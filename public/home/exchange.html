@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title>太古里</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/exchange.css">
+<style>
+.disabled {
+	pointer-events: none;
+	background-color: gainsboro !important;
+}
+.layui-layer-btn a {
+	font-size: 12px;
+}
+</style>
+<style>
+.xg .suo img {
+	width: 20%;
+	-ms-transform:rotate(45deg); 	/* IE 9 */
+	-moz-transform:rotate(45deg); 	/* Firefox */
+	-webkit-transform:rotate(45deg); /* Safari 和 Chrome */
+	-o-transform:rotate(45deg); 	/* Opera */
+}
+.mm img {
+	width: 0.16rem;
+	margin: 0.28rem 0.35rem 0 0.1rem;
+	-ms-transform:rotate(45deg); 	/* IE 9 */
+	-moz-transform:rotate(45deg); 	/* Firefox */
+	-webkit-transform:rotate(45deg); /* Safari 和 Chrome */
+	-o-transform:rotate(45deg); 	/* Opera */
+}
+</style>
+</head>
+<body>
+
+<!-- 加载 -->
+<div id="jiaZai"> <img src="../assets/image/loadbg.png"> </div>
+
+<!-- 内容 --> 
+<!-- 内容 -->
+<div id="main">
+  <div class="title">
+    <div> <img src="../assets/image/dhlp2.png"> 礼品兑换 - 选择礼品 </div>
+    <div>Gift Redemption - Select Gift</div>
+  </div>
+  <div class="content">
+    <div class="content_1">
+      <div class="act">
+        <p><img src="http://project.chenfeng.co/taikooli/public/assets/image/qian.png">可兑换的消费记录(限当日) / Redeemable</p>
+      </div>
+    </div>
+    <div class="content_2">
+      <div>
+        <div class="xf">
+          <p>消费金额 - 店铺名称 - 礼品 / Amount - Merchant - Redeemable</p>
+          <p><img src="http://project.chenfeng.co/taikooli/public/assets/image/dui.png" class="guoxiao" alt="">CNY 44 - CC SHOP
+            <input type="hidden" class="guoxiao_id xiaochu" value="6">
+            <input type="hidden" class="guoxiao_amount xiaochu" value="44">
+          </p>
+        </div>
+        <div class="xf">
+          <p>消费金额 - 店铺名称 - 礼品 / Amount - Merchant - Redeemable</p>
+          <p><img src="http://project.chenfeng.co/taikooli/public/assets/image/dui.png" class="guoxiao" alt="">CNY 34444444 - Gloria Jean's Coffees高乐雅咖啡
+            <input type="hidden" class="guoxiao_id xiaochu" value="7">
+            <input type="hidden" class="guoxiao_amount xiaochu" value="34444444">
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="anNiu"> <a href="javascript:void (0)" class="sy"> 上一页<br/>
+    Previous </a> <a href="javascript:void (0)" class="duiHuan"> <img src="../assets/image/duiHuan.png"> 兑换<br/>
+    Redeem <span>99</span> </a> <a href="javascript:void (0)" class="qxDuiHuan"> <img src="../assets/image/quXiao.png"> 取消兑换<br/>
+    Undo <span>99</span> </a> <a href="javascript:void (0)" class="tiaoGuo"> <img src="../assets/image/tiaoGuo.png"> 跳过问卷<br/>
+    Skip survey <span>99</span> </a> <a href="javascript:void (0)" class="xy"> 下一页<br/>
+    Next </a> </div>
+  <div class="gouXuan"> <img src="../assets/image/dhlp.png"> 已勾选的当日消费：￥<span id="today_amount_guo"> 0 </span>,可兑换： </div>
+  <div class="shangPing jin"> </div>
+  <div class="leiJi"> <img src="../assets/image/dhlp.png"> 2017：累积消费 ￥6604 - 已兑换 ￥0 - 本次兑换 ￥<span id="ben_exchange"></span> = 剩余 ￥ <span id="shen_exchange">
+    <input type="hidden" value="6604">
+    6604</span>，
+    暂无可累积兑换礼品 </div>
+  <div class="shangPing xin"> </div>
+</div>
+<div class="dhlp">
+  <div class="Inputs" style="display: none"> </div>
+  <div> <a href="javascript:void (0)" class="gb"><img src="../assets/image/gb.png"></a>
+    <div class="dhlp_content">
+      <div class="suo"> <img src="../assets/image/dhlp.png"> </div>
+      <div class="dhlp_info">
+        <p class="title">兑换礼品/Gift Redemption</p>
+        <span id="dui_name">X MolesKine 笔记本</span>
+        <div>
+          <p class="bz">备注1</p>
+          <input type="text" name="remark"/>
+          <p class="bz">备注2</p>
+          <input type="text" name="desc"/>
+        </div>
+        <a href="javascript:void (0)" class="cs queren">确认兑换</a> </div>
+    </div>
+  </div>
+</div>
+<input type="hidden" id="Exchange_id" value=""/>
+<div class="gn">
+  <div class="dj">
+    <div> <img src="../assets/image/gn1.png" class="xs" alt=""> <img src="../assets/image/gn2.png" class="yc" alt=""> </div>
+    <div><img src="../assets/image/gn2.png"></div>
+  </div>
+  <div class="nr">
+    <div>礼品兑换系统</div>
+   <p class="lp"><a href="search.html"><img src="../assets/image/dhlp.png">礼品兑换</a></p>
+    <p class="mm"><img src="../assets/image/bi.png" class="bi" alt="">修改密码</p>
+    <p class="tuichu"><img src="../assets/image/dl2.png">退出登录</p>
+    <div class="renWu"> <img src="../assets/image/renWu.png">
+      <p>18602897807</p>
+      <p class="time"></p>
+    </div>
+  </div>
+</div>
+<div class="xg">
+  <div> <a href="javascript:void (0)" class="gb"><img src="../assets/image/gb.png"></a>
+    <div class="xg_content">
+      <div class="suo"> <img src="../assets/image/bi.png"> </div>
+      <div class="xg_info">
+        <p class="title">修改密码</p>
+        <input type="password" id="oldPassword" placeholder="旧密码"/>
+        <input type="password" id="newPassword" placeholder="新密码"/>
+        <input type="password" id="rePassword" placeholder="再次输入新密码"/>
+        <a href="javascript:void (0)" class="cs mima">确认修改密码</a> </div>
+    </div>
+  </div>
+</div>
+</body>
+<!-- Javascripts -->
+<script src="../assets/js/remJs.js"></script>
+<script src="../assets/js/jquery-1.8.0.min.js"></script>
+<script src="../assets/js/plugins/layer/layer.js"></script>
+<script>
+    window.onload = function(){
+        $('#jiaZai').hide();
+        $('#main').show();
+    }
+     $(function(){
+             var dt = new Date();
+             var m=new Array("Jan ","Feb ","Mar ","Apr ","May ","Jun ","Jul ","Aug ","Spt ","Oct ","Nov ","Dec ");
+             var mn=dt.getMonth();
+             var dn=dt.getDate();
+             $('.time').html(m[mn]+"&nbsp;"+dn+'，'+dt.getFullYear());
+     //右侧功能栏隐藏显示
+             $('.xs').click(function(){
+                 $(this).hide();
+                 $('.yc').show();
+                 $('.gn').css('WebkitAnimation','yd2 0.4s forwards');
+             });
+             $('.yc').click(function(){
+                 $(this).hide();
+                 $('.xs').show();
+                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
+             });
+
+
+             //侧栏操作
+             $('.lp').click(function(){
+                 $('.yc').hide();
+                 $('.xs').show();
+                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
+             });
+             $('.mm').click(function(){
+                 $('.yc').hide();
+                 $('.xs').show();
+                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
+                 $('.xg').fadeIn(200);
+             });
+             $('.gb').click(function(){$('.xg').fadeOut(200);});
+
+             $('.tuichu').on('click',function(){
+                $.ajax({
+                    url: "../user/logout",
+                    type: "get",
+                    data: {},
+                    dataType:"json",
+                    success: function(ret) {
+                        layer.closeAll();
+                        if (ret.status == 1) {
+                            var i=3;
+                            setInterval(function(){
+                                layer.msg("正在退出 ("+i+")", {
+                                  time: 1000
+                                });
+                                if(i==0) location.href = '../user/login';
+                                  i--;
+                            },1000);
+                        }else{
+                            layer.msg(ret.message, {
+                              time: 2000
+                            });
+                        }
+                    }
+                })
+             })
+             $('.cs').on('click',function(){
+                if(!$(this).hasClass('mima'))return false;
+                 var oldpass = $('#oldPassword').val();
+                 var newpass = $('#newPassword').val();
+                 var repass = $('#rePassword').val();
+                 if(newpass!=repass){
+                    layer.msg('两次输入的新密码不相同！', {
+                       time: 2000
+                    });
+                    return false;
+                 }
+                 if(newpass==oldpass){
+                     layer.msg('输入的新旧密码相同！', {
+                        time: 2000
+                     });
+                     return false;
+                 }
+                 $.ajax({
+                     url: "../user/password",
+                     type: "post",
+                     data: {oldpass:oldpass,newpass:newpass,repass:repass},
+                     dataType:"json",
+                     success: function(ret) {
+                         layer.closeAll();
+                         if (ret.status == 1) {
+                             $('#oldPassword').val('');
+                             $('#newPassword').val('');
+                             $('#rePassword').val('');
+                            $('.xg .gb').click();
+                         }
+                         layer.msg(ret.message, {
+                           time: 2000
+                         });
+                     }
+                 })
+              })
+     });
+</script>
+<script>
+    window.onload=function(){
+        $('#jiaZai').hide();
+        $('#main').show();
+        $('.gb').click(function(){
+            $('.xg').fadeOut(200);
+            $('.dhlp').fadeOut(200);
+        });
+
+        //商品选中
+        $(document).on('click','.shangPing>div',function(){
+            if(!$('#Exchange_id').val()){
+                $('.shangPing>div').removeClass('xuanZhong');
+                if($(this).hasClass('xuanZhong')) $(this).removeClass('xuanZhong');
+                else $(this).addClass('xuanZhong');
+            }else{
+                                layer.msg('本次已兑换！', {
+                  time: 2000 //2s后自动关闭
+                });
+                            }
+        });
+
+         $(document).on('click','.xf',function(){
+
+         if(!$('#Exchange_id').val() && !$(this).find('p').hasClass('shanchu')){
+             var today_amount = parseFloat($('#today_amount_guo').html());
+             var jin = parseFloat($(this).find('.guoxiao_amount').val());
+             if($(this).find('.guoxiao_id').hasClass('xiaochu')){
+                 $('#today_amount_guo').html(today_amount-jin);
+                 huoquipin(today_amount-jin);
+                 $(this).find('.guoxiao_id').removeClass('xiaochu');
+                 $(this).find('.guoxiao_amount').removeClass('xiaochu');
+                 $(this).find('.guoxiao').attr('src','../assets/image/wu.png');
+
+             }else{
+                $('#today_amount_guo').html(today_amount+jin);
+                huoquipin(today_amount+jin);
+                $(this).find('.guoxiao_id').addClass('xiaochu');
+                $(this).find('.guoxiao_amount').addClass('xiaochu');
+                $(this).find('.guoxiao').attr('src','../assets/image/dui.png');
+             }
+         }else{
+                        layer.msg('本次已兑换！', {
+              time: 2000 //2s后自动关闭
+            });
+                     }
+        });
+        //取消兑换
+        $('.qxDuiHuan').on('click',function(){
+            layer.msg('确定要取消兑换吗？', {
+              time: 0 //不自动关闭
+              ,btn: ['确定', '取消']
+              ,yes: function(index){
+                layer.close(index);
+                 var exchangeId = $('#Exchange_id').val();
+                $.ajax({
+                    type:'post',
+                    url:'../home/delete-exchange-gifts',
+                    data:{
+                            exchangeId:exchangeId
+                        },
+                    success:function(res){
+                    console.log(res.message);
+                        if(res.status==1){
+                            layer.msg(res.message, {
+                              time: 2000 ,//2s后自动关闭
+                              // btn: ['明白了', '知道了', '哦']
+                            });
+                            setTimeout(function(){
+                                 window.location.href = '../home/exchange';
+                            },3000);
+                        }else{
+                            layer.msg(res.message, {
+                              time: 2000 //2s后自动关闭
+                            });
+                        }
+
+                    }
+                });
+              }
+            });
+        });
+        $('.duiHuan').on('click',function(){
+            if(!$('#Exchange_id').val()){
+                 var gift_id = xua_id = '';
+                var shene = parseFloat($('#shen_exchange').find('input').val());
+                var today_amount = parseFloat($('#today_amount_guo').html());
+                var xuanze_id = $('.xf').find('.guoxiao_id.xiaochu');
+                var xuanze_id_length = $('.xf').find('.guoxiao_id.xiaochu').length;
+                var ob_jin = $('.shangPing>div.xuanZhong');
+                var length = $('.shangPing>div.xuanZhong').length;
+                var type=0;
+                if(!$('.shangPing>div.xuanZhong').hasClass('xuzh_jin'))type=1;
+                if(((today_amount==0 && type==0)|| (shene==0 &&type==1))  && length!=0){
+                    layer.msg('没有勾选的或累积的消费金额进行兑换！', {
+                      time: 2000 //2s后自动关闭
+                    });
+                    return false;
+                }
+                if(length==0){
+                    layer.msg('请选择礼品进行兑换！', {
+                      time: 2000 //2s后自动关闭
+                    });
+                    return false;
+                }
+                for(i=0;i<xuanze_id_length;i++){
+                    xua_id += ';'+xuanze_id[i].value+'';
+                }
+                gift_id = ob_jin.find('input').val();
+
+                var giftname = ob_jin.find(".gift_name").html();
+        		var xuan_ids = xua_id.substr(1).split(';');
+        		$('.dhlp').find('.Inputs').empty();
+        		var html = "<input type='hidden' name='balance' value='"+shene+"'/>"
+        		    +"<input type='hidden' name='consuming_gou' value='"+today_amount+"'/>"
+        		     +"<input type='hidden' name='gift_name' value='"+giftname+"'/>"
+        		      +"<input type='hidden' name='gift_id' value='"+gift_id+"'/>"
+        		      +"<input type='hidden' name='type' value='"+type+"'/>"
+        		       +"<input type='hidden' name='xuan_ids' value='"+xuan_ids+"'/>"
+               $('.dhlp').css('display','block');
+               $('.dhlp').find('#dui_name').html(giftname);
+               $('.dhlp').find('.Inputs').append(html);
+               $('.dhlp').find('input[name="remark"]').val('');
+               $('.dhlp').find('input[name="desc"]').val('');
+           }else{
+               layer.msg('本次已兑换！', {
+                 time: 2000 //2s后自动关闭
+               });
+           }
+        });
+        //获取可兑换的礼品
+        $('.queren').on('click',function(){
+            var xuanid = $('.dhlp').find('input[name="xuan_ids"]').val();
+            var gift_name = $('.dhlp').find('input[name="gift_name"]').val();
+            var balance = $('.dhlp').find('input[name="balance"]').val();
+            var consuming_gou = $('.dhlp').find('input[name="consuming_gou"]').val();
+            var gift_id = $('.dhlp').find('input[name="gift_id"]').val();
+            var remark = $('.dhlp').find('input[name="remark"]').val();
+            var desc = $('.dhlp').find('input[name="desc"]').val();
+            var type = $('.dhlp').find('input[name="type"]').val();
+            $.ajax({
+                type:'post',
+                url:'../home/add-exchange-gifts',
+                data:{
+                        xuanid:xuanid,
+                        gift_name:gift_name,
+                        balance:balance,
+                        consuming_gou:consuming_gou,
+                        gift_id:gift_id,
+                        remark:remark,
+                        desc:desc,
+                        type:type
+                    },
+                success:function(res){
+                console.log(res.message);
+                    if(res.status==1){
+                        $('#ben_exchange').html(res.data.consumer_amount);
+                        $('#Exchange_id').val(res.data.id);
+                        $('.dhlp').css('display','none');
+                        $('#shen_exchange').empty();
+                        var shen = parseFloat(balance)-res.data.consumer_amount;
+                        $('#shen_exchange').append('<input type="hidden" value="'+shen+'">'+shen);
+                        layer.msg(res.message, {
+                          time: 2000 //2s后自动关闭
+                        });
+                    }else{
+                        layer.msg(res.message, {
+                          time: 2000 //2s后自动关闭
+                        });
+                    }
+
+                }
+            });
+        });
+
+        //下一页
+        $('.xy').click(function(){
+            if($('#Exchange_id').val())window.location.href = '../home/questniare?exchange='+$('#Exchange_id').val();
+            else{
+                layer.msg('本次还未进行兑换！', {
+                  time: 2000 //2s后自动关闭
+                });
+            }
+        });
+
+        //跳过问卷，到签名页
+
+        $('.tiaoGuo').click(function(){
+            if($('#Exchange_id').val())window.location.href = '../home/autograph?type=exchange&exchange='+$('#Exchange_id').val();
+            else{
+                layer.msg('本次还未进行兑换！', {
+                  time: 2000 //2s后自动关闭
+                });
+            }
+        });
+        //上一页
+        $('.sy').click(function(){
+            if(!$('#Exchange_id').val()){
+                window.location.href = '../home/entry.html';
+            }else{
+                layer.msg('还有兑换信息没有签名！确定要退出兑换返回上一页吗？', {
+                  time: 0 //不自动关闭
+                  ,btn: ['确定', '取消']
+                  ,yes: function(index){
+                    layer.close(index);
+                    window.location.href = '../home/entry';
+                  }
+                });
+            }
+        });
+    }
+
+    function querenAuto(){
+        //询问框
+        layer.msg('今天还有兑换信息没有签名！', {
+              time: 2000 //2s后自动关闭
+         });
+//        layer.confirm('上次兑换的还未签名！是取消该兑换信息还是签名确认兑换？', {
+//            btn: ['取消兑换','去签名'] //按钮
+//        }, function(){
+//            $('.qxDuiHuan').click();
+//        }, function(){
+//            $('.tiaoGuo').click();
+//        });
+    }
+
+    function huoquipin(aut){
+        $.ajax({
+            type:'post',
+            url:'../home/get-gifts-exchangge',
+            data:{amount:aut},
+            success:function(res){
+                if(res.status==1){
+                    $('.shangPing.jin').empty();
+                    var html = '';
+                    for(i=0;i<res.data.length;i++){
+                        html += "<div class='xuzh_jin'><input type='hidden' class='gift_id' value='"+res.data[i].id+"'/>" ;
+                        html += "  <img src='"+res.data[i].fimage+"'/><p><span class='gift_name'>"+res.data[i].fname+"</span></p>";
+                        html += "  <div class='gou'>";
+                        html += "  <img src='../assets/image/gou.png' />";
+                        html += "  </div>";
+                        html += "</div>";
+                    }
+                    $('.shangPing.jin').append(html);
+                }else{
+                    layer.msg(res.message, {
+                      time: 2000 //2s后自动关闭
+                    });
+                }
+            }
+        });
+    }
+</script>
+</html>
