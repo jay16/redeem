@@ -1,4 +1,3 @@
-<link media="all" type="text/css" rel="stylesheet" href="../assets/css/index.css">
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -9,6 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/index.css">
 <link media="all" type="text/css" rel="stylesheet" href="../assets/css/public-style.css">
 <link media="all" type="text/css" rel="stylesheet" href="../assets/css/animate.min.css">
 <link media="all" type="text/css" rel="stylesheet" href="../assets/css/side.css">
@@ -32,48 +32,59 @@
 </style>
 </head>
 <body>
-
 <!-- 加载 -->
-<div id="jiaZai"> <img src="../assets/image/loadbg.png"> </div>
+<div id="jiaZai">
+  <img src="../assets/image/loadbg.png"></div>
 <!-- 内容 -->
 <div id="main">
-  <div class="tgl">
+<!--   <div class="tgl">
     <div class="shang"></div>
     <img src="../assets/image/slogo.png">
     <div class="xia"></div>
-  </div>
+  </div> -->
   <div class="login">
-    <div class="tb"> <img src="../assets/image/login.png"> </div>
+    <div class="tb">
+      <img src="../assets/image/login.png"></div>
     <div class="info">
       <input type="text" id="yhm" name="username" placeholder="用户名" />
       <input type="password" id="pwd" name="password" placeholder="密码" />
       <a href="javascript:void (0)" id="btn_login">登 录</a>
-      <p></p>
+      <p>
+      </p>
     </div>
-    <a href="javascript:void (0)" class="wj"> <img src="../assets/image/suo.png"> 忘记密码 </a> </div>
-  <div class="logo"> <img src="../assets/image/logo.png"> </div>
+    <a href="javascript:void (0)" class="wj">
+      <img src="../assets/image/suo.png">忘记密码</a></div>
+  <div class="logo">
+    <img style='display: none;' src="../assets/image/logo.png"></div>
   <div class="gn">
     <div class="dj">
-      <div> <img src="../assets/image/gn1.png" class="xs" alt=""> <img src="../assets/image/gn2.png" class="yc" alt=""> </div>
-      <div><img src="../assets/image/gn2.png"></div>
+      <div>
+        <img src="../assets/image/gn1.png" class="xs" alt="">
+        <img src="../assets/image/gn2.png" class="yc" alt=""></div>
+      <div>
+        <img src="../assets/image/gn2.png"></div>
     </div>
     <div class="nr">
       <div>礼品兑换系统</div>
-      <p class="dl"><img src="../assets/image/dl.png">用户登录</p>
-      <p class="hf"><img src="../assets/image/suo.png">密码恢复</p>
-    </div>
+      <p class="dl">
+        <img src="../assets/image/dl.png">用户登录</p>
+      <p class="hf">
+        <img src="../assets/image/suo.png">密码恢复</p></div>
   </div>
 </div>
 <div class="xg chongshe">
-  <div> <a href="javascript:void (0)" class="gb"><img src="../assets/image/gb.png"></a>
+  <div>
+    <a href="javascript:void (0)" class="gb">
+      <img src="../assets/image/gb.png"></a>
     <div class="xg_content">
-      <div class="suo"> <img src="../assets/image/suo.png"> </div>
+      <div class="suo">
+        <img src="../assets/image/suo.png"></div>
       <div class="xg_info">
         <p class="title">忘记密码了么?</p>
         <p class="sm">没关系. 请输入您的用户名和电子邮件地址， 我们会将新的密码发给您。</p>
-        <input type="text" id="xg_mz" placeholder="用户名"/>
-        <input type="text" id="xg_yj" placeholder="电子邮件地址"/>
-        <a href="javascript:void (0)" class="cs chongshemima">重设密码</a> </div>
+        <input type="text" id="xg_mz" placeholder="用户名" />
+        <input type="text" id="xg_yj" placeholder="电子邮件地址" />
+        <a href="javascript:void (0)" class="cs chongshemima">重设密码</a></div>
     </div>
   </div>
 </div>
@@ -82,214 +93,216 @@
 <script src="../assets/js/remJs.js"></script>
 <script src="../assets/js/jquery-1.8.0.min.js"></script>
 <script src="../assets/js/plugins/layer/layer.js"></script>
-<script>
-    window.onload = function(){
-        $('#jiaZai').hide();
-        $('#main').show();
-    }
-     $(function(){
-             var dt = new Date();
-             var m=new Array("Jan ","Feb ","Mar ","Apr ","May ","Jun ","Jul ","Aug ","Spt ","Oct ","Nov ","Dec ");
-             var mn=dt.getMonth();
-             var dn=dt.getDate();
-             $('.time').html(m[mn]+"&nbsp;"+dn+'，'+dt.getFullYear());
-     //右侧功能栏隐藏显示
-             $('.xs').click(function(){
-                 $(this).hide();
-                 $('.yc').show();
-                 $('.gn').css('WebkitAnimation','yd2 0.4s forwards');
-             });
-             $('.yc').click(function(){
-                 $(this).hide();
-                 $('.xs').show();
-                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
-             });
+<script>window.onload = function() {
+    $('#jiaZai').hide();
+    $('#main').show();
+}
+$(function() {
+    var dt = new Date();
+    var m = new Array("Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Spt ", "Oct ", "Nov ", "Dec ");
+    var mn = dt.getMonth();
+    var dn = dt.getDate();
+    $('.time').html(m[mn] + "&nbsp;" + dn + '，' + dt.getFullYear());
+    //右侧功能栏隐藏显示
+    $('.xs').click(function() {
+        $(this).hide();
+        $('.yc').show();
+        $('.gn').css('WebkitAnimation', 'yd2 0.4s forwards');
+    });
+    $('.yc').click(function() {
+        $(this).hide();
+        $('.xs').show();
+        $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+    });
 
 
-             //侧栏操作
-             $('.lp').click(function(){
-                 $('.yc').hide();
-                 $('.xs').show();
-                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
-             });
-             $('.mm').click(function(){
-                 $('.yc').hide();
-                 $('.xs').show();
-                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
-                 $('.xg').fadeIn(200);
-             });
-             $('.gb').click(function(){$('.xg').fadeOut(200);});
+    //侧栏操作
+    $('.lp').click(function() {
+        $('.yc').hide();
+        $('.xs').show();
+        $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+    });
+    $('.mm').click(function() {
+        $('.yc').hide();
+        $('.xs').show();
+        $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+        $('.xg').fadeIn(200);
+    });
+    $('.gb').click(function() {
+        $('.xg').fadeOut(200);
+    });
 
-             $('.tuichu').on('click',function(){
-                $.ajax({
-                    url: "../user/logout",
-                    type: "get",
-                    data: {},
-                    dataType:"json",
-                    success: function(ret) {
-                        layer.closeAll();
-                        if (ret.status == 1) {
-                            var i=3;
-                            setInterval(function(){
-                                layer.msg("正在退出 ("+i+")", {
-                                  time: 1000
-                                });
-                                if(i==0) location.href = '../user/login';
-                                  i--;
-                            },1000);
-                        }else{
-                            layer.msg(ret.message, {
-                              time: 2000
-                            });
-                        }
-                    }
-                })
-             })
-            /* $('.cs').on('click',function(){
-                if(!$(this).hasClass('mima'))return false;
-                 var oldpass = $('#oldPassword').val();
-                 var newpass = $('#newPassword').val();
-                 var repass = $('#rePassword').val();
-                 if(newpass!=repass){
-                    layer.msg('两次输入的新密码不相同！', {
-                       time: 2000
-                    });
-                    return false;
-                 }
-                 if(newpass==oldpass){
-                     layer.msg('输入的新旧密码相同！', {
+    $('.tuichu').on('click', function() {
+        $.ajax({
+            url: "../user/logout",
+            type: "get",
+            data: {},
+            dataType: "json",
+            success: function(ret) {
+                layer.closeAll();
+                if (ret.status == 1) {
+                    var i = 3;
+                    setInterval(function() {
+                        layer.msg("正在退出 (" + i + ")", {
+                            time: 1000
+                        });
+                        if (i == 0) location.href = '../user/login';
+                        i--;
+                    }, 1000);
+                } else {
+                    layer.msg(ret.message, {
                         time: 2000
-                     });
-                     return false;
-                 }
-                $.ajax({
-                     url: "../user/password",
-                     type: "post",
-                     data: {oldpass:oldpass,newpass:newpass,repass:repass},
-                     dataType:"json",
-                     success: function(ret) {
-                         layer.closeAll();
-                         if (ret.status == 1) {
-                             $('#oldPassword').val('');
-                             $('#newPassword').val('');
-                             $('#rePassword').val('');
-                            $('.xg .gb').click();
-                         }
-                         layer.msg(ret.message, {
-                           time: 2000
-                         });
-                     }
-                 })
-              })*/
-     });
-</script>
-<script>
-    $(function(){
-        var myDate = new Date();
-        $('.info p').html(myDate.toLocaleDateString());
-        //右侧功能栏隐藏显示
-        $('.xs').click(function(){
-            $(this).hide();
-            $('.yc').show();
-            $('.gn').css('WebkitAnimation','yd2 0.4s forwards');
-        });
-        $('.yc').click(function(){
-            $(this).hide();
-            $('.xs').show();
-            $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
-        });
-        //显示重置密码
-        $('.wj,.hf').click(function(){
-            $('.chongshe').fadeIn(200);
-            if($(this).hasClass('hf')){
-                $('.yc').hide();
-                $('.xs').show();
-                $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
+                    });
+                }
             }
-        });
-        $('.gb').click(function(){$('.xg').fadeOut(200);});
-        $('.dl').click(function(){
+        })
+    })
+    /* $('.cs').on('click',function(){
+        if(!$(this).hasClass('mima'))return false;
+         var oldpass = $('#oldPassword').val();
+         var newpass = $('#newPassword').val();
+         var repass = $('#rePassword').val();
+         if(newpass!=repass){
+            layer.msg('两次输入的新密码不相同！', {
+               time: 2000
+            });
+            return false;
+         }
+         if(newpass==oldpass){
+             layer.msg('输入的新旧密码相同！', {
+                time: 2000
+             });
+             return false;
+         }
+        $.ajax({
+             url: "../user/password",
+             type: "post",
+             data: {oldpass:oldpass,newpass:newpass,repass:repass},
+             dataType:"json",
+             success: function(ret) {
+                 layer.closeAll();
+                 if (ret.status == 1) {
+                     $('#oldPassword').val('');
+                     $('#newPassword').val('');
+                     $('#rePassword').val('');
+                    $('.xg .gb').click();
+                 }
+                 layer.msg(ret.message, {
+                   time: 2000
+                 });
+             }
+         })
+      })*/
+});
+
+$(function() {
+    var myDate = new Date();
+    $('.info p').html(myDate.toLocaleDateString());
+    //右侧功能栏隐藏显示
+    $('.xs').click(function() {
+        $(this).hide();
+        $('.yc').show();
+        $('.gn').css('WebkitAnimation', 'yd2 0.4s forwards');
+    });
+    $('.yc').click(function() {
+        $(this).hide();
+        $('.xs').show();
+        $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+    });
+    //显示重置密码
+    $('.wj,.hf').click(function() {
+        $('.chongshe').fadeIn(200);
+        if ($(this).hasClass('hf')) {
             $('.yc').hide();
             $('.xs').show();
-            $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
-        });
-        $('.chongshemima').on('click',function(){
-            var username = $('#xg_mz').val();
-            var email = $('#xg_yj').val();
-            if(!username || !email){
-                 layer.msg('邮箱或用户名不能为空！', {
-                      time: 2000, //2s后自动关闭
-                 });
-                 return false;
-            }
-          /*  $.ajax({
-                url: "../user/forget",
-                type: "post",
-                data: 'username='+username+'&email='+email,
-                dataType:"json",
-                success: function(ret) {
-                    layer.closeAll();
-                    if (ret.status == 1) {
-                        layer.msg(ret.message, {
-                          time: 1000, //2s后自动关闭
-                          end: function(){
-                            $('.chongshe').hide();
-                          }
-                        });
-                    }else{
-                        layer.msg(ret.message, {
-                          time: 2000, //2s后自动关闭
-                        });
-                    };
-                }
-            })*/
-        });
-        $('#btn_login').on('click',function(){
-            var username = $('#yhm').val();
-            var password = $('#pwd').val();
-            var area_id  = $('input[name="area_id"]:checked').val();
-            if (!username) {
-                layer.tips('请输入用户名', '#yhm', {
-                  tips: [2, '#faab20']
-                });
-                return false;
-            }else if(!password){
-                layer.tips('请输入密码', '#pwd', {
-                  tips: [2, '#faab20']
-                });
-                return false;
-            }else{
-                var loading = layer.msg('登录中...', {
-                  icon: 16
-                  ,shade: 0.01
-                });
+            $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+        }
+    });
+    $('.gb').click(function() {
+        $('.xg').fadeOut(200);
+    });
+    $('.dl').click(function() {
+        $('.yc').hide();
+        $('.xs').show();
+        $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+    });
+    $('.chongshemima').on('click', function() {
+        var username = $('#xg_mz').val();
+        var email = $('#xg_yj').val();
+        if (!username || !email) {
+            layer.msg('邮箱或用户名不能为空！', {
+                time: 2000, //2s后自动关闭
+            });
+            return false;
+        }
+        /*  $.ajax({
+              url: "../user/forget",
+              type: "post",
+              data: 'username='+username+'&email='+email,
+              dataType:"json",
+              success: function(ret) {
+                  layer.closeAll();
+                  if (ret.status == 1) {
+                      layer.msg(ret.message, {
+                        time: 1000, //2s后自动关闭
+                        end: function(){
+                          $('.chongshe').hide();
+                        }
+                      });
+                  }else{
+                      layer.msg(ret.message, {
+                        time: 2000, //2s后自动关闭
+                      });
+                  };
+              }
+          })*/
+    });
+    $('#btn_login').on('click', function() {
+        var username = $('#yhm').val();
+        var password = $('#pwd').val();
+        var area_id = $('input[name="area_id"]:checked').val();
+        if (!username) {
+            layer.tips('请输入用户名', '#yhm', {
+                tips: [2, '#faab20']
+            });
+            return false;
+        } else if (!password) {
+            layer.tips('请输入密码', '#pwd', {
+                tips: [2, '#faab20']
+            });
+            return false;
+        } else {
+            var loading = layer.msg('登录中...', {
+                icon: 16,
+                shade: 0.01
+            });
 
-                var clientCookie = '';
-                var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
-                var userGid = 1000080;
-                var userPwd = 'A1E9840D1C9C2097';
-                var workStation = '172.17.104.164';
-                var storeCode = '0210';
-                var Oper = 'HDCRM[0]';
+            var clientCookie = '';
+            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+            var userGid = 1000080;
+            var userPwd = 'A1E9840D1C9C2097';
+            var workStation = '172.17.104.164';
+            var storeCode = '0210';
+            var Oper = 'HDCRM[0]';
 
-                userGid = username;
-                userPwd = password;
+            userGid = username;
+            userPwd = password;
 
-                // 3.1.1 登录
-                //
-                // <?xml version="1.0" encoding="utf-8"?>
+            // 3.1.1 登录
+            //
+            // <?xml version="1.0" encoding="utf-8"?>
 
-                // <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/">
-                //   <SOAP-ENV:Body SOAP-ENC:encodingStyle="http://schemas.xmlsoap.org/soap/envelope/">
-                //     <NS1:DoClientCommandResponse xmlns:NS1="urn:HDCRMWebServiceIntf-IHDCRMWebService">
-                //       <return xsi:type="xsd:int">0</return>
-                //       <sErrMsg xsi:type="xsd:string"/>
-                //       <sOutParams xsi:type="xsd:string">{"FRESULT":1,"FCARDTYPE":"","FCARDNUM":"","FMSG":"该OpenID数据异常"}</sOutParams>
-                //     </NS1:DoClientCommandResponse>
-                //   </SOAP-ENV:Body>
-                // </SOAP-ENV:Envelope>
+            // <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/">
+            //   <SOAP-ENV:Body SOAP-ENC:encodingStyle="http://schemas.xmlsoap.org/soap/envelope/">
+            //     <NS1:DoClientCommandResponse xmlns:NS1="urn:HDCRMWebServiceIntf-IHDCRMWebService">
+            //       <return xsi:type="xsd:int">0</return>
+            //       <sErrMsg xsi:type="xsd:string"/>
+            //       <sOutParams xsi:type="xsd:string">{"FRESULT":1,"FCARDTYPE":"","FCARDNUM":"","FMSG":"该OpenID数据异常"}</sOutParams>
+            //     </NS1:DoClientCommandResponse>
+            //   </SOAP-ENV:Body>
+            // </SOAP-ENV:Envelope>
 
-                  var a = '<?xml version="1.0" encoding="utf-8"?>\
+            var a = '<?xml version="1.0" encoding="utf-8"?>\
                     <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
                     xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
                     xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
@@ -309,65 +322,65 @@
                         </ns0:LogIn>\
                       </ns2:Body>\
                     </SOAP-ENV:Envelope>';
-                  $.ajax({
-                      url: url+ "?op=LogIn",
-                      type:'POST',
-                      async:false,
-                      dataType:'xml',
-                      data:a,
-                      timeout:10000,
-                      contentType: "text/xml; charset=UTF-8",
-                      success: function (xmlHttpRequest) {
-                        console.log(xmlHttpRequest);
-                        console.log(xmlHttpRequest.responseText);
-                //        alert("登录成功")
-                        clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
-                        window.localStorage.setItem('sClientCookie', clientCookie);
-                        window.localStorage.setItem('userGid', userGid);
+            $.ajax({
+                url: url + "?op=LogIn",
+                type: 'POST',
+                async: false,
+                dataType: 'xml',
+                data: a,
+                timeout: 10000,
+                contentType: "text/xml; charset=UTF-8",
+                success: function(xmlHttpRequest) {
+                    console.log(xmlHttpRequest);
+                    console.log(xmlHttpRequest.responseText);
+                    //        alert("登录成功")
+                    clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
+                    window.localStorage.setItem('sClientCookie', clientCookie);
+                    window.localStorage.setItem('userGid', userGid);
 
-                        location.href = '../home/search.html';
-                      },
-                      complete:function(xmlHttpRequest, status) {
-                        console.log(status);
-                        console.log(xmlHttpRequest);
-                      },
-                      error: function (xmlHttpRequest) {
-                          alert("登录失败")
-                      }
-                  });
+                    location.href = '../home/search.html';
+                },
+                complete: function(xmlHttpRequest, status) {
+                    console.log(status);
+                    console.log(xmlHttpRequest);
+                },
+                error: function(xmlHttpRequest) {
+                    alert("登录失败")
+                }
+            });
 
-				//update cynthia
-				// location.href = '../home/search.html';
-               /* $.ajax({
-                    url: "../user/login",
-                    type: "post",
-                    data: 'username='+username+'&password='+password+'&area_id='+area_id,
-                    dataType:"json",
-                    success: function(ret) {
-                        layer.closeAll();
-                        if (ret.status == 1) {
-                            layer.msg(ret.message, {
-                              time: 1000, //2s后自动关闭
-                              end: function(){
-                                location.href = '../home/search';
-                              }
-                            });
-                        }else{
-                            layer.msg(ret.message, {
-                              time: 2000,
-                            });
-                        };
-                    }
-                })*/
-            }
-        })
-
-        $('#yhm').val(1000080);
-        $('#pwd').val('A1E9840D1C9C2097');
-        var cookie = window.localStorage.getItem('sClientCookie');
-        if(cookie !== null) {
-          location.href = '../home/search.html';
+            //update cynthia
+            // location.href = '../home/search.html';
+            /* $.ajax({
+                 url: "../user/login",
+                 type: "post",
+                 data: 'username='+username+'&password='+password+'&area_id='+area_id,
+                 dataType:"json",
+                 success: function(ret) {
+                     layer.closeAll();
+                     if (ret.status == 1) {
+                         layer.msg(ret.message, {
+                           time: 1000, //2s后自动关闭
+                           end: function(){
+                             location.href = '../home/search';
+                           }
+                         });
+                     }else{
+                         layer.msg(ret.message, {
+                           time: 2000,
+                         });
+                     };
+                 }
+             })*/
         }
     })
+
+    $('#yhm').val(1000080);
+    $('#pwd').val('A1E9840D1C9C2097');
+    var cookie = window.localStorage.getItem('sClientCookie');
+    if (cookie !== null) {
+        location.href = '../home/search.html';
+    }
+})
 </script>
 </html>
