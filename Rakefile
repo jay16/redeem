@@ -39,7 +39,7 @@ namespace :remote do
   desc "scp local config files to remote server."
   task :deploy => :environment do
     Net::SSH.start(Settings.server.host, Settings.server.user, :password => Settings.server.password) do |ssh|
-      command = "cd %s && git reset --hard HEAD && git pull" % Settings.server.app_root_path
+      command = "cd %s && /bin/bash tool.sh deploy:server" % Settings.server.app_root_path
       execute!(ssh, command)
     end
   end
