@@ -76,11 +76,11 @@
                 <p>顾客信息 / Customer</p>
                 <p>Information</p>
             </div>
-            <div data-id="2">
+            <div data-id="2" class='purchase-history'>
                 <p>消费记录 / Purchase</p>
                 <p>History</p>
             </div>
-            <div data-id="3">
+            <div data-id="3" class='redeem-history'>
                 <p>兑换记录 / Redeem</p>
                 <p>History</p>
             </div>
@@ -209,7 +209,7 @@
              var mn=dt.getMonth();
              var dn=dt.getDate();
              $('.time').html(m[mn]+"&nbsp;"+dn+'，'+dt.getFullYear());
-     //右侧功能栏隐藏显示
+              //右侧功能栏隐藏显示
              $('.xs').click(function(){
                  $(this).hide();
                  $('.yc').show();
@@ -279,30 +279,6 @@
                           alert("退出失败")
                       }
                   });
-
-                // $.ajax({
-                //     url: "../user/logout",
-                //     type: "get",
-                //     data: {},
-                //     dataType:"json",
-                //     success: function(ret) {
-                //         layer.closeAll();
-                //         if (ret.status == 1) {
-                //             var i=3;
-                //             setInterval(function(){
-                //                 layer.msg("正在退出 ("+i+")", {
-                //                   time: 1000
-                //                 });
-                //                 if(i==0) location.href = '../user/login';
-                //                   i--;
-                //             },1000);
-                //         }else{
-                //             layer.msg(ret.message, {
-                //               time: 2000
-                //             });
-                //         }
-                //     }
-                // })
              })
 
 
@@ -345,12 +321,6 @@
      });
 </script>
 <script>
-	/**window.onload = function(){alert($('#mz').val());
-		if($('#mz').val()){
-			$('.xy').css('display','block');
-		}
-	}*/
-
     $(function(){
         var dt = new Date();
         var m=new Array("Jan ","Feb ","Mar ","Apr ","May ","Jun ","Jul ","Aug ","Spt ","Oct ","Nov ","Dec ");
@@ -359,6 +329,171 @@
         $('.time').html(m[mn]+"&nbsp;"+dn+'，'+dt.getFullYear());
 
 
+        Date.prototype.format = function(format) {
+            var date = {
+                "M+": this.getMonth() + 1,
+                "d+": this.getDate(),
+                "h+": this.getHours(),
+                "m+": this.getMinutes(),
+                "s+": this.getSeconds(),
+                "q+": Math.floor((this.getMonth() + 3) / 3),
+                "S+": this.getMilliseconds()
+            };
+            if (/(y+)/i.test(format)) {
+                format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+            }
+            for (var k in date) {
+                if (new RegExp("(" + k + ")").test(format)) {
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ?
+                        date[k] : ("00" + date[k]).substr(("" + date[k]).length));
+                }
+            }
+            return format;
+        }
+
+        // 3.2.17 查询HDMall交易卡流水（查询用户信息，消费记录）（通过测试）
+        function queryMallTranhst() {
+            var clientCookie = window.localStorage.getItem('sClientCookie');
+            var sFCardNum = window.localStorage.getItem('sFCARDNUM');
+
+            var today = new Date(),
+                endDateStr = today.format('yyyy.MM.dd');
+
+                today.setDate(today.getDate() - 365);
+                beginDateStr = today.format('yyyy.MM.dd');
+            var params = "[\\]\nFCardNum=" + sFCardNum + "\nFBeginDate=" + beginDateStr + "\nFEndDate=" + endDateStr + "\nFPageIndex=0\nFPageSize=50\n";
+
+            console.log(params);
+            var xmlstring = '<SOAP-ENV:Envelope \
+            xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+            SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+            <SOAP-ENV:Header/>\
+              <ns2:Body>\
+                <ns0:DoClientCommand>\
+                  <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+                  <sCommand xsi:type="ns3:string">QUERYMALLTRANSHSTJSON</sCommand>\
+                  <sParams xsi:type="ns3:string">' + params + '</sParams>\
+                </ns0:DoClientCommand>\
+              </ns2:Body>\
+            </SOAP-ENV:Envelope>'
+
+            console.log(xmlstring)
+
+            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+            $.ajax({
+                url: url + "?op=DoClientCommand",
+                type: 'POST',
+                async: false,
+                dataType: 'xml',
+                data: xmlstring,
+                timeout: 10000,
+                contentType: "text/xml; charset=UTF-8",
+                success: function(xmlHttpRequest) {
+                    console.log(xmlHttpRequest);
+                    var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+                    var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+                    console.log(resultstring);
+                    var items = resultstring.split('FDATA='),
+                        jsonString =  $.trim(items[1]);
+                    if(errMsg.length > 0) {
+                        alert(errMsg)
+                    }
+                    console.log(jsonString);
+                    var outparams = JSON.parse(jsonString);
+
+                    _doConsumerInfo(outparams['Data'],false);
+                },
+                complete: function(xmlHttpRequest, status) {
+                    console.log(xmlHttpRequest);
+                },
+                error: function(xmlHttpRequest) {
+                    console.log(xmlHttpRequest);
+                    alert("手机号查询信息失败")
+                }
+            });
+        }
+
+        // 3.2.37 查询会员兑奖单信息（通过测试）
+        function queryScorePrizeBillJson() {
+          var clientCookie = window.localStorage.getItem('sClientCookie');
+          var fcardnum = window.localStorage.getItem('sFCARDNUM');
+
+          var fpageindex = 0,
+              fpagesize = 50;
+          var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
+            console.log(params);
+            var xmlstring = '<SOAP-ENV:Envelope \
+            xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+            SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+            <SOAP-ENV:Header/>\
+              <ns2:Body>\
+                <ns0:DoClientCommand>\
+                  <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+                  <sCommand xsi:type="ns3:string">CRMQueryScorePrizeBillJson</sCommand>\
+                  <sParams xsi:type="ns3:string">' + params + '</sParams>\
+                </ns0:DoClientCommand>\
+              </ns2:Body>\
+            </SOAP-ENV:Envelope>'
+
+            console.log(xmlstring)
+
+            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+            $.ajax({
+                url: url + "?op=DoClientCommand",
+                type: 'POST',
+                async: false,
+                dataType: 'xml',
+                data: xmlstring,
+                timeout: 10000,
+                contentType: "text/xml; charset=UTF-8",
+                success: function(xmlHttpRequest) {
+                    console.log(xmlHttpRequest);
+                    var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+                    var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+                    console.log(resultstring);
+                    if(errMsg.length > 0) {
+                        alert(errMsg)
+                    }
+                    console.log(resultstring);
+                    var outparams = JSON.parse(resultstring);
+                    if(outparams["FRESULT"] === 0) {
+                        console.log(outparams['FDATA']);
+                        var array = (typeof(outparams['FDATA']) === 'string' ? [] : outparams['FDATA']);
+                        console.log(array);
+                        _doConsumerInfo(array,false);
+
+                        if(outparams['FMSG'].length > 0) {
+                            layer.closeAll();
+                            layer.msg(outparams['FMSG'], {
+                                shade: 0.01
+                                ,time: 2000
+                            });
+                        }
+                    }
+                },
+                complete: function(xmlHttpRequest, status) {
+                    console.log(xmlHttpRequest);
+                },
+                error: function(xmlHttpRequest) {
+                    console.log(xmlHttpRequest);
+                    alert("手机号查询信息失败")
+                    LogOut();
+                }
+            });
+        }
+
         //顾客信息记录选择
         $('.content_1>div').click(function(){
             if(!$(this).hasClass('act')){
@@ -366,6 +501,41 @@
                 $(this).addClass('act');
                 $('.content_2>div').hide();
                 $('.content_2>div:eq('+$(this).index()+')').show();
+            }
+
+            var sFCardNum = window.localStorage.getItem('sFCARDNUM');
+            if($(this).hasClass("purchase-history")) {
+                if(sFCardNum !== null) {
+                    layer.msg('获取中...', {
+                        icon: 16
+                        ,shade: 0.01
+                        ,time: 1000
+                    });
+
+                    queryMallTranhst();
+                } else {
+                    layer.msg('请输入会员手机号', {
+                        shade: 0.01
+                        ,time: 1200
+                    });
+                }
+            }
+
+            if($(this).hasClass("redeem-history")) {
+                if(sFCardNum !== null) {
+                    layer.msg('获取中...', {
+                        icon: 16
+                        ,shade: 0.01
+                        ,time: 1000
+                    });
+
+                    queryScorePrizeBillJson();
+                } else {
+                    layer.msg('请输入会员手机号', {
+                        shade: 0.01
+                        ,time: 1200
+                    });
+                }
             }
         })
 
@@ -405,7 +575,8 @@
 
         });
 
-        $('#search').val(18602897807);
+
+        $('#search').val(18020285885);
         $('#btn_search').on('click',function(){
             var phone = $('#search').val();
 
@@ -427,7 +598,6 @@
                   icon: 16
                   ,shade: 0.01
                 });
-
 
                 var clientCookie = window.localStorage.getItem('sClientCookie');
                 var xmlstring = '<SOAP-ENV:Envelope \
@@ -462,11 +632,15 @@
                       console.log(xmlHttpRequest);
                       var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
                       var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+
+                      window.localStorage.setItem('sOutParams', resultstring);
                       var outparams = JSON.parse(resultstring);
                       var result = outparams["FRESULT"];
+                      console.log(outparams);
 
                       if(errMsg.length > 0) {
                         alert(errMsg)
+
                       }
                       for(var key in outparams) {
                         console.log(key + ': ' + outparams[key]);
@@ -481,6 +655,7 @@
                       ret.ConsumerInfo = [];
                       ret.ExchangeInfo = [];
                         if (ret.status == 0) {
+                            window.localStorage.setItem('sFCARDNUM', outparams["FCARDNUM"]);
                             _do(ret.data);
                             _doConsumerInfo(ret.ConsumerInfo,false);
                             _doExchangeInfo(ret.ExchangeInfo,false);
@@ -488,7 +663,8 @@
                             $('#work_dz').parent().css('display','block');
                             $('.bc').css('display','none');
                             $('.xy').css('display','block');
-                        }else{
+                        } else {
+                            window.localStorage.removeItem('sFCARDNUM');
                             _chu();
                             _chuConsumerInf();
                             _chuExchangeInfo();
@@ -510,77 +686,83 @@
                       alert("手机号查询信息失败")
                    }
               });
-
-       //          $.ajax({
-       //              url: "../home/member-info",
-       //              type: "post",
-       //              data: 'phone='+phone,
-       //              dataType:"json",
-       //              success: function(ret) {
-       //                  layer.closeAll();
-       //                  if($('.content_1').find('.act').data('id')!=1){
-       //                      $('.content_1').children('div').first().click();
-       //                  }
-       //                  if (ret.status == 1) {
-       //                      _do(ret.data);
-       //                      _doConsumerInfo(ret.ConsumerInfo,false);
-       //                      _doExchangeInfo(ret.ExchangeInfo,false);
-							// $('#wx').parent().css('display','block');
-       //                      $('#work_dz').parent().css('display','block');
-       //                      $('.bc').css('display','none');
-       //                      $('.xy').css('display','block');
-       //                  }else{
-							// _chu();
-							// _chuConsumerInf();
-							// _chuExchangeInfo();
-       //                      layer.msg(ret.message, {
-       //                        time: 2000, //2s后自动关闭
-       //                        // btn: ['明白了', '知道了', '哦']
-       //                      });
-       //                      $('#wx').parent().css('display','none');
-       //                      $('#work_dz').parent().css('display','none');
-       //                      $('.bc').css('display','block');
-       //                      $('.xy').css('display','none');
-       //                  };
-       //              }
-       //          })
             }
         })
 
+
+        // 3.2.1 会员注册（已测试）
         $('.bc').on('click',function(){
-            var fmobilephone = $('#search').val();
+            var fmbrmobilephone = $('#search').val();
             var $phe=/^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
-            if(!($phe.test(fmobilephone))){
+            if(!($phe.test(fmbrmobilephone))){
                layer.msg('请输入正确的手机号码',{
                               time: 2000, //2s后自动关闭
                               // btn: ['明白了', '知道了', '哦']
                             });
                 return false;
             }
-            var fmbrname = $('#mz').val();
-            var fmbrsex = $('#xb option:selected').val();
-            var fmbrbirth = $('#ymd').val();
-            var faddress = $('#live_dz').val();
-            var fcardid = '0280';
+            var fmbrname = $.trim($('#mz').val());
+            var fmbrsex = $.trim($('#xb option:selected').val());
+            var fmbrbirth = $.trim($('#ymd').val());
+            var faddress = $.trim($('#live_dz').val());
+
+            if(fmbrname.length == 0){
+               layer.msg('请输入用户名',{
+                              time: 2000
+                            });
+                return false;
+            }
+
+            var fopenid = 'm0' + (new Date()).valueOf(),
+                fcardid = '0210';
+
+            var params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + fopenid + '&quot;}';
+
+            console.log(params);
+            var clientCookie = window.localStorage.getItem('sClientCookie');
+            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+            var check_xml = '<SOAP-ENV:Envelope \
+            xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+            SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+            <SOAP-ENV:Header/>\
+              <ns2:Body>\
+                <ns0:DoClientCommand>\
+                  <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+                  <sCommand xsi:type="ns3:string">CRMWeiXinOpenCardJson</sCommand>\
+                  <sParams xsi:type="ns3:string">' + params + '</sParams>\
+                </ns0:DoClientCommand>\
+              </ns2:Body>\
+            </SOAP-ENV:Envelope>'
+
+            console.log(check_xml);
+
+            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
             $.ajax({
-                url: "../home/save-member-info",
-                type: "post",
-                data: {
-                    'fmobilephone':fmobilephone,
-                    'fmbrname':fmbrname,
-                    'fmbrsex':fmbrsex,
-                    'fmbrbirth':fmbrbirth,
-                    'faddress':faddress,
-                    'fcardid':fcardid
-                },
-                dataType:"json",
-                success: function(ret) {
+                url: url + "?op=DoClientCommand",
+                type: 'POST',
+                async: false,
+                dataType: 'xml',
+                data: check_xml,
+                timeout: 10000,
+                contentType: "text/xml; charset=UTF-8",
+                success: function(xmlHttpRequest) {
+                    console.log(xmlHttpRequest);
+                    var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+                    var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+                    var ret = JSON.parse(resultstring);
                     layer.closeAll();
-                    if (ret.status == 1) {
+                    if (ret["FRESULT"] === 0) {
+                        alert("注册成功，卡号：" + ret["FCARDNUM"]);
                         $('.bc').css('display','none');
                         $('.xy').css('display','block');
                     }else{
-                        layer.msg(ret.message, {
+                        layer.msg(ret["FMSG"], {
                           time: 2000, //2s后自动关闭
                           // btn: ['明白了', '知道了', '哦']
                         });
@@ -589,8 +771,15 @@
                         $('.bc').css('display','block');
                         $('.xy').css('display','block');
                     };
+                },
+                complete: function(xmlHttpRequest, status) {
+                    console.log('complete');
+                    console.log(xmlHttpRequest);
+                },
+                error: function(xmlHttpRequest) {
+                    alert("手机号查询信息失败")
                 }
-            })
+            });
         })
 
         //加载更多
@@ -638,7 +827,7 @@
 
         }
 
-        function _doConsumerInfo(ConsumerInfo,xia){
+        function _doConsumerInfo(ConsumerInfo, xia){
             if(ConsumerInfo.length>0){
                 if(!xia){
                     $("#ConsumerInfo").empty();
@@ -650,12 +839,25 @@
                     $("#ConsumerInfo").empty();
                     var ye = xia;
                 }
+                // "REALAMT ": "60",  消费金额
+                // "POSNO": "180",  收银机号
+                // "FLOWNO": "201405230004",  流水号
+                // "ACTION": "消费", 动作：有消费，修正
+                // "MEMBERNAME": "郭一云",  会员姓名
+                // "CARDNUM": "40000035", 卡号
+                // "FILDATE": "2014.05.23 09:36:53",  流水产生时间
+                // "RN": "2",  行号
+                // "STORECODE": "0001",  门店代码
+                // " CARDTYPE ": "201", 卡类型
+                // "NOTE": “收银机号:180,流水号201405230004”,  备注
+                // "SCORE": "6" 本次发生积分,
+                // “BRAND”:”ONLY” 品牌
                 for(a=0;a<ConsumerInfo.length;a++){
                     html +='<div class="xf"><p>消费日期 : 消费金额 - 店铺名称 / Date : Amount - Merchant name</p>';
-                    html += '<p>'+ConsumerInfo[a].created_at+':CNY '+ConsumerInfo[a].amount+' - '+ConsumerInfo[a].store_name+'</p></div>';
+                    html += '<p>'+ConsumerInfo[a].FILDATE+':CNY '+ConsumerInfo[a].REALAMT+' - '+ConsumerInfo[a].NOTE+'</p></div>';
                 }
                 //if(ConsumerInfo.length==10){
-                    html +='<div class="xf gengduo"><p></p><p class="ConsumerInfo" style="text-align: center"><input type="hidden" value="'+ye+'">加载更多</p></div>';
+                    // html +='<div class="xf gengduo"><p></p><p class="ConsumerInfo" style="text-align: center"><input type="hidden" value="'+ye+'">加载更多</p></div>';
                 //}
                 $("#ConsumerInfo").append(html);
             }else{
