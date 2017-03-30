@@ -36,9 +36,9 @@ Date.prototype.format = function(format) {
 }
 
 var clientCookie = '';
-var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
-var userGid = 1000080;
-var userPwd = 'A1E9840D1C9C2097';
+var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
+var userGid = 1000020;
+var userPwd = 'CAB371810F12B8C2';
 var workStation = '172.17.104.164';
 var storeCode = '0210';
 var Oper = 'HDCRM[0]';
@@ -57,10 +57,10 @@ function LogIn() {
       <ns2:Body>\
         <ns0:LogIn>\
           <sOper xsi:type="ns3:string">HDCRM[0]</sOper>\
-          <sStoreCode xsi:type="ns3:string">0210</sStoreCode>\
-          <sWorkStation xsi:type="ns3:string">172.17.104.164</sWorkStation>\
-          <nUserGid xsi:type="ns3:int">1000080</nUserGid>\
-          <sUserPwd xsi:type="ns3:string">A1E9840D1C9C2097</sUserPwd>\
+          <sStoreCode xsi:type="ns3:string">' + storeCode + '</sStoreCode>\
+          <sWorkStation xsi:type="ns3:string">' + workStation + '</sWorkStation>\
+          <nUserGid xsi:type="ns3:int">' + userGid + '</nUserGid>\
+          <sUserPwd xsi:type="ns3:string">' + userPwd + '</sUserPwd>\
           <sClientCookie xsi:type="ns3:string"/>\
         </ns0:LogIn>\
       </ns2:Body>\

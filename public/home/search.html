@@ -256,7 +256,7 @@
                     </ns2:Body>4\
                   </SOAP-ENV:Envelope>'
 
-                  var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+                  var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
                   $.ajax({
                       url: url + "?op=LogOut",
                       type:'POST',
@@ -356,12 +356,14 @@
             var clientCookie = window.localStorage.getItem('sClientCookie');
             var sFCardNum = window.localStorage.getItem('sFCARDNUM');
 
-            var today = new Date(),
+            var today = new Date();
+
+                today.setDate(today.getDate() +1);
                 endDateStr = today.format('yyyy.MM.dd');
 
                 today.setDate(today.getDate() - 365);
                 beginDateStr = today.format('yyyy.MM.dd');
-            var params = "[\\]\nFCardNum=" + sFCardNum + "\nFBeginDate=" + beginDateStr + "\nFEndDate=" + endDateStr + "\nFPageIndex=0\nFPageSize=50\n";
+            var params = "[\\]\nFCardNum=" + sFCardNum + "\nFBeginDate=" + beginDateStr + "\nFEndDate=" + endDateStr + "\nFPageIndex=1\nFPageSize=10\n";
 
             console.log(params);
             var xmlstring = '<SOAP-ENV:Envelope \
@@ -384,8 +386,9 @@
             </SOAP-ENV:Envelope>'
 
             console.log(xmlstring)
+            console.log((new Date()));
 
-            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+            var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
             $.ajax({
                 url: url + "?op=DoClientCommand",
                 type: 'POST',
@@ -425,7 +428,7 @@
           var fcardnum = window.localStorage.getItem('sFCARDNUM');
 
           var fpageindex = 0,
-              fpagesize = 50;
+              fpagesize = 0;
           var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
             console.log(params);
             var xmlstring = '<SOAP-ENV:Envelope \
@@ -449,7 +452,7 @@
 
             console.log(xmlstring)
 
-            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+            var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
             $.ajax({
                 url: url + "?op=DoClientCommand",
                 type: 'POST',
@@ -619,7 +622,7 @@
                   </ns2:Body>\
                 </SOAP-ENV:Envelope>'
 
-                var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+                var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
                  $.ajax({
                     url: url + "?op=DoClientCommand",
                     type:'POST',
@@ -720,7 +723,7 @@
 
             console.log(params);
             var clientCookie = window.localStorage.getItem('sClientCookie');
-            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+            var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
             var check_xml = '<SOAP-ENV:Envelope \
             xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
             xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
@@ -742,7 +745,7 @@
 
             console.log(check_xml);
 
-            var url = 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService';
+            var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
             $.ajax({
                 url: url + "?op=DoClientCommand",
                 type: 'POST',
