@@ -25,6 +25,25 @@ case "$1" in
         /bin/bash "$0" git:pull
     ;;
 
+    git:push)
+        git_current_branch=$(git rev-parse --abbrev-ref HEAD)
+        git push origin ${git_current_branch}
+    ;;
+    git:pull)
+        git_current_branch=$(git rev-parse --abbrev-ref HEAD)
+        git pull origin ${git_current_branch}
+    ;;
+    git:auto)
+        if [[ -z "$2" ]];
+        then
+            echo "Error: please input commit message"
+            exit
+        fi
+        git add .
+        git commit -a -m "$2"
+         /bin/bash "$0" git:push
+    ;;
+
     *)
         echo "Usage: $SCRIPTNAME {config|start|stop|start_redis|stop_redis|restart|deploy}" >&2
         exit 2
