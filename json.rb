@@ -1,7 +1,7 @@
 fields = <<-EOF
-FCARDNUM
-FPAGEINDEX
-FPAGESIZE
+FTITELID
+FVALUEID
+FVALUE
 EOF
 
 words = fields.split(/\n/).map(&:strip)

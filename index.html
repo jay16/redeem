@@ -1,14 +1,19 @@
 <button onClick="LogIn();">LogIn</button><br>
 <button onClick="LogOut();">LogOut</button><br>
+
+<hr>
+
 <button onClick="CheckRegistered(18020285885);">CheckRegistered</button><br>
 <button onClick="queryMallTranhst();">queryMallTranhst</button><br>
 <button onClick="queryScorePrizeBillJson();">queryScorePrizeBillJson</button><br>
 <button onClick="WeiXinOpenCard();">WeiXinOpenCard</button><br>
-<button onClick="QueryMallGiftPromInfo();">QueryMallGiftPromInfo</button><br>
-<button onClick="GenMallSupplyBill();">GenMallSupplyBill</button><br>
-<button onClick="QueryCRMQuestionnaireMode();">QueryCRMQuestionnaireMode</button><br>
-<button onClick="SaveCRMQuestionnaire();">SaveCRMQuestionnaire</button><br>
-<button onClick="QueryMallGndWeb();">QueryMallGndWeb</button><br>
+<button onClick="QueryMallGndWeb();">查询有效商铺信息</button><br>
+<button onClick="QueryMallGiftPromInfo();">查询有效的赠品促销接口</button><br>
+<button onClick="CRMGenMallSupplyBill();">生成赠品发放单接口</button><br>
+
+<hr>
+<button onClick="CRMQueryCRMQuestionnaireMode();">查询调查问卷模板信息</button><br>
+<button onClick="CRMSaveCRMQuestionnaire();">3.2.33 保存调查问卷信息</button><br>
 
 
 <script src="jquery.min.js" type="text/javascript"></script>
@@ -125,6 +130,7 @@ function LogOut() {
         }
     });
 }
+
 // 3.2.1 会员注册（已测试）
 function WeiXinOpenCard() {
     if (clientCookie.length === 0) {
@@ -412,67 +418,6 @@ function QueryMallGiftPromInfo() {
         }
     });
 }
-// 3.2.4 生成赠品发放单接口
-function GenMallSupplyBill() {
-    if (clientCookie.length === 0) {
-        LogIn();
-    }
-    console.log(clientCookie);
-
-    var fcardnum,
-        fnum,
-        fmember,
-        fmobilephone,
-        fcardid,
-        femail,
-        ftotal,
-        fsupplypay;
-    var params = '{&quot;FCARDNUM&quot;: &quot;' + fcardnum + '&quot;,&quot;FNUM&quot;: &quot;' + fnum + '&quot;,&quot;FMEMBER&quot;: &quot;' + fmember + '&quot;,&quot;FMOBILEPHONE&quot;: &quot;' + fmobilephone + '&quot;,&quot;FCARDID&quot;: &quot;' + fcardid + '&quot;,&quot;FEMAIL&quot;: &quot;' + femail + '&quot;,&quot;FTOTAL&quot;: &quot;' + ftotal + '&quot;,&quot;FSUPPLYPAY&quot;: []]}';
-
-    console.log(params);
-    var check_xml = '<SOAP-ENV:Envelope \
-    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-    <SOAP-ENV:Header/>\
-      <ns2:Body>\
-        <ns0:DoClientCommand>\
-          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-          <sCommand xsi:type="ns3:string">CRMGenMallSupplyBill </sCommand>\
-          <sParams xsi:type="ns3:string">' + params + '</sParams>\
-        </ns0:DoClientCommand>\
-      </ns2:Body>\
-    </SOAP-ENV:Envelope>'
-
-    $.ajax({
-        url: url + "?op=DoClientCommand",
-        type: 'POST',
-        async: false,
-        dataType: 'xml',
-        data: check_xml,
-        timeout: 10000,
-        contentType: "text/xml; charset=UTF-8",
-        success: function(xmlHttpRequest) {
-            console.log('success');
-            console.log(xmlHttpRequest);
-        },
-        complete: function(xmlHttpRequest, status) {
-            console.log('complete');
-            console.log(xmlHttpRequest);
-        },
-        error: function(xmlHttpRequest) {
-            console.log('error');
-            console.log(xmlHttpRequest);
-            alert("手机号查询信息失败")
-            LogOut();
-        }
-    });
-}
 // 3.2.5 查询调查问卷模板信息
 function QueryCRMQuestionnaireMode() {
     if (clientCookie.length === 0) {
@@ -527,71 +472,6 @@ function QueryCRMQuestionnaireMode() {
         }
     });
 }
-// 3.2.6 保存调查问卷信息
-function SaveCRMQuestionnaire() {
-    if (clientCookie.length === 0) {
-        LogIn();
-    }
-    console.log(clientCookie);
-
-    var params = '{\
-  &quot;FCARDNUM&quot;: &quot;00000930&quot;,\
-  &quot;FNUM&quot;: &quot;02801610090001&quot;,\
-  &quot;FDATA&quot;: [\
-  { &quot;FTITELID&quot;:&quot;1&quot;,\
-    &quot;FVALUEID&quot;:&quot;2&quot;,\
-    &quot;FVALUE&quot;:&quot;&quot;},\
-  {&quot;FTITELID&quot;:&quot;3&quot;,\
-        &quot;FVALUEID&quot;:&quot;&quot;,\
-        &quot;FVALUE&quot;:&quot;我对你们很满意，没有意见&quot;}\
-    ]\
-  }';
-
-
-    console.log(params);
-    var check_xml = '<SOAP-ENV:Envelope \
-    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-    <SOAP-ENV:Header/>\
-      <ns2:Body>\
-        <ns0:DoClientCommand>\
-          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-          <sCommand xsi:type="ns3:string">CRMSaveCRMQuestionnaire</sCommand>\
-          <sParams xsi:type="ns3:string">' + params + '</sParams>\
-        </ns0:DoClientCommand>\
-      </ns2:Body>\
-    </SOAP-ENV:Envelope>'
-
-    $.ajax({
-        url: url + "?op=DoClientCommand",
-        type: 'POST',
-        async: false,
-        dataType: 'xml',
-        data: check_xml,
-        timeout: 10000,
-        contentType: "text/xml; charset=UTF-8",
-        success: function(xmlHttpRequest) {
-            console.log('success');
-            console.log(xmlHttpRequest);
-        },
-        complete: function(xmlHttpRequest, status) {
-            console.log('complete');
-            console.log(xmlHttpRequest);
-        },
-        error: function(xmlHttpRequest) {
-            console.log('error');
-            console.log(xmlHttpRequest);
-            alert("手机号查询信息失败")
-            LogOut();
-        }
-    });
-}
 // 3.2.7 查询有效商铺信息
 function QueryMallGndWeb() {
     if (clientCookie.length === 0) {
@@ -602,7 +482,7 @@ function QueryMallGndWeb() {
     var fstorecode = storeCode,
         fpageindex = '1',
         fpagesize = '30';
-    var params = '{&quot;FSTORECODE&quot;: &quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;: &quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;: &quot;' + fpagesize + '&quot;}';
+    var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
 
     console.log(params);
     var check_xml = '<SOAP-ENV:Envelope \
@@ -624,6 +504,8 @@ function QueryMallGndWeb() {
       </ns2:Body>\
     </SOAP-ENV:Envelope>'
 
+    console.log(check_xml);
+
     $.ajax({
         url: url + "?op=DoClientCommand",
         type: 'POST',
@@ -635,6 +517,19 @@ function QueryMallGndWeb() {
         success: function(xmlHttpRequest) {
             console.log('success');
             console.log(xmlHttpRequest);
+            var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+            var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+            console.log(resultstring)
+            var outparams = JSON.parse(resultstring);
+            var result = outparams["FRESULT"];
+            if(result["FRESULT"] === 0) {
+              console.log(result["FDATA"]);
+            } else {
+                if(result["FMSG"].length > 0) {
+                    alert(result["FMSG"]);
+                }
+            }
+            console.log(resultstring)
         },
         complete: function(xmlHttpRequest, status) {
             console.log('complete');
@@ -648,4 +543,292 @@ function QueryMallGndWeb() {
         }
     });
 }
+// 3.2.30 查询有效的赠品促销接口
+function QueryMallGiftPromInfo() {
+    if (clientCookie.length === 0) {
+        LogIn();
+    }
+    console.log(clientCookie);
+
+    var fildate = (new Date()).format('yyyy.MM.dd hh:mm:ss');
+    console.log(fildate);
+    var params = '{&quot;FFILDATE&quot;:&quot;' + fildate + '&quot;}';
+
+    console.log(params);
+    var check_xml = '<SOAP-ENV:Envelope \
+    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+    <SOAP-ENV:Header/>\
+      <ns2:Body>\
+        <ns0:DoClientCommand>\
+          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+          <sCommand xsi:type="ns3:string">CRMQueryMallGiftPromInfo </sCommand>\
+          <sParams xsi:type="ns3:string">' + params + '</sParams>\
+        </ns0:DoClientCommand>\
+      </ns2:Body>\
+    </SOAP-ENV:Envelope>'
+
+    console.log(check_xml);
+
+    $.ajax({
+        url: url + "?op=DoClientCommand",
+        type: 'POST',
+        async: false,
+        dataType: 'xml',
+        data: check_xml,
+        timeout: 10000,
+        contentType: "text/xml; charset=UTF-8",
+        success: function(xmlHttpRequest) {
+            console.log('success');
+            console.log(xmlHttpRequest);
+            var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+            var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+            console.log(resultstring);
+            // var outparams = JSON.parse(resultstring);
+            // var result = outparams["FRESULT"];
+            // if(result["FRESULT"] === 0) {
+            //   console.log(result["FDATA"]);
+            // } else {
+            //     if(result["FMSG"].length > 0) {
+            //         alert(result["FMSG"]);
+            //     }
+            // }
+            // console.log(resultstring)
+        },
+        complete: function(xmlHttpRequest, status) {
+            console.log('complete');
+            console.log(xmlHttpRequest);
+        },
+        error: function(xmlHttpRequest) {
+            console.log('error');
+            console.log(xmlHttpRequest);
+            alert("手机号查询信息失败")
+            LogOut();
+        }
+    });
+}
+
+// 3.2.31 生成赠品发放单接口
+function CRMGenMallSupplyBill() {
+    if (clientCookie.length === 0) {
+        LogIn();
+    }
+    console.log(clientCookie);
+
+    var fildate = (new Date()).format('yyyy.MM.dd hh:mm:ss');
+
+    var fgndgid = '1000021',
+        fflowno = (new Date()).valueOf(),
+        focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss');
+    var fsupplypay_params = '{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;}';
+
+    var flaggid = '1000000',
+        famount = parseInt(Math.random() * 10 + 1);
+    var fsupplydtl_params = '{&quot;FLAGGID&quot;:&quot;' + flaggid + '&quot;,&quot;FAMOUNT&quot;:&quot;' + famount + '&quot;}';
+
+    var
+    fcardnum = '80000518',
+    fnum = '02101703310001',
+    ftotal = '12345';
+
+    var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,&quot;FSUPPLYPAY&quot;:[' + fsupplypay_params + '],&quot;FSUPPLYDTL&quot;:[' + fsupplydtl_params + ']}';
+
+    console.log(params);
+    console.log(params.replace('&quot;', "'"));
+    var check_xml = '<SOAP-ENV:Envelope \
+    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+    <SOAP-ENV:Header/>\
+      <ns2:Body>\
+        <ns0:DoClientCommand>\
+          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+          <sCommand xsi:type="ns3:string">CRMGenMallSupplyBill</sCommand>\
+          <sParams xsi:type="ns3:string">' + params + '</sParams>\
+        </ns0:DoClientCommand>\
+      </ns2:Body>\
+    </SOAP-ENV:Envelope>'
+
+    console.log(check_xml);
+
+    $.ajax({
+        url: url + "?op=DoClientCommand",
+        type: 'POST',
+        async: false,
+        dataType: 'xml',
+        data: check_xml,
+        timeout: 10000,
+        contentType: "text/xml; charset=UTF-8",
+        success: function(xmlHttpRequest) {
+            console.log('success');
+            console.log(xmlHttpRequest);
+            var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+            var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+            console.log(resultstring);
+            // var outparams = JSON.parse(resultstring);
+            // var result = outparams["FRESULT"];
+            // if(result["FRESULT"] === 0) {
+            //   console.log(result["FDATA"]);
+            // } else {
+            //     if(result["FMSG"].length > 0) {
+            //         alert(result["FMSG"]);
+            //     }
+            // }
+            // console.log(resultstring)
+        },
+        complete: function(xmlHttpRequest, status) {
+            console.log('complete');
+            console.log(xmlHttpRequest);
+        },
+        error: function(xmlHttpRequest) {
+            console.log('error');
+            console.log(xmlHttpRequest);
+            alert("手机号查询信息失败")
+            LogOut();
+        }
+    });
+}
+
+
+// 3.2.32 查询调查问卷模板信息
+function CRMQueryCRMQuestionnaireMode () {
+    if (clientCookie.length === 0) {
+        LogIn();
+    }
+    console.log(clientCookie);
+
+    var fname = '';
+    var params = '{&quot;FNAME&quot;:&quot;' + fname + '&quot;}';
+
+
+    console.log(params);
+    var check_xml = '<SOAP-ENV:Envelope \
+    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+    <SOAP-ENV:Header/>\
+      <ns2:Body>\
+        <ns0:DoClientCommand>\
+          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+          <sCommand xsi:type="ns3:string">CRMQueryCRMQuestionnaireMode </sCommand>\
+          <sParams xsi:type="ns3:string">' + params + '</sParams>\
+        </ns0:DoClientCommand>\
+      </ns2:Body>\
+    </SOAP-ENV:Envelope>'
+
+    console.log(check_xml);
+
+    $.ajax({
+        url: url + "?op=DoClientCommand",
+        type: 'POST',
+        async: false,
+        dataType: 'xml',
+        data: check_xml,
+        timeout: 10000,
+        contentType: "text/xml; charset=UTF-8",
+        success: function(xmlHttpRequest) {
+            console.log('success');
+            console.log(xmlHttpRequest);
+            var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+            var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+            console.log(resultstring);
+        },
+        complete: function(xmlHttpRequest, status) {
+            console.log('complete');
+            console.log(xmlHttpRequest);
+        },
+        error: function(xmlHttpRequest) {
+            console.log('error');
+            console.log(xmlHttpRequest);
+            alert("手机号查询信息失败")
+            LogOut();
+        }
+    });
+}
+
+
+
+// 3.2.33 保存调查问卷信息
+function CRMSaveCRMQuestionnaire() {
+    if (clientCookie.length === 0) {
+        LogIn();
+    }
+    console.log(clientCookie);
+
+    var ftitelid = 0,
+        fvalueid = 1,
+        fvalue = '';
+    var fdata_params = '{&quot;FTITELID&quot;:&quot;' + ftitelid + '&quot;,&quot;FVALUEID&quot;:&quot;' + fvalueid + '&quot;,&quot;FVALUE&quot;:&quot;' + fvalue + '&quot;}';
+
+    var fcardnum = '80000518',
+        fnum = '02101703310001';
+    var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FDATA&quot;:[' + fdata_params + ']}';
+
+    console.log(params);
+    var check_xml = '<SOAP-ENV:Envelope \
+    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+    <SOAP-ENV:Header/>\
+      <ns2:Body>\
+        <ns0:DoClientCommand>\
+          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+          <sCommand xsi:type="ns3:string">CRMSaveCRMQuestionnaire </sCommand>\
+          <sParams xsi:type="ns3:string">' + params + '</sParams>\
+        </ns0:DoClientCommand>\
+      </ns2:Body>\
+    </SOAP-ENV:Envelope>'
+
+    console.log(check_xml);
+
+    $.ajax({
+        url: url + "?op=DoClientCommand",
+        type: 'POST',
+        async: false,
+        dataType: 'xml',
+        data: check_xml,
+        timeout: 10000,
+        contentType: "text/xml; charset=UTF-8",
+        success: function(xmlHttpRequest) {
+            console.log('success');
+            console.log(xmlHttpRequest);
+            var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+            var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+            console.log(resultstring);
+        },
+        complete: function(xmlHttpRequest, status) {
+            console.log('complete');
+            console.log(xmlHttpRequest);
+        },
+        error: function(xmlHttpRequest) {
+            console.log('error');
+            console.log(xmlHttpRequest);
+            alert("手机号查询信息失败")
+            LogOut();
+        }
+    });
+}
+
+
 </script>

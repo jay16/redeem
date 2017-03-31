@@ -36,7 +36,7 @@
 <!-- 加载 -->
 <div id="jiaZai"> <img src="../assets/image/loadbg.png"> </div>
 
-<!-- 内容 --> 
+<!-- 内容 -->
 <!-- 内容 -->
 <div id="main">
   <div class="title">
@@ -70,12 +70,12 @@
   <div class="anNiu"> <a href="search.html" class="sy"> 上一页<br/>
     Previous </a> <a href="javascript:void (0)" class="xy
                 "> 下一页<br/>
-    Next </a> 
-    
-    <!--<a href="javascript:void (0)" class="bc">--> 
-    <!--保存<br/>--> 
-    <!--Save--> 
-    <!--</a>--> 
+    Next </a>
+
+    <!--<a href="javascript:void (0)" class="bc">-->
+    <!--保存<br/>-->
+    <!--Save-->
+    <!--</a>-->
   </div>
 </div>
 <div class="xuanZe">
@@ -243,7 +243,7 @@
             $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
         });
 		//上一页
-		
+
 
 
         //侧栏操作
@@ -295,6 +295,87 @@
         //删除新增
         $(document).on('click','.jian',function(){$(this).parent().remove();});
 
+        // 3.2.7 查询有效商铺信息
+        function QueryMallGndWeb() {
+
+            var clientCookie = window.localStorage.getItem('sClientCookie');
+            var fstorecode = '0210',
+                fpageindex = '1',
+                fpagesize = '30';
+            var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
+
+            console.log(params);
+            var check_xml = '<SOAP-ENV:Envelope \
+            xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+            SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+            <SOAP-ENV:Header/>\
+              <ns2:Body>\
+                <ns0:DoClientCommand>\
+                  <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+                  <sCommand xsi:type="ns3:string">QueryMallGndWeb</sCommand>\
+                  <sParams xsi:type="ns3:string">' + params + '</sParams>\
+                </ns0:DoClientCommand>\
+              </ns2:Body>\
+            </SOAP-ENV:Envelope>'
+
+            console.log(check_xml);
+
+            var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
+            $.ajax({
+                url: url + "?op=DoClientCommand",
+                type: 'POST',
+                async: false,
+                dataType: 'xml',
+                data: check_xml,
+                timeout: 10000,
+                contentType: "text/xml; charset=UTF-8",
+                success: function(xmlHttpRequest) {
+                    console.log('success');
+                    console.log(xmlHttpRequest);
+                    var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+                    var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+                    console.log(resultstring)
+                    var outparams = JSON.parse(resultstring);
+                    if(outparams["FRESULT"] === 0) {
+
+                        $('.xuanZe .hangHu').html('');
+                        $('.xuanZe').fadeIn(200);
+                        var html = '';
+                        var data = outparams["FDATA"];
+                        for(i=0;i<data.length;i++){
+                            html += "<div  class='soudingname'><div><p>"+data[i].GNDNAME+"</p><p><b>"+data[i].GNDCODE+"</b></p></div></div> ";
+                        }
+                        console.log(html);
+                        $('.xuanZe .hangHu').append(html);
+
+                    } else {
+                        if(outparams["FMSG"].length > 0) {
+                            alert(outparams["FMSG"]);
+                        }
+                    }
+                    console.log(resultstring)
+
+
+                },
+                complete: function(xmlHttpRequest, status) {
+                    console.log('complete');
+                    console.log(xmlHttpRequest);
+                },
+                error: function(xmlHttpRequest) {
+                    console.log('error');
+                    console.log(xmlHttpRequest);
+                    alert("手机号查询信息失败")
+                    LogOut();
+                }
+            });
+        }
+
 
         //关闭选择商户
         $('.xuanZe_gb').click(function(){$('.xuanZe').fadeOut(200);});
@@ -304,19 +385,24 @@
             dpm = $(this).parent().find('.store-name');
 			dpm.addClass('suoding');
             var dpm_val = dpm.val();
-			//update cynthia 数据传入	
-             var data= [
-                { "gndname":"CC SHOP1" , "gndcode":"F267" },
-                { "gndname":"CC SHOP2" , "gndcode":"F268" },
-                { "gndname":"CC SHOP3" , "gndcode":"F269" },
-                ];  
-				$('.xuanZe .hangHu').html('');
-				$('.xuanZe').fadeIn(200);
-				var html = '';
-				for(i=0;i<data.length;i++){
-					html += "<div  class='soudingname'><div><p>"+data[i].gndname+"</p><p><b>"+data[i].gndcode+"</b></p></div></div> ";
-				}
-				$('.xuanZe .hangHu').append(html);									
+			//update cynthia 数据传入
+    //          var data= [
+    //             { "gndname":"CC SHOP1" , "gndcode":"F267" },
+    //             { "gndname":"CC SHOP2" , "gndcode":"F268" },
+    //             { "gndname":"CC SHOP3" , "gndcode":"F269" },
+    //             ];
+				// $('.xuanZe .hangHu').html('');
+				// $('.xuanZe').fadeIn(200);
+				// var html = '';
+				// for(i=0;i<data.length;i++){
+				// 	html += "<div  class='soudingname'><div><p>"+data[i].gndname+"</p><p><b>"+data[i].gndcode+"</b></p></div></div> ";
+				// }
+    //             console.log(html);
+				// $('.xuanZe .hangHu').append(html);
+
+            QueryMallGndWeb();
+
+
 		/*	$.ajax({
 				type:'post',
 				url:'../home/store-info',
@@ -332,10 +418,10 @@
 						$('.xuanZe .hangHu').append(html);
 					}else{
 						layer.msg(ret.message, {
-                          time: 2000, 
+                          time: 2000,
                         });
 					}
-					
+
 				}
 			});*/
         });
@@ -349,7 +435,7 @@
             // $('.xuanZe').fadeOut(200);
             // dpm.val($(this).find('p:eq(0)').html());
         // })
-		
+
 		$(document).on('blur','.amount',function(){
 			var val = $(this).val();
 			var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
@@ -359,7 +445,7 @@
 						});
 			}
 		});
-		
+
 		//下一页
 		$('.xy').on('click',function(){
 			var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
@@ -432,7 +518,7 @@
                           time: 2000, //2s后自动关闭
                         });
 					}
-					
+
 				}
 			});*/
 		});
