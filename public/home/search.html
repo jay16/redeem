@@ -475,7 +475,7 @@
                         console.log(outparams['FDATA']);
                         var array = (typeof(outparams['FDATA']) === 'string' ? [] : outparams['FDATA']);
                         console.log(array);
-                        _doConsumerInfo(array,false);
+                        _doExchangeInfo(array, false);
 
                         if(outparams['FMSG'].length > 0) {
                             layer.closeAll();
@@ -516,11 +516,6 @@
                     });
 
                     queryMallTranhst();
-                } else {
-                    layer.msg('请输入会员手机号', {
-                        shade: 0.01
-                        ,time: 1200
-                    });
                 }
             }
 
@@ -533,11 +528,6 @@
                     });
 
                     queryScorePrizeBillJson();
-                } else {
-                    layer.msg('请输入会员手机号', {
-                        shade: 0.01
-                        ,time: 1200
-                    });
                 }
             }
         })
@@ -881,13 +871,16 @@
                     var ye = xia;
                 }
                 var html = '';
-                for(a=0;a<ExchangeInfo.length;a++){
-                    html +='<div class="xf"><p>兑换日期 : 礼品 / Redemption date : gifts</p>';
-                    html += ' <p>'+ExchangeInfo[a].created_at+':CNY '+ExchangeInfo[a].consumer_amount+' - '+ExchangeInfo[a].gift_id.fname+'</p></div>';
+                for(var i = 0, ilen = ExchangeInfo.length; i < ilen; i++){
+                    html +='<div class="xf"><p>兑换记录 : 礼品 / Redemption date : gifts</p>';
+                    for(var j = 0, jlen = ExchangeInfo[i]["FGOODS"].length; j < jlen; j++) {
+                      html += ' <p>'+ExchangeInfo[i].FBILLNUM+':CNY '+ExchangeInfo[i]["FGOODS"][j].AMOUNT+' - '+ExchangeInfo[i]["FGOODS"][j].NAME+'</p></div>';
+                    }
                 }
                 if(ExchangeInfo.length==10){
                     html +='<div class="xf gengduo"><p></p><p class="ExchangeInfo" style="text-align: center"><input type="hidden" value="'+ye+'">加载更多</p></div>';
                 }
+                console.log(html);
                 $("#ExchangeInfo").append(html);
             }else{
                  _chuExchangeInfo()
