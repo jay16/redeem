@@ -280,22 +280,22 @@ window.onload = function() {
     var dq_count = $(".content_2 .dq-wrapper").length + 1;
 
     $('.content_2').append(
-      '<div class="dq-wrapper dq-wrapper-' + dq_count + '">' +
-      '<div class="dp">' +
-      '<p>店铺名称 / Merchant</p>' +
-      '<input type="text" placeholder="店铺名称" class="store-name"/><input type="hidden" placeholder="店铺code" class="store-code"/>' +
-      '<a href="javascript:void (0)" class="search"><img src="../assets/image/search.png"/></a>' +
-      '</div>' +
-      '<div>' +
-      '<p>流水号 / Serial Number</p>' +
-      '<input type="text" placeholder="流水号" class="serial-num"/>' +
-      '</div>' +
-      '<div>' +
-      '<p>消费金额 / Amount</p>' +
-      '<input type="number" placeholder="0.00" class="amount"/>' +
-      '</div>' +
-      '<a href="javascript:void (0)" class="jian">-</a>' +
-      '</div>'
+      '<div class="dq-wrapper dq-wrapper-' + dq_count + '">\
+         <div class="dp"> \
+           <p>店铺名称 / Merchant</p>\
+           <input type="text" placeholder="店铺名称" class="store-name"/><input type="hidden" placeholder="GNDGID" class="gndgid"/>\
+          <a href="javascript:void (0)" class="search"><img src="../assets/image/search.png"/></a>\
+         </div>\
+         <div>\
+           <p>流水号 / Serial Number</p>\
+           <input type="text" placeholder="流水号" class="serial-num"/>\
+         </div>\
+         <div>\
+           <p>消费金额 / Amount</p>\
+           <input type="number" placeholder="0.00" class="amount"/>\
+         </div>\
+         <a href="javascript:void (0)" class="jian">-</a>\
+       </div>'
     )
   }
 
@@ -314,8 +314,8 @@ window.onload = function() {
   function QueryMallGndWeb() {
     var clientCookie = window.localStorage.getItem('sClientCookie');
     var fstorecode = '0210',
-      fpageindex = '1',
-      fpagesize = '30';
+        fpageindex = '1',
+        fpagesize = '30';
     var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
 
     console.log(params);
@@ -363,19 +363,27 @@ window.onload = function() {
           var html = '';
           var data = outparams["FDATA"];
           for (i = 0; i < data.length; i++) {
-            html += "<div  class='soudingname'><div><p>" + data[i].GNDNAME + "</p><p><b>" + data[i].GNDCODE + "</b></p></div></div> ";
+            html += "<div class='soudingname'>\
+                        <div>\
+                          <p>" + data[i].GNDNAME + "</p>\
+                          <p>\
+                            <b>" + data[i].GNDGID + "</b>\
+                          </p>\
+                        </div>\
+                        <input type='hidden' value='" + data[i].GNDGID + "' class='gndgid'/>\
+                        <input type='hidden' value='" + data[i].GNDNAME + "' class='gndname'/>\
+                        <input type='hidden' value='" + data[i].GNDCODE + "' class='gndcode'/>\
+                        <input type='hidden' value='" + data[i].RN + "' class='rn'/>\
+                      </div> ";
           }
           console.log(html);
           $('.xuanZe .hangHu').append(html);
-
         } else {
           if (outparams["FMSG"].length > 0) {
             alert(outparams["FMSG"]);
           }
         }
         console.log(resultstring)
-
-
       },
       complete: function(xmlHttpRequest, status) {
         console.log('complete');
@@ -396,9 +404,10 @@ window.onload = function() {
     $('.xuanZe').fadeOut(200);
   });
   //打开商户选择
-  var dpm = null;
+  var dpm = null, gndgid = null;
   $(document).on('click', '.search', function() {
     dpm = $(this).parent().find('.store-name');
+    gndgid = $(this).parent().find('.gndgid');
     dpm.addClass('suoding');
     var dpm_val = dpm.val();
 
@@ -407,8 +416,11 @@ window.onload = function() {
   //选择商户
   $(document).on('click', '.soudingname', function() {
     $('.xuanZe').fadeOut(200);
-    dpm.val($(this).find('p:eq(0)').html());
-    dpm.next('input:eq(0)').val($(this).find('p:eq(1)').find('b').html());
+    dpm.val($(this).find('.gndname').val());
+    gndgid.val($(this).find('.gndgid').val());
+
+    // dpm.val($(this).find('p:eq(0)').html());
+    // dpm.next('input:eq(0)').val($(this).find('p:eq(1)').find('b').html());
   })
   // $('.suoding').click(function(){alert('aaa');
   // $('.xuanZe').fadeOut(200);
@@ -434,9 +446,7 @@ window.onload = function() {
     code = '',
     records = [];
 
-
     if ($("input.store-name").length === 1) {
-
       if ($(this).hasClass('tiaozhuang') && (!$("input.store-name")[0].value || !$("input.serial-num")[0].value || !$("input.amount")[0].value)) {
         location.href = "../home/exchange";
         return false;
@@ -451,24 +461,24 @@ window.onload = function() {
 
     $(".dq-wrapper").each(function() {
       var record = {};
-      name = $(this).find("input.store-name").val();
-      num = $(this).find("input.serial-num").val();
-      amount = $(this).find("input.amount").val();
-      code = $(this).find("input.amount").val();
+        name = $(this).find("input.store-name").val();
+        serialnum = $(this).find("input.serial-num").val();
+        amount = $(this).find("input.amount").val();
+        gndgid = $(this).find("input.gndgid").val();
 
-      if(!name.length || !num.length || !amount.length) {
+      if(!name.length || !serialnum.length || !amount.length) {
         var msg = "";
         if(!name.length && !msg.length) msg = "店铺名称不能为空！";
-        if(!num.length && !msg.length) msg = "流水号不能为空！";
+        if(!serialnum.length && !msg.length) msg = "流水号不能为空！";
         if(!amount.length && !msg.length) msg = "请正确填写金额";
         layer.msg(msg, { time: 2000 });
         return false;
       }
 
       record["name"] = name;
-      record["serialnum"] = num;
+      record["serialnum"] = serialnum;
       record["amount"] = amount;
-      record["code"] = code;
+      record["gndgid"] = gndgid;
       records.push(record);
     })
 

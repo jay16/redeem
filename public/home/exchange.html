@@ -193,9 +193,11 @@
           '<p>消费金额 - 店铺名称 - 礼品 / Amount - Merchant - Redeemable</p>' +
           '<p>' +
             '<img src="http://project.chenfeng.co/taikooli/public/assets/image/dui.png" class="guoxiao" alt="">CNY ' + record["amount"] + '- ' + record["name"] +
-            '<input type="hidden" class="guoxiao_id xiaochu" value="' + record["code"] + '">' +
+            '<input type="hidden" class="guoxiao_id xiaochu" value="' + record["gndgid"] + '">' +
+            '<input type="hidden" class="guoxiao_gndgid xiaochu" value="' + record["gndgid"] + '">' +
             '<input type="hidden" class="guoxiao_amount xiaochu" value="' + record["amount"] + '">' +
             '<input type="hidden" class="guoxiao_store xiaochu" value="' + record["name"] + '">' +
+            '<input type="hidden" class="guoxiao_serialnum xiaochu" value="' + record["serialnum"] + '">' +
           '</p>' +
         '</div>'
       );
@@ -308,14 +310,16 @@
       var fcardnum = window.localStorage.getItem('sFCARDNUM');
       var fildate = (new Date()).format('yyyy.MM.dd hh:mm:ss');
 
-      var paies = [], gid, flowno, crttime;
+      var paies = [], gid, flowno, crttime, famt;
       $(".xf").each(function() {
         if($(this).hasClass("checked")) {
-          fgndgid = $(this).find(".guoxiao_store").val();
-          fflowno = $(this).find(".guoxiao_id").val();
+          fgndgid = $(this).find(".guoxiao_gndgid").val();
+          fflowno = $(this).find(".guoxiao_serialnum").val();
+          famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2);
           focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss');
 
-          paies.push('{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;}');
+          console.log('fgndgid - ' + fgndgid);
+          paies.push('{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;,&quot;FAMT&quot;:&quot;' + famt + '&quot;}');
         }
       });
       // var fgndgid = '1000021',
@@ -373,6 +377,7 @@
               console.log(xmlHttpRequest);
               var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
               var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+              console.log(resultstring);
               var outparams = JSON.parse(resultstring);
 
               if(outparams["FMSG"].length) {

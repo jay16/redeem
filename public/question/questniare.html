@@ -32,66 +32,66 @@
 </style>
 </head>
 <body>
-
 <!-- 加载 -->
-<div id="jiaZai"> <img src="../assets/image/loadbg.png"> </div>
-
-<!-- 内容 --> 
+<div id="jiaZai">
+  <img src="../assets/image/loadbg.png"></div>
+<!-- 内容 -->
 <!-- 内容 -->
 <div id="main">
   <div class="title">
-    <div> <img src="../assets/image/dhlp2.png"> <img src="../assets/image/diaoCha.png"> 问卷调查 </div>
-    <div>Survey</div>
-  </div>
-  <div class="questionnaire">
-    <div class="wt">您如何到成都远洋太古汇? 需时多久?
-      <input type="hidden" name="ftitleid" id="ftitleid" value="0"/>
-      <input type="hidden" name="ftype" id="ftype" value="1"/>
-    </div>
-    <div class="kx"> <img src="../assets/image/diaoCha.png"> 可选答案 <span> 8 </span> </div>
-    <div class="xz">
-      <div id="1" >自驾</div>
-      <div id="2" >出租车</div>
-      <div id="3" >公共汽车</div>
-      <div id="4" >地铁</div>
-      <div id="5" class="xuanZhong">自行车</div>
-      <div id="6" >步行</div>
-      <div id="7" class="xuanZhong">通常需要__分钟到达这里</div>
-      <div id="others">其他 Others(请注明)
-        <textarea class="ques_others"></textarea>
+    <div>
+      <img src="../assets/image/dhlp2.png">
+      <img src="../assets/image/diaoCha.png">
+      <span class="questionnaire-title">
+          问卷调查
+      </span>
       </div>
-    </div>
+    <div>Survey</div></div>
+  <div class="questionnaire" qindex="0">
   </div>
-  <div class="anNiu"> <a href="../home/exchange.html" class="sy"> 上一页<br/>
-    Previous </a> <a href="javascript:void (0)" class="xy"> 下一页<br/>
-    Next </a> </div>
+  <div class="anNiu">
+    <a href="javascript:void (0)" class="sy last-option">上一页
+      <br/>Previous</a>
+    <a href="javascript:void (0)" class="xy next-option">下一页
+      <br/>Next</a></div>
 </div>
 <div class="gn">
   <div class="dj">
-    <div> <img src="../assets/image/gn1.png" class="xs" alt=""> <img src="../assets/image/gn2.png" class="yc" alt=""> </div>
-    <div><img src="../assets/image/gn2.png"></div>
+    <div>
+      <img src="../assets/image/gn1.png" class="xs" alt="">
+      <img src="../assets/image/gn2.png" class="yc" alt=""></div>
+    <div>
+      <img src="../assets/image/gn2.png"></div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
-    <p class="lp"><a href="../home/search.html"><img src="../assets/image/dhlp.png">礼品兑换</a></p>
-    <p class="mm"><img src="../assets/image/bi.png" class="bi" alt="">修改密码</p>
-    <p class="tuichu"><img src="../assets/image/dl2.png">退出登录</p>
-    <div class="renWu"> <img src="../assets/image/renWu.png">
+    <p class="lp">
+      <a href="../home/search.html">
+        <img src="../assets/image/dhlp.png">礼品兑换</a></p>
+    <p class="mm">
+      <img src="../assets/image/bi.png" class="bi" alt="">修改密码</p>
+    <p class="tuichu">
+      <img src="../assets/image/dl2.png">退出登录</p>
+    <div class="renWu">
+      <img src="../assets/image/renWu.png">
       <p>18602897807</p>
       <p class="time"></p>
     </div>
   </div>
 </div>
 <div class="xg">
-  <div> <a href="javascript:void (0)" class="gb"><img src="../assets/image/gb.png"></a>
+  <div>
+    <a href="javascript:void (0)" class="gb">
+      <img src="../assets/image/gb.png"></a>
     <div class="xg_content">
-      <div class="suo"> <img src="../assets/image/bi.png"> </div>
+      <div class="suo">
+        <img src="../assets/image/bi.png"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
-        <input type="password" id="oldPassword" placeholder="旧密码"/>
-        <input type="password" id="newPassword" placeholder="新密码"/>
-        <input type="password" id="rePassword" placeholder="再次输入新密码"/>
-        <a href="javascript:void (0)" class="cs mima">确认修改密码</a> </div>
+        <input type="password" id="oldPassword" placeholder="旧密码" />
+        <input type="password" id="newPassword" placeholder="新密码" />
+        <input type="password" id="rePassword" placeholder="再次输入新密码" />
+        <a href="javascript:void (0)" class="cs mima">确认修改密码</a></div>
     </div>
   </div>
 </div>
@@ -101,182 +101,453 @@
 <script src="../assets/js/jquery-1.8.0.min.js"></script>
 <script src="../assets/js/plugins/layer/layer.js"></script>
 <script>
-    window.onload = function(){
-        $('#jiaZai').hide();
-        $('#main').show();
+
+// 3.2.32 查询调查问卷模板信息
+function CRMQueryCRMQuestionnaireMode() {
+  var clientCookie = window.localStorage.getItem('sClientCookie');
+  console.log(clientCookie);
+
+  var fname = '';
+  var params = '{&quot;FNAME&quot;:&quot;' + fname + '&quot;}';
+
+  console.log(params);
+  var check_xml = '<SOAP-ENV:Envelope \
+    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+    <SOAP-ENV:Header/>\
+      <ns2:Body>\
+        <ns0:DoClientCommand>\
+          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+          <sCommand xsi:type="ns3:string">CRMQueryCRMQuestionnaireMode </sCommand>\
+          <sParams xsi:type="ns3:string">' + params + '</sParams>\
+        </ns0:DoClientCommand>\
+      </ns2:Body>\
+    </SOAP-ENV:Envelope>'
+
+  console.log(check_xml);
+
+  var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
+  $.ajax({
+    url: url + "?op=DoClientCommand",
+    type: 'POST',
+    async: false,
+    dataType: 'xml',
+    data: check_xml,
+    timeout: 10000,
+    contentType: "text/xml; charset=UTF-8",
+    success: function(xmlHttpRequest) {
+      console.log('success');
+      console.log(xmlHttpRequest);
+      var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+      var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+      console.log(resultstring);
+      var outparams = JSON.parse(resultstring);
+
+      if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+          window.localStorage.setItem("questionnaire", resultstring);
+      } else {
+          if(outparams["FMSG"].length) {
+            layer.msg(outparams["FMSG"], { time: 2000 });
+          }
+      }
+    },
+    complete: function(xmlHttpRequest, status) {
+      console.log('complete');
+      console.log(xmlHttpRequest);
+    },
+    error: function(xmlHttpRequest) {
+      console.log('error');
+      console.log(xmlHttpRequest);
+      alert("手机号查询信息失败")
+      LogOut();
     }
-     $(function(){
-             var dt = new Date();
-             var m=new Array("Jan ","Feb ","Mar ","Apr ","May ","Jun ","Jul ","Aug ","Spt ","Oct ","Nov ","Dec ");
-             var mn=dt.getMonth();
-             var dn=dt.getDate();
-             $('.time').html(m[mn]+"&nbsp;"+dn+'，'+dt.getFullYear());
-     //右侧功能栏隐藏显示
-             $('.xs').click(function(){
-                 $(this).hide();
-                 $('.yc').show();
-                 $('.gn').css('WebkitAnimation','yd2 0.4s forwards');
-             });
-             $('.yc').click(function(){
-                 $(this).hide();
-                 $('.xs').show();
-                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
-             });
+  });
+}
+
+// 3.2.33 保存调查问卷信息
+function CRMSaveCRMQuestionnaire() {
+  var clientCookie = window.localStorage.getItem('sClientCookie'),
+      fcardnum = window.localStorage.getItem('sFCARDNUM');
+  console.log(clientCookie);
+
+  var questionResult = window.localStorage.getItem("questionResult"),
+      questionJSON = JSON.parse(questionResult);
+
+  var fdata_params = [], item;
+  for(var key in questionJSON) {
+    item = questionJSON[key];
+    fdata_params.push('{&quot;FTITELID&quot;:&quot;' + item["ftitleid"] + '&quot;,&quot;FVALUEID&quot;:&quot;' + item["fvalueid"] + '&quot;,&quot;FVALUE&quot;:&quot;' + item["fvalue"] + '&quot;}')
+  }
+  // '{&quot;FTITELID&quot;:&quot;' + ftitelid + '&quot;,&quot;FVALUEID&quot;:&quot;' + fvalueid + '&quot;,&quot;FVALUE&quot;:&quot;' + fvalue + '&quot;}';
+
+  var fcardnum = '80000518',
+    fnum = $("#fnum").val();
+  var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FDATA&quot;:[' + fdata_params.join(',') + ']}';
+
+  console.log(params);
+  var check_xml = '<SOAP-ENV:Envelope \
+    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+    <SOAP-ENV:Header/>\
+      <ns2:Body>\
+        <ns0:DoClientCommand>\
+          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+          <sCommand xsi:type="ns3:string">CRMSaveCRMQuestionnaire </sCommand>\
+          <sParams xsi:type="ns3:string">' + params + '</sParams>\
+        </ns0:DoClientCommand>\
+      </ns2:Body>\
+    </SOAP-ENV:Envelope>';
+  console.log(check_xml);
+
+  var url = 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService';
+  $.ajax({
+    url: url + "?op=DoClientCommand",
+    type: 'POST',
+    async: false,
+    dataType: 'xml',
+    data: check_xml,
+    timeout: 10000,
+    contentType: "text/xml; charset=UTF-8",
+    success: function(xmlHttpRequest) {
+      console.log('success');
+      console.log(xmlHttpRequest);
+      var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+      var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+      console.log(resultstring);
+      var outparams = JSON.parse(resultstring);
+      if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        window.localStorage.removeItem("questionnaire");
+        window.localStorage.removeItem("questionResult");
+        layer.msg(outparams["FMSG"], { time: 4000 });
+
+        window.location.href = "../question/complete.html"
+      } else {
+          if(outparams["FMSG"].length) {
+            layer.msg(outparams["FMSG"], { time: 2000 });
+          }
+      }
+    },
+    complete: function(xmlHttpRequest, status) {
+      console.log('complete');
+      console.log(xmlHttpRequest);
+    },
+    error: function(xmlHttpRequest) {
+      console.log('error');
+      console.log(xmlHttpRequest);
+      alert("手机号查询信息失败")
+      LogOut();
+    }
+  });
+}
 
 
-             //侧栏操作
-             $('.lp').click(function(){
-                 $('.yc').hide();
-                 $('.xs').show();
-                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
-             });
-             $('.mm').click(function(){
-                 $('.yc').hide();
-                 $('.xs').show();
-                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
-                 $('.xg').fadeIn(200);
-             });
-             $('.gb').click(function(){$('.xg').fadeOut(200);});
+var questionnaireString = window.localStorage.getItem("questionnaire");
+if(questionnaireString === null) {
+ CRMQueryCRMQuestionnaireMode();
+}
 
-             $('.tuichu').on('click',function(){
-                $.ajax({
-                    url: "../user/logout",
-                    type: "get",
-                    data: {},
-                    dataType:"json",
-                    success: function(ret) {
-                        layer.closeAll();
-                        if (ret.status == 1) {
-                            var i=3;
-                            setInterval(function(){
-                                layer.msg("正在退出 ("+i+")", {
-                                  time: 1000
-                                });
-                                if(i==0) location.href = '../user/login';
-                                  i--;
-                            },1000);
-                        }else{
-                            layer.msg(ret.message, {
-                              time: 2000
-                            });
-                        }
-                    }
-                })
-             })
+var qindex = parseInt($(".questionnaire").attr("qindex"));
+skip_question(qindex);
 
-             $('.cs').on('click',function(){
-                if(!$(this).hasClass('mima'))return false;
-                 var oldpass = $('#oldPassword').val();
-                 var newpass = $('#newPassword').val();
-                 var repass = $('#rePassword').val();
-                 if(newpass!=repass){
-                    layer.msg('两次输入的新密码不相同！', {
-                       time: 2000
-                    });
-                    return false;
-                 }
-                 if(newpass==oldpass){
-                     layer.msg('输入的新旧密码相同！', {
-                        time: 2000
-                     });
-                     return false;
-                 }
-                 $.ajax({
-                     url: "../user/password",
-                     type: "post",
-                     data: {oldpass:oldpass,newpass:newpass,repass:repass},
-                     dataType:"json",
-                     success: function(ret) {
-                         layer.closeAll();
-                         if (ret.status == 1) {
-                             $('#oldPassword').val('');
-                             $('#newPassword').val('');
-                             $('#rePassword').val('');
-                            $('.xg .gb').click();
-                         }
-                         layer.msg(ret.message, {
-                           time: 2000
-                         });
-                     }
-                 })
-              })
-     });
-</script>
-<script>
-     window.onload=function(){
-        $('#jiaZai').hide();
-        $('#main').show();
-        // $('#others').click(function(){
-        //     $('.xz .xuanZhong').removeClass('xuanZhong');
-        // });
-        //商品选中
-        $('.xz>div').click(function(){
-            if($('#ftype').val() == '0'){
-                if($('.xz').children('.xuanZhong').length==1){
-                    $('.xz .xuanZhong').removeClass('xuanZhong');
-                    $(this).addClass('xuanZhong');
-                }else{
-					$(this).addClass('xuanZhong');
-				}
-            }else{
-                // $('#others').removeClass('xuanZhong');
-                if($(this).hasClass('xuanZhong')) $(this).removeClass('xuanZhong');
-                else $(this).addClass('xuanZhong');
-            }
+// {
+//   "FRESULT": "0",
+//   "FMSG": "成功",
+//   "DATA": [
+//     {
+//       "FNUM": "02101703070001",
+//       "FNAME": "开业活动调查",
+//       "MODEDTL": [
+//         {
+//           "FTITLEID": "0",
+//           "FTITLE": "你对今天的活动满意吗",
+//           "FTYPE": "0",
+//           "OPTIONDTL": [
+//             {
+//               "FVALUEID": "1",
+//               "FVALUE": "满意"
+//             },
+//             {
+//               "FVALUEID": "2",
+//               "FVALUE": "不满意"
+//             }
+//           ]
+//         },
+//         {
+//           "FTITLEID": "1",
+//           "FTITLE": "活动礼品喜欢吗",
+//           "FTYPE": "2",
+//           "OPTIONDTL": []
+//         },
+//         {
+//           "FTITLEID": "2",
+//           "FTITLE": "有哪些店铺前去最多",
+//           "FTYPE": "0",
+//           "OPTIONDTL": [
+//             {
+//               "FVALUEID": "1",
+//               "FVALUE": "肯德基"
+//             },
+//             {
+//               "FVALUEID": "2",
+//               "FVALUE": "麦当劳"
+//             },
+//             {
+//               "FVALUEID": "3",
+//               "FVALUE": "Mr pizza"
+//             }
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// }
+function skip_question(qindex) {
+    var questionnaireString = window.localStorage.getItem("questionnaire");
+    if(questionnaireString === null) { return }
+
+    var questionnaireJSON = JSON.parse(questionnaireString);
+        data_items = questionnaireJSON["DATA"],
+        data_item = data_items[0],
+        modeldtl_item = data_item["MODEDTL"][qindex],
+        htmlString = '';
+
+    store_question();
+    if(qindex === 0) {
+        $(".last-option").html("上一页");
+        $(".next-option").html("下一题");
+    } else {
+        $(".last-option").html("上一题");
+        $(".next-option").html("下一题");
+
+        if(qindex === data_item["MODEDTL"].length - 1) {
+            $(".next-option").html("下一页");
+        }
+    }
+
+    if(qindex >= data_item["MODEDTL"].length){
+        CRMSaveCRMQuestionnaire()
+    }
+
+    $(".questionnaire-title").html(data_item["FNAME"]);
+    htmlString += '<div class="wt">' + data_item["FTITLE"] +
+      '<input type="hidden" name="fnum" id="fnum" value="' + data_item["FNUM"] + '" />\
+       <input type="hidden" name="ftype" id="ftype" value="0" />\
+       <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
+        <div class="kx">\
+          <img src="../assets/image/diaoCha.png">可选答案\
+          <span>' + modeldtl_item["OPTIONDTL"].length + '</span></div>\
+        <div class="xz">';
+
+    console.log(questionnaireString);
+    for(var i = 0, len = modeldtl_item["OPTIONDTL"].length; i < len; i ++) {
+        var option_item = modeldtl_item["OPTIONDTL"][i];
+        console.log(option_item);
+        htmlString += '<div  onclick="action_select_qestion(this);" class="fvalueid" fvalueid="' + option_item["FVALUEID"] + '">' + option_item["FVALUE"] + '</div>';
+    }
+    htmlString += '</div></div>';
+
+    $(".questionnaire").html(htmlString);
+}
+
+function store_question() {
+    var ftitleid = $("#ftitleid").val(),
+      fvalues = [],
+      fvalueids = [];
+
+    if(ftitleid === undefined) return;
+
+    $(".xz .xuanZhong").each(function() {
+      fvalues.push($(this).html());
+      fvalueids.push($(this).attr("fvalueid"));
+    });
+
+    var questionResult = window.localStorage.getItem("questionResult"),
+        resultJSON = {};
+    if(questionResult !== null) {
+      resultJSON = JSON.parse(questionResult);
+    }
+    resultJSON[ftitleid] = { "ftitleid": ftitleid, fvalue: fvalues.join(','), fvalueid: fvalueids.join(',')}
+
+    window.localStorage.setItem("questionResult", JSON.stringify(resultJSON));
+}
+
+
+// <div class="questionnaire">
+//   <div class="wt">您如何到成都远洋太古汇? 需时多久?
+//     <input type="hidden" name="ftitleid" id="ftitleid" value="0" />
+//     <input type="hidden" name="ftype" id="ftype" value="1" /></div>
+//   <div class="kx">
+//     <img src="../assets/image/diaoCha.png">可选答案
+//     <span>8</span></div>
+//   <div class="xz">
+//     <div id="1">自驾</div>
+//     <div id="2">出租车</div>
+//     <div id="3">公共汽车</div>
+//     <div id="4">地铁</div>
+//     <div id="5" class="xuanZhong">自行车</div>
+//     <div id="6">步行</div>
+//     <div id="7" class="xuanZhong">通常需要__分钟到达这里</div>
+//     <div id="others">其他 Others(请注明)
+//       <textarea class="ques_others"></textarea></div>
+//   </div>
+// </div>
+
+//商品选中
+function action_select_qestion(ctl) {
+    if ($('#ftype').val() == '0') {
+        $('.xz .xuanZhong').removeClass('xuanZhong');
+        $(ctl).addClass('xuanZhong');
+    } else {
+      // $('#others').removeClass('xuanZhong');
+      if ($(ctl).hasClass('xuanZhong'))
+        $(ctl).removeClass('xuanZhong');
+      else
+        $(ctl).addClass('xuanZhong');
+    }
+};
+$(function() {
+
+
+    $('.ques_others').focus(function() {
+        $(this).parent().find('#others').addClass('xuanZhong');
+    })
+
+  $('.last-option').on('click', function() {
+    var lastQIndex = parseInt($(".questionnaire").attr("qindex")) - 1;
+    $(".questionnaire").attr("qindex", lastQIndex);
+    if(lastQIndex >= 0) {
+        skip_question(lastQIndex);
+    } else {
+        window.location.href = "../home/search.html"
+    }
+  });
+
+  $('.next-option').on('click', function() {
+    var nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
+    $(".questionnaire").attr("qindex", nextQIndex);
+    skip_question(nextQIndex);
+  });
+});
+
+window.onload = function() {
+  $('#jiaZai').hide();
+  $('#main').show();
+}
+$(function() {
+  var dt = new Date();
+  var m = new Array("Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Spt ", "Oct ", "Nov ", "Dec ");
+  var mn = dt.getMonth();
+  var dn = dt.getDate();
+  $('.time').html(m[mn] + "&nbsp;" + dn + '，' + dt.getFullYear());
+  //右侧功能栏隐藏显示
+  $('.xs').click(function() {
+    $(this).hide();
+    $('.yc').show();
+    $('.gn').css('WebkitAnimation', 'yd2 0.4s forwards');
+  });
+  $('.yc').click(function() {
+    $(this).hide();
+    $('.xs').show();
+    $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+  });
+
+
+  //侧栏操作
+  $('.lp').click(function() {
+    $('.yc').hide();
+    $('.xs').show();
+    $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+  });
+  $('.mm').click(function() {
+    $('.yc').hide();
+    $('.xs').show();
+    $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
+    $('.xg').fadeIn(200);
+  });
+  $('.gb').click(function() {
+    $('.xg').fadeOut(200);
+  });
+
+  $('.tuichu').on('click', function() {
+    $.ajax({
+      url: "../user/logout",
+      type: "get",
+      data: {},
+      dataType: "json",
+      success: function(ret) {
+        layer.closeAll();
+        if (ret.status == 1) {
+          var i = 3;
+          setInterval(function() {
+            layer.msg("正在退出 (" + i + ")", {
+              time: 1000
+            });
+            if (i == 0) location.href = '../user/login';
+            i--;
+          }, 1000);
+        } else {
+          layer.msg(ret.message, {
+            time: 2000
+          });
+        }
+      }
+    })
+  })
+
+  $('.cs').on('click', function() {
+    if (!$(this).hasClass('mima')) return false;
+    var oldpass = $('#oldPassword').val();
+    var newpass = $('#newPassword').val();
+    var repass = $('#rePassword').val();
+    if (newpass != repass) {
+      layer.msg('两次输入的新密码不相同！', {
+        time: 2000
+      });
+      return false;
+    }
+    if (newpass == oldpass) {
+      layer.msg('输入的新旧密码相同！', {
+        time: 2000
+      });
+      return false;
+    }
+    $.ajax({
+      url: "../user/password",
+      type: "post",
+      data: {
+        oldpass: oldpass,
+        newpass: newpass,
+        repass: repass
+      },
+      dataType: "json",
+      success: function(ret) {
+        layer.closeAll();
+        if (ret.status == 1) {
+          $('#oldPassword').val('');
+          $('#newPassword').val('');
+          $('#rePassword').val('');
+          $('.xg .gb').click();
+        }
+        layer.msg(ret.message, {
+          time: 2000
         });
-                $('.xy').on('click',function(){
-            var titid = $('#ftitleid').val();
-            var fnum = '02801701140001';
-            var valueid = '';var vallue ='';var title = '';
-							for(i=0;i<$('.xz .xuanZhong').length;i++){
-					title += ';'+titid;
-					if($('.xz .xuanZhong')[i].id =='others'){
-						valueid += '; ';
-						vallue += ';'+ $('.ques_others').val();
-					}else{
-						valueid += ';'+$('.xz .xuanZhong')[i].id;
-						vallue += ';'+ $('.xz .xuanZhong')[i].innerHTML;  
-					}
-				}
-				var fvalueid = valueid.substr(1).split(';');
-				var fvalue = vallue.substr(1).split(';');
-				var ftitleid = title.substr(1).split(';');
-			            var fcardnum = '00000930';
-            var fname = '成都远洋太古汇顾客调查问卷';
-            var loading = layer.msg('提交中...', {
-                  icon: 16
-                  ,shade: 0.01
-                });
-			//update 下一页			
-			location.href = 'questniare2.html';
-            /* $.ajax({
-                url: "../question/cachequestion",
-                type: "post",
-                data: {
-                    'fcardnum':fcardnum,
-                    'ftitelid':ftitleid,
-                    'fnum':fnum,
-                    'fname':fname,
-                    'fvalueid':fvalueid,
-                    'fvalue':fvalue
-                },
-                dataType:"json",
-                success: function(ret) {
-                    layer.closeAll();
-                    if (ret.status == 1) {
-                     location.href = '../question/questniare?fname=&num=2&exchange=';
-                       }else{
-                        layer.msg(ret.message, {
-                          time: 2000, //2s后自动关闭
-                          // btn: ['明白了', '知道了', '哦']
-                        });
-                    };
-                }
-            })*/
-        });
-            }
-	$('.ques_others').focus(function(){
-		$(this).parent().find('#others').addClass('xuanZhong');
-	})
+      }
+    })
+  })
+});
+
+
 </script>
 </html>
