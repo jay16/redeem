@@ -232,7 +232,8 @@
   // 3.2.3 查询有效的赠品促销接口
   function QueryMallGiftPromInfo() {
       var clientCookie = window.localStorage.getItem('sClientCookie');
-      var ffildate = (new Date()).format('yyyy.MM.dd hh:mm:SS');
+      var ffildate = (new Date()).format('yyyy.MM.dd hh:mm:ss');
+      console.log(ffildate);
       var params = '{&quot;FFILDATE&quot;:&quot;' + ffildate + '&quot;}';
       console.log(params);
       var check_xml = '<SOAP-ENV:Envelope \
@@ -268,6 +269,7 @@
             console.log(xmlHttpRequest);
             var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
             var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+            console.log(resultstring);
             var outparams = JSON.parse(resultstring);
 
             if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
@@ -276,6 +278,7 @@
               for (var i = 0, len = outparams["Data"].length; i < len; i++) {
                 item = outparams["Data"][i];
                 html += "<div class='xuzh_jin'><input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
+                html += "<input type='hidden' class='fnum' value='" + item["FNUM"] + "'/>";
                 html += "  <img style='' src='../assets/image/gift.png'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
                 html += "  <div class='gou'>";
                 html += "  <img src='../assets/image/gou.png' />";
@@ -337,13 +340,21 @@
       //     famount = parseInt(Math.random() * 10 + 1);
       // var fsupplydtl_params = '{&quot;FLAGGID&quot;:&quot;' + flaggid + '&quot;,&quot;FAMOUNT&quot;:&quot;' + famount + '&quot;}';
 
-      var fnum = $(".shangPing .xuanZhong .gift_id").val();
-          ftotal = $("#today_amount_guo").html();
+      var fnum = $(".shangPing .xuanZhong .fnum").val();
+          ftotal = $("#today_amount_guo").html(),
+          fmember = '',
+          fmobilephone = '',
+          fcardid = '',
+          femail = '';
 
-      var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,&quot;FSUPPLYPAY&quot;:[' + paies.join(',') + '],&quot;FSUPPLYDTL&quot;:[' + gifts.join(',') + ']}';
+      console.log(paies.join(","));
+      console.log('-----------')
+      console.log(gifts.join(","));
+      console.log('-----------')
+      var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,&quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FEMAIL&quot;:&quot;' + femail + '&quot;,&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,&quot;FSUPPLYPAY&quot;:[' +  paies.join(",") + '],&quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + ']}';
+
 
       console.log(params);
-      console.log(params.replace('&quot;', "'"));
       var check_xml = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
@@ -380,19 +391,14 @@
               console.log(resultstring);
               var outparams = JSON.parse(resultstring);
 
-              if(outparams["FMSG"].length) {
-                layer.msg(outparams["FMSG"], { time: 2000 });
-              }
+              // if(outparams["FMSG"].length) {
+              //   layer.msg(outparams["FMSG"], { time: 2000 });
+              // }
               if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-                $('#ben_exchange').html(res.data.consumer_amount);
-                $('#Exchange_id').val(res.data.id);
-                $('.dhlp').css('display', 'none');
-                $('#shen_exchange').empty();
-                var shen = parseFloat(balance) - res.data.consumer_amount;
-                $('#shen_exchange').append('<input type="hidden" value="' + shen + '">' + shen);
-                layer.msg(res.message, {
-                  time: 2000 //2s后自动关闭
-                });
+                alert("兑换成功，TODO: 签字");
+                window.localStorage.removeItem("records");
+              } else {
+                alert(outparams["FMSG"]);
               }
           },
           complete: function(xmlHttpRequest, status) {

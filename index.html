@@ -625,8 +625,9 @@ function CRMGenMallSupplyBill() {
 
     var fgndgid = '1000021',
         fflowno = (new Date()).valueOf(),
-        focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss');
-    var fsupplypay_params = '{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;}';
+        focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss'),
+        famt = 123.00;
+    var fsupplypay_params = '{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;,&quot;FAMT&quot;:&quot;' + famt + '&quot;}';
 
     var flaggid = '1000000',
         famount = parseInt(Math.random() * 10 + 1);
@@ -635,9 +636,13 @@ function CRMGenMallSupplyBill() {
     var
     fcardnum = '80000518',
     fnum = '02101703310001',
-    ftotal = '12345';
+    ftotal = '12345',
+    fmember = '',
+    fmobilephone = '',
+    fcardid = '',
+    femail = '';
 
-    var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,&quot;FSUPPLYPAY&quot;:[' + fsupplypay_params + '],&quot;FSUPPLYDTL&quot;:[' + fsupplydtl_params + ']}';
+    var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,&quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FEMAIL&quot;:&quot;' + femail + '&quot;,&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,&quot;FSUPPLYPAY&quot;:[' + fsupplypay_params  + '],&quot;FSUPPLYDTL&quot;:[' + fsupplydtl_params + ']}';
 
     console.log(params);
     console.log(params.replace('&quot;', "'"));

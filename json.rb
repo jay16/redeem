@@ -1,7 +1,8 @@
 fields = <<-EOF
-FTITELID
-FVALUEID
-FVALUE
+FMEMBER
+FMOBILEPHONE
+FCARDID
+FEMAIL
 EOF
 
 words = fields.split(/\n/).map(&:strip)
