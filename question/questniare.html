@@ -150,38 +150,67 @@ function skipToQuestionWithIndex(qindex) {
         return;
     }
 
+    // FTYPE: 0 选择题,1 多选题,2 填空题
     $(".questionnaire-title").html(data_item["FNAME"]);
-    htmlString += '<div class="wt">' + data_item["FTITLE"] +
-      '<input type="hidden" name="fnum" id="fnum" value="' + data_item["FNUM"] + '" />\
-       <input type="hidden" name="ftype" id="ftype" value="0" />\
-       <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
-        <div class="kx">\
-          <img src="../assets/image/diaoCha.png">可选答案\
-          <span>' + modeldtl_item["OPTIONDTL"].length + '</span></div>\
-        <div class="xz">';
-
-    console.log(questionnaireString);
-    for(var i = 0, len = modeldtl_item["OPTIONDTL"].length; i < len; i ++) {
-        var option_item = modeldtl_item["OPTIONDTL"][i];
-        console.log(option_item);
+    htmlString += '\
+      <div class="wt">\
+       ' + modeldtl_item["FTITLE"] + '\
+      <input type="hidden" name="fnum" id="fnum" value="' + modeldtl_item["OPTIONDTL"].length + '" />\
+      <input type="hidden" name="ftype" id="ftype" value="' + modeldtl_item["FTYPE"] + '" />\
+      <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
+      <div class="kx">\
+        <img src="../assets/image/diaoCha.png">\
+        <div class="question-type" style="display:inline;"></div>\
+        <span class="optiondtl-num" style="display: none;">' + modeldtl_item["OPTIONDTL"].length + '</span>\
+      </div>\
+      <div class="xz">';
+    if(modeldtl_item["FTYPE"] === "2") {
+      htmlString += '<textarea id="ques_hui" fvalueid="-1"></textarea>';
+    } else {
+      var option_item;
+      for(var i = 0, len = modeldtl_item["OPTIONDTL"].length; i < len; i ++) {
+        option_item = modeldtl_item["OPTIONDTL"][i];
         htmlString += '<div  onclick="actionSelectQestion(this);" class="fvalueid" fvalueid="' + option_item["FVALUEID"] + '">' + option_item["FVALUE"] + '</div>';
+      }
     }
-    htmlString += '</div></div>';
+    htmlString += '\
+      </div>\
+    </div>';
 
     $(".questionnaire").html(htmlString);
+    if(modeldtl_item["FTYPE"] === "0") {
+      $(".question-type").html("单选题");
+      $(".optiondtl-num").css("display", "none");
+    } else if(modeldtl_item["FTYPE"] === "1") {
+      $(".question-type").html("多选题");
+      $(".optiondtl-num").css("display", "block");
+    } else if(modeldtl_item["FTYPE"] === "2") {
+      $(".question-type").html("填空题");
+      $(".optiondtl-num").css("display", "none");
+    }
 }
 
 function storeQuestion() {
     var ftitleid = $("#ftitleid").val(),
+      ftype = $("#ftype").val(),
       fvalues = [],
-      fvalueids = [];
+      fvalueids = [],
+      fvalueid;
 
     if(ftitleid === undefined) return;
 
-    $(".xz .xuanZhong").each(function() {
-      fvalues.push($(this).html());
-      fvalueids.push($(this).attr("fvalueid"));
-    });
+    // ftype: 0 单选，1 多选，2 填空
+    if(ftype === "2") {
+      fvalueid = $("#ques_hui").attr("fvalueid");
+      if(fvalueids.indexOf(fvalueid) < 0) { fvalueids.push(fvalueid); }
+      fvalues.push($("#ques_hui").val());
+    } else {
+      $(".xz .xuanZhong").each(function() {
+        fvalueid = $(this).attr("fvalueid")
+        if(fvalueids.indexOf(fvalueid) < 0) { fvalueids.push(fvalueid); }
+        fvalues.push($(this).html());
+      });
+    }
 
     var questionResult = window.localStorage.getItem("questionResult"),
         resultJSON = {};
@@ -192,7 +221,6 @@ function storeQuestion() {
 
     window.localStorage.setItem("questionResult", JSON.stringify(resultJSON));
 }
-
 
 // <div class="questionnaire">
 //   <div class="wt">您如何到成都远洋太古汇? 需时多久?
@@ -216,15 +244,18 @@ function storeQuestion() {
 
 //商品选中
 function actionSelectQestion(ctl) {
+    // ftype: 0 单选，2 多选，3 填空
     if ($('#ftype').val() == '0') {
         $('.xz .xuanZhong').removeClass('xuanZhong');
         $(ctl).addClass('xuanZhong');
     } else {
       // $('#others').removeClass('xuanZhong');
-      if ($(ctl).hasClass('xuanZhong'))
+      if ($(ctl).hasClass('xuanZhong')) {
         $(ctl).removeClass('xuanZhong');
-      else
+      }
+      else {
         $(ctl).addClass('xuanZhong');
+      }
     }
 };
 $(function() {

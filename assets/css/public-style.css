@@ -17,6 +17,9 @@ ul,ol{list-style-type:none;  }
 select,input,img,select{vertical-align:middle;}
 a{text-decoration:none;}
 a:hover,a:active,a:focus{text-decoration:none;}
+.legal-provision-dz { display: none; }
+.legal-provision-link { color: -webkit-link; }
+.legal-provision-link:hover { cursor: pointer; }
 button,input[type="button"]{border: none;background-color: #bebdc8;color: #fff;outline: none;}
 /*去除iphone默认样式*/
 input[type="submit"], input[type="reset"], input[type="button"], button {  -webkit-appearance: none; }

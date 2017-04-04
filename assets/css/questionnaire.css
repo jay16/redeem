@@ -106,7 +106,7 @@
     margin: 0 auto;
     text-align: center;
 }
-.xz>div{
+.xz > div{
     display: inline-block;
     height: 2rem;
     width: 44%;
@@ -114,6 +114,7 @@
     background-color: #fff;
     padding: 0.5rem 2%;
     font-size: 0.4rem;
+    margin: 0.1rem;
     margin-bottom: 0.2rem;
     vertical-align: top;
     overflow: hidden;
