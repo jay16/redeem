@@ -1,4 +1,7 @@
 @charset "UTF-8";
+.layui-layer-btn a {
+  font-size: 12px;
+}
 
 /*初始化样式*/
 input[type="button"], input[type="submit"], input[type="reset"] {
@@ -29,7 +32,7 @@ input{outline:none;}
 }
 #jiaZai img{
     width: 40%;
-    margin: 50% auto;
+    margin: 10% auto;
     -webkit-animation:zhuanQuan 1s infinite;
 }
 @-webkit-keyframes zhuanQuan {
@@ -55,3 +58,6 @@ body,html{
     -webkit-overflow-scrolling : touch;
 }
 img{width: 100%;}
+
+
+/*------------------------------------重设密码-------------------------------------------*/

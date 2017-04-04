@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title>
+	太古汇
+</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/search.css">
+<style>
+#layui-layer1{ top:223px !important; }
+.tishibuton .cs { margin: 0.5rem !important; }
+</style>
+</head>
+<body>
+<!-- 加载 -->
+<div id="jiaZai">
+  <img src="../assets/image/loadbg.png"></div>
+<!-- 内容 -->
+<div id="main">
+  <div class="title">
+    <div>
+      <img src="../assets/image/dhlp2.png">礼品兑换 -
+      <img src="../assets/image/renWu2.png">客户信息</div>
+    <div>Gift Redemption - Customer</div></div>
+  <div class="prompt">请输入手机号码 / Mobile phone number:</div>
+  <div class="search">
+    <input type="tel" id="search" placeholder="手机号码 / Mobile phone number" value="" />
+    <a href="javascript:void(0)" onClick="window.TKH.queryMemberInfoJSON();" id="btn_search">
+      <img src="../assets/image/search.png"></a>
+  </div>
+  <div class="content">
+    <div class="content_1">
+      <div class="act" data-id="1">
+        <p>顾客信息 / Customer</p>
+        <p>Information</p>
+      </div>
+      <div data-id="2" class='purchase-history'>
+        <p>消费记录 / Purchase</p>
+        <p>History</p>
+      </div>
+      <div data-id="3" class='redeem-history'>
+        <p>兑换记录 / Redeem</p>
+        <p>History</p>
+      </div>
+    </div>
+    <div class="content_2">
+      <div data-id='1' style="display: block;">
+        <div>
+          <p>姓名 / Full name</p>
+          <input type="text" id="mz" value="" /></div>
+        <div>
+          <p>性别 / Gender</p>
+          <select name="" id="xb">
+            <option value="男" selected>男 / M</option>
+            <option value="女">女 / F</option></select>
+        </div>
+        <div>
+          <p>出生日期 / Birthday</p>
+          <input type="date" id="ymd" value="" /></div>
+        <div>
+          <p>微信帐号 / Wechat</p>
+          <input type="text" id="wx" /></div>
+        <div class="dz">
+          <p>居住地址 / Living address</p>
+          <input type="text" id="live_dz" value="" /></div>
+        <div class="dz">
+          <p>工作地址 / Working address</p>
+          <input type="text" id="work_dz" /></div>
+      </div>
+      <div data-id="2" id="ConsumerInfo"></div>
+      <div data-id="3" id="ExchangeInfo">
+        <div class="xf">
+          <p>兑换日期 : 礼品 / Redemption date : gifts</p>
+          <p>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="anNiu">
+    <a href="javascript:void (0)" class="bc" onClick="window.TKH.CRMWeiXinOpenCardJson();">保存
+      <br/>Save</a>
+    <a href="javascript:void (0)" class="xy" style="display:block">下一页
+      <br/>Next</a></div>
+</div>
+<div class="xg tishibuton" style="width: 100% !important;">
+  <div class="xg_info" style="margin-top: 43px !important; padding: 0px 14px 36px 14px !important; ">
+    <p class="sm" style="margin-top: 20px;">是否只做问卷，不添加消费信息、兑换信息等？</p>
+    <a href="javascript:;" onclick="window.location.href='../question/questniare.html'" class="cs">填写问卷</a>
+    <a href="javascript:;" onclick="window.location.href='../home/entry.html'" class="cs">消费兑换</a></div>
+</div>
+<div class="gn">
+  <div class="dj">
+    <div>
+      <img src="../assets/image/gn1.png" class="xs" alt="">
+      <img src="../assets/image/gn2.png" class="yc" alt=""></div>
+    <div>
+      <img src="../assets/image/gn2.png"></div>
+  </div>
+  <div class="nr">
+    <div>礼品兑换系统</div>
+    <p class="lp">
+      <a href="search.html">
+        <img src="../assets/image/dhlp.png">礼品兑换</a></p>
+    <p class="mm">
+      <img src="../assets/image/bi.png" class="bi" alt="">修改密码</p>
+    <p class="tuichu" onClick="window.TKH.logout();">
+      <img src="../assets/image/dl2.png">退出登录</p>
+    <div class="renWu">
+      <img src="../assets/image/renWu.png">
+      <p id="userGid"></p>
+      <p class="time"></p>
+    </div>
+  </div>
+</div>
+<div class="xg">
+  <div>
+    <a href="javascript:void (0)" class="gb">
+      <img src="../assets/image/gb.png"></a>
+    <div class="xg_content">
+      <div class="suo">
+        <img src="../assets/image/bi.png"></div>
+      <div class="xg_info">
+        <p class="title">修改密码</p>
+        <input type="password" id="oldPassword" placeholder="旧密码" />
+        <input type="password" id="newPassword" placeholder="新密码" />
+        <input type="password" id="rePassword" placeholder="再次输入新密码" />
+        <a href="javascript:void (0)" class="cs mima">确认修改密码</a></div>
+    </div>
+  </div>
+</div>
+</body>
+<!-- Javascripts -->
+<script src="../assets/js/remJs.js"></script>
+<script src="../assets/js/jquery-1.8.0.min.js"></script>
+<script src="../assets/js/plugins/layer/layer.js"></script>
+<script src="../assets/js/tkh.js"></script>
+<script src="../assets/js/side.js"></script>
+<script>
+$(function(){
+    //顾客信息记录选择
+    $('.content_1>div').click(function(){
+        if(!$(this).hasClass('act')){
+            $('.content_1 .act').removeClass('act');
+            $(this).addClass('act');
+            $('.content_2>div').hide();
+            $('.content_2>div:eq('+$(this).index()+')').show();
+        }
+
+        var sFCardNum = window.localStorage.getItem('sFCARDNUM');
+        if($(this).hasClass("purchase-history")) {
+            if(sFCardNum !== null) {
+                layer.msg('获取中...', {
+                    icon: 16
+                    ,shade: 0.01
+                    ,time: 1000
+                });
+                window.TKH.queryMallTranhst();
+            }
+        }
+
+        if($(this).hasClass("redeem-history")) {
+            if(sFCardNum !== null) {
+                layer.msg('获取中...', {
+                    icon: 16
+                    ,shade: 0.01
+                    ,time: 1000
+                });
+
+                window.TKH.queryScorePrizeBillJson();
+            }
+        }
+    })
+
+    //下一页
+    $('.xy').on('click',function(){
+		var phone = $('#search').val();
+		var name = 	$('#mz').val();
+        if (!phone || !name) {
+            layer.tips('请输入手机号码,查询用户或新增用户！', '#search', {
+              tips: [3, '#faab20']
+            });
+            return false;
+        }
+		var $phe=/^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+		if(!($phe.test(phone))){
+			layer.msg('请输入正确的手机号码',{
+					  time: 2000, //2s后自动关闭
+					  // btn: ['明白了', '知道了', '哦']
+					});
+			return false;
+		}
+        $('.tishibuton').fadeIn(200);
+        layer.open({
+            type:1,
+            area:"450px",
+            content:$('.tishibuton')
+        });
+    });
+
+
+    var cookie = window.localStorage.getItem('sClientCookie'),
+        userGid = window.localStorage.getItem('userGid');
+
+    if(cookie === null) {
+      location.href = '../user/login.html';
+    }
+    $("userGid").html(userGid);
+})
+</script>
+</html>
+

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title>太古汇</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/entry.css">
+</head>
+<body>
+<!-- 加载 -->
+<div id="jiaZai">
+  <img src="../assets/image/loadbg.png"></div>
+<!-- 内容 -->
+<!-- 内容 -->
+<div id="main">
+  <div class="title">
+    <div>
+      <img src="../assets/image/dhlp2.png">礼品兑换 -
+      <img src="../assets/image/qian.png">消费录入</div>
+    <div>Gift Redemption - Purchase Entry</div></div>
+  <div class="content">
+    <div class="content_1">
+      <div class="act">
+        <p>
+          <img src="../assets/image/qian.png">消费信息录入 / Purchase Entry</p></div>
+    </div>
+    <div class="content_2">
+      <a href="javascript:void (0)" class="xinZeng" onClick="window.TKH.addRecordInput();">增加记录 / Add record</a>
+    </div>
+  </div>
+  <div class="anNiu">
+    <a href="search.html" class="sy">上一页
+      <br/>Previous</a>
+    <a href="javascript:void (0)" class="xy
+    ">下一页
+      <br/>Next</a>
+    <!--<a href="javascript:void (0)" class="bc">-->
+    <!--保存<br/>-->
+    <!--Save-->
+    <!--</a>--></div></div>
+<div class="xuanZe">
+  <div>
+    <a href="javascript:void (0)" class="xuanZe_gb">
+      <img src="../assets/image/gb.png"></a>
+    <p>
+      <img src="../assets/image/xuanZe.png">请选择商户 / Find merchant</p>
+    <div class="hangHu"></div>
+  </div>
+</div>
+<div class="gn">
+  <div class="dj">
+    <div>
+      <img src="../assets/image/gn1.png" class="xs" alt="">
+      <img src="../assets/image/gn2.png" class="yc" alt=""></div>
+    <div>
+      <img src="../assets/image/gn2.png"></div>
+  </div>
+  <div class="nr">
+    <div>礼品兑换系统</div>
+    <p class="lp">
+      <a href="search.html">
+        <img src="../assets/image/dhlp.png">礼品兑换</a></p>
+    <p class="mm">
+      <img src="../assets/image/bi.png" class="bi" alt="">修改密码</p>
+    <p class="tuichu" onclick="window.TKH.logout();">
+      <img src="../assets/image/dl2.png">退出登录</p>
+    <div class="renWu">
+      <img src="../assets/image/renWu.png">
+      <p>18602897807</p>
+      <p class="time"></p>
+    </div>
+  </div>
+</div>
+<div class="xg">
+  <div>
+    <a href="javascript:void (0)" class="gb">
+      <img src="../assets/image/gb.png"></a>
+    <div class="xg_content">
+      <div class="suo">
+        <img src="../assets/image/bi.png"></div>
+      <div class="xg_info">
+        <p class="title">修改密码</p>
+        <input type="password" id="oldPassword" placeholder="旧密码" />
+        <input type="password" id="newPassword" placeholder="新密码" />
+        <input type="password" id="rePassword" placeholder="再次输入新密码" />
+        <a href="javascript:void (0)" class="cs mima">确认修改密码</a></div>
+    </div>
+  </div>
+</div>
+</body>
+<!-- Javascripts -->
+<script src="../assets/js/remJs.js"></script>
+<script src="../assets/js/jquery-1.8.0.min.js"></script>
+<script src="../assets/js/plugins/layer/layer.js"></script>
+<script src="../assets/js/tkh.js"></script>
+<script src="../assets/js/side.js"></script>
+<script>
+$(function() {
+  // 初始一个，消费记录输入框
+  window.TKH.addRecordInput();
+
+  // 若已录入消费记录，此处还原
+  // 场景：录入后，从兑奖页面返回时
+  var recordString = window.localStorage.getItem("records");
+  if (recordString !== null && recordString.length > 0) {
+    var records = JSON.parse(recordString),
+    record = {},
+    today_amount = 0,
+    dq_count = 0;
+
+    $('.content_2 .dq-wrapper').remove();
+    for (var i = 0,
+    len = records.length; i < len; i++) {
+      dq_count = $(".content_2 .dq-wrapper").length + 1;
+      record = records[i];
+      $('.content_2').append('<div class="dq-wrapper dq-wrapper-' + dq_count + '">\
+         <div class="dp"> \
+           <p>店铺名称 / Merchant</p>\
+           <input type="text" placeholder="店铺名称" class="store-name" value="' + record["name"] + '" />\
+           <input type="hidden" placeholder="GNDGID" class="gndgid" value="' + record["gndgid"] + '" />\
+          <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);" class="search"><img src="../assets/image/search.png"/></a>\
+         </div>\
+         <div>\
+           <p>流水号 / Serial Number</p>\
+           <input type="text" placeholder="流水号" class="serial-num" value="' + record["serialnum"] + '"/>\
+         </div>\
+         <div>\
+           <p>消费金额 / Amount</p>\
+           <input type="number" placeholder="0.00" class="amount" value="' + record["amount"] + '" />\
+         </div>\
+         <a href="javascript:void (0)" class="jian">-</a>\
+       </div>');
+    }
+  }
+
+  //删除新增
+  $(document).on('click', '.jian',
+  function() {
+    $(this).parent().remove();
+  });
+
+  //关闭选择商户
+  $('.xuanZe_gb').click(function() {
+    $('.xuanZe').fadeOut(200);
+  });
+
+  $(document).on('blur', '.amount',
+  function() {
+    var val = $(this).val();
+    var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+    if (!reg.test(val)) {
+      layer.msg('请正确填写金额！', {
+        time: 2000,
+        //2s后自动关闭
+      });
+    }
+  });
+
+  //下一页
+  $('.xy').on('click',
+  function() {
+    var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+    var name = '',
+    amount = '',
+    num = '',
+    code = '',
+    records = [];
+
+    if ($("input.store-name").length === 1) {
+      if ($(this).hasClass('tiaozhuang') && (!$("input.store-name")[0].value || !$("input.serial-num")[0].value || !$("input.amount")[0].value)) {
+        window.location.href = "../home/exchange.html";
+        return false;
+      }
+      if (!$("input.store-name")[0].value && !$("input.serial-num")[0].value && !$("input.amount")[0].value) {
+        layer.msg('你今日还没有消费记录，请填写消费记录！', {
+          time: 2000,
+          //2s后自动关闭
+        });
+        return false;
+      }
+    }
+
+    var is_error = 0;
+    $(".dq-wrapper").each(function() {
+      var record = {};
+      name = $(this).find("input.store-name").val();
+      serialnum = $(this).find("input.serial-num").val();
+      amount = $(this).find("input.amount").val();
+      gndgid = $(this).find("input.gndgid").val();
+
+      if (!name.length || !serialnum.length || !amount.length) {
+        var msg = "";
+        if (!name.length && !msg.length) msg = "店铺名称不能为空！";
+        if (!serialnum.length && !msg.length) msg = "流水号不能为空！";
+        if (!amount.length && !msg.length) msg = "请正确填写金额";
+        layer.msg(msg, {
+          time: 2000
+        });
+
+        is_error = 1;
+        return false;
+      }
+
+      record["name"] = name;
+      record["serialnum"] = serialnum;
+      record["amount"] = amount;
+      record["gndgid"] = gndgid;
+      records.push(record);
+    })
+
+    if (!is_error) {
+      window.localStorage.setItem("records", JSON.stringify(records));
+      //update cynthia 下一页转向
+      window.location.href = "../home/exchange.html"
+    }
+  });
+});
+</script>
+</html>

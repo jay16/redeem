@@ -12,7 +12,13 @@
 <link media="all" type="text/css" rel="stylesheet" href="../assets/css/animate.min.css">
 <link media="all" type="text/css" rel="stylesheet" href="../assets/css/side.css">
 <link media="all" type="text/css" rel="stylesheet" href="../assets/css/tc.css">
-<link media="all" type="text/css" rel="stylesheet" href="../assets/css/questionnaire.css">
+<link media="all" type="text/css" rel="stylesheet" href="../assets/css/complete.css">
+<style>
+.ewm {
+	margin: 121px auto;
+	padding: 1.4rem 0;
+}
+</style>
 <style>
 .xg .suo img {
 	width: 20%;
@@ -32,28 +38,22 @@
 </style>
 </head>
 <body>
+
 <!-- 加载 -->
 <div id="jiaZai"> <img src="../assets/image/loadbg.png"> </div>
-<!-- 内容 --> 
+
+<!-- 内容 -->
 <!-- 内容 -->
 <div id="main">
   <div class="title">
-    <div> <img src="../assets/image/dhlp2.png"> <img src="../assets/image/diaoCha.png"> 问卷调查 </div>
-    <div>Survey</div>
+    <div> <img src="../assets/image/dhlp2.png"> 问卷调查 - <img src="../assets/image/wc.png"> 完成 </div>
+    <div>Survey - Completed</div>
   </div>
-  <div class="questionnaire">
-    <div class="wt">您在远洋太古汇经常逛的商铺是哪些 （限填三项）
-      <input type="hidden" name="ftitleid" id="ftitleid" value="3"/>
-      <input type="hidden" name="ftype" id="ftype" value="2"/>
-    </div>
-    <div class="kx"> <img src="../assets/image/diaoCha.png"> 填空题 </div>
-    <div class="xz">
-      <textarea id="ques_hui">cs</textarea>
-    </div>
+  <div class="xin"> <a href="javascript:void (0)"> 开始新调查<br/>
+    New Survey </a> </div>
+  <div class="ewm">
+    <div><img src="../assets/image/ewm.png"></div>
   </div>
-  <div class="anNiu"> <a href="questniare.html" class="sy"> 上一页<br/>
-    Previous </a> <a href="javascript:void (0)" class="xy"> 下一页<br/>
-    Next </a> </div>
 </div>
 <div class="gn">
   <div class="dj">
@@ -64,7 +64,7 @@
     <div>礼品兑换系统</div>
     <p class="lp"><a href="../home/search.html"><img src="../assets/image/dhlp.png">礼品兑换</a></p>
     <p class="mm"><img src="../assets/image/bi.png" class="bi" alt="">修改密码</p>
-    <p class="tuichu"><img src="../assets/image/dl2.png">退出登录</p>
+    <p class="tuichu" onclick="window.TKH.logout();"><img src="../assets/image/dl2.png">退出登录</p>
     <div class="renWu"> <img src="../assets/image/renWu.png">
       <p>18602897807</p>
       <p class="time"></p>
@@ -152,7 +152,8 @@
                     }
                 })
              })
-            
+
+
              $('.cs').on('click',function(){
                 if(!$(this).hasClass('mima'))return false;
                  var oldpass = $('#oldPassword').val();
@@ -192,69 +193,12 @@
      });
 </script>
 <script>
-     window.onload=function(){
-        $('#jiaZai').hide();
-        $('#main').show();
-        // $('#others').click(function(){
-        //     $('.xz .xuanZhong').removeClass('xuanZhong');
-        // });
-        //商品选中
-        $('.xz>div').click(function(){
-            if($('#ftype').val() == '0'){
-                if($('.xz').children('.xuanZhong').length==1){
-                    $('.xz .xuanZhong').removeClass('xuanZhong');
-                    $(this).addClass('xuanZhong');
-                }else{
-					$(this).addClass('xuanZhong');
-				}
-            }else{
-                // $('#others').removeClass('xuanZhong');
-                if($(this).hasClass('xuanZhong')) $(this).removeClass('xuanZhong');
-                else $(this).addClass('xuanZhong');
-            }
+//update cynthia
+    $(function(){
+        $('.xin').on('click',function(){
+			 location.href = '../home/search.html';
+           // location.href = '../home/chongxin'
         });
-                $('.xy').on('click',function(){
-            var titid = $('#ftitleid').val();
-            var fnum = '02801701140001';
-            var valueid = '';var vallue ='';var title = '';
-							var fvalueid = ' ';
-				var fvalue = $('#ques_hui').val();
-				var ftitleid = titid;
-			            var fcardnum = '00000930';
-            var fname = '成都远洋太古汇顾客调查问卷';
-            var loading = layer.msg('提交中...', {
-                  icon: 16
-                  ,shade: 0.01
-                });
-            location.href = 'complete.html';
-             /*$.ajax({
-                url: "../question/cachequestion",
-                type: "post",
-                data: {
-                    'fcardnum':fcardnum,
-                    'ftitelid':ftitleid,
-                    'fnum':fnum,
-                    'fname':fname,
-                    'fvalueid':fvalueid,
-                    'fvalue':fvalue
-                },
-                dataType:"json",
-                success: function(ret) {
-                    layer.closeAll();
-                    if (ret.status == 1) {
-                                                location.href = '../question/questniare?fname=&num=5&exchange=';
-                                            }else{
-                        layer.msg(ret.message, {
-                          time: 2000, 
-                          // btn: ['明白了', '知道了', '哦']
-                        });
-                    };
-                }
-            })*/
-        });
-            }
-	$('.ques_others').focus(function(){
-		$(this).parent().find('#others').addClass('xuanZhong');
-	})
+    });
 </script>
 </html>
