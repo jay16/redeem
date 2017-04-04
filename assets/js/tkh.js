@@ -42,34 +42,33 @@ window.TKH = {
         icon: 16,
         shade: 0.01
       });
-      var clientCookie = '';
-      var userGid = username;
-      var userPwd = password;
-      var workStation = '172.17.104.164';
-      var storeCode = '0210';
-      var Oper = 'HDCRM[0]';
+      var clientCookie,
+        userGid = username,
+        userPwd = password,
+        workStation = '172.17.104.164',
+        storeCode = '0210',
+        Oper = 'HDCRM[0]';
 
       // 3.1.1 登录
-      var a = '\
-      <?xml version="1.0" encoding="utf-8"?>\
+    var a = '<?xml version="1.0" encoding="utf-8"?>\
       <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-        xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-        xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-        xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-        xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-        xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-        SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-          <ns2:Body>\
-            <ns0:LogIn>\
-              <sOper xsi:type="ns3:string">HDCRM[0]</sOper>\
-              <sStoreCode xsi:type="ns3:string">0210</sStoreCode>\
-              <sWorkStation xsi:type="ns3:string">172.17.104.164</sWorkStation>\
-              <nUserGid xsi:type="ns3:int">' + userGid + '</nUserGid>\
-              <sUserPwd xsi:type="ns3:string">' + userPwd + '</sUserPwd>\
-              <sClientCookie xsi:type="ns3:string"/>\
-            </ns0:LogIn>\
-          </ns2:Body>\
+      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+        <ns2:Body>\
+          <ns0:LogIn>\
+            <sOper xsi:type="ns3:string">HDCRM[0]</sOper>\
+            <sStoreCode xsi:type="ns3:string">' + storeCode + '</sStoreCode>\
+            <sWorkStation xsi:type="ns3:string">' + workStation + '</sWorkStation>\
+            <nUserGid xsi:type="ns3:int">' + userGid + '</nUserGid>\
+            <sUserPwd xsi:type="ns3:string">' + userPwd + '</sUserPwd>\
+            <sClientCookie xsi:type="ns3:string"/>\
+          </ns0:LogIn>\
+        </ns2:Body>\
       </SOAP-ENV:Envelope>';
       $.ajax({
         url: window.TKH.server + "?op=LogIn",
@@ -83,10 +82,14 @@ window.TKH = {
           console.log(xmlHttpRequest);
           console.log(xmlHttpRequest.responseText);
           clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
-          window.localStorage.setItem('sClientCookie', clientCookie);
-          window.localStorage.setItem('userGid', userGid);
-
-          location.href = '../home/search.html';
+          console.log(clientCookie);
+          if(clientCookie !== null && clientCookie.length > 0) {
+            window.localStorage.setItem('sClientCookie', clientCookie);
+            window.localStorage.setItem('userGid', userGid);
+            location.href = '../home/search.html';
+          } else {
+            layer.msg("用户验证失败", { time: 3000 });
+          }
         },
         complete: function(xmlHttpRequest, status) {
           console.log(status);

@@ -82,7 +82,7 @@
   $('#yhm').val(1000020);
   $('#pwd').val('CAB371810F12B8C2');
   var cookie = window.localStorage.getItem('sClientCookie');
-  if (cookie !== null) {
+  if (cookie !== null && cookie.length > 0) {
       location.href = '../home/search.html';
   }
 </script>
