@@ -96,7 +96,7 @@ window.TKH = {
           console.log(xmlHttpRequest);
         },
         error: function(xmlHttpRequest) {
-          alert("登录失败")
+          layer.msg("登录失败", { time: 2000 });
         }
       });
     }
@@ -137,7 +137,7 @@ window.TKH = {
       },
       complete: function(xmlHttpRequest, status) {},
       error: function(xmlHttpRequest) {
-        alert("退出失败")
+        layer.msg("退出失败", { time: 2000 });
       }
     });
   },
@@ -184,17 +184,12 @@ window.TKH = {
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
         var resultstring = $(xmlHttpRequest).find('sOutParams').text();
         console.log(resultstring);
         var items = resultstring.split('FDATA='),
-          jsonString = $.trim(items[1]);
-        if (errMsg.length > 0) {
-          alert(errMsg)
-        }
+        jsonString = $.trim(items[1]);
         console.log(jsonString);
         var outparams = JSON.parse(jsonString);
-
         window.TKH._doConsumerInfo(outparams['Data'], false);
       },
       complete: function(xmlHttpRequest, status) {
@@ -202,7 +197,7 @@ window.TKH = {
       },
       error: function(xmlHttpRequest) {
         console.log(xmlHttpRequest);
-        alert("手机号查询信息失败")
+        layer.msg("ERROR - QUERYMALLTRANSHSTJSON", { time: 3000 });
       }
     });
   },
@@ -246,7 +241,7 @@ window.TKH = {
         var resultstring = $(xmlHttpRequest).find('sOutParams').text();
         console.log(resultstring);
         if (errMsg.length > 0) {
-          alert(errMsg)
+          layer.msg(errMsg, { time: 3000 });
         }
         console.log(resultstring);
         var outparams = JSON.parse(resultstring);
@@ -271,7 +266,7 @@ window.TKH = {
       },
       error: function(xmlHttpRequest) {
         console.log(xmlHttpRequest);
-        alert("手机号查询信息失败")
+        layer.msg("ERROR - CRMQueryScorePrizeBillJson", { time: 3000 });
       }
     });
   },
@@ -336,13 +331,13 @@ window.TKH = {
           ret.data = outparams;
           ret.ConsumerInfo = [];
           ret.ExchangeInfo = [];
-          if (ret.status == 0) {
+          if (ret.status === 0 || ret.status === "0") {
             window.localStorage.setItem('sFCARDNUM', outparams["FCARDNUM"]);
             window.TKH._do(ret.data);
             window.TKH._doConsumerInfo(ret.ConsumerInfo, false);
             window.TKH._doExchangeInfo(ret.ExchangeInfo, false);
             $('#wx').parent().css('display', 'block');
-            $('#work_dz').parent().css('display', 'block');
+            $('#live_dz').parent().css('display', 'block');
             $('.bc, .legal-provision-dz').css('display', 'none');
 
             $('.xy').css('display', 'block');
@@ -353,11 +348,11 @@ window.TKH = {
             window.TKH._chuExchangeInfo();
 
             if (typeof(outparams['FMSG']) === 'string' && outparams['FMSG'].length > 0) {
-              layer.msg(outparams['FMSG'], { time: 3000 });
+              layer.msg(outparams['FMSG'], { time: 2000 });
             }
 
-            $('#wx').parent().css('display', 'none');
-            $('#work_dz').parent().css('display', 'none');
+            $('#wx').parent().css('display', 'block');
+            $('#live_dz').parent().css('display', 'block');
             $('.bc, .legal-provision-dz').css('display', 'block');
             $('.xy').css('display', 'none');
           };
@@ -367,7 +362,7 @@ window.TKH = {
         },
         error: function(xmlHttpRequest) {
           console.log(xmlHttpRequest);
-          alert("手机号查询信息失败")
+          layer.msg("ERROR - QUERYMEMBERINFOJSON", { time: 3000 });
         }
       });
     }
@@ -474,10 +469,10 @@ window.TKH = {
       });
       return false;
     }
-    var fmbrname = $.trim($('#mz').val());
-    var fmbrsex = $.trim($('#xb option:selected').val());
-    var fmbrbirth = $.trim($('#ymd').val());
-    var faddress = $.trim($('#live_dz').val());
+    var fmbrname = $.trim($('#mz').val()),
+        fmbrsex = $.trim($('#xb option:selected').val()),
+        fmbrbirth = $.trim($('#ymd').val()),
+        faddress = $.trim($('#live_dz').val());
 
     if (fmbrname.length == 0) {
       layer.msg('请输入用户名', {
@@ -488,7 +483,7 @@ window.TKH = {
 
     var fopenid = 'm0' + (new Date()).valueOf(),
       fcardid = '0210';
-    var params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + fopenid + '&quot;}';
+    var params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + faddress + '&quot;}';
 
     var clientCookie = window.localStorage.getItem('sClientCookie');
     var check_xml = '<SOAP-ENV:Envelope \
@@ -525,7 +520,15 @@ window.TKH = {
         var ret = JSON.parse(resultstring);
         layer.closeAll();
         if (ret["FRESULT"] === 0) {
-          alert("注册成功，卡号：" + ret["FCARDNUM"]);
+          layer.msg("注册成功，卡号：" + ret["FCARDNUM"], {
+            time: 0,
+            btn: ['确定'],
+            yes: function(index) {
+              layer.close(index);
+            }
+          });
+          $(".layui-layer-btn").css("text-align", "center");
+
           $('.bc, .legal-provision-dz').css('display', 'none');
           $('.xy').css('display', 'block');
         } else {
@@ -534,7 +537,7 @@ window.TKH = {
             // btn: ['明白了', '知道了', '哦']
           });
           $('#wx').parent().css('display', 'none');
-          $('#work_dz').parent().css('display', 'none');
+          $('#live_dz').parent().css('display', 'none');
           $('.bc, .legal-provision-dz').css('display', 'block');
           $('.xy').css('display', 'block');
         };
@@ -544,7 +547,7 @@ window.TKH = {
         console.log(xmlHttpRequest);
       },
       error: function(xmlHttpRequest) {
-        alert("手机号查询信息失败")
+        layer.msg("ERROR - CRMWeiXinOpenCardJson", { time: 3000 });
       }
     });
   },
@@ -655,7 +658,7 @@ window.TKH = {
           $('.xuanZe .hangHu').append(html);
         } else {
           if (outparams["FMSG"].length > 0) {
-            alert(outparams["FMSG"]);
+            layer.msg(outparams["FMSG"], { time: 3000 });
           }
         }
         console.log(resultstring)
@@ -667,8 +670,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        alert("手机号查询信息失败")
-        LogOut();
+        layer.msg("ERROR - QueryMallGndWeb", { time: 3000 });
       }
     });
   },
@@ -745,8 +747,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        alert("手机号查询信息失败")
-        LogOut();
+        layer.msg("ERROR - CRMQueryMallGiftPromInfo", { time: 3000 });
       }
     });
   },
@@ -842,7 +843,7 @@ window.TKH = {
           window.localStorage.removeItem("records");
           window.location.href = "../question/questniare.html"
         } else {
-          alert(outparams["FMSG"]);
+          layer.msg(outparams["FMSG"], { time: 2000 });
         }
       },
       complete: function(xmlHttpRequest, status) {
@@ -852,8 +853,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        alert("手机号查询信息失败")
-        LogOut();
+        layer.msg("ERROR - CRMGenMallSupplyBill", { time: 2000 });
       }
     });
   },
@@ -917,8 +917,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        alert("手机号查询信息失败")
-        LogOut();
+        layer.msg("ERROR - CRMQueryCRMQuestionnaireMode", { time: 2000 });
       }
     });
   },
@@ -984,15 +983,13 @@ window.TKH = {
           });
 
           layer.msg('您的问卷已保存', {
-            time: 0 //不自动关闭
-              ,
+            time: 0,
             btn: ['确定'],
             yes: function(index) {
               layer.close(index);
               window.location.href = "../home/signature.html"
             }
           });
-
           $(".layui-layer-btn").css("text-align", "center");
         } else {
           if (outparams["FMSG"].length) {
@@ -1009,7 +1006,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        alert("手机号查询信息失败")
+        layer.msg("ERROR - CRMSaveCRMQuestionnaire", { time: 2000 });
       }
     });
   },
