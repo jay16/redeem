@@ -17,6 +17,7 @@
 <style>
 #layui-layer1{ top:223px !important; }
 .tishibuton .cs { margin: 0.5rem !important; }
+.tishibuton .button { margin: 0.5rem !important; }
 </style>
 </head>
 <body>
@@ -95,8 +96,8 @@
 <div class="xg tishibuton" style="width: 100% !important;">
   <div class="xg_info" style="margin-top: 43px !important; padding: 0px 14px 36px 14px !important; ">
     <p class="sm" style="margin-top: 20px;">是否只做问卷，不添加消费信息、兑换信息等？</p>
-    <a href="javascript:;" onclick="window.location.href='../question/questniare.html'" class="cs">填写问卷</a>
-    <a href="javascript:;" onclick="window.location.href='../home/entry.html'" class="cs">消费兑换</a></div>
+    <a href="javascript:void(0);" onclick="window.location.href='../question/questniare.html'" class="button">填写问卷</a>
+    <a href="javascript:void(0);" onclick="window.location.href='../home/entry.html'" class="button">消费兑换</a></div>
 </div>
 <div class="gn">
   <div class="dj">
@@ -183,28 +184,30 @@ $(function(){
 
     //下一页
     $('.xy').on('click',function(){
-		var phone = $('#search').val();
-		var name = 	$('#mz').val();
-        if (!phone || !name) {
-            layer.tips('请输入手机号码,查询用户或新增用户！', '#search', {
-              tips: [3, '#faab20']
-            });
-            return false;
+        var phone = $('#search').val();
+        var name =  $('#mz').val();
+            if (!phone || !name) {
+                layer.tips('请输入手机号码,查询用户或新增用户！', '#search', {
+                  tips: [3, '#faab20']
+                });
+                return false;
+            }
+        var $phe=/^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+        if(!($phe.test(phone))){
+          layer.msg('请输入正确的手机号码',{
+                time: 2000, //2s后自动关闭
+                // btn: ['明白了', '知道了', '哦']
+              });
+          return false;
         }
-		var $phe=/^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
-		if(!($phe.test(phone))){
-			layer.msg('请输入正确的手机号码',{
-					  time: 2000, //2s后自动关闭
-					  // btn: ['明白了', '知道了', '哦']
-					});
-			return false;
-		}
-        $('.tishibuton').fadeIn(200);
+        // $('.tishibuton').fadeIn(200);
         layer.open({
             type:1,
             area:"450px",
             content:$('.tishibuton')
         });
+        $(".layui-layer").css({"width": "50%", "top": "30%", "height": "100% !important", "min-height": "230px"});
+        $(".button, .tishibuton").css({"display": "block"});
     });
 
 
@@ -218,4 +221,3 @@ $(function(){
 })
 </script>
 </html>
-

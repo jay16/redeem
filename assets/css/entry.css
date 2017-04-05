@@ -1,6 +1,6 @@
 #main {
     background: url('../image/bg.jpg') no-repeat center;
-    background-size: auto 100%;
+    background-size: 100% 100%;
     -webkit-animation: fadeIn .6s backwards;
     display: none;
 }
