@@ -71,7 +71,7 @@
           <input type="text" id="live_dz" value="" /></div>
         <div class="dz legal-provision-dz">
           <p>
-            <input type="checkbox" checked="checked" style="width: 0.4rem;" />
+            <input id='checkbox_legal' type="checkbox" checked="checked" style="width: 0.4rem;" />
             同意并愿意遵守兴业太古汇
             <a class="legal-provision-link" target="_blank" href="../user/legal-provision.html">会员计划章程及细则</a>
           </p>
@@ -88,7 +88,7 @@
     </div>
   </div>
   <div class="anNiu">
-    <a href="javascript:void (0)" class="bc" onClick="window.TKH.CRMWeiXinOpenCardJson();">保存
+    <a href="javascript:void (0)" class="bc" onClick="window.TKH.openCardJson();">保存
       <br/>Save</a>
     <a href="javascript:void (0)" class="xy" style="display:block">下一页
       <br/>Next</a></div>
@@ -148,6 +148,7 @@
 <script src="../assets/js/side.js"></script>
 <script>
 $(function(){
+    $("#ymd").attr("max", (new Date()).format('yyyy-MM-dd'));
     //顾客信息记录选择
     $('.content_1>div').click(function(){
         if(!$(this).hasClass('act')){
@@ -194,10 +195,7 @@ $(function(){
             }
         var $phe=/^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
         if(!($phe.test(phone))){
-          layer.msg('请输入正确的手机号码',{
-                time: 2000, //2s后自动关闭
-                // btn: ['明白了', '知道了', '哦']
-              });
+          layer.msg('请输入正确的手机号码',{time: 2000});
           return false;
         }
         // $('.tishibuton').fadeIn(200);
@@ -206,7 +204,7 @@ $(function(){
             area:"450px",
             content:$('.tishibuton')
         });
-        $(".layui-layer").css({"width": "50%", "top": "30%", "height": "100% !important", "min-height": "230px"});
+        $(".layui-layer").css({"top": "30%", "min-height": "230px"});
         $(".button, .tishibuton").css({"display": "block"});
     });
 

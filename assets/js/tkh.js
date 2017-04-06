@@ -355,6 +355,7 @@ window.TKH = {
             $('#live_dz').parent().css('display', 'block');
             $('.bc, .legal-provision-dz').css('display', 'block');
             $('.xy').css('display', 'none');
+            $("#search").val('');
           };
         },
         complete: function(xmlHttpRequest, status) {
@@ -459,14 +460,26 @@ window.TKH = {
     var html = '<div class="xf"><p>消费日期 : 消费金额 - 店铺名称 / Date : Amount - Merchant name</p><p></p></div>';
     $("#ConsumerInfo").append(html);
   },
+  openCardJson: function() {
+    if($("#checkbox_legal").prop('checked')) {
+      window.TKH.CRMWeiXinOpenCardJson();
+    } else {
+     window.localStorage.setItem('sFCARDNUM', '-');
+     layer.open({
+          type:1,
+          area:"450px",
+          content:$('.tishibuton')
+      });
+      $(".layui-layer").css({"top": "30%", "min-height": "230px"});
+      $(".button, .tishibuton").css({"display": "block"});
+    }
+  },
   CRMWeiXinOpenCardJson: function() {
+
     var fmbrmobilephone = $('#search').val();
     var $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
     if (!($phe.test(fmbrmobilephone))) {
-      layer.msg('请输入正确的手机号码', {
-        time: 2000, //2s后自动关闭
-        // btn: ['明白了', '知道了', '哦']
-      });
+      layer.msg('请输入正确的手机号码', { time: 2000 });
       return false;
     }
     var fmbrname = $.trim($('#mz').val()),
@@ -578,7 +591,7 @@ window.TKH = {
       '<div class="dq-wrapper dq-wrapper-' + dq_count + '">\
          <div class="dp"> \
            <p>店铺名称 / Merchant</p>\
-           <input type="text" placeholder="店铺名称" class="store-name"/><input type="hidden" placeholder="GNDGID" class="gndgid"/>\
+           <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/><input type="hidden" placeholder="GNDGID" class="gndgid"/>\
           <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);"  class="search"><img src="../assets/image/search.png"/></a>\
          </div>\
          <div>\
@@ -836,12 +849,9 @@ window.TKH = {
         console.log(resultstring);
         var outparams = JSON.parse(resultstring);
 
-        // if(outparams["FMSG"].length) {
-        //   layer.msg(outparams["FMSG"], { time: 2000 });
-        // }
         if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
           window.localStorage.removeItem("records");
-          window.location.href = "../question/questniare.html"
+          window.location.href = "../home/exchange.html"
         } else {
           layer.msg(outparams["FMSG"], { time: 2000 });
         }

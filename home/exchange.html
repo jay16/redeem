@@ -55,11 +55,11 @@
       <img src="../assets/image/quXiao.png">取消兑换
       <br/>Undo
       <span>99</span></a>
-    <a href="javascript:void (0)" class="tiaoGuo">
+    <a href="javascript:void (0)" onclick="window.location.href='../question/complete.html'"  class="tiaoGuo">
       <img src="../assets/image/tiaoGuo.png">跳过问卷
       <br/>Skip survey
       <span>99</span></a>
-    <a href="javascript:void (0)" class="xy">下一页
+    <a href="javascript:void (0)" class="xy" onclick="window.location.href='../question/questniare.html'">下一页
       <br/>Next</a></div>
   <div class="gouXuan">
     <img src="../assets/image/dhlp.png">已勾选的当日消费：￥
@@ -285,15 +285,15 @@ $(function() {
     }
   });
 
-  //下一页
-  $('.xy').click(function() {
-    if ($('#Exchange_id').val()) window.location.href = '../home/questniare?exchange=' + $('#Exchange_id').val();
-    else {
-      layer.msg('本次还未进行兑换！', {
-        time: 2000 //2s后自动关闭
-      });
-    }
-  });
+  // //下一页
+  // $('.xy').click(function() {
+  //   if ($('#Exchange_id').val()) window.location.href = '../home/questniare?exchange=' + $('#Exchange_id').val();
+  //   else {
+  //     layer.msg('本次还未进行兑换！', {
+  //       time: 2000 //2s后自动关闭
+  //     });
+  //   }
+  // });
 
   //跳过问卷，到签名页
   $('.tiaoGuo').click(function() {
