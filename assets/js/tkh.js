@@ -282,8 +282,7 @@ window.TKH = {
       var $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
       if (!($phe.test(phone))) {
         layer.msg('请输入正确的手机号码', {
-          time: 2000, //2s后自动关闭
-          // btn: ['明白了', '知道了', '哦']
+          time: 2000
         });
         return false;
       }
@@ -805,15 +804,16 @@ window.TKH = {
       fmobilephone = '',
       fcardid = '',
       femail = '';
-
-    console.log(paies.join(","));
-    console.log('-----------')
-    console.log(gifts.join(","));
-    console.log('-----------')
-    var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,&quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FEMAIL&quot;:&quot;' + femail + '&quot;,&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,&quot;FSUPPLYPAY&quot;:[' + paies.join(",") + '],&quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + ']}';
-
-
-    console.log(params);
+    var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
+                   &quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,\
+                   &quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,\
+                   &quot;FEMAIL&quot;:&quot;' + femail + '&quot;,\
+                   &quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,\
+                   &quot;FNUM&quot;:&quot;' + fnum + '&quot;,\
+                   &quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,\
+                   &quot;FSUPPLYPAY&quot;:[' + paies.join(",") + '],\
+                   &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + ']\
+                 }';
     var check_xml = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
@@ -850,8 +850,16 @@ window.TKH = {
         var outparams = JSON.parse(resultstring);
 
         if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-          window.localStorage.removeItem("records");
-          window.location.href = "../home/exchange.html"
+          layer.msg('礼品兑换成功', {
+            time: 0,
+            btn: ['知道了'],
+            yes: function(index) {
+              layer.close(index);
+              window.localStorage.removeItem("records");
+              window.location.href = "../home/exchange.html"
+            }
+          });
+          $(".layui-layer-btn").css("text-align", "center");
         } else {
           layer.msg(outparams["FMSG"], { time: 2000 });
         }
