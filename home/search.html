@@ -94,10 +94,17 @@
       <br/>Next</a></div>
 </div>
 <div class="xg tishibuton" style="width: 100% !important;">
-  <div class="xg_info" style="margin-top: 43px !important; padding: 0px 14px 36px 14px !important; ">
+  <div class="xg_info" style="margin-top: 43px !important; padding: 0px 14px 46px 13px !important; ">
     <p class="sm" style="margin-top: 20px;">是否只做问卷，不添加消费信息、兑换信息等？</p>
     <a href="javascript:void(0);" onclick="window.location.href='../question/questniare.html'" class="button">填写问卷</a>
     <a href="javascript:void(0);" onclick="window.location.href='../home/entry.html'" class="button">消费兑换</a></div>
+</div>
+<div class="xg regisitered-area" style="width: 100% !important;">
+  <div class="xg_info" style="margin-top: 43px !important; padding: 0px 14px 46px 13px !important;">
+    <p class="sm" style="margin-top: 20px;">注册成功，卡号：<span id="fnum_span"></span></p>
+
+    <p>请扫描二维码 同步在微信端绑定会员卡 </p>
+    <p><img src="../assets/image/ewm.png" style="max-width:100px; max-height: 100px;" />
 </div>
 <div class="gn">
   <div class="dj">
@@ -182,6 +189,13 @@ $(function(){
             }
         }
     })
+
+        // layer.open({
+        //     type:1,
+        //     area:"450px",
+        //     content:$('.regisitered-area')
+        // });
+        // $(".layui-layer").css({"top": "30%", "min-height": "230px"});
 
     //下一页
     $('.xy').on('click',function(){

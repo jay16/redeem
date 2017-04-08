@@ -1,5 +1,5 @@
 #main {
-    background: url('../image/bg.jpg') no-repeat center;
+    background: url('../image/bg-blur.jpg') no-repeat center;
     background-size: 100% 100%;
     -webkit-animation: fadeIn .6s backwards;
     display: none;
@@ -74,7 +74,7 @@
 }
 
 .xin{
-    text-align: right;
+    text-align: center;
 }
 .xin a{
     text-align: center;
@@ -90,7 +90,7 @@
 .jp,.ewm{
     margin: 0.5rem auto;
     width: 90%;
-    background-color: #fff;
+    /*background-color: #fff;*/
     text-align: center;
     padding: 0.4rem 0;
 }
