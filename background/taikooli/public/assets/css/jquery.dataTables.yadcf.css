@@ -1,0 +1,55 @@
+.hide {
+	display: none;
+}
+
+.inuse, .ui-slider-range .inuse, .yadcf-filter-range-number-slider .inuse {
+	background: #d9edf7;
+	font-weight:bold;
+
+}
+
+.yadcf-filter-reset-button {
+}
+
+.yadcf-filter-reset-button.range-number-slider-reset-button{
+}
+
+.yadcf-filter {
+
+}
+
+.yadcf-filter > option{
+    background: white;
+}
+
+.ui-autocomplete .ui-menu-item { 
+}
+
+#ui-datepicker-div { 
+}
+.yadcf-filter-wrapper {
+}
+
+.yadcf-filter-range-number {
+
+}
+
+.yadcf-filter-range-number-seperator {
+
+}
+
+.yadcf-filter-range-date {
+
+}
+
+.yadcf-filter-range-date-seperator {
+
+}
+
+.yadcf-filter-wrapper-inner {
+
+}
+
+.yadcf-number-slider-filter-wrapper-inner {
+
+}

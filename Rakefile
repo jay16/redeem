@@ -5,42 +5,30 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 
-#encoding: utf-8
-require "net/ssh"
-require "net/scp"
-require 'settingslogic'
+$LOAD_PATH.unshift(File.dirname(__FILE__))
 
-
-root_path = File.dirname(File.dirname(__FILE__))
-$LOAD_PATH.unshift(root_path)
 task default: [:environment]
 
-desc 'set up environment for rake'
+desc 'bundle exec rake task_name RACK_ENV=development'
 task environment: 'Gemfile.lock' do
   ENV['RACK_ENV'] ||= 'production'
+  ENV['RAILS_ENV'] = ENV['RACK_ENV']
+  require File.expand_path('../config/boot.rb', __FILE__)
 
-  class Settings < Settingslogic
-      source "config/setting.yaml"
-      namespace  ENV["RACK_ENV"] || 'production'
+  Rack::Builder.parse_file File.expand_path('../config.ru', __FILE__)
+  # eval 'Rack::Builder.new {( ' + File.read(File.expand_path('../config.ru', __FILE__)) + "\n )}"
+end
+
+require 'sinatra/activerecord/rake'
+
+namespace :db do
+  task :load_config do
+    require File.expand_path('../config/boot.rb', __FILE__)
   end
 end
 
-desc "remote deploy application."
-namespace :remote do
-  def encode(data)
-    data.to_s.encode('UTF-8', {:invalid => :replace, :undef => :replace, :replace => '?'})
-  end
-  def execute!(ssh, command)
-    ssh.exec!(command) do  |ch, stream, data|
-      puts "%s:\n%s" % [stream, encode(data)]
-    end
-  end
-
-  desc "scp local config files to remote server."
-  task :deploy => :environment do
-    Net::SSH.start(Settings.server.host, Settings.server.user, :password => Settings.server.password) do |ssh|
-      command = "cd %s && /bin/bash tool.sh deploy:server" % Settings.server.app_root_path
-      execute!(ssh, command)
-    end
-  end
+Dir.glob('lib/tasks/*.rake').each do |rake_file|
+  load rake_file
 end
+
+

@@ -1,0 +1,42 @@
+
+<script src="http://project.chenfeng.co/taikooli/public/assets/js/ajaxfileupload.min.js"></script>
+
+<style>
+.xiangQing{ font-size: 16px;font-weight: 700; margin: 20px 0px 20px 20px;}
+</style>
+
+<form accept-charset="utf-8" class="form-horizontal" id="ajaxform" autocomplete="off" method="POST" action="http://project.chenfeng.co/taikooli/public/admin/member/edit/1">
+        <div class="xiangQing">会员信息：</div>
+    <div class="form-group"><label for="fmemname" class="control-label col-lg-2 col-sm-4">姓名</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmemname" type="text" name="fmemname" value="吴博"></div></div>
+    <div class="form-group"><label for="fmemmobilephone" class="control-label col-lg-2 col-sm-4">电话</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmemmobilephone" type="text" name="fmemmobilephone" value="18602897807"></div></div>
+    <div class="form-group"><label for="fmembirth" class="control-label col-lg-2 col-sm-4">出生年月</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmembirth" type="date" name="fmembirth" value="1982-12-05"></div></div>
+    <div class="form-group"><label for="fmemage" class="control-label col-lg-2 col-sm-4">年龄</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmemage" type="text" name="fmemage" value="0"></div></div>
+    <div class="form-group"><label for="fmememailadr" class="control-label col-lg-2 col-sm-4">邮箱</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmememailadr" type="text" name="fmememailadr" value="geta_gg@163.com"></div></div>
+    <div class="form-group"><label for="fmemaddress" class="control-label col-lg-2 col-sm-4">居住地址</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmemaddress" type="text" name="fmemaddress" value="四川省成都市成华区"></div></div>
+    <div class="form-group"><label for="fmemqq" class="control-label col-lg-2 col-sm-4">QQ</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmemqq" type="text" name="fmemqq" value=""></div></div>
+    <div class="form-group"><label for="fmemsex" class="control-label col-lg-2 col-sm-4">性别</label><div class="col-lg-10 col-sm-8"><select class="form-control" readonly="readonly" id="fmemsex" name="fmemsex"><option value="男" selected="selected">男</option><option value="女">女</option></select></div></div>
+    <div class="form-group"><label for="fmemtel" class="control-label col-lg-2 col-sm-4">座机</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmemtel" type="text" name="fmemtel" value=""></div></div>
+    <div class="form-group"><label for="fmsg" class="control-label col-lg-2 col-sm-4">信息</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmsg" type="text" name="fmsg" value=""></div></div>
+    <div class="form-group"><label for="fmembusiness" class="control-label col-lg-2 col-sm-4">职务</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fmembusiness" type="text" name="fmembusiness" value=""></div></div>
+    <div class="form-group"><label for="fidcardtype" class="control-label col-lg-2 col-sm-4">身份证</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fidcardtype" type="text" name="fidcardtype" value="身份证"></div></div>
+    <div class="form-group"><label for="fisetransused" class="control-label col-lg-2 col-sm-4">是否开卡</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fisetransused" type="text" name="fisetransused" value="未开卡"></div></div>
+    <div class="xiangQing">卡信息：</div>
+    <div class="form-group"><label for="fcardnum" class="control-label col-lg-2 col-sm-4">卡号</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fcardnum" type="text" name="fcardnum" value="00000930"></div></div>
+    <div class="form-group"><label for="fcardbalance" class="control-label col-lg-2 col-sm-4">余额 </label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fcardbalance" type="text" name="fcardbalance" value="0"></div></div>
+    <div class="form-group"><label for="fcardstat" class="control-label col-lg-2 col-sm-4">状态</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fcardstat" type="text" name="fcardstat" value="正常"></div></div>
+    <div class="form-group"><label for="fcardtotalscore" class="control-label col-lg-2 col-sm-4">总积分</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fcardtotalscore" type="text" name="fcardtotalscore" value="0"></div></div>
+    <div class="form-group"><label for="fcardtype" class="control-label col-lg-2 col-sm-4">类型</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fcardtype" type="text" name="fcardtype" value="里悦计划"></div></div>
+    <div class="form-group"><label for="fcarrier" class="control-label col-lg-2 col-sm-4">持卡人</label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fcarrier" type="text" name="fcarrier" value="1001720"></div></div>
+    <div class="form-group"><label for="fhours" class="control-label col-lg-2 col-sm-4">停车小时数 </label><div class="col-lg-10 col-sm-8"><input class="form-control" readonly="readonly" id="fhours" type="text" name="fhours" value="1.00"></div></div>
+    
+    <div class="form-group"><div class="col-lg-offset-2 col-sm-offset-4 col-lg-10 col-sm-8"><button class="btn btn-primary btn-lg close" type="submit"><span class="glyphicon glyphicon-ok-sign"></span> 返回</button></div></div>
+<input class="form-control" type="hidden" name="_token" value="MsoqhDyCts4oSbQIVgprh44nbOZaZjNG5ZPmW7mC"></form>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.close').on('click',function(){
+            $('.bootstrap-dialog').remove();
+            $('.modal-backdrop').remove();
+            return false;
+        });
+    });
+</script>

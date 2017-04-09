@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+	<title>
+		同步问卷 :: 			管理系统
+		
+	</title>
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <!-- Google will often use this as its description of your page/site. Make it good. -->
+    <meta name="description" content="" />
+    <!-- Speaking of Google, don't forget to set your site up: http://google.com/webmasters -->
+    <meta name="google-site-verification" content="">
+    <!-- Dublin Core Metadata : http://dublincore.org/ -->
+    <meta name="DC.title" content="Project Name">
+    <meta name="DC.subject" content="">
+    <meta name="DC.creator" content="">
+    <!--  Mobile Viewport Fix -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- This is the traditional favicon.
+     - size: 16x16 or 32x32
+     - transparency is OK
+     - see wikipedia for info on browser support: http://mky.be/favicon/ -->
+    <link rel="shortcut icon" href="/taikooli/public/assets/ico/favicon.png">
+    <!-- iOS favicons. -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/taikooli/public/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/taikooli/public/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/taikooli/public/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/taikooli/public/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <!-- CSS -->
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/bootstrap/css/bootstrap.min.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/bootstrap/css/font-awesome.min.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/ionicons.min.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/AdminLTE.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/skins/_all-skins.min.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/bootstrap-dialog.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/sco.message.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/dataTables.bootstrap.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/jquery.dataTables.yadcf.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/dataTables.colVis.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/jquery-ui.min.css">
+
+    <link media="all" type="text/css" rel="stylesheet" href="/taikooli/public/assets/css/lightbox.css">
+ 
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="/taikooli/public/assets/js/html5.js"></script>
+
+    <![endif]-->
+    <!-- 上传图片公用样式 -->
+    <style type="text/css">
+    .upload_item{
+        float: left; margin-right: 10px; height: 120px; list-style: none; text-align: center;
+    }
+    .upload_item img{width: 100px; height: 100px;padding-bottom: 5px;}
+    .district,.city{display: none;}
+
+    .required sup{color: #dd4b39;}
+    .required input,.required select,.required textarea{border-color: #dd4b39;}
+    </style>
+	<style>
+.col-lg-12{ margin-bottom: 20px;}
+.col-lg-12 .input-1{width: 15%; display: inline;}
+</style>
+
+</head>
+  <body class="skin-blue sidebar-mini">
+    <!-- Site wrapper -->
+    <div class="wrapper">
+      <header class="main-header">
+        <!-- Logo -->
+        <a href="#" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>管理系统</b></span>
+          <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b></b>管理系统</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+       <!--#include file="/admin/template/nav.html"--> 
+      </header>
+
+      <!-- =============================================== -->
+
+      <!-- Left side column. contains the sidebar -->
+      <!--#include file="/admin/template/menu.html"-->
+
+      <!-- =============================================== -->
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+                    <h1>
+            同步问卷
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="/taikooli/public/admin/index"><i class="fa fa-dashboard"></i> 首页</a></li>
+            <li class="active">同步问卷</li>
+          </ol>
+                  </section>
+
+      <section class="content">
+        <div class="row">
+<div class="col-lg-12">
+    <form action="http://project.chenfeng.co/taikooli/public/admin/question/geng-question" method="get">
+       <input type="text" name="fname" value="" placeholder="调查问卷名称 可不填" class="form-control input-1">
+       <input type="hidden" name="type" value="1" placeholder="店铺code" class="form-control input-1">
+       <input type="submit" id="addSysem" class="btn btn-success btn-xm" value="搜索">
+    </form>
+        </div>
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+               更新成功！
+           
+		</div>		
+	</div>
+</div>
+        </section>
+      </div><!-- /.content-wrapper -->
+
+      <!--#include file="/admin/template/footer.html"--> 
+    </div><!-- ./wrapper -->
+
+
+    <!-- Javascripts -->
+    <script src="/taikooli/public/assets/js/jquery-2.1.1.min.js"></script>
+
+    <script src="/taikooli/public/assets/js/jquery-ui.min.js"></script>
+
+    <script src="/taikooli/public/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="/taikooli/public/assets/js/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+
+    <script src="/taikooli/public/assets/js/plugins/fastclick/fastclick.min.js"></script>
+
+    <script src="/taikooli/public/assets/js/bootstrap-dialog.js"></script>
+
+    <script src="/taikooli/public/assets/js/sco.message.js"></script>
+
+    <script src="/taikooli/public/assets/js/jquery.dataTables.min.js"></script>
+
+    <script src="/taikooli/public/assets/js/jquery.dataTables.yadcf.js"></script>
+
+    <script src="/taikooli/public/assets/js/dataTables.colVis.js"></script>
+
+    <script src="/taikooli/public/assets/js/dataTables.bootstrap.js"></script>
+
+    <script src="/taikooli/public/assets/js/lightbox.min.js"></script>
+
+    <script src="/taikooli/public/assets/js/app.min.js"></script>
+
+    <!-- 上传图片公用js -->
+    <script src="/taikooli/public/assets/js/plupload/plupload.full.min.js"></script>
+
+    <script src="/taikooli/public/assets/js/plupload/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>
+
+    <script src="/taikooli/public/assets/js/plupload/i18n/zh_CN.js"></script>
+
+    <script src="/taikooli/public/assets/js/common_upload.js"></script>
+
+    
+    <script type="text/javascript">
+    var AJAXCITYURL    = "/taikooli/public/common/ajaxcity";
+    var AJAXDISITRCTURL = "/taikooli/public/common/ajaxdistrict";
+    
+    var url = window.location;
+    var element = $('ul.sidebar-menu a').filter(function() {
+      if(this.href == url){
+        $(this).parent().addClass('active');
+        if($(this).parent().parent().attr('class')=='treeview-menu'){
+          $(this).parent().parent().parent().addClass('active');
+        }
+      }
+    });
+    </script>
+
+    <script>
+              </script>
+
+    
+  </body>
+
+</html>

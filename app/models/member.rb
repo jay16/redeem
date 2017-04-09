@@ -1,0 +1,80 @@
+# encoding: utf-8
+require 'securerandom'
+require 'sinatra/activerecord'
+
+# 会员管理
+class Member < ActiveRecord::Base
+  self.table_name = 'sys_model_1'
+
+  # 字段，别名，意思
+  # field0, name, 会员名
+  # field1, telphone, 电话
+  # field2, card_number, 会员卡号
+  # field3, birthday, 出生日期
+  # field4, address, 住址
+  # field5, email, 邮箱
+  # field6, sex, 性别
+  # field7, married, 婚姻状态
+  # field8, id_number, 身份证号
+  # field9, qq, qq 号
+  # field10, landline, 座机
+  def self.extract_params(params)
+    options = {}
+    options[:field0] = params[:name] if params[:name]
+    options[:field1] = params[:telphone] if params[:telphone]
+    options[:field2] = params[:card_number] if params[:card_number]
+    options[:field3] = params[:birthday] if params[:birthday]
+    options[:field4] = params[:address] if params[:address]
+    options[:field5] = params[:email] if params[:email]
+    options[:field6] = params[:sex] if params[:sex]
+    options[:field7] = params[:married] if params[:married]
+    options[:field8] = params[:id_number] if params[:id_number]
+    options[:field9] = params[:qq] if params[:qq]
+    options[:field10] = params[:landline] if params[:landline]
+    options
+  end
+
+  def self.find_or_create_with_params(params)
+    card_number = params[:card_number] || SecureRandom.hex(32)
+    unless member = find_by(field2: card_number)
+      member = create(extract_params(params))
+    end
+    member
+  end
+
+  def update_with_params(params)
+    self.update_columns(Member.extract_params(params))
+  end
+
+  # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作
+  def data_table
+    [
+      self.id,
+      self.field0,
+      self.field1,
+      self.field2,
+      self.field3,
+      self.field4,
+      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      ""
+    ]
+  end
+
+  def to_hash
+    {
+      id: self.id,
+      name: self.field0,
+      telphone: self.field1,
+      card_number: self.field2,
+      birthday: self.field3,
+      address: self.field4,
+      email: self.field5,
+      sex: self.field6,
+      married: self.field7,
+      id_number: self.field8,
+      qq: self.field9,
+      landline: self.field10,
+      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+    }
+  end
+end

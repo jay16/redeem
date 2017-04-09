@@ -1,0 +1,34 @@
+-# coding: UTF-8
+!!!
+%html{"ng-app" => "solife"}
+  %head
+    = render_page_title
+    %meta{"http-equiv" => "content-type", content: "text/html", charset: "UTF-8"}
+    %meta{name: "renderer", content:"webkit"}
+    %meta{"http-equiv" => "X-UA-Compatible", content: "IE=edge"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+    %link{href: "#{Setting.website.favicon}", rel: "shortcut icon"}
+    %meta{name: "keywords", content: "#{@meta_keywords}"}
+    %meta{name: "description", content: "#{@meta_description}"}
+    = stylesheet_link_tag "bootstrap.min.css"
+    = stylesheet_link_tag "application.css"
+
+%body{:style => "background-image: url(#{'/images/monkey-patch.jpg'});background-repeat:no-repeat;background-attachment:fixed;background-position:100% 60%;"}
+  .container
+    .row
+      .col-sm-12.error-page
+        %h1.error-title
+          %span.text-3d-left 4
+          %span.text-3d-center 0
+          %span.text-3d-right 4
+
+        .col-sm-6.col-sm-offset-3
+          .panel.panel-default{style:"background:transparent;border:none;"}
+            .panel-body
+              %h4{style: "text-align: center;"} Apologize
+              %p{style: "width:100%; text-align: center;"}
+                %span.error-url= "%s %s" % [request.request_method, request.url]
+              %p{style: "width:100%; text-align: center;"}
+                %a{:href => "/"} Home
+
+

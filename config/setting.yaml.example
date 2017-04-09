@@ -1,9 +1,18 @@
 default: &default
-  server:
-    app_root_path: "/var/www/project"
-    host: "123.456.789.10"
-    user: "username"
-    password: "password"
+  app_name: 'app-name'
+  redis_url: 'redis://127.0.0.1:6379/0'
+  admin_nums:
+    - 'administrator'
+  website:
+    title: 'title'
+    subtitle: 'subtitle'
+    slogan: 'todo'
+    favicon: '/images/favicon.ico'
+    footer: ''
+  unicorn:
+    timeout: 30
+    worker_processes: 3
+
 production:
   <<: *default
 
