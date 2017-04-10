@@ -8,6 +8,7 @@ root_path = File.dirname(File.dirname(__FILE__))
 ENV['APP_ROOT_PATH'] = root_path
 ENV['RACK_ENV'] ||= 'development'
 ENV['VIEW_PATH'] = %(#{root_path}/app/views)
+ENV['API_SERVER'] = 'http://localhost:4567'
 
 begin
   ENV['BUNDLE_GEMFILE'] ||= %(#{root_path}/Gemfile)

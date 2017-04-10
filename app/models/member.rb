@@ -6,6 +6,11 @@ require 'sinatra/activerecord'
 class Member < ActiveRecord::Base
   self.table_name = 'sys_model_1'
 
+  attr_reader :class_name
+  def class_name
+    @class_name || self.class.to_s.downcase
+  end
+
   # 字段，别名，意思
   # field0, name, 会员名
   # field1, telphone, 电话
@@ -18,6 +23,19 @@ class Member < ActiveRecord::Base
   # field8, id_number, 身份证号
   # field9, qq, qq 号
   # field10, landline, 座机
+
+  alias_attribute :name, :field0 # 会员名
+  alias_attribute :telphone, :field1 # 电话
+  alias_attribute :card_number, :field2 # 会员卡号
+  alias_attribute :birthday, :field3 # 出生日期
+  alias_attribute :address, :field4 # 住址
+  alias_attribute :email, :field5 # 邮箱
+  alias_attribute :sex, :field6 # 性别
+  alias_attribute :married, :field7 # 婚姻状态
+  alias_attribute :id_number, :field8 # 身份证号
+  alias_attribute :qq, :field9 # qq 号
+  alias_attribute :landline, :field10 # 座机
+
   def self.extract_params(params)
     options = {}
     options[:field0] = params[:name] if params[:name]
@@ -48,6 +66,15 @@ class Member < ActiveRecord::Base
 
   # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作
   def data_table
+    html_tags = <<-EOF
+      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
+        <i class="fa fa-pencil-square-o"></i>
+      </a>
+      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+        <i class="fa fa-trash"></i>
+      </a>
+    EOF
+
     [
       self.id,
       self.field0,
@@ -56,7 +83,7 @@ class Member < ActiveRecord::Base
       self.field3,
       self.field4,
       self.created_at.strftime("%y-%m-%m %H:%M:%S"),
-      ""
+      html_tags
     ]
   end
 

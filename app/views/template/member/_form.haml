@@ -1,0 +1,57 @@
+:css
+  .xiangQing{ font-size: 16px;font-weight: 700; margin: 20px 0px 20px 20px;}
+%form#ajaxform.form-horizontal{"accept-charset" => "utf-8", :action => "", :autocomplete => "off", :method => "POST"}
+  .xiangQing 会员信息：
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "fmbrname"}
+      姓名
+      %sup *
+    .col-lg-10.col-sm-8
+      %input#fmbrname.form-control{:name => "name", :required => "required", :type => "text", value: "#{@record.name}" }/
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "fmobilephone"}
+      电话
+      %sup *
+    .col-lg-10.col-sm-8
+      %input#fmobilephone.form-control{:name => "telphone", :required => "required", :type => "tel", value: "#{@record.telphone}"}/
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "fmbrbirth"}
+      出生年月
+      %sup *
+    .col-lg-10.col-sm-8
+      %input#fmbrbirth.form-control{:name => "birthday", :required => "required", :type => "date", value: "#{@record.birthday}"}/
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "femail"} 邮箱
+    .col-lg-10.col-sm-8
+      %input#femail.form-control{:name => "email", :type => "text", value: "#{@record.email}"}/
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "faddress"}
+      居住地址
+      %sup *
+    .col-lg-10.col-sm-8
+      %input#faddress.form-control{:name => "address", :required => "required", :type => "text", value: "#{@record.address}"}/
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "fmbrsex"}
+      性别
+      %sup *
+    .col-lg-10.col-sm-8
+      %select#fmbrsex.form-control{:name => "sex", :required => "required", value: "#{@record.sex}"}
+        %option{:value => "男"} 男
+        %option{:value => "女"} 女
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "fwedlock"}
+      婚姻状况
+      %sup *
+    .col-lg-10.col-sm-8
+      %select#fwedlock.form-control{:name => "marrried", :required => "required", value: "#{@record.married}"}
+        %option{:value => "未婚"} 未婚
+        %option{:value => "已婚"} 已婚
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "fidcard"} 身份证号
+    .col-lg-10.col-sm-8
+      %input#fidcard.form-control{:name => "id_number", :type => "text", value: "#{@record.id_number}"}/
+  .form-group
+    .col-lg-offset-2.col-sm-offset-4.col-lg-10.col-sm-8
+      %button.btn.btn-success.btn-lg.btn-block{:type => "submit"}
+        %span.glyphicon.glyphicon-ok-sign
+  %input.form-control{name: "_token", type: "hidden", value: "4sKeXW2IREccIIgEwLtkn3d2DIGJ2c7eJ91MCzgz"}/

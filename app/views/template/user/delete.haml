@@ -1,0 +1,17 @@
+%form#ajaxform.text-center{"accept-charset" => "utf-8", :action => "#{ENV['API_SERVER']}/api/v1/delete/user/#{@record.id}", :autocomplete => "off", :method => "POST"}
+  %h3
+    %i.fa.fa-exclamation-circle.fa-fw>
+    确定删除
+    %mark= @record.name
+
+  %hr/
+  = succeed "\u{a0}" do
+    %button.btn-danger.btn{:type => "submit"}
+      %span.glyphicon.glyphicon-ok-sign
+      删除
+  %button.btn-default.btn{"data-dismiss" => "modal", :type => "button"}
+    %span.glyphicon.glyphicon-remove
+    取消
+  %input.form-control{:name => "_token", :type => "hidden", :value => "4sKeXW2IREccIIgEwLtkn3d2DIGJ2c7eJ91MCzgz"}/
+
+= haml :"template/javascripts/delete"

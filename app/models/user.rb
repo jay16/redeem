@@ -9,8 +9,78 @@ require 'sinatra/activerecord'
 # sys_model_5, Answer, 问卷回答
 # sys_model_6, Redeem, 礼品兑换
 
-# 用户
+# 管理员
 class User < ActiveRecord::Base
   self.table_name = 'sys_model_0'
+
+  attr_reader :class_name
+  def class_name
+    @class_name || self.class.to_s.downcase
+  end
+
+  # 字段，别名，意思
+  # field0, name, 名称
+  # field1, password, 密码
+  # field2, email, 邮箱
+  # field3, telphone, 手机号
+  # field4, area, 区域
+  alias_attribute :name, :field0 # 名称
+  alias_attribute :password, :field1 # 名称
+  alias_attribute :email, :field2 # 名称
+  alias_attribute :telphone, :field3 # 名称
+  alias_attribute :area, :field4 # 名称
+
+  def self.extract_params(params)
+    options = {}
+    options[:field0] = params[:name] if params[:name]
+    options[:field1] = params[:password] if params[:password]
+    options[:field2] = params[:email] if params[:email]
+    options[:field3] = params[:telphone] if params[:telphone]
+    options[:field4] = params[:area] if params[:area]
+    options
+  end
+
+  def self.find_or_create_with_params(params)
+    unless record = find_by(field2: params[:email])
+      record = create(extract_params(params))
+    end
+    record
+  end
+
+  def update_with_params(params)
+    self.update_columns(User.extract_params(params))
+  end
+
+  # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作
+  def data_table
+    html_tags = <<-EOF
+      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
+        <i class="fa fa-pencil-square-o"></i>
+      </a>
+      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+        <i class="fa fa-trash"></i>
+      </a>
+    EOF
+
+    [
+      self.id,
+      self.field0,
+      self.field2,
+      self.field4,
+      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      html_tags
+    ]
+  end
+
+  def to_hash
+    {
+      id: self.id,
+      name: self.field0,
+      email: self.field2,
+      telphone: self.field3,
+      area: self.field4,
+      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+    }
+  end
 end
 

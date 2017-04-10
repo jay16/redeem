@@ -12,7 +12,7 @@ use Unicorn::WorkerKiller::MaxRequests, 1000, 1500
 use Unicorn::WorkerKiller::Oom, (192*(1024**2)), (256*(1024**2))
 
 {
-  '/'                       => 'HomeController',
+  '/'                       => 'ApplicationController',
   '/api/v1'                 => 'API::V1Controller'
 }.each_pair do |path, mod|
   # clazz = mod.split('::').inject(Object) { |a, e| a.const_get(e) }

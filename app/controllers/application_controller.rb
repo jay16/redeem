@@ -20,6 +20,7 @@ class ApplicationController < Sinatra::Base
 
   use AssetHandler
 
+  set :views, ENV['VIEW_PATH']
   set :root, ENV['APP_ROOT_PATH']
   set :rack_env, ENV['RACK_ENV']
   set :logger_level, :info
@@ -44,6 +45,19 @@ class ApplicationController < Sinatra::Base
 
   error do
     haml :'shared/error', views: ENV['VIEW_PATH']
+  end
+
+  get '/view/:model/:action/:id' do
+    klass = class_get(params[:model])
+
+    puts params
+    puts klass
+    puts klass.where(id: params[:id]).to_sql
+    unless @record = klass.find_by(id: params[:id])
+      @record = klass.new
+    end
+
+    haml :"template/#{params[:model]}/#{params[:action]}"
   end
 
   protected
@@ -152,5 +166,31 @@ class ApplicationController < Sinatra::Base
     true
   rescue
     false
+  end
+
+  def class_get(table_name)
+    # Object.const_get(table_name.camelize)
+    table_name.to_s.camelize.constantize
+  rescue
+    define_model(table_name)
+    class_get(table_name)
+  end
+
+  # TODO: 1. use eval, 2. check table_name exist in database
+  def define_model(table_name)
+    model_content = <<-EOF.strip_heredoc
+      # encoding: utf-8
+      require 'sinatra/activerecord'
+
+      # model: automatic defined
+      class #{table_name.to_s.camelize} < ActiveRecord::Base
+          self.table_name = '#{table_name}'
+      end
+    EOF
+
+    model_path = app_tmp_join(%(rb/#{table_name}.rb))
+    File.open(model_path, 'w:utf-8') { |file| file.puts(model_content) }
+
+    require model_path
   end
 end

@@ -1,5 +1,5 @@
 # encoding: utf-8
-ENV['RACK_ENV'] = 'test'
+ENV['RACK_ENV'] = 'development'
 require File.expand_path '../../config/boot.rb', __FILE__
 require 'capybara'
 require 'capybara/dsl'
@@ -42,17 +42,6 @@ RSpec.configure do |config|
   config.formatter = :documentation # :progress, :html, :textmate
 
   # config.order = 'random'
-end
-
-RSpec::Sidekiq.configure do |config|
-  # Clears all job queues before each example
-  config.clear_all_enqueued_jobs = true # default => true
-
-  # Whether to use terminal colours when outputting messages
-  config.enable_terminal_colours = true # default => true
-
-  # Warn when jobs are not enqueued to Redis but to a job array
-  config.warn_when_jobs_not_processed_by_sidekiq = false # default => true
 end
 
 def json_parse(body)

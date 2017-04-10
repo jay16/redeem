@@ -1,0 +1,22 @@
+
+.upload_item {
+  float: left;
+  margin-right: 10px;
+  height: 120px;
+  list-style: none;
+  text-align: center;
+}
+.upload_item img {
+  width: 100px;
+  height: 100px;
+  padding-bottom: 5px;
+}
+.district, .city {
+  display: none;
+}
+.required sup {
+  color: #dd4b39;
+}
+.required input, .required select, .required textarea {
+  border-color: #dd4b39;
+}

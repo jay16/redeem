@@ -1,0 +1,32 @@
+%form#ajaxform.form-horizontal{"accept-charset" => "utf-8", :action => "", :autocomplete => "off", method: "POST"}
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "username"}
+      用户名
+      %sup *
+    .col-lg-10.col-sm-8
+      %input#username.form-control{name: "name", required: "required", type: "text", value: "#{@record.name}"}/
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "password"}
+      密码
+      %sup *
+    .col-lg-10.col-sm-8
+      %input#password.form-control{name: "password", required: "required", placeholder: "登录密码", type: "password", value: "#{@record.name}"}/
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "email"}
+      邮箱
+      %sup *
+    .col-lg-10.col-sm-8
+      %input#email.form-control{name: "email", required: "required", type: "text", value: "#{@record.email}"}/
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "area_id"} 区域
+    .col-lg-10.col-sm-8
+      %select#area_id.form-control{:name => "area"}
+        %option{:value => "南区"} 南区
+        %option{:value => "北区"} 北区
+        %option{:value => "西区"} 西区
+        %option{:value => "东区"} 东区
+  .form-group
+    .col-lg-offset-2.col-sm-offset-4.col-lg-10.col-sm-8
+      %button.btn.btn-primary.btn-lg.btn-block{type: "submit"}
+        %span.glyphicon.glyphicon-ok-sign
+  %input.form-control{name: "_token", type: "hidden", value: "4sKeXW2IREccIIgEwLtkn3d2DIGJ2c7eJ91MCzgz"}/

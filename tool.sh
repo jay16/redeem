@@ -9,6 +9,7 @@ app_root_path=$(pwd)
 shell_used='bash'
 [[ $(uname -s) = Darwin ]] && shell_used='zsh'
 
+mkdir -p tmp/rb
 [[ -f ~/.${shell_used}rc ]] && source ~/.${shell_used}rc &> /dev/null
 [[ -f ~/.${shell_used}_profile ]] && source ~/.${shell_used}_profile &> /dev/null
 export LANG=zh_CN.UTF-8

@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-def fields
+def filds_to_json
   string = <<-EOF
 FMEMBER
 FMOBILEPHONE
@@ -42,4 +42,36 @@ def if_hash
   puts "options"
 end
 
-if_hash
+def alias_field
+  string = <<-EOF
+  # field0, name, 会员名
+  # field1, telphone, 电话
+  # field2, card_number, 会员卡号
+  # field3, birthday, 出生日期
+  # field4, address, 住址
+  # field5, email, 邮箱
+  # field6, sex, 性别
+  # field7, married, 婚姻状态
+  # field8, id_number, 身份证号
+  # field9, qq, qq 号
+  # field10, landline, 座机
+  EOF
+
+  string.split("\n").map(&:strip).each do |line|
+    field, alias_name, explain = line.sub("#", "").split(",").map(&:strip)
+    puts "alias_attribute :#{alias_name}, :#{field} # #{explain}"
+  end
+end
+
+alias :af :alias_field
+alias :ih :if_hash
+alias :ftj :filds_to_json
+
+if ARGV.empty?
+  puts "please offer method name"
+  puts "- as, alias_field"
+  puts "- ih, if_hash"
+  puts "- ftj, filds_to_json"
+else
+  send(ARGV[0])
+end

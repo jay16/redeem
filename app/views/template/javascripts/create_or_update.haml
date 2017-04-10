@@ -1,0 +1,44 @@
+:javascript
+  $(document).ready(function() {
+      $(".glyphicon-ok-sign").html(window.CRUD.submit);
+      $("#ajaxform").attr("action", window.CRUD.action);
+
+      //提交数据
+      var tableId = "tableRecords";
+      var frm     = $('#ajaxform');
+      frm.submit(function () {
+          $.ajax({
+              type: frm.attr('method'),
+              url: frm.attr('action'),
+              data: frm.serialize(),
+              cache: false,
+              dataType: 'json',
+              beforeSend: function() {
+                  $(".validator-error").remove();
+                  $(".has-error").removeClass("has-error");
+              },
+              success: function(data) {
+                  if(data.status == 0){
+                      $.scojs_message(data.message, $.scojs_message.TYPE_ERROR);
+                      if(data.hasOwnProperty('errors')){
+                          var arr = data.errors;
+                          $.each(arr, function(index, value){
+                              if (value.length != 0){
+                                  $("#"+index).parent().parent().addClass('has-error');
+                                  $("#"+index).parent().after('<div class="col-md-offset-2 col-md-12 validator-error"><label class="control-label" for="'+index+'">'+ value +'</label></div>');
+                              }
+                          });
+                      }
+                  }else {
+                      BootstrapDialog.closeAll();
+                      $('#'+tableId).DataTable().ajax.reload();
+                      $.scojs_message(data.message, $.scojs_message.TYPE_OK);
+                  }
+              },
+              error: function(xhr, textStatus, thrownError) {
+                  alert('Something went to wrong.Please Try again later...');
+              }
+          });
+          return false;
+      });
+  });
