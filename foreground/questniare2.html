@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title>太古汇</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link media="all" type="text/css" rel="stylesheet" href="assets/css/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/css/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/css/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/css/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/css/questionnaire.css">
+<style>
+.xg .suo img {
+	width: 20%;
+	-ms-transform: rotate(45deg); 	/* IE 9 */
+	-moz-transform: rotate(45deg); 	/* Firefox */
+	-webkit-transform: rotate(45deg); /* Safari 和 Chrome */
+	-o-transform: rotate(45deg); 	/* Opera */
+}
+.mm img {
+	width: 0.16rem;
+	margin: 0.28rem 0.35rem 0 0.1rem;
+	-ms-transform: rotate(45deg); 	/* IE 9 */
+	-moz-transform: rotate(45deg); 	/* Firefox */
+	-webkit-transform: rotate(45deg); /* Safari 和 Chrome */
+	-o-transform: rotate(45deg); 	/* Opera */
+}
+</style>
+</head>
+<body>
+<!-- 加载 -->
+<div id="jiaZai"> <img src="assets/image/loadbg.png"> </div>
+<!-- 内容 -->
+<!-- 内容 -->
+<div id="main">
+  <div class="title">
+    <div> <img src="assets/image/dhlp2.png"> <img src="assets/image/diaoCha.png"> 问卷调查 </div>
+    <div>Survey</div>
+  </div>
+  <div class="questionnaire">
+    <div class="wt">您在远洋太古汇经常逛的商铺是哪些 （限填三项）
+      <input type="hidden" name="ftitleid" id="ftitleid" value="3"/>
+      <input type="hidden" name="ftype" id="ftype" value="2"/>
+    </div>
+    <div class="kx"> <img src="assets/image/diaoCha.png"> 填空题 </div>
+    <div class="xz">
+      <textarea id="ques_hui">cs</textarea>
+    </div>
+  </div>
+  <div class="anNiu"> <a href="questniare.html" class="sy"> 上一页<br/>
+    Previous </a> <a href="javascript:void (0)" class="xy"> 下一页<br/>
+    Next </a> </div>
+</div>
+<div class="gn">
+  <div class="dj">
+    <div> <img src="assets/image/gn1.png" class="xs" alt=""> <img src="assets/image/gn2.png" class="yc" alt=""> </div>
+    <div><img src="assets/image/gn2.png"></div>
+  </div>
+  <div class="nr">
+    <div>礼品兑换系统</div>
+    <p class="lp"><a href="home/search.html"><img src="assets/image/dhlp.png">礼品兑换</a></p>
+    <p class="mm"><img src="assets/image/bi.png" class="bi" alt="">修改密码</p>
+    <p class="tuichu"><img src="assets/image/dl2.png">退出登录</p>
+    <div class="renWu"> <img src="assets/image/renWu.png">
+      <p>18602897807</p>
+      <p class="time"></p>
+    </div>
+  </div>
+</div>
+<div class="xg">
+  <div> <a href="javascript:void (0)" class="gb"><img src="assets/image/gb.png"></a>
+    <div class="xg_content">
+      <div class="suo"> <img src="assets/image/bi.png"> </div>
+      <div class="xg_info">
+        <p class="title">修改密码</p>
+        <input type="password" id="oldPassword" placeholder="旧密码"/>
+        <input type="password" id="newPassword" placeholder="新密码"/>
+        <input type="password" id="rePassword" placeholder="再次输入新密码"/>
+        <a href="javascript:void (0)" class="cs mima">确认修改密码</a> </div>
+    </div>
+  </div>
+</div>
+</body>
+<!-- Javascripts -->
+<script src="assets/js/remJs.js"></script>
+<script src="assets/js/jquery-1.8.0.min.js"></script>
+<script src="assets/js/plugins/layer/layer.js"></script>
+<script>
+    window.onload = function(){
+        $('#jiaZai').hide();
+        $('#main').show();
+    }
+     $(function(){
+             var dt = new Date();
+             var m=new Array("Jan ","Feb ","Mar ","Apr ","May ","Jun ","Jul ","Aug ","Spt ","Oct ","Nov ","Dec ");
+             var mn=dt.getMonth();
+             var dn=dt.getDate();
+             $('.time').html(m[mn]+"&nbsp;"+dn+'，'+dt.getFullYear());
+     //右侧功能栏隐藏显示
+             $('.xs').click(function(){
+                 $(this).hide();
+                 $('.yc').show();
+                 $('.gn').css('WebkitAnimation','yd2 0.4s forwards');
+             });
+             $('.yc').click(function(){
+                 $(this).hide();
+                 $('.xs').show();
+                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
+             });
+
+
+             //侧栏操作
+             $('.lp').click(function(){
+                 $('.yc').hide();
+                 $('.xs').show();
+                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
+             });
+             $('.mm').click(function(){
+                 $('.yc').hide();
+                 $('.xs').show();
+                 $('.gn').css('WebkitAnimation','yd1 0.4s forwards');
+                 $('.xg').fadeIn(200);
+             });
+             $('.gb').click(function(){$('.xg').fadeOut(200);});
+
+             $('.tuichu').on('click',function(){
+                $.ajax({
+                    url: "user/logout",
+                    type: "get",
+                    data: {},
+                    dataType:"json",
+                    success: function(ret) {
+                        layer.closeAll();
+                        if (ret.status == 1) {
+                            var i=3;
+                            setInterval(function(){
+                                layer.msg("正在退出 ("+i+")", {
+                                  time: 1000
+                                });
+                                if(i==0) location.href = '../user/login';
+                                  i--;
+                            },1000);
+                        }else{
+                            layer.msg(ret.message, {
+                              time: 2000
+                            });
+                        }
+                    }
+                })
+             })
+
+             $('.cs').on('click',function(){
+                if(!$(this).hasClass('mima'))return false;
+                 var oldpass = $('#oldPassword').val();
+                 var newpass = $('#newPassword').val();
+                 var repass = $('#rePassword').val();
+                 if(newpass!=repass){
+                    layer.msg('两次输入的新密码不相同！', {
+                       time: 2000
+                    });
+                    return false;
+                 }
+                 if(newpass==oldpass){
+                     layer.msg('输入的新旧密码相同！', {
+                        time: 2000
+                     });
+                     return false;
+                 }
+                 $.ajax({
+                     url: "user/password",
+                     type: "post",
+                     data: {oldpass:oldpass,newpass:newpass,repass:repass},
+                     dataType:"json",
+                     success: function(ret) {
+                         layer.closeAll();
+                         if (ret.status == 1) {
+                             $('#oldPassword').val('');
+                             $('#newPassword').val('');
+                             $('#rePassword').val('');
+                            $('.xg .gb').click();
+                         }
+                         layer.msg(ret.message, {
+                           time: 2000
+                         });
+                     }
+                 })
+              })
+     });
+</script>
+<script>
+     window.onload=function(){
+        $('#jiaZai').hide();
+        $('#main').show();
+        // $('#others').click(function(){
+        //     $('.xz .xuanZhong').removeClass('xuanZhong');
+        // });
+        //商品选中
+        $('.xz>div').click(function(){
+            if($('#ftype').val() == '0'){
+                if($('.xz').children('.xuanZhong').length==1){
+                    $('.xz .xuanZhong').removeClass('xuanZhong');
+                    $(this).addClass('xuanZhong');
+                }else{
+					$(this).addClass('xuanZhong');
+				}
+            }else{
+                // $('#others').removeClass('xuanZhong');
+                if($(this).hasClass('xuanZhong')) $(this).removeClass('xuanZhong');
+                else $(this).addClass('xuanZhong');
+            }
+        });
+                $('.xy').on('click',function(){
+            var titid = $('#ftitleid').val();
+            var fnum = '02801701140001';
+            var valueid = '';var vallue ='';var title = '';
+							var fvalueid = ' ';
+				var fvalue = $('#ques_hui').val();
+				var ftitleid = titid;
+			            var fcardnum = '00000930';
+            var fname = '成都远洋太古汇顾客调查问卷';
+            var loading = layer.msg('提交中...', {
+                  icon: 16
+                  ,shade: 0.01
+                });
+            location.href = 'complete.html';
+             /*$.ajax({
+                url: "question/cachequestion",
+                type: "post",
+                data: {
+                    'fcardnum':fcardnum,
+                    'ftitelid':ftitleid,
+                    'fnum':fnum,
+                    'fname':fname,
+                    'fvalueid':fvalueid,
+                    'fvalue':fvalue
+                },
+                dataType:"json",
+                success: function(ret) {
+                    layer.closeAll();
+                    if (ret.status == 1) {
+                                                location.href = '../question/questniare?fname=&num=5&exchange=';
+                                            }else{
+                        layer.msg(ret.message, {
+                          time: 2000,
+                          // btn: ['明白了', '知道了', '哦']
+                        });
+                    };
+                }
+            })*/
+        });
+            }
+	$('.ques_others').focus(function(){
+		$(this).parent().find('#others').addClass('xuanZhong');
+	})
+</script>
+</html>

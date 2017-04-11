@@ -891,7 +891,7 @@ window.TKH = {
             yes: function(index) {
               layer.close(index);
               window.localStorage.removeItem("records");
-              window.location.href = "../home/exchange.html"
+              window.location.href = "exchange.html"
             }
           });
           $(".layui-layer-btn").css("text-align", "center");
@@ -1040,7 +1040,7 @@ window.TKH = {
             btn: ['确定'],
             yes: function(index) {
               layer.close(index);
-              window.location.href = "../home/signature.html"
+              window.location.href = "signature.html"
             }
           });
           $(".layui-layer-btn").css("text-align", "center");
@@ -1074,7 +1074,7 @@ window.TKH = {
         window.localStorage.setItem("signature", datapair)
 
         layer.close(index);
-        window.location.href = '../question/complete.html';
+        window.location.href = 'complete.html';
       }
     });
   }
