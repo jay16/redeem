@@ -26,7 +26,7 @@
      - size: 16x16 or 32x32
      - transparency is OK
      - see wikipedia for info on browser support: http://mky.be/favicon/ -->
-<link rel="shortcut icon" href="../taikooli/public/assets/ico/favicon.png">
+<link rel="shortcut icon" href="../taikooli/public/assets/ico/favicon.ico">
 <!-- iOS favicons. -->
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../taikooli/public/assets/ico/apple-touch-icon-144-precomposed.png">
 <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../taikooli/public/assets/ico/apple-touch-icon-114-precomposed.png">
@@ -166,7 +166,7 @@
         <a href="exchange.shtml">
           <i class="fa fa-fw fa-paper-plane-o"></i>兑换信息管理</a>
       </li>
-      <li>
+      <li style="display: none;">
         <a href="system.html">
           <i class="fa fa-fw fa-info"></i>配置设置</a>
       </li>
@@ -304,7 +304,7 @@ $(document).ready(function() {
     }
     foot.append(tr);
   }
-  $('div.toolbar').html('<a href="http://localhost:4567/view/user/new/0" title="添加" class="btn btn-primary btn-xm iframe">添加</a>');
+  $('div.toolbar').html('<a href="' + window.ServerAPI.server + '/view/user/new/0" title="添加" class="btn btn-primary btn-xm iframe">添加</a>');
 });
 </script>
 </body>

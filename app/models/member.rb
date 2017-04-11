@@ -54,17 +54,16 @@ class Member < ActiveRecord::Base
 
   def self.find_or_create_with_params(params)
     card_number = params[:card_number] || SecureRandom.hex(32)
-    unless member = find_by(field2: card_number)
-      member = create(extract_params(params))
+    unless record = find_by(field2: card_number)
+      record = create(extract_params(params))
     end
-    member
+    record
   end
 
   def update_with_params(params)
-    self.update_columns(Member.extract_params(params))
+    self.update_columns(self.class.extract_params(params))
   end
 
-  # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作
   def data_table
     html_tags = <<-EOF
       <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">

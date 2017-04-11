@@ -35,7 +35,7 @@ gem 'settingslogic', '~>2.0.9'
 gem 'net-ssh', '~>2.7.0'
 gem 'net-scp', '~>1.2.1'
 
-return unless `uname -s`.strip.eql?('Darwin')
+# return unless `uname -s`.strip.eql?('Darwin')
 
 group :test do
   gem 'rack-test', '~>0.6.3'

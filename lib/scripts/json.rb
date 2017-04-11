@@ -21,17 +21,16 @@ end
 
 def if_hash
   string = <<-EOF
-      field0: params[:name],
-      field1: params[:telphone],
-      field2: params[:card_number],
-      field3: params[:birthday],
-      field4: params[:address],
-      field5: params[:email],
-      field6: params[:sex],
-      field7: params[:married],
-      field8: params[:id_number],
-      field9: params[:qq],
-      field10: params[:landline]
+      field0: params[:card_number],
+      field1: params[:member],
+      field2: params[:telphone],
+      field3: params[:amount],
+      field4: params[:redeem_state],
+      field5: params[:gift_name],
+      field6: params[:gift_id],
+      field7: params[:store_id],
+      field8: params[:store_name],
+      field9: params[:serial_number]
   EOF
 
   puts "options = {}"
@@ -44,17 +43,16 @@ end
 
 def alias_field
   string = <<-EOF
-  # field0, name, 会员名
-  # field1, telphone, 电话
-  # field2, card_number, 会员卡号
-  # field3, birthday, 出生日期
-  # field4, address, 住址
-  # field5, email, 邮箱
-  # field6, sex, 性别
-  # field7, married, 婚姻状态
-  # field8, id_number, 身份证号
-  # field9, qq, qq 号
-  # field10, landline, 座机
+  # field0, card_number, 会员卡号
+  # field1, member, 兑换人
+  # field2, telphone, 电话
+  # field3, amount, 兑换金额
+  # field4, redeem_state, 兑换状态
+  # field5, gift_name, 礼品名称
+  # field6, gift_id, 礼品ID
+  # field7, store_id, 门店ID
+  # field8, store_name, 门店名称
+  # field9, serial_number, 流水号
   EOF
 
   string.split("\n").map(&:strip).each do |line|

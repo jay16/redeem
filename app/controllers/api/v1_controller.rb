@@ -1,8 +1,16 @@
 # encoding: utf-8
 module API
   class V1Controller < API::ApplicationController
+    set :views, ENV['VIEW_PATH']
+
     get '/echo' do
       params.to_inspect
+    end
+
+    post '/authen' do
+      result_hash = User.authen(params)
+      puts result_hash
+      respond_with_json(result_hash, result_hash[:code])
     end
 
     #
@@ -22,15 +30,15 @@ module API
         result_hash[:status] = 0
       end
 
-      respond_with_json(result_hash, 200)
+      respond_with_json(result_hash, 201)
     end
 
     # view
     # get /api/v1/:model/:id
     get '/item/:model/:id' do
-      record = class_get(params[:model]).find_by(id: params[:id])
+      @record = class_get(params[:model]).find_by(id: params[:id])
 
-      respond_with_json({data: record.to_hash}, 200)
+      haml :"template/#{params[:model]}/view"
     end
 
     # update

@@ -1,0 +1,32 @@
+%form#ajaxform.form-horizontal{"accept-charset" => "utf-8", :action => "", :autocomplete => "off", :method => "POST"}
+  .xiangQing 题目信息：
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "fnum"} 单据号
+    .col-lg-10.col-sm-8
+      %input#fnum.form-control{:name => "fnum", :readonly => "readonly", :type => "text", :value => "#{@record.questionnaire_code}"}/
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "fname"} 问卷名称
+    .col-lg-10.col-sm-8
+      %input#fname.form-control{:name => "fname", :readonly => "readonly", :type => "text", :value => "#{@record.questionnaire_name}"}/
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "ftitleid"} 题目 ID
+    .col-lg-10.col-sm-8
+      %input#ftitleid.form-control{:name => "ftitleid", :readonly => "readonly", :type => "text", :value => "#{@record.subject_id}"}/
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "ftitle"} 问卷题目
+    .col-lg-10.col-sm-8
+      %input#ftitle.form-control{:name => "ftitle", :readonly => "readonly", :type => "text", :value => "#{@record.subject}"}/
+  .form-group
+    %label.control-label.col-lg-2.col-sm-4{:for => "ftype"} 题目类型
+    .col-lg-10.col-sm-8
+      %select#ftype.form-control{:name => "ftype", :readonly => "readonly"}
+        %option{:selected => "#{@record.subject_type == '单选题' ? 'selected' : ''}", :value => "单选题"} 单选题
+        %option{:selected => "#{@record.subject_type == '多选题' ? 'selected' : ''}", :value => "多选题"} 多选题
+        %option{:selected => "#{@record.subject_type == '填空题' ? 'selected' : ''}", :value => "填空题"} 填空题
+  .xiangQing 问题选项信息：
+  .form-group
+    .col-lg-offset-2.col-sm-offset-4.col-lg-10.col-sm-8
+      %button.btn.btn-primary.btn-lg.close{:type => "submit"}
+        %span.glyphicon.glyphicon-ok-sign>
+        返回
+  %input.form-control{:name => "_token", :type => "hidden", :value => "PPvttIEPVB0VZZ6EnvfqkuS2p9qKibPzjA2omfeg"}/

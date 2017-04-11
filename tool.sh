@@ -16,6 +16,9 @@ export LANG=zh_CN.UTF-8
 
 cd "${app_root_path}" || exit 1
 case "$1" in
+    rspec|spec)
+       $bundle_command exec rspec spec/
+    ;;
     deploy:remote|dr)
         $bundle_command install
         echo $bundle_command

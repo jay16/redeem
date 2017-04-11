@@ -25,10 +25,10 @@ class User < ActiveRecord::Base
   # field3, telphone, 手机号
   # field4, area, 区域
   alias_attribute :name, :field0 # 名称
-  alias_attribute :password, :field1 # 名称
-  alias_attribute :email, :field2 # 名称
-  alias_attribute :telphone, :field3 # 名称
-  alias_attribute :area, :field4 # 名称
+  alias_attribute :password, :field1 # 密码
+  alias_attribute :email, :field2 # 邮箱
+  alias_attribute :telphone, :field3 # 手机号
+  alias_attribute :area, :field4 # 区域
 
   def self.extract_params(params)
     options = {}
@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
   end
 
   def update_with_params(params)
-    self.update_columns(User.extract_params(params))
+    self.update_columns(self.class.extract_params(params))
   end
 
   # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作
@@ -81,6 +81,19 @@ class User < ActiveRecord::Base
       area: self.field4,
       created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
     }
+  end
+
+  def self.authen(params)
+    authen_hash = {}
+    if record = find_by(field2: params[:email], field1: params[:password])
+      authen_hash[:code] = 200
+      authen_hash[:info] = 'succesfully'
+    else
+      authen_hash[:code] = 401
+      authen_hash[:info] = '用户验证失败'
+    end
+
+    authen_hash
   end
 end
 

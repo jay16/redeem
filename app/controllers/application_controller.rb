@@ -47,6 +47,11 @@ class ApplicationController < Sinatra::Base
     haml :'shared/error', views: ENV['VIEW_PATH']
   end
 
+  get '/' do
+    "index"
+    # haml :"home/index", layout: settings.layout
+  end
+
   get '/view/:model/:action/:id' do
     klass = class_get(params[:model])
 

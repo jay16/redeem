@@ -5,6 +5,11 @@ require 'sinatra/activerecord'
 class Redeem < ActiveRecord::Base
   self.table_name = 'sys_model_6'
 
+  attr_reader :class_name
+  def class_name
+    @class_name || self.class.to_s.downcase
+  end
+
   # 字段，别名，意思
   # field0, card_number, 会员卡号
   # field1, member, 兑换人
@@ -15,28 +20,64 @@ class Redeem < ActiveRecord::Base
   # field6, gift_id, 礼品ID
   # field7, store_id, 门店ID
   # field8, store_name, 门店名称
-  # field9, serial_number, 流水号、
+  # field9, serial_number, 流水号
+  alias_attribute :card_number, :field0 # 会员卡号
+  alias_attribute :member, :field1 # 兑换人
+  alias_attribute :telphone, :field2 # 电话
+  alias_attribute :amount, :field3 # 兑换金额
+  alias_attribute :redeem_state, :field4 # 兑换状态
+  alias_attribute :gift_name, :field5 # 礼品名称
+  alias_attribute :gift_id, :field6 # 礼品ID
+  alias_attribute :store_id, :field7 # 门店ID
+  alias_attribute :store_name, :field8 # 门店名称
+  alias_attribute :serial_number, :field9 # 流水号
+
   def self.extract_params(params)
-    {
-      field0: params[:card_number],
-      field1: params[:member],
-      field2: params[:telphone],
-      field3: params[:amount],
-      field4: params[:redeem_state],
-      field5: params[:gift_name],
-      field6: params[:gift_id],
-      field7: params[:store_id],
-      field8: params[:store_name],
-      field9: params[:serial_number]
-    }
+    options = {}
+    options[:field0] = params[:card_number] if params[:card_number]
+    options[:field1] = params[:member] if params[:member]
+    options[:field2] = params[:telphone] if params[:telphone]
+    options[:field3] = params[:amount] if params[:amount]
+    options[:field4] = params[:redeem_state] if params[:redeem_state]
+    options[:field5] = params[:gift_name] if params[:gift_name]
+    options[:field6] = params[:gift_id] if params[:gift_id]
+    options[:field7] = params[:store_id] if params[:store_id]
+    options[:field8] = params[:store_name] if params[:store_name]
+    options[:field9] = params[:serial_number] if params[:serial_number]
+    options
   end
 
-  def self.new_with_params(params)
-    new(extract_params(params))
+  def self.find_or_create_with_params(params)
+    # unless record = find_by(serial_number: params[:serial_number])
+      record = create(extract_params(params))
+    # end
+    record
   end
 
   def update_with_params(params)
-    self.update_columns(Redeem.extract_params(params))
+    self.update_columns(self.class.extract_params(params))
+  end
+
+  def data_table
+    html_tags = <<-EOF
+      <a disabled="disabled" href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
+        <i class="fa fa-pencil-square-o"></i>
+      </a>
+      <a disabled="disabled" href="#{ENV['API_SERVER']}/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+        <i class="fa fa-trash"></i>
+      </a>
+    EOF
+
+    [
+      self.id,
+      self.field0,
+      self.field1,
+      self.field2,
+      self.field3,
+      self.field4,
+      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      html_tags
+    ]
   end
 
   def to_hash
