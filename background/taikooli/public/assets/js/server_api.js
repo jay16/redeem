@@ -1,5 +1,5 @@
 window.ServerAPI = {
-  server: 'http://localhost:4567',
+  server: 'http://123.56.91.131:4567',
   login: function() {
     var email = $("#email").val(),
         password = $("#password").val(),
@@ -19,7 +19,7 @@ window.ServerAPI = {
     }
     $.ajax({
       cache: false,
-      url: window.ServerAPI.server + "/api/v1/authen",
+      url: window.ServerAPI.server + "/api/v1/authen/login",
       type: 'post',
       async: false,
       dataType: 'json',
@@ -66,4 +66,8 @@ window.ServerAPI = {
       }
     });
   }
+}
+
+if(window.location.protocol === 'file:') {
+  window.ServerAPI.server = 'http://localhost:4567';
 }

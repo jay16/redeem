@@ -8,7 +8,6 @@ root_path = File.dirname(File.dirname(__FILE__))
 ENV['APP_ROOT_PATH'] = root_path
 ENV['RACK_ENV'] ||= 'development'
 ENV['VIEW_PATH'] = %(#{root_path}/app/views)
-ENV['API_SERVER'] = 'http://localhost:4567'
 
 begin
   ENV['BUNDLE_GEMFILE'] ||= %(#{root_path}/Gemfile)
@@ -37,6 +36,11 @@ end
 # end
 ENV['PLATFORM_OS'] = `uname -s`.strip.downcase
 ENV['APP_RUNNER'] = `whoami`.strip.downcase
+if ENV['PLATFORM_OS'] == 'Darwin'
+  ENV['API_SERVER'] = 'http://localhost:4567'
+else
+  ENV['API_SERVER'] = 'http://123.56.91.131:4567'
+end
 
 # 扩充require路径数组
 # require 文件时会在$:数组中查找是否存在

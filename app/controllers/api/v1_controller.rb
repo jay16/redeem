@@ -7,7 +7,7 @@ module API
       params.to_inspect
     end
 
-    post '/authen' do
+    post '/authen/login' do
       result_hash = User.authen(params)
       puts result_hash
       respond_with_json(result_hash, result_hash[:code])
