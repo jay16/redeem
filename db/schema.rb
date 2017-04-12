@@ -40,12 +40,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -80,12 +80,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -120,12 +120,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -160,12 +160,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -200,12 +200,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -240,12 +240,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -280,12 +280,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -320,12 +320,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -360,12 +360,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -400,12 +400,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false
@@ -440,12 +440,12 @@ ActiveRecord::Schema.define(version: 20170409090568) do
     t.string   "field24"
     t.string   "field25"
     t.string   "field26"
-    t.string   "field27"
-    t.string   "field28"
-    t.string   "field29"
-    t.string   "field30"
-    t.string   "field31"
-    t.string   "field32"
+    t.text     "text1",      limit: 65535
+    t.text     "text2",      limit: 65535
+    t.text     "text3",      limit: 65535
+    t.text     "text4",      limit: 65535
+    t.text     "text5",      limit: 65535
+    t.text     "text6",      limit: 65535
     t.string   "ip"
     t.text     "browser",    limit: 65535
     t.datetime "created_at",               null: false

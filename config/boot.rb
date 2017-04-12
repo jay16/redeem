@@ -36,11 +36,14 @@ end
 # end
 ENV['PLATFORM_OS'] = `uname -s`.strip.downcase
 ENV['APP_RUNNER'] = `whoami`.strip.downcase
-if ENV['PLATFORM_OS'] == 'Darwin'
+if ENV['PLATFORM_OS'] == 'darwin'
   ENV['API_SERVER'] = 'http://localhost:4567'
 else
   ENV['API_SERVER'] = 'http://123.56.91.131:4567'
 end
+
+puts ENV['PLATFORM_OS']
+puts ENV['API_SERVER']
 
 # 扩充require路径数组
 # require 文件时会在$:数组中查找是否存在

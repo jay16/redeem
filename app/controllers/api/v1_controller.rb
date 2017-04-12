@@ -67,9 +67,23 @@ module API
     # list
     # get /api/v1/list/:model
     get '/list/:model' do
-      records = class_get(params[:model]).all.map(&:data_table)
+      records = class_get(params[:model]).data_tables
 
       respond_with_json({data: records}, 200)
+    end
+
+    # truncate
+    # post /api/v1/truncate/:model
+    post '/truncate/:model' do
+      begin
+        klass = class_get(params[:model])
+        ActiveRecord::Base.connection.execute("TRUNCATE #{klass.table_name}")
+      rescue => e
+        puts params
+        puts e.message
+      end
+
+      respond_with_json({}, 200)
     end
   end
 end

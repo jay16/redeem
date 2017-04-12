@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="renderer" content="webkit">
+<title><%= @title %>::管理系统</title>
+<meta name="keywords" content="" />
+<meta name="author" content="" />
+<!-- Google will often use this as its description of your page/site. Make it good. -->
+<meta name="description" content="" />
+<!-- Speaking of Google, don't forget to set your site up: http://google.com/webmasters -->
+<meta name="google-site-verification" content="">
+<meta name="DC.title" content="Project Name">
+<meta name="DC.subject" content="">
+<meta name="DC.creator" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="shortcut icon" href="/images/favicon.ico"><!--
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/ico/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/ico/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/ico/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="/ico/apple-touch-icon-57-precomposed.png"> -->
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/ionicons.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/AdminLTE.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/skins/_all-skins.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/bootstrap-dialog.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/sco.message.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/dataTables.bootstrap.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/jquery.dataTables.yadcf.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/dataTables.colVis.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/jquery-ui.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/lightbox.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/common.css">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/layer.css?v=3.0.11110">
+<script src="/javascripts/jquery-2.1.1.min.js"></script>
+<script src="/javascripts/jquery-ui.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="/javascripts/plugins/fastclick/fastclick.min.js"></script>
+<script src="/javascripts/bootstrap-dialog.js"></script>
+<script src="/javascripts/sco.message.js"></script>
+<script src="/javascripts/jquery.dataTables.min.js"></script>
+<script src="/javascripts/jquery.dataTables.yadcf.js"></script>
+<script src="/javascripts/dataTables.colVis.js"></script>
+<script src="/javascripts/dataTables.bootstrap.js"></script>
+<script src="/javascripts/lightbox.min.js"></script>
+<script src="/javascripts/app.min.js"></script>
+<script src="/javascripts/plupload/plupload.full.min.js"></script>
+<script src="/javascripts/plupload/jquery.plupload.queue/jquery.plupload.queue.min.js"></script>
+<script src="/javascripts/plupload/i18n/zh_CN.js"></script>
+<script src="/javascripts/common_upload.js"></script>
+<script src="/javascripts/server_api.js"></script>
+<script src="/javascripts/common.js"></script>
+<script src="/javascripts/ajaxfileupload.min.js"></script>
+<script src="/javascripts/tkh.js"></script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="http://project.chenfeng.co../taikooli/public/javascripts/html5.js"></script>
+<![endif]-->
+</head>
+<body class="skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <%= erb :"layouts/_admin_sidebar.html" %>
+
+  <div class="content-wrapper">
+    <section class="content-header">
+      <h1><%= @title %></h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="index.html">
+            <i class="fa fa-dashboard"></i>首页</a>
+        </li>
+        <li><%= @title %></li></ol>
+    </section>
+
+    <%= yield %>
+
+  </div>
+</div>
+</body>
+</html>

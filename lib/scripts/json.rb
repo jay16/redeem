@@ -61,9 +61,28 @@ def alias_field
   end
 end
 
+
+def post_params
+  string = <<-EOF
+  # field0, questionnaire_code, 问卷单号(单据号)
+  # field1, questionnaire_name, 问卷名称
+  # field2, subject_index, 题目序号
+  # field3, subject_id, 题目ID
+  # field4, subject, 题目内容
+  # field5, subject_type, 题目类型
+  # text1, options, 问题选项
+  EOF
+
+  string.split("\n").map(&:strip).each do |line|
+    field, alias_name, explain = line.sub("#", "").split(",").map(&:strip)
+    puts "post_param['#{alias_name}'] = data[i].;"
+  end
+end
+
 alias :af :alias_field
 alias :ih :if_hash
 alias :ftj :filds_to_json
+alias :p2p :post_params
 
 if ARGV.empty?
   puts "please offer method name"

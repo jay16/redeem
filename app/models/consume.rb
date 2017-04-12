@@ -46,6 +46,10 @@ class Consume < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
+  def self.data_tables
+    all.map(&:data_table)
+  end
+
   def data_table
     html_tags = <<-EOF
       <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">

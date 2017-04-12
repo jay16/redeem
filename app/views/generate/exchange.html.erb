@@ -1,0 +1,126 @@
+<style>
+.col-lg-12{ margin-bottom: 20px;}
+.col-lg-12 .input-1{width: 15%; display: inline;}
+.col-lg-12 .form-control{width: 15%; }
+</style>
+<section class="content">
+  <div class="row">
+    <div class="col-lg-12">
+      <form action="../taikooli/public/admin/exchange/index" method="get">
+        <div>
+          <select class="form-control" id="status" name="status">
+            <option selected>请选择状态</option>
+            <option value="1">确认兑换</option>
+            <option value="0">未完成</option></select>
+        </div>
+        <input type="text" name="fname" value="" placeholder="礼品名" class="form-control input-1">
+        <input type="text" name="fmemname" value="" placeholder="会员名" class="form-control input-1">
+        <input type="text" name="fmemmobilephone" value="" placeholder="会员电话" class="form-control input-1">
+        <input type="submit"  disabled="disabled" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
+    </div>
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <table id="tableRecords" class="table table-striped table-condensed table-hover" width="100%"></table>
+      </div>
+    </div>
+  </div>
+</section>
+<script type="text/javascript">
+$(document).ready(function() {
+  var oTable = $('#tableRecords').DataTable({
+    //bFilter: false,
+    "columnDefs": [{
+      "title": "ID",
+      "name": "id",
+      "targets": 0,
+      "orderable": true,
+      "searchable": false
+    },
+    {
+      "title": "兑换金额",
+      "name": "consumer_amount",
+      "targets": 1,
+      "orderable": true,
+      "searchable": false
+    },
+    {
+      "title": "状态",
+      "name": "status",
+      "targets": 2,
+      "orderable": true,
+      "searchable": true
+    },
+    {
+      "title": "礼品名称",
+      "name": "fname",
+      "targets": 3,
+      "orderable": true,
+      "searchable": true
+    },
+    {
+      "title": "兑换人",
+      "name": "fmemname",
+      "targets": 4,
+      "orderable": true,
+      "searchable": true
+    },
+    {
+      "title": "兑换人电话",
+      "name": "fmemmobilephone",
+      "targets": 5,
+      "orderable": true,
+      "searchable": true
+    },
+    {
+      "title": "添加时间",
+      "name": "created_at",
+      "targets": 6,
+      "orderable": false,
+      "searchable": false
+    },
+    {
+      "title": "操作",
+      "targets": 7,
+      "orderable": false,
+      "searchable": false
+    },
+    ],
+    "stateSave": true,
+    "order": [[0, "desc"]],
+    "serverSide": false,
+    //true代表后台处理分页，false代表前台处理分页
+    "iDisplayLength": 20,
+    // 每页显示多少条
+    "iDisplayStart": 0,
+    "order": [[0, "desc"]],
+    "ajax": window.ServerAPI.server + "/api/v1/list/redeem",
+    "drawCallback": function(settings) {
+      $("#tableRecords_filter").hide();
+      $(".iframe").off('click').on('click',
+      function(event) {
+        event.preventDefault();
+        var url = $(this).attr('href');
+        var type = BootstrapDialog.TYPE_PRIMARY;
+        if ($(this).attr('title') == '编辑') type = BootstrapDialog.TYPE_PRIMARY;
+        if ($(this).attr('title') == '删除') type = BootstrapDialog.TYPE_DANGER;
+        BootstrapDialog.show({
+          title: $(this).attr('title') + '兑换信息管理',
+          message: $('<div></div>').load(url),
+          type: type,
+        });
+      });
+    }
+  });
+
+  var foot = $('#tableRecords').find('tfoot');
+  if (!foot.length) {
+    foot = $('<tfoot>').appendTo($('#tableRecords'));
+    var tr = $("<tr></tr>");
+    for (var i = 0; i < $('#tableRecords thead th').length; i++) {
+      $('<th>').appendTo(tr);
+    }
+    foot.append(tr);
+  }
+
+});
+</script>

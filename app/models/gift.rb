@@ -58,6 +58,10 @@ class Gift < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
+  def self.data_tables
+    all.map(&:data_table)
+  end
+
   def data_table
     [
       self.id,

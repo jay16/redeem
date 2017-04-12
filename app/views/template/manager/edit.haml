@@ -1,0 +1,9 @@
+= haml :"template/manager/_form"
+
+:javascript
+  window.CRUD = {
+    submit: "更新",
+    action: "#{ENV['API_SERVER']}/api/v1/update/manager/#{@record.id}",
+  }
+
+= haml :"template/javascripts/create_or_update"

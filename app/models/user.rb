@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
   alias_attribute :email, :field2 # 邮箱
   alias_attribute :telphone, :field3 # 手机号
   alias_attribute :area, :field4 # 区域
+  alias_attribute :super_admin, :field5 # 区域
 
   def self.extract_params(params)
     options = {}
@@ -37,6 +38,7 @@ class User < ActiveRecord::Base
     options[:field2] = params[:email] if params[:email]
     options[:field3] = params[:telphone] if params[:telphone]
     options[:field4] = params[:area] if params[:area]
+    options[:field5] = 'no'
     options
   end
 
@@ -51,7 +53,10 @@ class User < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
-  # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作
+  def self.data_tables
+    where(field5: 'no').map(&:data_table)
+  end
+
   def data_table
     html_tags = <<-EOF
       <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">

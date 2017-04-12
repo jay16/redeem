@@ -64,6 +64,10 @@ class Member < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
+  def self.data_tables
+    all.map(&:data_table)
+  end
+
   def data_table
     html_tags = <<-EOF
       <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">

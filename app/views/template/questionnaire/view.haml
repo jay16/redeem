@@ -24,6 +24,19 @@
         %option{:selected => "#{@record.subject_type == '多选题' ? 'selected' : ''}", :value => "多选题"} 多选题
         %option{:selected => "#{@record.subject_type == '填空题' ? 'selected' : ''}", :value => "填空题"} 填空题
   .xiangQing 问题选项信息：
+  - @record.options_array.each_pair do |i, item|
+    .form-group
+      %label.control-label.col-lg-2.col-sm-4{:for => "username"} 问题排序:
+      .col-lg-10.col-sm-8
+        %input.form-control{:readonly => "readonly", :value => "#{item['option_index']}"}/
+    .form-group
+      %label.control-label.col-lg-2.col-sm-4{:for => "values[0].fvalueid"} 问题 ID
+      .col-lg-10.col-sm-8
+        %input.form-control{:id => "values[0].fvalueid", :name => "values[0].fvalueid", :readonly => "readonly", :type => "text", :value => "#{item['option_id']}"}/
+    .form-group
+      %label.control-label.col-lg-2.col-sm-4{:for => "values[0].fvalue"} 问题回答
+      .col-lg-10.col-sm-8
+        %input.form-control{:id => "values[0].fvalue", :name => "values[0].fvalue", :readonly => "readonly", :type => "text", :value => "#{item['option_value']}"}/
   .form-group
     .col-lg-offset-2.col-sm-offset-4.col-lg-10.col-sm-8
       %button.btn.btn-primary.btn-lg.close{:type => "submit"}

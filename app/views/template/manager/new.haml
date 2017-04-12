@@ -1,0 +1,9 @@
+= haml :"template/manager/_form"
+
+:javascript
+  window.CRUD = {
+    submit: "保存",
+    action: "#{ENV['API_SERVER']}/api/v1/manager"
+  }
+
+= haml :"template/javascripts/create_or_update"

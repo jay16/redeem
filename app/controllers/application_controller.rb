@@ -21,6 +21,7 @@ class ApplicationController < Sinatra::Base
   use AssetHandler
 
   set :views, ENV['VIEW_PATH']
+  set :layout, :"layouts/layout"
   set :root, ENV['APP_ROOT_PATH']
   set :rack_env, ENV['RACK_ENV']
   set :logger_level, :info
@@ -48,8 +49,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/' do
-    "index"
-    # haml :"home/index", layout: settings.layout
+    haml :"home/index", layout: settings.layout
   end
 
   get '/view/:model/:action/:id' do
@@ -63,6 +63,27 @@ class ApplicationController < Sinatra::Base
     end
 
     haml :"template/#{params[:model]}/#{params[:action]}"
+  end
+
+  get '/generate/:pagename' do
+    page_titles = {
+      'answer-list' => '礼品管理',
+      'consumer' => '店铺管理',
+      'exchange' => '兑换信息管理',
+      'gift' => '礼品管理',
+      'index' => '后台首页',
+      'login' => '用户登录',
+      'manager' => '超级管理员管理',
+      'member' => '会员管理',
+      'questionnaire' => '问卷管理',
+      'store' => '店铺管理',
+      'sync-gift' => '店铺管理',
+      'sync-questionnaire' => '店铺管理',
+      'sync-store' => '店铺管理',
+      'user' => '管理员管理'
+    }
+    @title = page_titles.fetch(params[:pagename].split('.')[0], "unknown")
+    erb :"generate/#{params[:pagename]}", layout: :"layouts/admin_layout.html"
   end
 
   protected
