@@ -44,6 +44,7 @@
 <script src="/javascripts/bootstrap.min.js"></script>
 <script src="/javascripts/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="/javascripts/plugins/fastclick/fastclick.min.js"></script>
+<script src="/javascripts/plugins/layer/layer.js"></script>
 <script src="/javascripts/bootstrap-dialog.js"></script>
 <script src="/javascripts/sco.message.js"></script>
 <script src="/javascripts/jquery.dataTables.min.js"></script>
@@ -68,7 +69,7 @@
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
 
-  <%= erb :"layouts/_admin_sidebar.html" %>
+  <%= erb :"layouts/_main_sidebar.html" %>
 
   <div class="content-wrapper">
     <section class="content-header">
@@ -82,8 +83,9 @@
     </section>
 
     <%= yield %>
-
   </div>
+
+  <%= erb :"layouts/_main_footer.html" %>
 </div>
 </body>
 </html>

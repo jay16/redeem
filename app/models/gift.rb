@@ -21,6 +21,7 @@ class Gift < ActiveRecord::Base
   # field7, count, 赠品数量
   # field8, min_amount, 起始金额
   # field9, price, 赠品单价
+  # field9, gift_gid, GID
   alias_attribute :theme_code, :field0 # 主题单号
   alias_attribute :theme_name, :field1 # 主题名称
   alias_attribute :begin_date, :field2 # 开始时间
@@ -31,6 +32,7 @@ class Gift < ActiveRecord::Base
   alias_attribute :count, :field7 # 赠品数量
   alias_attribute :min_amount, :field8 # 起始金额
   alias_attribute :price, :field9 # 赠品单价
+  alias_attribute :gift_gid, :field10 # GID
 
   def self.extract_params(params)
     options = {}
@@ -44,6 +46,7 @@ class Gift < ActiveRecord::Base
     options[:field7] = params[:count] if params[:count]
     options[:field8] = params[:min_amount] if params[:min_amount]
     options[:field9] = params[:price] if params[:price]
+    options[:field10] = params[:gift_gid] if params[:gift_gid]
     options
   end
 

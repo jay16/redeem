@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <title>太古汇 - 礼品兑换</title>
 <meta charset="UTF-8">
-<link rel="icon" type="image/x-icon" href="assets/image/favicon.ico">
+<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/public-style.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/animate.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/side.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/tc.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/exchange.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/exchange.css">
 <style>
 .disabled {
 	pointer-events: none;
@@ -27,13 +27,13 @@
 <body>
 <!-- 加载 -->
 <div id="jiaZai">
-  <img src="assets/image/loadbg.png"></div>
+  <img src="assets/images/loadbg.png"></div>
 <!-- 内容 -->
 <!-- 内容 -->
 <div id="main">
   <div class="title">
     <div>
-      <img src="assets/image/dhlp2.png">礼品兑换 - 选择礼品</div>
+      <img src="assets/images/dhlp2.png">礼品兑换 - 选择礼品</div>
     <div>Gift Redemption - Select Gift</div></div>
   <div class="content">
     <div class="content_1">
@@ -48,27 +48,27 @@
     <a href="javascript:void (0)" class="sy">上一页
       <br/>Previous</a>
     <a href="javascript:void (0)" class="duiHuan">
-      <img src="assets/image/duiHuan.png">兑换
+      <img src="assets/images/duiHuan.png">兑换
       <br/>Redeem
       <span>99</span></a>
     <a href="javascript:void (0)" class="qxDuiHuan">
-      <img src="assets/image/quXiao.png">取消兑换
+      <img src="assets/images/quXiao.png">取消兑换
       <br/>Undo
       <span>99</span></a>
-    <a href="javascript:void (0)" onclick="window.location.href='complete.html'"  class="tiaoGuo">
-      <img src="assets/image/tiaoGuo.png">跳过问卷
+    <a style="display:none;" href="javascript:void (0)" onclick="window.location.href='complete.html'"  class="tiaoGuo">
+      <img src="assets/images/tiaoGuo.png">跳过问卷
       <br/>Skip survey
       <span>99</span></a>
-    <a href="javascript:void (0)" class="xy" onclick="window.location.href='signature.html'">下一页
+    <a style="display:none;" href="javascript:void (0)" class="xy" onclick="window.location.href='signature.html'">下一页
       <br/>Next</a></div>
   <div class="gouXuan">
-    <img src="assets/image/dhlp.png">已勾选的当日消费：￥
+    <img src="assets/images/dhlp.png">已勾选的当日消费：￥
     <span id="today_amount_guo">0</span>,可兑换：</div>
   <div class="shangPing jin">
 
   </div>
   <div class="leiJi" style="display: none;">
-    <img src="assets/image/dhlp.png">2017：累积消费 ￥6604 - 已兑换 ￥0 - 本次兑换 ￥
+    <img src="assets/images/dhlp.png">2017：累积消费 ￥6604 - 已兑换 ￥0 - 本次兑换 ￥
     <span id="ben_exchange"></span>= 剩余 ￥
     <span id="shen_exchange">
       <input type="hidden" value="6604">6604</span>， 暂无可累积兑换礼品</div>
@@ -78,10 +78,10 @@
   <div class="Inputs" style=""></div>
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="assets/image/gb.png"></a>
+      <img src="assets/images/gb.png"></a>
     <div class="dhlp_content">
       <div class="suo">
-        <img src="assets/image/dhlp.png"></div>
+        <img src="assets/images/dhlp.png"></div>
       <div class="dhlp_info">
         <p class="title">兑换礼品/Gift Redemption</p>
         <span id="dui_name">X MolesKine 笔记本</span>
@@ -98,22 +98,22 @@
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="assets/image/gn1.png" class="xs" alt="">
-      <img src="assets/image/gn2.png" class="yc" alt=""></div>
+      <img src="assets/images/gn1.png" class="xs" alt="">
+      <img src="assets/images/gn2.png" class="yc" alt=""></div>
     <div>
-      <img src="assets/image/gn2.png"></div>
+      <img src="assets/images/gn2.png"></div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="assets/image/dhlp.png">礼品兑换</a></p>
+        <img src="assets/images/dhlp.png">礼品兑换</a></p>
     <p class="mm">
-      <img src="assets/image/bi.png" class="bi" alt="">修改密码</p>
+      <img src="assets/images/bi.png" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="assets/image/dl2.png">退出登录</p>
+      <img src="assets/images/dl2.png">退出登录</p>
     <div class="renWu">
-      <img src="assets/image/renWu.png">
+      <img src="assets/images/renWu.png">
       <p>18602897807</p>
       <p class="time"></p>
     </div>
@@ -122,10 +122,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="assets/image/gb.png"></a>
+      <img src="assets/images/gb.png"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="assets/image/bi.png"></div>
+        <img src="assets/images/bi.png"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -137,11 +137,12 @@
 </div>
 </body>
 <!-- Javascripts -->
-<script src="assets/js/remJs.js"></script>
-<script src="assets/js/jquery-1.8.0.min.js"></script>
-<script src="assets/js/plugins/layer/layer.js"></script>
-<script src="assets/js/tkh.js"></script>
-<script src="assets/js/side.js"></script>
+<script src="assets/javascripts/remJs.js"></script>
+<script src="assets/javascripts/jquery-1.8.0.min.js"></script>
+<script src="assets/javascripts/plugins/layer/layer.js"></script>
+<script src="assets/javascripts/server_api.js"></script>
+<script src="assets/javascripts/tkh.js"></script>
+<script src="assets/javascripts/side.js"></script>
 <script>
 $(function() {
   // 消费记录

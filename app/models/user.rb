@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'lib/utils/mail_sender'
 require 'sinatra/activerecord'
 
 # sys_model_0, User, 用户
@@ -11,6 +12,7 @@ require 'sinatra/activerecord'
 
 # 管理员
 class User < ActiveRecord::Base
+  include ::Mail::Methods
   self.table_name = 'sys_model_0'
 
   attr_reader :class_name
@@ -90,7 +92,7 @@ class User < ActiveRecord::Base
 
   def self.authen(params)
     authen_hash = {}
-    if record = find_by(field2: params[:email], field1: params[:password])
+    if record = find_by(field0: params[:username], field1: params[:password])
       authen_hash[:code] = 200
       authen_hash[:info] = 'succesfully'
     else
@@ -100,5 +102,13 @@ class User < ActiveRecord::Base
 
     authen_hash
   end
+
+  # def deliver_reset_password_email(username, email)
+  #   # from = %(【太古汇】 <#{::Setting.email.username}>)
+  #   # subject = %(【太古汇】登录密码重置)
+  #   # mail_body = <<-EOF.strip_mail_heredoc
+  #   # EOF
+  #   # res = send_email(from, [email], subject, mail_body)
+  # end
 end
 

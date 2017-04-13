@@ -7,65 +7,60 @@
 <meta http-equiv="Expires" content="0">
 <title>太古汇</title>
 <meta charset="UTF-8">
-<link rel="icon" type="image/x-icon" href="assets/image/favicon.ico">
+<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/index.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/public-style.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/animate.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/side.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/index.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css">
 </head>
 <body>
   <!-- 加载 -->
   <div id="jiaZai">
-    <img src="assets/image/loadbg.png"></div>
+    <img src="assets/images/loadbg.png"></div>
   <!-- 内容 -->
   <div id="main">
-  <!--   <div class="tgl">
-      <div class="shang"></div>
-      <img src="assets/image/slogo.png">
-      <div class="xia"></div>
-    </div> -->
     <div class="login">
       <div class="tb">
-        <img src="assets/image/login.png"></div>
+        <img src="assets/images/login.png"></div>
       <div class="info">
-        <input type="text" id="yhm" name="username" placeholder="用户名" />
-        <input type="password" id="pwd" name="password" placeholder="密码" />
-        <a href="javascript:void (0)" onClick="window.TKH.login();" id="btn_login">登 录</a>
+        <input type="text" id="username" name="username" placeholder="用户名" />
+        <input type="password" id="password" name="password" placeholder="密码" />
+        <a href="javascript:void (0)" onClick="window.ServerAPI.login('ipad');" id="btn_login">登 录</a>
         <p>
         </p>
       </div>
       <a href="javascript:void (0)" class="wj">
-        <img src="assets/image/suo.png">忘记密码</a></div>
+        <img src="assets/images/suo.png">忘记密码</a></div>
     <div class="logo">
-      <img style='display: none;' src="assets/image/logo.png"></div>
+      <img style='display: none;' src="assets/images/logo.png"></div>
     <div class="gn">
       <div class="dj">
         <div>
-          <img src="assets/image/gn1.png" class="xs" alt="">
-          <img src="assets/image/gn2.png" class="yc" alt=""></div>
+          <img src="assets/images/gn1.png" class="xs" alt="">
+          <img src="assets/images/gn2.png" class="yc" alt=""></div>
         <div>
-          <img src="assets/image/gn2.png"></div>
+          <img src="assets/images/gn2.png"></div>
       </div>
       <div class="nr">
         <div>礼品兑换系统</div>
         <p class="dl">
-          <img src="assets/image/dl.png">用户登录</p>
+          <img src="assets/images/dl.png">用户登录</p>
         <p class="hf">
-          <img src="assets/image/suo.png">密码恢复</p></div>
+          <img src="assets/images/suo.png">密码恢复</p></div>
     </div>
   </div>
   <div class="xg chongshe">
     <div>
       <a href="javascript:void (0)" class="gb">
-        <img src="assets/image/gb.png"></a>
+        <img src="assets/images/gb.png"></a>
       <div class="xg_content">
         <div class="suo">
-          <img src="assets/image/suo.png"></div>
+          <img src="assets/images/suo.png"></div>
         <div class="xg_info">
           <p class="title">忘记密码了么?</p>
           <p class="sm">没关系. 请输入您的用户名和电子邮件地址， 我们会将新的密码发给您。</p>
@@ -77,17 +72,16 @@
   </div>
 </body>
 <!-- Javascripts -->
-<script src="assets/js/remJs.js"></script>
-<script src="assets/js/jquery-1.8.0.min.js"></script>
-<script src="assets/js/plugins/layer/layer.js"></script>
-<script src="assets/js/tkh.js"></script>
-<script src="assets/js/side.js"></script>
-<script>
-  $('#yhm').val(1000020);
-  $('#pwd').val('CAB371810F12B8C2');
-  var cookie = window.localStorage.getItem('sClientCookie');
-  if (cookie !== null && cookie.length > 0) {
-      location.href = 'search.html';
-  }
+<script src="assets/javascripts/remJs.js"></script>
+<script src="assets/javascripts/jquery-1.8.0.min.js"></script>
+<script src="assets/javascripts/plugins/layer/layer.js"></script>
+<script src="assets/javascripts/server_api.js"></script>
+<script src="assets/javascripts/tkh.js"></script>
+<script src="assets/javascripts/side.js"></script>
+<script type="text/javascript">
+  // var cookie = window.localStorage.getItem('sClientCookie');
+  // if (cookie !== null && cookie.length > 0) {
+  //     location.href = 'search.html';
+  // }
 </script>
 </html>

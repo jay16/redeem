@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <title>太古汇 - 问卷调查</title>
 <meta charset="UTF-8">
-<link rel="icon" type="image/x-icon" href="assets/image/favicon.ico">
+<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/public-style.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/animate.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/side.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/tc.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/complete.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/complete.css">
 <style>
 .ewm {
 	margin: 121px auto;
@@ -25,13 +25,13 @@
 <body>
 
 <!-- 加载 -->
-<div id="jiaZai"> <img src="assets/image/loadbg.png"> </div>
+<div id="jiaZai"> <img src="assets/images/loadbg.png"> </div>
 
 <!-- 内容 -->
 <!-- 内容 -->
 <div id="main">
   <div class="title">
-    <div><img src="assets/image/wc.png"> 兑换完成 </div>
+    <div><img src="assets/images/wc.png"> 兑换完成 </div>
     <div>Redeem - Completed</div>
   </div>
 
@@ -45,19 +45,19 @@
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
-    <p class="lp"><a href="search.html"><img src="assets/image/dhlp.png">礼品兑换</a></p>
-    <p class="mm"><img src="assets/image/bi.png" class="bi" alt="">修改密码</p>
-    <p class="tuichu" onclick="window.TKH.logout();"><img src="assets/image/dl2.png">退出登录</p>
-    <div class="renWu"> <img src="assets/image/renWu.png">
+    <p class="lp"><a href="search.html"><img src="assets/images/dhlp.png">礼品兑换</a></p>
+    <p class="mm"><img src="assets/images/bi.png" class="bi" alt="">修改密码</p>
+    <p class="tuichu" onclick="window.TKH.logout();"><img src="assets/images/dl2.png">退出登录</p>
+    <div class="renWu"> <img src="assets/images/renWu.png">
       <p>18602897807</p>
       <p class="time"></p>
     </div>
   </div>
 </div>
 <div class="xg">
-  <div> <a href="javascript:void (0)" class="gb"><img src="assets/image/gb.png"></a>
+  <div> <a href="javascript:void (0)" class="gb"><img src="assets/images/gb.png"></a>
     <div class="xg_content">
-      <div class="suo"> <img src="assets/image/bi.png"> </div>
+      <div class="suo"> <img src="assets/images/bi.png"> </div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码"/>
@@ -69,9 +69,11 @@
 </div>
 </body>
 <!-- Javascripts -->
-<script src="assets/js/remJs.js"></script>
-<script src="assets/js/jquery-1.8.0.min.js"></script>
-<script src="assets/js/plugins/layer/layer.js"></script>
+<script src="assets/javascripts/server_api.js"></script>
+<script src="assets/javascripts/tkh.js"></script>
+<script src="assets/javascripts/remJs.js"></script>
+<script src="assets/javascripts/jquery-1.8.0.min.js"></script>
+<script src="assets/javascripts/plugins/layer/layer.js"></script>
 <script>
     window.onload = function(){
         $('#jiaZai').hide();

@@ -4,28 +4,28 @@
 <meta charset="UTF-8">
 <title>太古汇 - 问卷调查</title>
 <meta charset="UTF-8">
-<link rel="icon" type="image/x-icon" href="assets/image/favicon.ico">
+<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/public-style.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/animate.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/side.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/tc.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/questionnaire.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/questionnaire.css">
 </head>
 <body>
 <!-- 加载 -->
 <div id="jiaZai">
-  <img src="assets/image/loadbg.png"></div>
+  <img src="assets/images/loadbg.png"></div>
 <!-- 内容 -->
 <!-- 内容 -->
 <div id="main">
   <div class="title">
     <div>
-      <img src="assets/image/dhlp2.png">
-      <img src="assets/image/diaoCha.png">
+      <img src="assets/images/dhlp2.png">
+      <img src="assets/images/diaoCha.png">
       <span class="questionnaire-title">
           问卷调查
       </span>
@@ -42,22 +42,22 @@
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="assets/image/gn1.png" class="xs" alt="">
-      <img src="assets/image/gn2.png" class="yc" alt=""></div>
+      <img src="assets/images/gn1.png" class="xs" alt="">
+      <img src="assets/images/gn2.png" class="yc" alt=""></div>
     <div>
-      <img src="assets/image/gn2.png"></div>
+      <img src="assets/images/gn2.png"></div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="assets/image/dhlp.png">礼品兑换</a></p>
+        <img src="assets/images/dhlp.png">礼品兑换</a></p>
     <p class="mm">
-      <img src="assets/image/bi.png" class="bi" alt="">修改密码</p>
+      <img src="assets/images/bi.png" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="assets/image/dl2.png">退出登录</p>
+      <img src="assets/images/dl2.png">退出登录</p>
     <div class="renWu">
-      <img src="assets/image/renWu.png">
+      <img src="assets/images/renWu.png">
       <p>18602897807</p>
       <p class="time"></p>
     </div>
@@ -66,10 +66,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="assets/image/gb.png"></a>
+      <img src="assets/images/gb.png"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="assets/image/bi.png"></div>
+        <img src="assets/images/bi.png"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -81,11 +81,12 @@
 </div>
 </body>
 <!-- Javascripts -->
-<script src="assets/js/remJs.js"></script>
-<script src="assets/js/jquery-1.8.0.min.js"></script>
-<script src="assets/js/plugins/layer/layer.js"></script>
-<script src="assets/js/tkh.js"></script>
-<script src="assets/js/side.js"></script>
+<script src="assets/javascripts/remJs.js"></script>
+<script src="assets/javascripts/jquery-1.8.0.min.js"></script>
+<script src="assets/javascripts/plugins/layer/layer.js"></script>
+<script src="assets/javascripts/server_api.js"></script>
+<script src="assets/javascripts/tkh.js"></script>
+<script src="assets/javascripts/side.js"></script>
 <script>
 
 
@@ -160,7 +161,7 @@ function skipToQuestionWithIndex(qindex) {
       <input type="hidden" name="ftype" id="ftype" value="' + modeldtl_item["FTYPE"] + '" />\
       <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
       <div class="kx">\
-        <img src="assets/image/diaoCha.png">\
+        <img src="assets/images/diaoCha.png">\
         <div class="question-type" style="display:inline;"></div>\
         <span class="optiondtl-num" style="display: none;">' + modeldtl_item["OPTIONDTL"].length + '</span>\
       </div>\
@@ -228,7 +229,7 @@ function storeQuestion() {
 //     <input type="hidden" name="ftitleid" id="ftitleid" value="0" />
 //     <input type="hidden" name="ftype" id="ftype" value="1" /></div>
 //   <div class="kx">
-//     <img src="assets/image/diaoCha.png">可选答案
+//     <img src="assets/images/diaoCha.png">可选答案
 //     <span>8</span></div>
 //   <div class="xz">
 //     <div id="1">自驾</div>

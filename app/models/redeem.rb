@@ -21,6 +21,10 @@ class Redeem < ActiveRecord::Base
   # field7, store_id, 门店ID
   # field8, store_name, 门店名称
   # field9, serial_number, 流水号
+  # field10, redeem_state, 兑换状态
+  # text1, consumers, 消费列表
+  # text2, gifts, 礼品信息
+  #
   alias_attribute :card_number, :field0 # 会员卡号
   alias_attribute :member, :field1 # 兑换人
   alias_attribute :telphone, :field2 # 电话
@@ -31,6 +35,9 @@ class Redeem < ActiveRecord::Base
   alias_attribute :store_id, :field7 # 门店ID
   alias_attribute :store_name, :field8 # 门店名称
   alias_attribute :serial_number, :field9 # 流水号
+  alias_attribute :redeem_state, :field10 # 流水号
+  alias_attribute :consumers, :text1 # 消费列表
+  alias_attribute :gifts, :text2 # 礼品信息
 
   def self.extract_params(params)
     options = {}
@@ -44,10 +51,21 @@ class Redeem < ActiveRecord::Base
     options[:field7] = params[:store_id] if params[:store_id]
     options[:field8] = params[:store_name] if params[:store_name]
     options[:field9] = params[:serial_number] if params[:serial_number]
+    options[:field10] = params[:redeem_state] if params[:redeem_state]
+    options[:text1] = params[:consumers] if params[:consumers]
+    options[:text2] = params[:gifts] if params[:gifts]
     options
   end
 
   def self.find_or_create_with_params(params)
+    if params[:consumers]
+      params[:consumers].each_pair do |k, v|
+        ::Consume.find_or_create_with_params(v);
+      end
+      params[:consumers] = params[:consumers].to_json
+    end
+
+    params[:gifts] = params[:gifts].to_json if params[:gifts]
     # unless record = find_by(serial_number: params[:serial_number])
       record = create(extract_params(params))
     # end

@@ -24,26 +24,26 @@
      - size: 16x16 or 32x32
      - transparency is OK
      - see wikipedia for info on browser support: http://mky.be/favicon/ -->
-<link rel="shortcut icon" href="assets/ico/favicon.ico">
+<link rel="shortcut icon" href="assets/images/favicon.ico">
 <!-- iOS favicons. -->
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
-<link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/images/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/images/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/images/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="assets/images/apple-touch-icon-57-precomposed.png">
 
 <!-- CSS -->
-<link media="all" type="text/css" rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/bootstrap/css/font-awesome.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/ionicons.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/AdminLTE.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/skins/_all-skins.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/bootstrap-dialog.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/jquery-ui.min.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/css/lightbox.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/bootstrap.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/font-awesome.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/ionicons.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/AdminLTE.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/skins/_all-skins.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/bootstrap-dialog.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/jquery-ui.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/lightbox.css">
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
-    <script src="assets/js/html5.js"></script>
+    <script src="assets/javascripts/html5.js"></script>
 
     <![endif]-->
 <!-- 上传图片公用样式 -->
@@ -59,9 +59,9 @@
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">后台登录</p>
-    <form method="POST" action="javascript: window.ServerAPI.login();" accept-charset="UTF-8">
+    <form method="POST" action="javascript: window.ServerAPI.login('background');" accept-charset="UTF-8">
       <div class="form-group has-feedback">
-        <input id="email" type="text" class="form-control" name="email" value="" placeholder="请输入用户名">
+        <input id="username" type="text" class="form-control" name="email" value="" placeholder="请输入用户名">
         <span class="glyphicon glyphicon-user form-control-feedback"></span> </div>
       <div class="form-group has-feedback">
         <input id="password"  type="password" class="form-control" name="password" placeholder="请输入密码">
@@ -70,7 +70,7 @@
         <div class="col-xs-8" style="padding-left:35px">
           <div class="checkbox icheck">
             <label>
-              <input type="checkbox" name="remember" id="remember" checked="1">保存登录状态
+              <input type="checkbox" name="remember" id="remember">保存登录状态
             </label>
           </div>
         </div>
@@ -85,13 +85,14 @@
   </div>
   <!-- /.login-box-body -->
   <!-- Javascripts -->
-  <script src="assets/js/jquery-2.1.1.min.js"></script>
-  <script src="assets/js/jquery-ui.min.js"></script>
-  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-  <script src="assets/js/bootstrap-dialog.js"></script>
-  <script src="assets/js/sco.message.js"></script>
-  <script src="assets/js/app.min.js"></script>
-  <script src="assets/js/server_api.js"></script>
+  <script src="assets/javascripts/jquery-2.1.1.min.js"></script>
+  <script src="assets/javascripts/jquery-ui.min.js"></script>
+  <script src="assets/javascripts/bootstrap.min.js"></script>
+  <script src="assets/javascripts/bootstrap-dialog.js"></script>
+  <script src="assets/javascripts/sco.message.js"></script>
+  <script src="assets/javascripts/app.min.js"></script>
+  <script src="assets/javascripts/server_api.js"></script>
+  <script src="assets/javascripts/common.js"></script>
 </div>
 <!-- /.login-box-body -->
 <script>

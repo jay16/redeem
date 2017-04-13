@@ -44,6 +44,7 @@
 <script src="assets/javascripts/bootstrap.min.js"></script>
 <script src="assets/javascripts/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="assets/javascripts/plugins/fastclick/fastclick.min.js"></script>
+<script src="assets/javascripts/plugins/layer/layer.js"></script>
 <script src="assets/javascripts/bootstrap-dialog.js"></script>
 <script src="assets/javascripts/sco.message.js"></script>
 <script src="assets/javascripts/jquery.dataTables.min.js"></script>
@@ -69,17 +70,45 @@
 <div class="wrapper">
 
   <header class="main-header">
-  <!-- Logo -->
-  <a href="#" class="logo">
-    <span class="logo-mini">
-      <b>管理系统</b>
-    </span>
-    <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg">
-      <b>
-      </b>管理系统</span>
-  </a>
-</header>
+        <!-- Logo -->
+        <a href="#" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>管理系统</b></span>
+          <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b></b>管理系统</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="hidden-xs">
+                        <i class="fa fa-user fa-fw"></i>
+                         admin <i class="fa fa-caret-down"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-right">
+                      <a href="javascript:void(0);" onclick="window.ServerAPI.logout();">
+                        <i class="fa fa-sign-out fa-fw"></i>
+                        退出登录
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
 
 <aside class="main-sidebar">
   <!-- sidebar: style can be found in sidebar.less -->
@@ -207,8 +236,15 @@ $(function() {
 })
 </script>
 
-
   </div>
+
+  <footer class="main-footer">
+  <div class="pull-right hidden-xs">
+    <b>Version</b> 0.2.1
+  </div>
+  <strong>Copyright © 2017 <a href="#">HD Studio</a>.</strong> All rights reserved.
+</footer>
+
 </div>
 </body>
 </html>
