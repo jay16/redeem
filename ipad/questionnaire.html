@@ -2,13 +2,16 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>太古汇 - 问卷调查</title>
 <meta charset="UTF-8">
 <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="telphone=no">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css">
@@ -96,7 +99,7 @@ if(questionnaireString === null) {
 }
 
 var qindex = parseInt($(".questionnaire").attr("qindex"));
-skipToQuestionWithIndex(qindex);
+skipToQuestionWithIndex(qindex, 'last');
 
 // {
 //   "FRESULT": "0",
@@ -124,7 +127,7 @@ skipToQuestionWithIndex(qindex);
 //       ]
 //   ]
 // }
-function skipToQuestionWithIndex(qindex) {
+function skipToQuestionWithIndex(qindex, skipType) {
     var questionnaireString = window.localStorage.getItem("questionnaire");
     if(questionnaireString === null) { return }
 
@@ -134,7 +137,9 @@ function skipToQuestionWithIndex(qindex) {
         modeldtl_item = data_item["MODEDTL"][qindex],
         htmlString = '';
 
-    storeQuestion();
+    if(skipType === 'next') {
+      storeQuestion();
+    }
     if(qindex === 0) {
         $(".last-option").html("上一页");
         $(".next-option").html("下一题");
@@ -201,18 +206,82 @@ function storeQuestion() {
 
     if(ftitleid === undefined) return;
 
+
+    // # field2, subject_index, 题目序号
+    // # field6, answer_id, 选项ID
+    // # field7, answer, 回答内容
+    // # field11, other_state, 是否其他回答
+    //
+    var questionnaireString = window.localStorage.getItem("questionnaire"),
+        questionnaireJSON = JSON.parse(questionnaireString),
+        qindex = parseInt($(".questionnaire").attr("qindex")) - 1,
+        data_items = questionnaireJSON["DATA"],
+        data_item = data_items[0],
+        modeldtl_item = data_item["MODEDTL"][qindex],
+        post_param = {},
+        fcardnum = window.localStorage.getItem('sFCARDNUM'),
+        currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = JSON.parse(currentQueryMember);
+
+    var subject_type = "",
+        answers = [];
+    if(ftype === '0') {
+      subject_type = "单选题";
+    } else if(ftype === '1') {
+      subject_type = "多选题";
+    } else {
+      subject_type = "填空题";
+    }
+
     // ftype: 0 单选，1 多选，2 填空
     if(ftype === "2") {
       fvalueid = $("#ques_hui").attr("fvalueid");
-      if(fvalueids.indexOf(fvalueid) < 0) { fvalueids.push(fvalueid); }
-      fvalues.push($("#ques_hui").val());
+      if(fvalueids.indexOf(fvalueid) < 0) {
+        fvalueids.push(fvalueid);
+        fvalues.push($("#ques_hui").val());
+        answers.push({
+          "answer": $("#ques_hui").val(),
+          "answer_id": fvalueid
+        });
+      }
+
     } else {
       $(".xz .xuanZhong").each(function() {
         fvalueid = $(this).attr("fvalueid")
-        if(fvalueids.indexOf(fvalueid) < 0) { fvalueids.push(fvalueid); }
-        fvalues.push($(this).html());
+        if(fvalueids.indexOf(fvalueid) < 0) {
+          fvalueids.push(fvalueid);
+          fvalues.push($(this).html());
+
+          answers.push({
+            "answer": $(this).html(),
+            "answer_id": fvalueid
+          });
+        }
       });
     }
+
+    var questionPostParam = window.localStorage.getItem("questionPostParam");
+    if(questionPostParam !== null) {
+      post_param = JSON.parse(questionPostParam);
+    }
+
+    post_param[modeldtl_item["FTITLEID"]] = {
+      "questionnaire_code": data_item["FNUM"],
+      "questionnaire_name": data_item["FNAME"],
+      "subject": modeldtl_item["FTITLE"],
+      "subject_id": modeldtl_item["FTITLEID"],
+      "subject_type":subject_type,
+      "card_number": fcardnum,
+      "member": currentQueryMember["name"],
+      "telphone": currentQueryMember["telphone"],
+      "answers":answers
+    };
+
+    if(answers.length) {
+      post_param[modeldtl_item["FTITLEID"]]["answer"] = answers[0].answer;
+      post_param[modeldtl_item["FTITLEID"]]["answer_id"] = answers[0].answer_id;
+    }
+    window.localStorage.setItem("questionPostParam", JSON.stringify(post_param));
 
     var questionResult = window.localStorage.getItem("questionResult"),
         resultJSON = {};
@@ -269,7 +338,7 @@ $(function() {
     var lastQIndex = parseInt($(".questionnaire").attr("qindex")) - 1;
     $(".questionnaire").attr("qindex", lastQIndex);
     if(lastQIndex >= 0) {
-        skipToQuestionWithIndex(lastQIndex);
+        skipToQuestionWithIndex(lastQIndex, 'last');
     } else {
         window.location.href = "search.html"
     }
@@ -278,7 +347,7 @@ $(function() {
   $('.next-option').on('click', function() {
     var nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
     $(".questionnaire").attr("qindex", nextQIndex);
-    skipToQuestionWithIndex(nextQIndex);
+    skipToQuestionWithIndex(nextQIndex, 'next');
   });
 });
 

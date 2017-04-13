@@ -1119,14 +1119,13 @@ window.TKH = {
   // 3.2.33 保存调查问卷信息
   saveCRMQuestionnaire: function() {
     var clientCookie = window.localStorage.getItem('sClientCookie'),
-      fcardnum = window.localStorage.getItem('sFCARDNUM');
-    console.log(clientCookie);
+        fcardnum = window.localStorage.getItem('sFCARDNUM'),
+        questionResult = window.localStorage.getItem("questionResult"),
+        questionJSON = JSON.parse(questionResult),
+        fdata_params = [],
+        item,
+        post_param = {};
 
-    var questionResult = window.localStorage.getItem("questionResult"),
-      questionJSON = JSON.parse(questionResult);
-
-    var fdata_params = [],
-      item;
     for (var key in questionJSON) {
       item = questionJSON[key];
       fdata_params.push('{&quot;FTITELID&quot;:&quot;' + item["ftitleid"] + '&quot;,&quot;FVALUEID&quot;:&quot;' + item["fvalueid"] + '&quot;,&quot;FVALUE&quot;:&quot;' + item["fvalue"] + '&quot;}')
@@ -1137,7 +1136,7 @@ window.TKH = {
     var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FDATA&quot;:[' + fdata_params.join(',') + ']}';
 
     console.log(params);
-    var check_xml = '<SOAP-ENV:Envelope \
+    var xmlString = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
       xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
@@ -1160,7 +1159,7 @@ window.TKH = {
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: check_xml,
+      data: xmlString,
       timeout: 10000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
@@ -1173,11 +1172,17 @@ window.TKH = {
         if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
           window.localStorage.removeItem("questionnaire");
           window.localStorage.removeItem("questionResult");
+
+
+          var questionPostParam = window.localStorage.getItem("questionPostParam");
+          if(questionPostParam !== null) {
+            post_param = JSON.parse(questionPostParam);
+            window.ServerAPI.save_answer(post_param);
+          }
           layer.msg(outparams["FMSG"], {
             time: 4000
           });
-
-          layer.msg('您的问卷已保存', {
+          layer.msg('问卷提交成功', {
             time: 0,
             btn: ['确定'],
             yes: function(index) {
@@ -1283,7 +1288,7 @@ window.TKH = {
             window.ServerAPI.save_store(post_param);
           }
 
-          $("#sync_state").html(data.length + " 家店铺同步完成，" + (new Date()));
+          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份店铺，");
         } else {
           if (outparams["FMSG"].length > 0) {
             alert(outparams["FMSG"]);
@@ -1390,7 +1395,7 @@ window.TKH = {
             window.ServerAPI.save_gift(post_param);
           }
 
-          $("#sync_state").html(data.length + " 份礼品同步完成，" + (new Date()));
+          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份礼品，");
         } else {
           if (outparams["FMSG"].length > 0) {
             layer.msg(outparams["FMSG"], {
@@ -1507,7 +1512,7 @@ window.TKH = {
               post_param['options'] = data_item_options;
               window.ServerAPI.save_questionnaire(post_param);
             }
-            $("#sync_state").html(data.length + " 份问卷同步完成，" + (new Date()));
+            $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份问卷，");
           }
         } else {
           if (outparams["FMSG"].length) {

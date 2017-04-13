@@ -156,6 +156,23 @@ window.ServerAPI = {
       }
     });
   },
+  save_answer: function(data) {
+    console.log('-------->save_answer<----------');
+    console.log(data);
+    console.log('--------<save_answer>----------');
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/answer",
+      type: 'post',
+      async: false,
+      dataType: 'json',
+      data: data,
+      timeout: 10000,
+      success: function(xhr) {
+        console.log(xhr);
+      }
+    });
+  },
   truncate_table: function(table_name) {
     console.log('-------->truncate_table<----------');
     console.log(table_name);

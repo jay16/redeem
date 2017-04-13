@@ -22,7 +22,7 @@ module API
       record = class_get(params[:model]).find_or_create_with_params(params)
 
       result_hash = {}
-      if record.valid?
+      if record && record.valid?
         result_hash[:message] = "创建成功（#{record.id}）"
         result_hash[:status] = 1
       else

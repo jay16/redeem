@@ -23,6 +23,7 @@ class Answer < ActiveRecord::Base
   # field9, member, 会员名称
   # field10, telphone, 电话号码
   # field11, other_state, 是否其他回答
+  # text1, answers, 回答列表
   alias_attribute :questionnaire_code, :field0 # 问卷单号(单据号)
   alias_attribute :questionnaire_name, :field1 # 问卷名称
   alias_attribute :subject_index, :field2 # 题目序号
@@ -35,6 +36,7 @@ class Answer < ActiveRecord::Base
   alias_attribute :member, :field9 # 会员名称
   alias_attribute :telphone, :field10 # 电话号码
   alias_attribute :other_state, :field11 # 是否其他回答
+  alias_attribute :answers, :text1 # 是否其他回答
 
   def self.extract_params(params)
     options = {}
@@ -50,13 +52,20 @@ class Answer < ActiveRecord::Base
     options[:field9] = params[:member] if params[:member]
     options[:field10] = params[:telphone] if params[:telphone]
     options[:field11] = params[:other_state] if params[:other_state]
+    options[:text1] = params[:answers] if params[:answers]
     options
   end
 
   def self.find_or_create_with_params(params)
-    # unless record = find_by(serial_number: params[:serial_number])
-      record = create(extract_params(params))
-    # end
+    record = nil
+    params.each_pair do |k, v|
+      next unless v.is_a?(Hash)
+      if v[:questionnaire_code]
+        # unless record = find_by(serial_number: params[:serial_number])
+        v[:answers] = v[:answers].to_json if v[:answers]
+        record = create(extract_params(v))
+      end
+    end
     record
   end
 
