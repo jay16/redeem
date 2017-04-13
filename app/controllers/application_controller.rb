@@ -67,7 +67,7 @@ class ApplicationController < Sinatra::Base
 
   get '/generate/:pagename' do
     page_titles = {
-      'answer-list' => '礼品管理',
+      'answer-list' => '回答列表',
       'consumer' => '店铺管理',
       'exchange' => '兑换信息管理',
       'gift' => '礼品管理',
