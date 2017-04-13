@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="renderer" content="webkit">
-<title>兑换信息管理::管理系统</title>
+<title>消费管理::管理系统</title>
 <meta name="keywords" content="" />
 <meta name="author" content="" />
 <!-- Google will often use this as its description of your page/site. Make it good. -->
@@ -214,33 +214,26 @@
 
   <div class="content-wrapper">
     <section class="content-header">
-      <h1>兑换信息管理</h1>
+      <h1>消费管理</h1>
       <ol class="breadcrumb">
         <li>
           <a href="index.html">
             <i class="fa fa-dashboard"></i>首页</a>
         </li>
-        <li>兑换信息管理</li></ol>
+        <li>消费管理</li></ol>
     </section>
 
     <style>
 .col-lg-12{ margin-bottom: 20px;}
 .col-lg-12 .input-1{width: 15%; display: inline;}
-.col-lg-12 .form-control{width: 15%; }
 </style>
 <section class="content">
   <div class="row">
     <div class="col-lg-12">
-      <form action="exchange.html" method="get">
-        <div>
-          <select class="form-control" id="redeem_state" name="redeem_state">
-            <option value="" selected>请选择状态</option>
-            <option value="兑换成功">兑换成功</option>
-            <option value="未兑换">未兑换</option></select>
-        </div>
-        <input type="text" name="gift_name" value="" placeholder="礼品名" class="form-control input-1">
-        <input type="text" name="member" value="" placeholder="会员名" class="form-control input-1">
-        <input type="text" name="telphone" value="" placeholder="会员电话" class="form-control input-1">
+      <form action="consume.html" method="get">
+        <input type="text" name="serial_number" value="" placeholder="流水号" class="form-control input-1">
+        <input type="text" name="store_code" value="" placeholder="店铺code" class="form-control input-1">
+        <input type="text" name="store_name" value="" placeholder="店铺名" class="form-control input-1">
         <input type="submit" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
     </div>
     <div class="col-lg-12">
@@ -256,70 +249,49 @@ $(document).ready(function() {
     //bFilter: false,
     "columnDefs": [{
       "title": "ID",
-      "name": "id",
       "targets": 0,
       "orderable": true,
       "searchable": false
     },
     {
-      "title": "会员",
-      "name": "member",
+      "title": "用户名",
       "targets": 1,
       "orderable": true,
-      "searchable": false
+      "searchable": true
     },
     {
-      "title": "会员电话",
-      "name": "member",
+      "title": "流水号",
       "targets": 2,
       "orderable": true,
-      "searchable": false
+      "searchable": true
     },
     {
-      "title": "兑换金额",
-      "name": "consumer_amount",
+      "title": "消费金额",
       "targets": 3,
       "orderable": true,
+      "searchable": true
+    },
+    {
+      "title": "店铺code",
+      "targets": 4,
+      "orderable": false,
       "searchable": false
     },
     {
-      "title": "状态",
-      "name": "status",
-      "targets": 4,
-      "orderable": true,
-      "searchable": true
-    },
-    {
-      "title": "礼品名称",
-      "name": "fname",
+      "title": "店铺名",
       "targets": 5,
-      "orderable": true,
-      "searchable": true
-    },
-    {
-      "title": "兑换人",
-      "name": "fmemname",
-      "targets": 6,
-      "orderable": true,
-      "searchable": true
-    },
-    {
-      "title": "兑换人电话",
-      "name": "fmemmobilephone",
-      "targets": 7,
-      "orderable": true,
-      "searchable": true
+      "orderable": false,
+      "searchable": false
     },
     {
       "title": "添加时间",
-      "name": "created_at",
-      "targets": 8,
+      "targets": 6,
       "orderable": false,
       "searchable": false
     },
     {
       "title": "操作",
-      "targets": 9,
+      "targets": 7,
       "orderable": false,
       "searchable": false
     },
@@ -331,31 +303,21 @@ $(document).ready(function() {
     "iDisplayLength": 20,
     // 每页显示多少条
     "iDisplayStart": 0,
-    "order": [[0, "desc"]],
     "ajax": {
-      "url": window.ServerAPI.server + "/api/v1/list/redeem",
+      "url": window.ServerAPI.server + "/api/v1/list/consume",
       "data": function(params) {
         var query = window.ServerAPI.params();
-        if(query["redeem_state"]) {
-          params["redeem_state"] = query["redeem_state"];
-
-          $("#redeem_state").children("option").each(function() {
-            if($(this).attr("value") === query["redeem_state"]) {
-              $(this).attr("selected", "selected");
-            }
-          });
+        if(query["serial_number"]) {
+          params["serial_number"] = query["serial_number"];
+          $("input[name=serial_number]").val(query["serial_number"]);
         }
-        if(query["gift_name"]) {
-          params["gift_name"] = query["gift_name"];
-          $("input[name=gift_name]").val(query["gift_name"]);
+        if(query["store_code"]) {
+          params["store_code"] = query["store_code"];
+          $("input[name=store_code]").val(query["store_code"]);
         }
-        if(query["member"]) {
-          params["member"] = query["member"];
-          $("input[name=member]").val(query["member"]);
-        }
-        if(query["telphone"]) {
-          params["telphone"] = query["telphone"];
-          $("input[name=telphone]").val(query["telphone"]);
+        if(query["store_name"]) {
+          params["store_name"] = query["store_name"];
+          $("input[name=store_name]").val(query["store_name"]);
         }
         return params;
       }
@@ -370,7 +332,7 @@ $(document).ready(function() {
         if ($(this).attr('title') == '编辑') type = BootstrapDialog.TYPE_PRIMARY;
         if ($(this).attr('title') == '删除') type = BootstrapDialog.TYPE_DANGER;
         BootstrapDialog.show({
-          title: $(this).attr('title') + '兑换信息管理',
+          title: $(this).attr('title') + '店铺管理',
           message: $('<div></div>').load(url),
           type: type,
         });

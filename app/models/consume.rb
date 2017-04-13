@@ -47,7 +47,14 @@ class Consume < ActiveRecord::Base
   end
 
   def self.data_tables(params)
-    all.map(&:data_table)
+    conditions = []
+    conditions.push("field2 like '%#{params[:serial_number]}%'") if params[:serial_number]
+    conditions.push("field4 like '%#{params[:store_code]}%'") if params[:store_code]
+    conditions.push("field5 like '%#{params[:store_name]}%'") if params[:store_name]
+
+    conditions.push("1 = 1") if conditions.empty?
+    # puts where(conditions.join(" or ")).to_sql
+    where(conditions.join(" or ")).map(&:data_table)
   end
 
   def data_table

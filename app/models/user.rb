@@ -9,6 +9,7 @@ require 'sinatra/activerecord'
 # sys_model_4, Questionnaire, 问卷调查
 # sys_model_5, Answer, 问卷回答
 # sys_model_6, Redeem, 礼品兑换
+# sys_model_7, Gift, 礼品列表
 
 # 管理员
 class User < ActiveRecord::Base

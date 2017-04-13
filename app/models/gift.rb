@@ -3,7 +3,7 @@ require 'sinatra/activerecord'
 
 # 礼品管理
 class Gift < ActiveRecord::Base
-  self.table_name = 'sys_model_5'
+  self.table_name = 'sys_model_7'
 
   attr_reader :class_name
   def class_name

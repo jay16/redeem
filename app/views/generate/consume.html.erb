@@ -5,11 +5,11 @@
 <section class="content">
   <div class="row">
     <div class="col-lg-12">
-      <form action="../taikooli/public/admin/consumer/index" method="get">
-        <input type="text" name="serial_num" value="" placeholder="流水号" class="form-control input-1">
-        <input type="text" name="storecode" value="" placeholder="店铺code" class="form-control input-1">
+      <form action="consume.html" method="get">
+        <input type="text" name="serial_number" value="" placeholder="流水号" class="form-control input-1">
+        <input type="text" name="store_code" value="" placeholder="店铺code" class="form-control input-1">
         <input type="text" name="store_name" value="" placeholder="店铺名" class="form-control input-1">
-        <input type="submit"  disabled="disabled" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
+        <input type="submit" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
     </div>
     <div class="col-lg-12">
       <div class="panel panel-default">
@@ -78,7 +78,25 @@ $(document).ready(function() {
     "iDisplayLength": 20,
     // 每页显示多少条
     "iDisplayStart": 0,
-    "ajax": window.ServerAPI.server + "/api/v1/list/consume",
+    "ajax": {
+      "url": window.ServerAPI.server + "/api/v1/list/consume",
+      "data": function(params) {
+        var query = window.ServerAPI.params();
+        if(query["serial_number"]) {
+          params["serial_number"] = query["serial_number"];
+          $("input[name=serial_number]").val(query["serial_number"]);
+        }
+        if(query["store_code"]) {
+          params["store_code"] = query["store_code"];
+          $("input[name=store_code]").val(query["store_code"]);
+        }
+        if(query["store_name"]) {
+          params["store_name"] = query["store_name"];
+          $("input[name=store_name]").val(query["store_name"]);
+        }
+        return params;
+      }
+    },
     "drawCallback": function(settings) {
       $("#tableRecords_filter").hide();
       $(".iframe").off('click').on('click',
@@ -97,15 +115,15 @@ $(document).ready(function() {
     }
   });
 
-  var foot = $('#tableRecords').find('tfoot');
-  if (!foot.length) {
-    foot = $('<tfoot>').appendTo($('#tableRecords'));
-    var tr = $("<tr></tr>");
-    for (var i = 0; i < $('#tableRecords thead th').length; i++) {
-      $('<th>').appendTo(tr);
-    }
-    foot.append(tr);
-  }
+  // var foot = $('#tableRecords').find('tfoot');
+  // if (!foot.length) {
+  //   foot = $('<tfoot>').appendTo($('#tableRecords'));
+  //   var tr = $("<tr></tr>");
+  //   for (var i = 0; i < $('#tableRecords thead th').length; i++) {
+  //     $('<th>').appendTo(tr);
+  //   }
+  //   foot.append(tr);
+  // }
 
 });
 </script>
