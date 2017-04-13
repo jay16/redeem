@@ -63,7 +63,7 @@ class Consume < ActiveRecord::Base
       self.amount,
       self.store_code,
       self.store_name,
-      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
       html_tags
     ]
   end
@@ -77,7 +77,7 @@ class Consume < ActiveRecord::Base
       amount: self.field3,
       store_code: self.field4,
       store_name: self.field5,
-      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
 end

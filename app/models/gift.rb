@@ -78,7 +78,7 @@ class Gift < ActiveRecord::Base
       self.count,
       self.min_amount,
       self.price,
-      self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      self.created_at.strftime("%y-%m-%d %H:%M:%S")
     ]
   end
 
@@ -95,7 +95,7 @@ class Gift < ActiveRecord::Base
       count: self.field7,
       min_amount: self.field8,
       price: self.field9,
-      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
 end

@@ -59,7 +59,9 @@
     text-indent: 14px;
     margin-top: 0.5rem;
 }
-.xg .cs, .xg .button{
+.xg .cs,
+.xg .button,
+.tishibuton-area .button {
     float: right;
     padding: 0 0.6rem;
     line-height: 1rem;

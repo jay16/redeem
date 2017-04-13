@@ -1288,7 +1288,7 @@ window.TKH = {
             window.ServerAPI.save_store(post_param);
           }
 
-          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份店铺，");
+          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份店铺");
         } else {
           if (outparams["FMSG"].length > 0) {
             alert(outparams["FMSG"]);
@@ -1395,7 +1395,7 @@ window.TKH = {
             window.ServerAPI.save_gift(post_param);
           }
 
-          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份礼品，");
+          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份礼品");
         } else {
           if (outparams["FMSG"].length > 0) {
             layer.msg(outparams["FMSG"], {
@@ -1512,7 +1512,7 @@ window.TKH = {
               post_param['options'] = data_item_options;
               window.ServerAPI.save_questionnaire(post_param);
             }
-            $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份问卷，");
+            $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份问卷");
           }
         } else {
           if (outparams["FMSG"].length) {

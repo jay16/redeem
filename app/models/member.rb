@@ -85,7 +85,7 @@ class Member < ActiveRecord::Base
       self.field2,
       self.field3,
       self.field4,
-      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
       html_tags
     ]
   end
@@ -104,7 +104,7 @@ class Member < ActiveRecord::Base
       id_number: self.field8,
       qq: self.field9,
       landline: self.field10,
-      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
 end

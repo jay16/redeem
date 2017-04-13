@@ -97,7 +97,7 @@ class Redeem < ActiveRecord::Base
       self.gift_name,
       self.member,
       self.telphone,
-      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
       html_tags
     ]
   end
@@ -115,7 +115,7 @@ class Redeem < ActiveRecord::Base
       store_id: self.field7,
       store_name: self.field8,
       serial_number: self.field9,
-      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
 end

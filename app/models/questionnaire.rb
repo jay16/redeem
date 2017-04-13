@@ -79,7 +79,7 @@ class Questionnaire < ActiveRecord::Base
       self.subject_id,
       self.subject,
       self.subject_type,
-      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
       html_tags
     ]
   end
@@ -99,7 +99,7 @@ class Questionnaire < ActiveRecord::Base
       member: self.field9,
       telphone: self.field10,
       other_state: self.field11,
-      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
 end

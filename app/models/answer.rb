@@ -89,7 +89,7 @@ class Answer < ActiveRecord::Base
       self.answer,
       self.subject_type,
       self.other_state,
-      self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      self.created_at.strftime("%y-%m-%d %H:%M:%S")
     ]
   end
 
@@ -108,7 +108,7 @@ class Answer < ActiveRecord::Base
       member: self.field9,
       telphone: self.field10,
       other_state: self.field11,
-      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
 end

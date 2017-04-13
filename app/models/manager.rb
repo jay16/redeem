@@ -64,9 +64,6 @@ class Manager < ActiveRecord::Base
       <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
         <i class="fa fa-pencil-square-o"></i>
       </a>
-      <a disabled='disabled' href="#{ENV['API_SERVER']}/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
-        <i class="fa fa-trash"></i>
-      </a>
     EOF
 
     [
@@ -74,7 +71,7 @@ class Manager < ActiveRecord::Base
       self.field0,
       self.field2,
       self.field4,
-      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
       html_tags
     ]
   end
@@ -86,7 +83,7 @@ class Manager < ActiveRecord::Base
       email: self.field2,
       telphone: self.field3,
       area: self.field4,
-      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
 

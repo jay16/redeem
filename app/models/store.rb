@@ -56,7 +56,7 @@ class Store < ActiveRecord::Base
       self.field0,
       self.field1,
       self.field2,
-      self.created_at.strftime("%y-%m-%m %H:%M:%S"),
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
       html_tags
     ]
   end
@@ -67,7 +67,7 @@ class Store < ActiveRecord::Base
       gid: self.field0,
       code: self.field1,
       name: self.field2,
-      created_at: self.created_at.strftime("%y-%m-%m %H:%M:%S")
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
 end
