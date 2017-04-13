@@ -92,11 +92,11 @@ class Redeem < ActiveRecord::Base
 
     [
       self.id,
-      self.field0,
-      self.field1,
-      self.field2,
-      self.field3,
-      self.field4,
+      self.amount,
+      self.redeem_state,
+      self.gift_name,
+      self.member,
+      self.telphone,
       self.created_at.strftime("%y-%m-%m %H:%M:%S"),
       html_tags
     ]

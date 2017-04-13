@@ -77,9 +77,9 @@ class ApplicationController < Sinatra::Base
       'member' => '会员管理',
       'questionnaire' => '问卷管理',
       'store' => '店铺管理',
-      'sync-gift' => '店铺管理',
-      'sync-questionnaire' => '店铺管理',
-      'sync-store' => '店铺管理',
+      'sync-gift' => '同步礼品',
+      'sync-questionnaire' => '同步问卷',
+      'sync-store' => '同步店铺',
       'user' => '管理员管理'
     }
     @title = page_titles.fetch(params[:pagename].split('.')[0], "unknown")
