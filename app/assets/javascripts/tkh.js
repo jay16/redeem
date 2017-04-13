@@ -29,16 +29,15 @@ window.TKH = {
   storeCode: '0210',
   oper: 'HDCRM[0]',
   // 3.1.1 登录
-  loginWithinIPad: function() {
+  loginWithinIPad: function(toPathName) {
     var username = $('#yhm').val(),
       password = $('#pwd').val(),
       area_id = $('input[name="area_id"]:checked').val();
-
       var loading = layer.msg('登录中...', {
         icon: 16,
         shade: 0.01
       });
-      var clientCookie,
+    var clientCookie,
         userGid = window.TKH.userGid,
         userPwd = window.TKH.userPwd,
         workStation = window.TKH.workStation,
@@ -81,7 +80,8 @@ window.TKH = {
           window.localStorage.setItem('sClientCookie', clientCookie);
           window.localStorage.setItem('userGid', userGid);
           window.localStorage.setItem('logined', "yes");
-          location.href = 'search.html';
+          window.localStorage.setItem('expiredIN', (new Date()).valueOf() + 1 * 60 * 60 * 1000);
+          window.location.href = toPathName;
         } else {
           layer.msg("用户验证失败", { time: 3000 });
         }
@@ -141,8 +141,15 @@ window.TKH = {
         if(clientCookie !== null && clientCookie.length > 0) {
           window.localStorage.setItem('sClientCookie', clientCookie);
           window.localStorage.setItem('userGid', userGid);
+          window.localStorage.setItem('expiredIN', (new Date()).valueOf() + 1 * 60 * 60 * 1000);
         } else {
-          alert("用户验证失败");
+          layer.msg('用户验证失败，请重新登录', {
+            time: 0,
+            btn: ['知道了'],
+            yes: function(index) {
+              window.location.href = "login.html";
+            }
+          });
         }
       },
       complete: function(xmlHttpRequest, status) {

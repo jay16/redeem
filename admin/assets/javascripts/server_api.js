@@ -37,7 +37,7 @@ window.ServerAPI = {
           window.localStorage.setItem("remember", is_remember);
           window.localStorage.setItem("logined", "yes");
           if(type === 'ipad') {
-            window.TKH.loginWithinIPad();
+            window.TKH.loginWithinIPad('search.html');
           }
           if(type === 'background') {
             window.location.href = 'manager.html';

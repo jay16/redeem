@@ -58,13 +58,14 @@ class Redeem < ActiveRecord::Base
   end
 
   def self.find_or_create_with_params(params)
-    if params[:consumes]
+    unless params[:consumes].empty?
       params[:consumes].each_pair do |k, v|
+        puts v.to_s
         ::Consume.find_or_create_with_params(v);
       end
-      params[:consumes] = params[:consumes].to_json
     end
 
+    params[:consumes] = params[:consumes].to_json
     params[:gifts] = params[:gifts].to_json if params[:gifts]
     # unless record = find_by(serial_number: params[:serial_number])
       record = create(extract_params(params))

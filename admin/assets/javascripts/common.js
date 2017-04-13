@@ -17,6 +17,12 @@ if(login_state && login_state.length && login_state === 'yes') {
       }
     });
   }
+
+  var expiredIN = window.localStorage.getItem("expiredIN");
+  if(expiredIN === null || (new Date()).valueOf() >= parseInt(expiredIN)) {
+    window.TKH.loginWithinAdmin(current_path);
+  }
+
 } else {
   if(current_path !== 'login.html') {
     window.location.href = 'login.html';

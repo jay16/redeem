@@ -3,7 +3,7 @@ require 'sinatra/activerecord'
 
 # 问卷回答
 class Answer < ActiveRecord::Base
-  self.table_name = 'sys_model_4'
+  self.table_name = 'sys_model_5'
 
   attr_reader :class_name
   def class_name
@@ -81,14 +81,11 @@ class Answer < ActiveRecord::Base
     [
       self.id,
       self.member,
-      self.telphone,
       self.questionnaire_code,
       self.questionnaire_name,
-      self.subject_id,
       self.subject,
       self.answer,
       self.subject_type,
-      self.other_state,
       self.created_at.strftime("%y-%m-%d %H:%M:%S")
     ]
   end

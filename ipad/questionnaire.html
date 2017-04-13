@@ -39,6 +39,14 @@
   <div class="anNiu">
     <a href="javascript:void (0)" class="sy last-option">上一页
       <br/>Previous</a>
+
+
+      <span id="checkbox_skip_wrapper" style="display:none;width: 0.4rem;color:white;font-size:15px;margin-bottom:1rem;">
+        <input id='checkbox_skip' type="checkbox"/>
+        跳过问卷
+      </span>
+
+
     <a href="javascript:void (0)" class="xy next-option">下一页
       <br/>Next</a></div>
 </div>
@@ -101,6 +109,7 @@ if(questionnaireString === null) {
 var qindex = parseInt($(".questionnaire").attr("qindex"));
 skipToQuestionWithIndex(qindex, 'last');
 
+
 // {
 //   "FRESULT": "0",
 //   "FMSG": "成功",
@@ -128,6 +137,12 @@ skipToQuestionWithIndex(qindex, 'last');
 //   ]
 // }
 function skipToQuestionWithIndex(qindex, skipType) {
+    if(qindex === "0" || qindex === 0) {
+      $("#checkbox_skip_wrapper").css("display", "inline");
+    } else {
+      $("#checkbox_skip_wrapper").css("display", "none");
+    }
+
     var questionnaireString = window.localStorage.getItem("questionnaire");
     if(questionnaireString === null) { return }
 
@@ -345,9 +360,15 @@ $(function() {
   });
 
   $('.next-option').on('click', function() {
-    var nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
-    $(".questionnaire").attr("qindex", nextQIndex);
-    skipToQuestionWithIndex(nextQIndex, 'next');
+    var qindex = parseInt($(".questionnaire").attr("qindex")),
+        nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
+
+    if(qindex === 0 &&  $("#checkbox_skip").prop("checked")) {
+      window.location.href = "signature.html"
+    } else {
+      $(".questionnaire").attr("qindex", nextQIndex);
+      skipToQuestionWithIndex(nextQIndex, 'next');
+    }
   });
 });
 
