@@ -61,8 +61,15 @@ class Gift < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
-  def self.data_tables
-    all.map(&:data_table)
+  def self.data_tables(params)
+    conditions = []
+    conditions.push("field1 like '%#{params[:theme_name]}%'") if params[:theme_name]
+    conditions.push("field6 like '%#{params[:gift_name]}%'") if params[:gift_name]
+    conditions.push("field4 like '%#{params[:address]}%'") if params[:address]
+
+    conditions.push("1 = 1") if conditions.empty?
+    # puts where(conditions.join(" or ")).to_sql
+    where(conditions.join(" or ")).map(&:data_table)
   end
 
   def data_table

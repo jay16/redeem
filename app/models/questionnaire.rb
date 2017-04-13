@@ -58,7 +58,7 @@ class Questionnaire < ActiveRecord::Base
     []
   end
 
-  def self.data_tables
+  def self.data_tables(params)
     all.map(&:data_table)
   end
 

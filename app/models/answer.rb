@@ -73,14 +73,22 @@ class Answer < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
-  def self.data_tables
-    all.map(&:data_table)
+  def self.data_tables(params)
+    conditions = []
+    conditions.push("field0 like '%#{params[:questionnaire_code]}%'") if params[:questionnaire_code]
+    conditions.push("field1 like '%#{params[:questionnaire_name]}%'") if params[:questionnaire_name]
+    conditions.push("field10 like '%#{params[:telphone]}%'") if params[:telphone]
+
+    conditions.push("1 = 1") if conditions.empty?
+    puts where(conditions.join(" or ")).to_sql
+    where(conditions.join(" or ")).map(&:data_table)
   end
 
   def data_table
     [
       self.id,
       self.member,
+      self.telphone,
       self.questionnaire_code,
       self.questionnaire_name,
       self.subject,

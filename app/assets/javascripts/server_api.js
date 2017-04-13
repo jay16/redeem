@@ -1,6 +1,19 @@
 window.ServerAPI = {
   version: '0.0.3',
   server: 'http://123.56.91.131:4567',
+  params: function() {
+    var query = {},
+        search = window.location.search.substring(1),
+        parts = search.split('&'),
+        pairs = [];
+
+    for(var i = 0, len = parts.length; i < len; i++) {
+      pairs = parts[i].split('=');
+      query[pairs[0]] = (pairs.length > 1 ? decodeURIComponent(pairs[1]) : null);
+    }
+
+    return query;
+  },
   login: function(type) {
     var username = $("#username").val(),
         password = $("#password").val(),

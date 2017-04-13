@@ -67,7 +67,7 @@ module API
     # list
     # get /api/v1/list/:model
     get '/list/:model' do
-      records = class_get(params[:model]).data_tables
+      records = class_get(params[:model]).data_tables(params)
 
       respond_with_json({data: records}, 200)
     end

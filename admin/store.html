@@ -58,9 +58,9 @@
 <script src="assets/javascripts/plupload/i18n/zh_CN.js"></script>
 <script src="assets/javascripts/common_upload.js"></script>
 <script src="assets/javascripts/server_api.js"></script>
-<script src="assets/javascripts/common.js"></script>
 <script src="assets/javascripts/ajaxfileupload.min.js"></script>
 <script src="assets/javascripts/tkh.js"></script>
+<script src="assets/javascripts/common.js"></script>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
 <script src="http://project.chenfeng.co../taikooli/publicassets/javascripts/html5.js"></script>
@@ -230,11 +230,11 @@
 <section class="content">
   <div class="row">
     <div class="col-lg-12">
-      <form action="../taikooli/public/admin/store/index" method="get">
-        <input type="text" name="gndgid" value="" placeholder="店铺gid" class="form-control input-1">
-        <input type="text" name="gndcode" value="" placeholder="店铺code" class="form-control input-1">
-        <input type="text" name="gndname" value="" placeholder="店铺名" class="form-control input-1">
-        <input type="submit"  disabled="disabled" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
+      <form id="searchForm" action="store.html" method="get">
+        <input type="text" name="gid" value="" placeholder="店铺gid" class="form-control input-1">
+        <input type="text" name="code" value="" placeholder="店铺code" class="form-control input-1">
+        <input type="text" name="name" value="" placeholder="店铺名" class="form-control input-1">
+        <input type="submit" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
     </div>
     <div class="col-lg-12">
       <div class="panel panel-default">
@@ -286,7 +286,25 @@ $(document).ready(function() {
     "iDisplayLength": 20,
     // 每页显示多少条
     "iDisplayStart": 0,
-    "ajax": window.ServerAPI.server + "/api/v1/list/store",
+    "ajax": {
+      "url": window.ServerAPI.server + "/api/v1/list/store",
+      "data": function(params) {
+        var query = window.ServerAPI.params();
+        if(query["gid"]) {
+          params["gid"] = query["gid"];
+          $("input[name=gid]").val(query["gid"]);
+        }
+        if(query["name"]) {
+          params["name"] = query["name"];
+          $("input[name=name]").val(query["name"]);
+        }
+        if(query["code"]) {
+          params["code"] = query["code"];
+          $("input[name=code]").val(query["code"]);
+        }
+        return params;
+      }
+    },
     "drawCallback": function(settings) {
       $("#tableRecords_filter").hide();
       $(".iframe").off('click').on('click',
@@ -305,30 +323,30 @@ $(document).ready(function() {
     }
   });
 
-  var foot = $('#tableRecords').find('tfoot');
-  if (!foot.length) {
-    foot = $('<tfoot>').appendTo($('#tableRecords'));
-    var tr = $("<tr></tr>");
-    for (var i = 0; i < $('#tableRecords thead th').length; i++) {
-      $('<th>').appendTo(tr);
-    }
-    foot.append(tr);
-  }
-  yadcf.init(oTable, [{
-    column_number: 1,
-    filter_type: "text",
-    filter_default_label: "搜索"
-  },
-  {
-    column_number: 2,
-    filter_type: "text",
-    filter_default_label: "搜索"
-  },
-  {
-    column_number: 3,
-    filter_type: "text",
-    filter_default_label: "搜索"
-  }], 'footer');
+  // var foot = $('#tableRecords').find('tfoot');
+  // if (!foot.length) {
+  //   foot = $('<tfoot>').appendTo($('#tableRecords'));
+  //   var tr = $("<tr></tr>");
+  //   for (var i = 0; i < $('#tableRecords thead th').length; i++) {
+  //     $('<th>').appendTo(tr);
+  //   }
+  //   foot.append(tr);
+  // }
+  // yadcf.init(oTable, [{
+  //   column_number: 1,
+  //   filter_type: "text",
+  //   filter_default_label: "搜索"
+  // },
+  // {
+  //   column_number: 2,
+  //   filter_type: "text",
+  //   filter_default_label: "搜索"
+  // },
+  // {
+  //   column_number: 3,
+  //   filter_type: "text",
+  //   filter_default_label: "搜索"
+  // }], 'footer');
 });
 </script>
 

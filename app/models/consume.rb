@@ -46,7 +46,7 @@ class Consume < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
-  def self.data_tables
+  def self.data_tables(params)
     all.map(&:data_table)
   end
 

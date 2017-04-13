@@ -35,7 +35,7 @@ class Redeem < ActiveRecord::Base
   alias_attribute :store_id, :field7 # 门店ID
   alias_attribute :store_name, :field8 # 门店名称
   alias_attribute :serial_number, :field9 # 流水号
-  alias_attribute :redeem_state, :field10 # 流水号
+  alias_attribute :redeem_state, :field10 # 兑换状态
   alias_attribute :consumes, :text1 # 消费列表
   alias_attribute :gifts, :text2 # 礼品信息
 
@@ -77,8 +77,16 @@ class Redeem < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
-  def self.data_tables
-    all.map(&:data_table)
+  def self.data_tables(params)
+    conditions = []
+    conditions.push("field10 like '%#{params[:redeem_state]}%'") if params[:redeem_state]
+    conditions.push("field5 like '%#{params[:gift_name]}%'") if params[:gift_name]
+    conditions.push("field1 like '%#{params[:member]}%'") if params[:member]
+    conditions.push("field2 like '%#{params[:telphone]}%'") if params[:telphone]
+
+    conditions.push("1 = 1") if conditions.empty?
+    puts where(conditions.join(" or ")).to_sql
+    where(conditions.join(" or ")).map(&:data_table)
   end
 
   def data_table
@@ -93,6 +101,8 @@ class Redeem < ActiveRecord::Base
 
     [
       self.id,
+      self.member,
+      self.telphone,
       self.amount,
       self.redeem_state,
       self.gift_name,
@@ -106,6 +116,7 @@ class Redeem < ActiveRecord::Base
   def to_hash
     {
       id: self.id,
+      member: self.member,
       card_number: self.field0,
       member: self.field1,
       telphone: self.field2,

@@ -6,17 +6,17 @@
 <section class="content">
   <div class="row">
     <div class="col-lg-12">
-      <form action="../taikooli/public/admin/exchange/index" method="get">
+      <form action="exchange.html" method="get">
         <div>
-          <select class="form-control" id="status" name="status">
-            <option selected>请选择状态</option>
-            <option value="1">确认兑换</option>
-            <option value="0">未完成</option></select>
+          <select class="form-control" id="redeem_state" name="redeem_state">
+            <option value="" selected>请选择状态</option>
+            <option value="兑换成功">兑换成功</option>
+            <option value="未兑换">未兑换</option></select>
         </div>
-        <input type="text" name="fname" value="" placeholder="礼品名" class="form-control input-1">
-        <input type="text" name="fmemname" value="" placeholder="会员名" class="form-control input-1">
-        <input type="text" name="fmemmobilephone" value="" placeholder="会员电话" class="form-control input-1">
-        <input type="submit"  disabled="disabled" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
+        <input type="text" name="gift_name" value="" placeholder="礼品名" class="form-control input-1">
+        <input type="text" name="member" value="" placeholder="会员名" class="form-control input-1">
+        <input type="text" name="telphone" value="" placeholder="会员电话" class="form-control input-1">
+        <input type="submit" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
     </div>
     <div class="col-lg-12">
       <div class="panel panel-default">
@@ -37,50 +37,64 @@ $(document).ready(function() {
       "searchable": false
     },
     {
+      "title": "会员",
+      "name": "member",
+      "targets": 1,
+      "orderable": true,
+      "searchable": false
+    },
+    {
+      "title": "会员电话",
+      "name": "member",
+      "targets": 2,
+      "orderable": true,
+      "searchable": false
+    },
+    {
       "title": "兑换金额",
       "name": "consumer_amount",
-      "targets": 1,
+      "targets": 3,
       "orderable": true,
       "searchable": false
     },
     {
       "title": "状态",
       "name": "status",
-      "targets": 2,
+      "targets": 4,
       "orderable": true,
       "searchable": true
     },
     {
       "title": "礼品名称",
       "name": "fname",
-      "targets": 3,
+      "targets": 5,
       "orderable": true,
       "searchable": true
     },
     {
       "title": "兑换人",
       "name": "fmemname",
-      "targets": 4,
+      "targets": 6,
       "orderable": true,
       "searchable": true
     },
     {
       "title": "兑换人电话",
       "name": "fmemmobilephone",
-      "targets": 5,
+      "targets": 7,
       "orderable": true,
       "searchable": true
     },
     {
       "title": "添加时间",
       "name": "created_at",
-      "targets": 6,
+      "targets": 8,
       "orderable": false,
       "searchable": false
     },
     {
       "title": "操作",
-      "targets": 7,
+      "targets": 9,
       "orderable": false,
       "searchable": false
     },
@@ -93,7 +107,34 @@ $(document).ready(function() {
     // 每页显示多少条
     "iDisplayStart": 0,
     "order": [[0, "desc"]],
-    "ajax": window.ServerAPI.server + "/api/v1/list/redeem",
+    "ajax": {
+      "url": window.ServerAPI.server + "/api/v1/list/redeem",
+      "data": function(params) {
+        var query = window.ServerAPI.params();
+        if(query["redeem_state"]) {
+          params["redeem_state"] = query["redeem_state"];
+
+          $("#redeem_state").children("option").each(function() {
+            if($(this).attr("value") === query["redeem_state"]) {
+              $(this).attr("selected", "selected");
+            }
+          });
+        }
+        if(query["gift_name"]) {
+          params["gift_name"] = query["gift_name"];
+          $("input[name=gift_name]").val(query["gift_name"]);
+        }
+        if(query["member"]) {
+          params["member"] = query["member"];
+          $("input[name=member]").val(query["member"]);
+        }
+        if(query["telphone"]) {
+          params["telphone"] = query["telphone"];
+          $("input[name=telphone]").val(query["telphone"]);
+        }
+        return params;
+      }
+    },
     "drawCallback": function(settings) {
       $("#tableRecords_filter").hide();
       $(".iframe").off('click').on('click',
@@ -112,15 +153,15 @@ $(document).ready(function() {
     }
   });
 
-  var foot = $('#tableRecords').find('tfoot');
-  if (!foot.length) {
-    foot = $('<tfoot>').appendTo($('#tableRecords'));
-    var tr = $("<tr></tr>");
-    for (var i = 0; i < $('#tableRecords thead th').length; i++) {
-      $('<th>').appendTo(tr);
-    }
-    foot.append(tr);
-  }
+  // var foot = $('#tableRecords').find('tfoot');
+  // if (!foot.length) {
+  //   foot = $('<tfoot>').appendTo($('#tableRecords'));
+  //   var tr = $("<tr></tr>");
+  //   for (var i = 0; i < $('#tableRecords thead th').length; i++) {
+  //     $('<th>').appendTo(tr);
+  //   }
+  //   foot.append(tr);
+  // }
 
 });
 </script>

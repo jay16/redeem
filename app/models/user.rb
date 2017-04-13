@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
-  def self.data_tables
+  def self.data_tables(params)
     where(field5: 'no').map(&:data_table)
   end
 

@@ -58,9 +58,9 @@
 <script src="assets/javascripts/plupload/i18n/zh_CN.js"></script>
 <script src="assets/javascripts/common_upload.js"></script>
 <script src="assets/javascripts/server_api.js"></script>
-<script src="assets/javascripts/common.js"></script>
 <script src="assets/javascripts/ajaxfileupload.min.js"></script>
 <script src="assets/javascripts/tkh.js"></script>
+<script src="assets/javascripts/common.js"></script>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
 <script src="http://project.chenfeng.co../taikooli/publicassets/javascripts/html5.js"></script>
@@ -230,16 +230,11 @@
 <section class="content">
   <div class="row">
     <div class="col-lg-12">
-      <form action="../taikooli/public/admin/gift/index" method="get">
-        <input type="text" name="fnum" value="" placeholder="促销主题单号" class="form-control input-1">
-        <input type="text" name="fsubject" value="" placeholder="促销主题名称" class="form-control input-1">
-        <!--<input type="date" name="fbgntime" value="" placeholder="开始时间" class="form-control input-1">
-        <input type="date" name="fendtime" value="" placeholder="结束时间" class="form-control input-1">-->
-        <input type="text" name="fcode" value="" placeholder="赠品代码" class="form-control input-1">
-        <input type="text" name="fname" value="" placeholder="赠品名称" class="form-control input-1">
-        <input type="text" name="flocation" value="" placeholder="促销地点" class="form-control input-1">
-        <input type="text" name="flowamt" value="" placeholder="起始金额" class="form-control input-1">
-        <input disabled="disabled" type="submit" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
+      <form action="gift.html" method="get">
+        <input type="text" name="theme_name" value="" placeholder="促销主题名称" class="form-control input-1">
+        <input type="text" name="gift_name" value="" placeholder="赠品名称" class="form-control input-1">
+        <input type="text" name="address" value="" placeholder="促销地点" class="form-control input-1">
+        <input type="submit" id="addSysem" class="btn btn-success btn-xm" value="搜索" /></form>
     </div>
     <div class="col-lg-12">
       <div class="panel panel-default">
@@ -335,7 +330,25 @@
     // 每页显示多少条
     "iDisplayStart": 0,
     "order": [[0, "desc"]],
-    "ajax": window.ServerAPI.server + "/api/v1/list/gift",
+    "ajax": {
+      "url": window.ServerAPI.server + "/api/v1/list/gift",
+      "data": function(params) {
+        var query = window.ServerAPI.params();
+        if(query["theme_name"]) {
+          params["theme_name"] = query["theme_name"];
+          $("input[name=theme_name]").val(query["theme_name"]);
+        }
+        if(query["gift_name"]) {
+          params["gift_name"] = query["gift_name"];
+          $("input[name=gift_name]").val(query["gift_name"]);
+        }
+        if(query["address"]) {
+          params["address"] = query["address"];
+          $("input[name=address]").val(query["address"]);
+        }
+        return params;
+      }
+    },
     "drawCallback": function(settings) {
       $("#tableRecords_filter").hide();
       $(".iframe").off('click').on('click',
@@ -354,15 +367,15 @@
     }
   });
 
-  var foot = $('#tableRecords').find('tfoot');
-  if (!foot.length) {
-    foot = $('<tfoot>').appendTo($('#tableRecords'));
-    var tr = $("<tr></tr>");
-    for (var i = 0; i < $('#tableRecords thead th').length; i++) {
-      $('<th>').appendTo(tr);
-    }
-    foot.append(tr);
-  }
+  // var foot = $('#tableRecords').find('tfoot');
+  // if (!foot.length) {
+  //   foot = $('<tfoot>').appendTo($('#tableRecords'));
+  //   var tr = $("<tr></tr>");
+  //   for (var i = 0; i < $('#tableRecords thead th').length; i++) {
+  //     $('<th>').appendTo(tr);
+  //   }
+  //   foot.append(tr);
+  // }
 });
 </script>
 

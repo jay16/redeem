@@ -37,8 +37,14 @@ class Store < ActiveRecord::Base
     self.update_columns(self.class.extract_params(params))
   end
 
-  def self.data_tables
-    all.map(&:data_table)
+  def self.data_tables(params)
+    conditions = []
+    conditions.push("field0 like '%#{params[:gid]}%'") if params[:gid]
+    conditions.push("field1 like '%#{params[:code]}%'") if params[:code]
+    conditions.push("field2 like '%#{params[:name]}%'") if params[:name]
+
+    conditions.push("1 = 1") if conditions.empty?
+    where(conditions.join(" or ")).map(&:data_table)
   end
 
   def data_table
