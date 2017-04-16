@@ -67,10 +67,9 @@
           <img src="assets/images/suo.png"></div>
         <div class="xg_info">
           <p class="title">忘记密码了么?</p>
-          <p class="sm">没关系. 请输入您的用户名和电子邮件地址， 我们会将新的密码发给您。</p>
-          <input type="text" id="xg_mz" placeholder="用户名" />
+          <p class="sm">没关系. 请输入您注册会员的电子邮件地址，我们会将新的密码发给您。</p>
           <input type="text" id="xg_yj" placeholder="电子邮件地址" />
-          <a href="javascript:void (0)" class="cs chongshemima">重设密码</a></div>
+          <a href="javascript:void(0)" onclick='window.ServerAPI.forgetPassword();' class="cs chongshemima">重设密码</a></div>
       </div>
     </div>
   </div>
@@ -82,10 +81,4 @@
 <script src="assets/javascripts/server_api.js"></script>
 <script src="assets/javascripts/tkh.js"></script>
 <script src="assets/javascripts/side.js"></script>
-<script type="text/javascript">
-  // var cookie = window.localStorage.getItem('sClientCookie');
-  // if (cookie !== null && cookie.length > 0) {
-  //     location.href = 'search.html';
-  // }
-</script>
 </html>

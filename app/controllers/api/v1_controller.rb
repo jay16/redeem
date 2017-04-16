@@ -9,7 +9,19 @@ module API
 
     post '/authen/login' do
       result_hash = User.authen(params)
-      puts result_hash
+
+      respond_with_json(result_hash, result_hash[:code])
+    end
+
+    post '/reset_password' do
+      result_hash = User.reset_password(params)
+
+      respond_with_json(result_hash, result_hash[:code])
+    end
+
+    post '/forget_password' do
+      result_hash = User.forget_password(params)
+
       respond_with_json(result_hash, result_hash[:code])
     end
 

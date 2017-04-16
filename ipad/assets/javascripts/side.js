@@ -1,4 +1,3 @@
-
 window.onload = function() {
     $('#jiaZai').hide();
     $('#main').show();
@@ -9,6 +8,7 @@ $(function() {
     var mn = dt.getMonth();
     var dn = dt.getDate();
     $('.time').html(m[mn] + "&nbsp;" + dn + '，' + dt.getFullYear());
+
     //右侧功能栏隐藏显示
     $('.xs').click(function() {
         $(this).hide();
@@ -39,19 +39,9 @@ $(function() {
 
     var myDate = new Date();
     $('.info p').html(myDate.toLocaleDateString());
-    //右侧功能栏隐藏显示
-    $('.xs').click(function() {
-        $(this).hide();
-        $('.yc').show();
-        $('.gn').css('WebkitAnimation', 'yd2 0.4s forwards');
-    });
-    $('.yc').click(function() {
-        $(this).hide();
-        $('.xs').show();
-        $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
-    });
+
     //显示重置密码
-    $('.wj,.hf').click(function() {
+    $('.wj, .hf').click(function() {
         $('.chongshe').fadeIn(200);
         if ($(this).hasClass('hf')) {
             $('.yc').hide();
@@ -59,23 +49,10 @@ $(function() {
             $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
         }
     });
-    $('.gb').click(function() {
-        $('.xg').fadeOut(200);
-    });
     $('.dl').click(function() {
         $('.yc').hide();
         $('.xs').show();
         $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
-    });
-    $('.chongshemima').on('click', function() {
-        var username = $('#xg_mz').val();
-        var email = $('#xg_yj').val();
-        if (!username || !email) {
-            layer.msg('邮箱或用户名不能为空！', {
-                time: 2000, //2s后自动关闭
-            });
-            return false;
-        }
     });
 })
 
@@ -93,6 +70,8 @@ if(login_state && login_state.length && login_state === 'yes') {
   if(expiredIN === null || (new Date()).valueOf() >= parseInt(expiredIN)) {
     window.TKH.loginWithinIPad(current_path);
   }
+
+  $('#userGid').html(window.localStorage.getItem("username"));
 } else {
   if(current_path !== 'login.html') {
     window.location.href = 'login.html';

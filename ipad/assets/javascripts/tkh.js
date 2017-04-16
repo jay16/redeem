@@ -91,7 +91,16 @@ window.TKH = {
         console.log(xmlHttpRequest);
       },
       error: function(xmlHttpRequest) {
-        layer.msg("登录失败", { time: 2000 });
+        layer.msg("用户验证失败，请重新登录", {
+          time: 0,
+          btn: ['确定'],
+          yes: function(index) {
+            layer.close(index);
+            window.localStorage.setItem('logined', "no");
+            window.location.href = 'login.html';
+          }
+        });
+        $(".layui-layer-btn").css({"text-align": "center"});
       }
     });
   },

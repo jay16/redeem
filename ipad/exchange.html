@@ -71,10 +71,10 @@
 
   </div>
   <div class="leiJi" style="display: none;">
-    <img src="assets/images/dhlp.png">2017：累积消费 ￥6604 - 已兑换 ￥0 - 本次兑换 ￥
+    <img src="assets/images/dhlp.png">2017：累积消费 ￥ - 已兑换 ￥0 - 本次兑换 ￥
     <span id="ben_exchange"></span>= 剩余 ￥
     <span id="shen_exchange">
-      <input type="hidden" value="6604">6604</span>， 暂无可累积兑换礼品</div>
+      <input type="hidden" value=""></span>， 暂无可累积兑换礼品</div>
   <div class="shangPing xin"></div>
 </div>
 <div class="dhlp">
@@ -117,7 +117,7 @@
       <img src="assets/images/dl2.png">退出登录</p>
     <div class="renWu">
       <img src="assets/images/renWu.png">
-      <p>18602897807</p>
+      <p id="userGid"></p>
       <p class="time"></p>
     </div>
   </div>
@@ -134,7 +134,7 @@
         <input type="password" id="oldPassword" placeholder="旧密码" />
         <input type="password" id="newPassword" placeholder="新密码" />
         <input type="password" id="rePassword" placeholder="再次输入新密码" />
-        <a href="javascript:void (0)" class="cs mima">确认修改密码</a></div>
+        <a onclick='window.ServerAPI.resetPassword();' href="javascript:void(0);" class="cs mima">确认修改密码</a></div>
     </div>
   </div>
 </div>

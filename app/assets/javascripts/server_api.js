@@ -34,7 +34,6 @@ window.ServerAPI = {
       });
       return false;
     }
-
     $.ajax({
       cache: false,
       url: window.ServerAPI.server + "/api/v1/authen/login",
@@ -56,14 +55,114 @@ window.ServerAPI = {
             window.location.href = 'manager.html';
           }
         } else {
-          alert(xhr.info);
+          layer.msg(xhr.info, {
+            time: 0,
+            btn: ['确定'],
+            yes: function(index) {
+              layer.close(index);
+            }
+          });
+          $(".layui-layer-btn").css({"text-align": "center"});
         }
       }
     });
     return false;
   },
+  resetPassword() {
+    var username = window.localStorage.getItem("username"),
+        cached_password = window.localStorage.getItem("password"),
+        old_password = $("#oldPassword").val(),
+        new_password = $("#newPassword").val(),
+        re_password = $("#rePassword").val();
+
+    if(!username || !cached_password || !cached_password.length) {
+      layer.msg('登录信息不完整，请重新登录！', {
+        time: 0,
+        btn: ['确定'],
+        yes: function(index) {
+          window.localStorage.setItem("logined", "no");
+          layer.close(index);
+          window.location.href = 'login.html';
+        }
+      });
+    }
+    if(!old_password.length) {
+      layer.tips('请输入旧密码', '#oldPassword', { tips: [2, '#faab20'] });
+      return false;
+    }
+    if(cached_password !== old_password) {
+      layer.tips('旧密码不正确', '#oldPassword', { tips: [2, '#faab20'] });
+      return false;
+    }
+    if(!new_password.length) {
+      layer.tips('请输入新密码', '#newPassword', { tips: [2, '#faab20'] });
+      return false;
+    }
+    if(new_password !== re_password) {
+      layer.tips('两次新密码不一致', '#rePassword', { tips: [2, '#faab20'] });
+      return false;
+    }
+
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/reset_password",
+      type: 'post',
+      async: false,
+      dataType: 'json',
+      data: {"username": username, "password": old_password, "new_password": new_password},
+      timeout: 10000,
+      success: function(xhr) {
+        layer.msg(xhr.info, {
+          time: 0,
+          btn: ['确定'],
+          yes: function(index) {
+            if(xhr.code === 201) {
+              $('.xg').fadeOut(200)
+              $("#oldPassword").val(''),
+              $("#newPassword").val(''),
+              $("#rePassword").val('');
+              window.localStorage.setItem("password", new_password);
+            }
+            layer.close(index);
+          }
+        });
+        $(".layui-layer-btn").css({"text-align": "center"});
+      }
+    });
+  },
+  forgetPassword() {
+    var email = $("#xg_yj").val();
+
+    if(!email.length) {
+      layer.tips('请输入注册邮箱', '#xg_yj', { tips: [2, '#faab20'] });
+      return false;
+    }
+
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/forget_password",
+      type: 'post',
+      async: false,
+      dataType: 'json',
+      data: {"email": email},
+      timeout: 10000,
+      success: function(xhr) {
+        layer.msg(xhr.info, {
+          time: 0,
+          btn: ['确定'],
+          yes: function(index) {
+            if(xhr.code === 201) {
+              window.location.href = 'login.html';
+            }
+            layer.close(index);
+          }
+        });
+        $(".layui-layer-btn").css({"text-align": "center"});
+      }
+    });
+  },
   logout: function() {
-    layer.msg('确认退出登录', {
+    layer.msg('确认退出登录?', {
       time: 0,
       btn: ['确定', '取消'],
       yes: function(index) {

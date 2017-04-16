@@ -116,7 +116,6 @@ class Redeem < ActiveRecord::Base
   def to_hash
     {
       id: self.id,
-      member: self.member,
       card_number: self.field0,
       member: self.field1,
       telphone: self.field2,
