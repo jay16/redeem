@@ -1,0 +1,18 @@
+<footer class="main-footer">
+  <div class="pull-right hidden-xs">
+    <b>Version</b> 0.3.4
+  </div>
+  <strong id="copyright"></strong> All rights reserved.
+</footer>
+<script type="text/javascript">
+$(document).ready(function() {
+  var developedYear = "2017",
+      todayYear = (new Date()).getFullYear(),
+      copyrightYield = developedYear;
+
+  if(parseInt(developedYear) < parseInt(todayYear)) {
+    copyrightYield = developedYear + '-' + todayYear;
+  }
+  document.getElementById("copyright").innerHTML = "Copyright © " + copyrightYield + " <a href='#'>HD Studio</a>.";
+});
+</script>

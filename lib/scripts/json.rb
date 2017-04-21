@@ -19,7 +19,7 @@ EOF
   puts %Q(var params = '{#{str}}';)
 end
 
-def if_hash
+def if_hash_deprecated
   string = <<-EOF
       field0: params[:card_number],
       field1: params[:member],
@@ -41,18 +41,34 @@ def if_hash
   puts "options"
 end
 
+def if_hash
+  string = <<-EOF
+  # field0, name, 会员名称
+  # field1, telphone, 会员手机号
+  # field2, card_number, 会员卡号
+  # field3, questionnaire_code, 问卷编号
+  # field4, questionnaire_name, 问卷名称
+  # field5, encode_type, 签字加密类型
+  # text, signature, 签字
+  EOF
+
+  puts "options = {}"
+  string.split("\n").map(&:strip).each do |line|
+    field, param, other = line.sub("#", "").split(",").map(&:strip)
+    puts "options[:#{field}] = params[:#{param}] if params[:#{param}]"
+  end
+  puts "options"
+end
+
 def alias_field
   string = <<-EOF
-  # field0, card_number, 会员卡号
-  # field1, member, 兑换人
-  # field2, telphone, 电话
-  # field3, amount, 兑换金额
-  # field4, redeem_state, 兑换状态
-  # field5, gift_name, 礼品名称
-  # field6, gift_id, 礼品ID
-  # field7, store_id, 门店ID
-  # field8, store_name, 门店名称
-  # field9, serial_number, 流水号
+  # field0, name, 会员名称
+  # field1, telphone, 会员手机号
+  # field2, card_number, 会员卡号
+  # field3, questionnaire_code, 问卷编号
+  # field4, questionnaire_name, 问卷名称
+  # field5, encode_type, 签字加密类型
+  # text, signature, 签字
   EOF
 
   string.split("\n").map(&:strip).each do |line|
@@ -64,13 +80,13 @@ end
 
 def post_params
   string = <<-EOF
-  # field0, questionnaire_code, 问卷单号(单据号)
-  # field1, questionnaire_name, 问卷名称
-  # field2, subject_index, 题目序号
-  # field3, subject_id, 题目ID
-  # field4, subject, 题目内容
-  # field5, subject_type, 题目类型
-  # text1, options, 问题选项
+  # field0, name, 会员名称
+  # field1, telphone, 会员手机号
+  # field2, card_number, 会员卡号
+  # field3, questionnaire_code, 问卷编号
+  # field4, questionnaire_name, 问卷名称
+  # field5, encode_type, 签字加密类型
+  # text, signature, 签字
   EOF
 
   string.split("\n").map(&:strip).each do |line|

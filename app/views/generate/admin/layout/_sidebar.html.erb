@@ -1,0 +1,145 @@
+<header class="main-header">
+        <!-- Logo -->
+        <a href="#" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>管理系统</b></span>
+          <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b></b>管理系统</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <span class="hidden-xs">
+                        <i class="fa fa-user fa-fw"></i>
+                         admin <i class="fa fa-caret-down"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-right">
+                      <a href="javascript:void(0);" onclick="window.ServerAPI.logout();">
+                        <i class="fa fa-sign-out fa-fw"></i>
+                        退出登录
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+
+<aside class="main-sidebar">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar" style="height: auto;">
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+      <li class="treeview treeview-manager">
+        <a href="#">
+          <i class="fa fa-fw fa-dashboard"></i>
+          <span>管理员管理</span>
+          <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="manager.html" data-parent="treeview-manager">
+              <i class="fa fa-fw fa-info"></i>后端管理员</a>
+          </li>
+          <li>
+            <a href="user.html" data-parent="treeview-manager">
+              <i class="fa fa-fw fa-info"></i>管理员管理</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="member.html">
+          <i class="fa fa-fw fa-paper-plane-o"></i>会员管理</a>
+      </li>
+      <li>
+        <a href="consume.html">
+          <i class="fa fa-fw fa-paper-plane-o"></i>消费管理</a>
+      </li>
+      <li class="treeview treeview-store">
+        <a href="#">
+          <i class="fa fa-fw  fa-dashboard"></i>
+          <span>店铺管理</span>
+          <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="store.html" data-parent="treeview-store">
+              <i class="fa fa-fw fa-info"></i>店铺列表</a>
+          </li>
+          <li>
+            <a href="sync-store.html" data-parent="treeview-store">
+              <i class="fa fa-fw fa-info"></i>同步店铺</a>
+          </li>
+        </ul>
+      </li>
+      <li class="treeview treeview-gift">
+        <a href="#">
+          <i class="fa fa-fw  fa-dashboard"></i>
+          <span>礼品管理</span>
+          <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="gift.html" data-parent="treeview-gift">
+              <i class="fa fa-fw fa-info"></i>礼品列表</a>
+          </li>
+          <li>
+            <a href="sync-gift.html" data-parent="treeview-gift">
+              <i class="fa fa-fw fa-info"></i>同步礼品</a>
+          </li>
+        </ul>
+      </li>
+      <li class="treeview treeview-questionnaire">
+        <a href="#">
+          <i class="fa fa-fw  fa-dashboard"></i>
+          <span>问卷管理</span>
+          <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu">
+          <li>
+            <a href="questionnaire.html" data-parent="treeview-questionnaire">
+              <i class="fa fa-fw fa-info"></i>问卷列表</a>
+          </li>
+          <li>
+            <a href="answer-list.html" data-parent="treeview-questionnaire">
+              <i class="fa fa-fw fa-info"></i>回答列表</a>
+          </li>
+          <li>
+            <a href="sync-questionnaire.html" data-parent="treeview-questionnaire">
+              <i class="fa fa-fw fa-info"></i>同步问卷</a>
+          </li>
+          <li style="display: none;">
+            <a href="ipad-setting.html" data-parent="treeview-questionnaire">
+              <i class="fa fa-fw fa-info"></i>前台配置</a>
+          </li>
+          <li style="display: none;">
+            <a href="question-data-com.html" data-parent="treeview-questionnaire">
+              <i class="fa fa-fw fa-info"></i>问卷重新提交</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="exchange.html">
+          <i class="fa fa-fw fa-paper-plane-o"></i>兑换信息管理</a>
+      </li>
+      <li>
+        <a href="signature.html">
+          <i class="fa fa-fw fa-paper-plane-o"></i>签名管理</a>
+      </li>
+    </ul>
+  </section>
+</aside>

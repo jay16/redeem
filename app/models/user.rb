@@ -11,6 +11,7 @@ require 'sinatra/activerecord'
 # sys_model_5, Answer, 问卷回答
 # sys_model_6, Redeem, 礼品兑换
 # sys_model_7, Gift, 礼品列表
+# sys_model_8, Signautre, 签字
 
 # 管理员
 class User < ActiveRecord::Base
@@ -129,6 +130,7 @@ class User < ActiveRecord::Base
       if record = find_by(field2: params[:email])
         new_password = (0..9).to_a.shuffle.sample(6).join
         send_result = self.deliver_reset_password_email(params[:email], record.name, new_password);
+        send_result[:executed_at] = Time.now.strftime('%Y-%m-%d %H:%M:%S')
         record.update_columns({field1: new_password, text1: send_result.to_json})
 
         if send_result[:status] == '250'

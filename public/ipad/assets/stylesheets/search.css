@@ -1,0 +1,224 @@
+#main {
+    background: url('../images/bg-blur.jpg') no-repeat center;
+    background-size: 100% 100%;
+    -webkit-animation: fadeIn .6s backwards;
+    display: none;
+}
+@media only screen and (min-width: 1366px){
+    #main { background-size: 100% 100%;}
+}
+
+
+
+.title img{width: 0.5rem;margin-top: -0.1rem;}
+.title{
+    color: #ddd;
+    font-size: 0.6rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.prompt{
+    font-size: 0.4rem;
+    color: #ddd;
+    text-align: center;
+    margin-top: 0.8rem;
+}
+
+.search{
+    text-align: center;
+}
+.search a{
+    display: inline-block;
+    width: 1rem;
+    line-height: 1rem;
+    background-color: #428bca;
+}
+.search a img{
+    width: 50%;
+    vertical-align: top;
+    margin-top: 25%;
+}
+.search a:active{
+    background-color:#357ebd;
+}
+.search input{
+    height: 1rem;
+    width: 70%;
+    margin-top: -0.2rem;
+    text-indent: 14px;
+    font-size: 0.4rem;
+    color: #333;
+}
+
+.content{
+    width: 90%;
+    margin: 0.6rem auto 0;
+}
+.content_1{overflow: hidden;}
+.content_1>div{
+    float: left;
+    width: 33%;
+    color: #777;
+    background-color: #505050;
+    font-size: 0.4rem;
+    text-align: center;
+    padding: 0.2rem 0;
+    cursor: pointer;
+}
+.content_1>div:nth-child(2){margin: 0 0.5%;}
+.content_1 .act{
+    color: #fdc82f;
+    background-color: #303030;
+}
+.content_1 p{
+    line-height: 1rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.content_2{
+    background-color: #303030;
+    padding: 0.6rem 0.3rem;
+    overflow: hidden;
+}
+.content_2>div{
+    display: none;
+    min-height:6rem;
+    max-height: 12rem;
+    overflow: auto;
+}
+.content_2 p{
+    color: #888;
+    font-size: 0.34rem;
+    text-indent: 10px;
+}
+.content_2>div>div{
+    float: left;
+    width: 46%;
+    padding: 0 2%;
+    margin-bottom: 0.5rem;
+}
+.content_2 input{
+    width: 100%;
+    border-bottom: 1px #505050 solid;
+    background-color: inherit;
+    height: 0.8rem;
+    color: #ddd;
+    text-indent: 10px;
+}
+.content_2 input:focus{
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(253,200,47,.6);
+    -webkit-transition:box-shadow .7s;
+}
+select{
+    background: 0 0;
+    color: #ddd;
+    width: 100%;
+    height: 0.8rem;
+    border: none;
+    border-bottom: 1px #505050 solid;
+    margin-top: 1px;
+    text-indent: 10px;
+}
+select:focus{
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(253,200,47,.6);
+    -webkit-transition:box-shadow .7s;
+}
+select optgroup{
+    background-color: #505050;
+    font-size: 0.5rem;
+    color: #fdc82f;
+}
+select option{
+    background-color: #505050;
+    color: #ddd;
+    font-size: 0.4rem;
+}
+.dz{width: 95%!important;}
+.content_2 .xf{
+    width: 100%;
+    padding: 0;
+}
+.xf p:nth-child(1){
+    font-weight: bold;
+    text-indent: 1rem;
+}
+.xf p:nth-child(2){
+    color: #fff;
+    background-color: #505050;
+    margin:0.2rem 0 0 0.7rem;
+    line-height: 0.8rem;
+}
+
+.anNiu{
+    width: 90%;
+    margin: 0.6rem auto 0;
+}
+.anNiu a{
+    font-size: 0.34rem;
+    float: right;
+    padding: 0.2rem 1.8rem;
+    display: none;
+    margin-bottom: 1rem;
+}
+.bc{
+    background-color: #d9534f;
+    color: #fff;
+}
+.bc:active{background-color: #d43f3a;}
+.xy{
+    background-color: #B18C20;
+    color: #222;
+}
+.xy:active{background-color: #fdc82f;}
+
+
+.xg input{
+    background-color: inherit;
+    border-bottom: 1px #505050 solid;
+    color:#ddd;
+}
+.xg input:focus{
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(253,200,47,.6);
+    -webkit-transition:box-shadow .7s;
+}
+
+.xg .title{margin-top: 0;}
+
+/*.xg .cs{width: 89%;}*/
+
+.xg .suo{margin-top: 2rem;}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-inline {
+    display: inline-block;
+}
+.form-inline .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+    width: 100px;
+    max-width:120px;
+}
+
+.score-field {
+    text-align: center;
+}

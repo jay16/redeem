@@ -65,7 +65,7 @@ class ApplicationController < Sinatra::Base
     haml :"template/#{params[:model]}/#{params[:action]}"
   end
 
-  get '/generate/:pagename' do
+  get '/generate/:part/:page' do
     page_titles = {
       'answer-list' => '回答列表',
       'consume' => '消费管理',
@@ -80,10 +80,11 @@ class ApplicationController < Sinatra::Base
       'sync-gift' => '同步礼品',
       'sync-questionnaire' => '同步问卷',
       'sync-store' => '同步店铺',
-      'user' => '管理员管理'
+      'user' => '管理员管理',
+      'signature' => '签名管理'
     }
-    @title = page_titles.fetch(params[:pagename].split('.')[0], "unknown")
-    erb :"generate/#{params[:pagename]}", layout: :"layouts/admin_layout.html"
+    @title = page_titles.fetch(params[:page].split('.')[0], "unknown")
+    erb :"generate/#{params[:part]}/#{params[:page]}", layout: :"generate/#{params[:part]}/layout/layout.html"
   end
 
   protected

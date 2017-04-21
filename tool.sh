@@ -20,7 +20,6 @@ mkdir -p {db,log,tmp/{pids,rb},public} > /dev/null 2>&1
 [[ -f ~/.${shell_used}_profile ]] && source ~/.${shell_used}_profile &> /dev/null
 export LANG=zh_CN.UTF-8
 
-
 process_start() {
     local pid_file="$1"
     local process_name="$2"
@@ -83,7 +82,6 @@ process_checker() {
     echo "process(${process_name}) is running"
     return 0
 }
-
 
 cd "${app_root_path}" || exit 1
 case "$1" in
