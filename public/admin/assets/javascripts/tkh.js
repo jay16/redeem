@@ -28,6 +28,19 @@ window.TKH = {
   workStation: '172.17.104.164',
   storeCode: '0210',
   oper: 'HDCRM[0]',
+  params: function() {
+    var query = {},
+        search = window.location.search.substring(1),
+        parts = search.split('&'),
+        pairs = [];
+
+    for(var i = 0, len = parts.length; i < len; i++) {
+      pairs = parts[i].split('=');
+      query[pairs[0]] = (pairs.length > 1 ? decodeURIComponent(pairs[1]) : null);
+    }
+
+    return query;
+  },
   // 3.1.1 登录
   loginWithinIPad: function(toPathName) {
     var username = $('#yhm').val(),
@@ -437,8 +450,10 @@ window.TKH = {
               "card_number": outparams["FCARDNUM"],
               "email": outparams["FMEMEMAILADR"],
             };
-            window.localStorage.setItem('current_telphone', JSON.stringify(params));
             window.ServerAPI.save_member(params);
+            params["total_score"] = outparams["FCARDTOTALSCORE"];
+            params["balance"] = outparams["FCARDBALANCE"];
+            window.localStorage.setItem('current_telphone', JSON.stringify(params));
           } else {
             window.localStorage.removeItem('sFCARDNUM');
             window.TKH._chu();
@@ -1052,7 +1067,7 @@ window.TKH = {
           window.ServerAPI.save_redeem(post_param);
 
           window.localStorage.removeItem("records");
-          window.location.href = "questionnaire.html"
+          window.location.href = "questionnaire.html?from=exchange.html"
         } else {
           layer.msg(outparams["FMSG"], { time: 2000 });
         }
@@ -1232,11 +1247,23 @@ window.TKH = {
         ,
       btn: ['确定', '取消'],
       yes: function(index) {
-        var $sigdiv = $("#signature"),
-          datapair = $sigdiv.jSignature("getData", "base30");
-        window.localStorage.setItem("signature", datapair)
-
         layer.close(index);
+        layer.msg('保存数据...', { icon: 16 ,shade: 0.01 ,time: 1000 });
+
+        var queriedMemberString = window.localStorage.getItem('current_telphone'),
+            queriedMember = JSON.parse(queriedMemberString),
+            post_params = {
+              "member": queriedMember["name"],
+              "telphone": queriedMember["telphone"],
+              "card_number": queriedMember["card_number"],
+              "questionnaire_code": "todo",
+              "questionnaire_name": "todo",
+              "encoded_type": "base30",
+              "signature": $("#signature").jSignature("getData", "base30").join(',')
+            };
+        window.ServerAPI.save_signature(post_params);
+
+        layer.msg('页面跳转...', { icon: 16 ,shade: 0.01 ,time: 1000 });
         window.location.href = 'complete.html';
       }
     });

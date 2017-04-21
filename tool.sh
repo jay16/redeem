@@ -137,8 +137,8 @@ case "$1" in
         git commit -a -m "$2"
          /bin/bash "$0" git:push
     ;;
-    admin_pages)
-        bash lib/scripts/admin_pages.sh
+    pages)
+        bash lib/scripts/offline_pages.sh
     ;;
     *)
         echo "Usage: $SCRIPTNAME {config|start|stop|start_redis|stop_redis|restart|deploy}" >&2

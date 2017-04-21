@@ -81,7 +81,13 @@ class ApplicationController < Sinatra::Base
       'sync-questionnaire' => '同步问卷',
       'sync-store' => '同步店铺',
       'user' => '管理员管理',
-      'signature' => '签名管理'
+      'signature' => '签名管理',
+      'complete' => '兑换完成',
+      'entry' => '消费录入',
+      'exchange' => '选择礼物',
+      'questionnaire' => '问卷调查',
+      'search' => '客户信息',
+      'signature' => '签名兑换完成'
     }
     @title = page_titles.fetch(params[:page].split('.')[0], "unknown")
     erb :"generate/#{params[:part]}/#{params[:page]}", layout: :"generate/#{params[:part]}/layout/layout.html"

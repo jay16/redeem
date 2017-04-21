@@ -2,8 +2,14 @@
 <html>
 <head lang="en">
 <meta charset="UTF-8">
-<title>太古汇</title>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>太古汇 - 问卷调查</title>
 <meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -12,61 +18,43 @@
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/questionnaire.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/complete.css">
 <style>
-.xg .suo img {
-	width: 20%;
-	-ms-transform: rotate(45deg); 	/* IE 9 */
-	-moz-transform: rotate(45deg); 	/* Firefox */
-	-webkit-transform: rotate(45deg); /* Safari 和 Chrome */
-	-o-transform: rotate(45deg); 	/* Opera */
-}
-.mm img {
-	width: 0.16rem;
-	margin: 0.28rem 0.35rem 0 0.1rem;
-	-ms-transform: rotate(45deg); 	/* IE 9 */
-	-moz-transform: rotate(45deg); 	/* Firefox */
-	-webkit-transform: rotate(45deg); /* Safari 和 Chrome */
-	-o-transform: rotate(45deg); 	/* Opera */
+.ewm {
+	margin: 121px auto;
+	padding: 1.4rem 0;
+    float:center;
 }
 </style>
 </head>
 <body>
+
 <!-- 加载 -->
 <div id="jiaZai"> <img src="assets/images/loadbg.png"> </div>
+
 <!-- 内容 -->
 <!-- 内容 -->
 <div id="main">
   <div class="title">
-    <div> <img src="assets/images/dhlp2.png"> <img src="assets/images/diaoCha.png"> 问卷调查 </div>
-    <div>Survey</div>
+    <div><img src="assets/images/wc.png"> 兑换完成 </div>
+    <div>Redeem - Completed</div>
   </div>
-  <div class="questionnaire">
-    <div class="wt">您在远洋太古汇经常逛的商铺是哪些 （限填三项）
-      <input type="hidden" name="ftitleid" id="ftitleid" value="3"/>
-      <input type="hidden" name="ftype" id="ftype" value="2"/>
-    </div>
-    <div class="kx"> <img src="assets/images/diaoCha.png"> 填空题 </div>
-    <div class="xz">
-      <textarea id="ques_hui">cs</textarea>
-    </div>
+
+  <div class="ewm">
+    <div class="xin"> <a href="javascript:void (0)"> 开始新调查<br/>New Survey </a> </div>
   </div>
-  <div class="anNiu"> <a href="questniare.html" class="sy"> 上一页<br/>
-    Previous </a> <a href="javascript:void (0)" class="xy"> 下一页<br/>
-    Next </a> </div>
 </div>
 <div class="gn">
   <div class="dj">
-    <div> <img src="assets/images/gn1.png" class="xs" alt=""> <img src="assets/images/gn2.png" class="yc" alt=""> </div>
-    <div><img src="assets/images/gn2.png"></div>
+
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
-    <p class="lp"><a href="home/search.html"><img src="assets/images/dhlp.png">礼品兑换</a></p>
+    <p class="lp"><a href="search.html"><img src="assets/images/dhlp.png">礼品兑换</a></p>
     <p class="mm"><img src="assets/images/bi.png" class="bi" alt="">修改密码</p>
-    <p class="tuichu"><img src="assets/images/dl2.png">退出登录</p>
+    <p class="tuichu" onclick="window.TKH.logout();"><img src="assets/images/dl2.png">退出登录</p>
     <div class="renWu"> <img src="assets/images/renWu.png">
-      <p>18602897807</p>
+      <p id="userGid"></p>
       <p class="time"></p>
     </div>
   </div>
@@ -80,12 +68,14 @@
         <input type="password" id="oldPassword" placeholder="旧密码"/>
         <input type="password" id="newPassword" placeholder="新密码"/>
         <input type="password" id="rePassword" placeholder="再次输入新密码"/>
-        <a href="javascript:void (0)" class="cs mima">确认修改密码</a> </div>
+        <a onclick='window.ServerAPI.resetPassword();' href="javascript:void(0);" class="cs mima">确认修改密码</a> </div>
     </div>
   </div>
 </div>
 </body>
 <!-- Javascripts -->
+<script src="assets/javascripts/server_api.js"></script>
+<script src="assets/javascripts/tkh.js"></script>
 <script src="assets/javascripts/remJs.js"></script>
 <script src="assets/javascripts/jquery-1.8.0.min.js"></script>
 <script src="assets/javascripts/plugins/layer/layer.js"></script>
@@ -153,6 +143,7 @@
                 })
              })
 
+
              $('.cs').on('click',function(){
                 if(!$(this).hasClass('mima'))return false;
                  var oldpass = $('#oldPassword').val();
@@ -192,69 +183,12 @@
      });
 </script>
 <script>
-     window.onload=function(){
-        $('#jiaZai').hide();
-        $('#main').show();
-        // $('#others').click(function(){
-        //     $('.xz .xuanZhong').removeClass('xuanZhong');
-        // });
-        //商品选中
-        $('.xz>div').click(function(){
-            if($('#ftype').val() == '0'){
-                if($('.xz').children('.xuanZhong').length==1){
-                    $('.xz .xuanZhong').removeClass('xuanZhong');
-                    $(this).addClass('xuanZhong');
-                }else{
-					$(this).addClass('xuanZhong');
-				}
-            }else{
-                // $('#others').removeClass('xuanZhong');
-                if($(this).hasClass('xuanZhong')) $(this).removeClass('xuanZhong');
-                else $(this).addClass('xuanZhong');
-            }
+//update cynthia
+    $(function(){
+        $('.xin').on('click',function(){
+			 location.href = 'search.html';
+           // location.href = '../home/chongxin'
         });
-                $('.xy').on('click',function(){
-            var titid = $('#ftitleid').val();
-            var fnum = '02801701140001';
-            var valueid = '';var vallue ='';var title = '';
-							var fvalueid = ' ';
-				var fvalue = $('#ques_hui').val();
-				var ftitleid = titid;
-			            var fcardnum = '00000930';
-            var fname = '成都远洋太古汇顾客调查问卷';
-            var loading = layer.msg('提交中...', {
-                  icon: 16
-                  ,shade: 0.01
-                });
-            location.href = 'complete.html';
-             /*$.ajax({
-                url: "question/cachequestion",
-                type: "post",
-                data: {
-                    'fcardnum':fcardnum,
-                    'ftitelid':ftitleid,
-                    'fnum':fnum,
-                    'fname':fname,
-                    'fvalueid':fvalueid,
-                    'fvalue':fvalue
-                },
-                dataType:"json",
-                success: function(ret) {
-                    layer.closeAll();
-                    if (ret.status == 1) {
-                                                location.href = '../question/questniare?fname=&num=5&exchange=';
-                                            }else{
-                        layer.msg(ret.message, {
-                          time: 2000,
-                          // btn: ['明白了', '知道了', '哦']
-                        });
-                    };
-                }
-            })*/
-        });
-            }
-	$('.ques_others').focus(function(){
-		$(this).parent().find('#others').addClass('xuanZhong');
-	})
+    });
 </script>
 </html>

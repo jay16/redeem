@@ -320,6 +320,6 @@ window.ServerAPI = {
   }
 }
 
-if(window.location.protocol === 'file:') {
+if(window.location.protocol === 'file:' || window.location.host === 'localhost:4567') {
   window.ServerAPI.server = 'http://localhost:4567';
 }

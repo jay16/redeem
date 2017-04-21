@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>太古汇 - 礼品兑换</title>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css">
+  <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css">
+  <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css">
+  <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css">
+  <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/exchange.css">
+  <style>
+    .disabled { pointer-events: none; background-color: gainsboro !important; }
+    .layui-layer-btn a { font-size: 12px; }
+    .anNiu a{width:30%;}
+    .ptt1{color:#fff;font-size:0.5rem;text-align:center;padding-bottom:10px;}
+    #signatureparent{color:#000;padding-bottom:10px;}
+    #signature{margin:0px auto;background:#fff;color:#000;}
+    #jSignature{height:300px;width:70%;}
+    #main{display:block;visibility:hidden;}
+  </style>
+</head>
+<body>
+  <!-- 加载 -->
+  <div id="jiaZai">
+    <img src="assets/images/loadbg.png">
+  </div>
+  <!-- 内容 -->
+  <!-- 内容 -->
+  <div id="main" style="height: 100%;">
+    <div class="title">
+      <div>
+        <img src="assets/images/dhlp2.png">礼品兑换 -
+        <img src="assets/images/bi.png" style="width:0.2rem;padding-right:5px;opacity:0.8">签名完成兑换</div>
+      <div>
+        Gift Redemption - Sign off
+      </div>
+      </div>
+    <div class="content">
+      <div id="signatureparent">
+        <p class="ptt1">请在此签字，完成兑换</p>
+        <div id="signature"></div>
+      </div>
+    </div>
+    <div class="anNiu">
+      <a href="javascript:void (0)" class="qxDuiHuan clearsign">
+        <img src="assets/images/duiHuan.png">清除
+        <br/>clear
+      </a>
+      <a href="javascript:void(0)" onClick="window.TKH.signatureDone();" class="duiHuan">完成兑换
+        <br/>Done
+      </a>
+    </div>
+  </div>
+
+  <div class="gn">
+    <div class="dj">
+      <div>
+        <img src="assets/images/gn1.png" class="xs" alt="">
+        <img src="assets/images/gn2.png" class="yc" alt="">
+      </div>
+      <div>
+        <img src="assets/images/gn2.png">
+      </div>
+    </div>
+    <div class="nr">
+      <div>礼品兑换系统</div>
+      <p class="lp">
+        <a href="search.html">
+          <img src="assets/images/dhlp.png">礼品兑换</a></p>
+      <p class="mm">
+        <img src="assets/images/bi.png" class="bi" alt="">修改密码</p>
+      <p class="tuichu" onclick="window.TKH.logout();">
+        <img src="assets/images/dl2.png">退出登录</p>
+      <div class="renWu">
+        <img src="assets/images/renWu.png">
+        <p id="userGid"></p>
+        <p class="time"></p>
+      </div>
+    </div>
+  </div>
+  <div class="xg">
+    <div>
+      <a href="javascript:void (0)" class="gb">
+        <img src="assets/images/gb.png"></a>
+      <div class="xg_content">
+        <div class="suo">
+          <img src="assets/images/bi.png"></div>
+        <div class="xg_info">
+          <p class="title">修改密码</p>
+          <input type="password" id="oldPassword" placeholder="旧密码" />
+          <input type="password" id="newPassword" placeholder="新密码" />
+          <input type="password" id="rePassword" placeholder="再次输入新密码" />
+          <a onclick='window.ServerAPI.resetPassword();' href="javascript:void(0);" class="cs mima">确认修改密码</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- Javascripts -->
+<script src="assets/javascripts/jquery-1.8.0.min.js"></script>
+<script src="assets/javascripts/remJs.js"></script>
+<script src="assets/javascripts/plugins/layer/layer.js"></script>
+<script src="assets/javascripts/server_api.js"></script>
+<script src="assets/javascripts/tkh.js"></script>
+<script src="assets/javascripts/side.js"></script>
+<!-- 新加js start -->
+<script src="assets/javascripts/modernizr.js"></script>
+<script src="assets/javascripts/jSignature.js"></script>
+<script src="assets/javascripts/jSignature.CompressorBase30.js"></script>
+<script src="assets/javascripts/jSignature.CompressorSVG.js"></script>
+<script src="assets/javascripts/jSignature.UndoButton.js"></script>
+<script src="assets/javascripts/plugins/signhere/jSignature.SignHere.js"></script>
+<!-- 新加js end -->
+<script>/*====签名 start===*/
+  $(function() {
+    var $sigdiv = $("#signature");
+    $sigdiv.jSignature({
+      'UndoButton': false
+    });
+    $(".clearsign").bind("click",
+    function() {
+      $sigdiv.jSignature("reset");
+    });
+
+    datapair = $sigdiv.jSignature("getData", "base30");
+    console.log(datapair);;
+    $('#main').css({"visibility": "visible"});
+
+    $sigdiv.jSignature("setData", "data:image/jsignature;base30,7M210226663362200Z34340Y378cfmjhid86Z5qq1D1M1U1J1y_3RZ46b7eeb852Y78dhgcba6Z579994200Y45334dabegkh_aM454765444222255aec966a7753_2vbbbhfda7533550Z37aa65364543_ePZ1000Y33434341_2X678c9bdcbbc9");
+  })
+  /*====签名 end===*/
+  </script>
+</html>

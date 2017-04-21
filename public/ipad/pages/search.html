@@ -1,48 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head lang="en">
 <meta charset="UTF-8">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="renderer" content="webkit">
-<title>客户信息 - 礼品兑换</title>
+<title>太古汇 - 礼品兑换</title>
 <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1492782987">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1492782987">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1492782987">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1492782987">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/search.css?timestamp=1492782987">
-<script src="assets/javascripts/server_api.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/tkh.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/remJs.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1492782987"></script>
-</head>
-<body>
-<div id="jiaZai">
-  <img src="assets/images/loadbg.png?timestamp=1492782987">
-</div>
-
-<script src="assets/javascripts/distpicker.data.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/distpicker.js?timestamp=1492782987"></script>
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/search.css">
 <style>
 #layui-layer1{ top:223px !important; }
 .tishibuton .cs { margin: 0.5rem !important; }
 .tishibuton .button { margin: 0.5rem !important; }
 </style>
+</head>
+<body>
+<!-- 加载 -->
+<div id="jiaZai">
+  <img src="assets/images/loadbg.png">
+</div>
+<!-- 内容 -->
 <div id="main">
   <div class="title">
     <div>
-      <img src="assets/images/dhlp2.png?1492782987"">礼品兑换 -
-      <img src="assets/images/renWu2.png?1492782987"">客户信息
+      <img src="assets/images/dhlp2.png">礼品兑换 -
+      <img src="assets/images/renWu2.png">客户信息
     </div>
     <div>Gift Redemption - Customer</div>
   </div>
@@ -52,7 +43,7 @@
   <div class="search">
     <input type="tel" id="search" placeholder="手机号码 / Mobile phone number" value="" />
     <a href="javascript:void(0)" onClick="window.TKH.queryMemberInfoJSON();" id="btn_search">
-      <img src="assets/images/search.png?1492782987"">
+      <img src="assets/images/search.png">
     </a>
   </div>
   <div class="content">
@@ -186,30 +177,30 @@
     </p>
 
     <p class="sm">请扫描二维码, 同步在微信端绑定会员卡 </p>
-    <p class="sm"><img src="assets/images/ewm.png?1492782987"" style="max-width:200px; max-height: 200px;" /></p>
+    <p class="sm"><img src="assets/images/ewm.png" style="max-width:200px; max-height: 200px;" /></p>
   </div>
 </div>
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="assets/images/gn1.png?1492782987"" class="xs" alt="">
-      <img src="assets/images/gn2.png?1492782987"" class="yc" alt="">
+      <img src="assets/images/gn1.png" class="xs" alt="">
+      <img src="assets/images/gn2.png" class="yc" alt="">
     </div>
     <div>
-      <img src="assets/images/gn2.png?1492782987"">
+      <img src="assets/images/gn2.png">
     </div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="assets/images/dhlp.png?1492782987"">礼品兑换</a></p>
+        <img src="assets/images/dhlp.png">礼品兑换</a></p>
     <p class="mm">
-      <img src="assets/images/bi.png?1492782987"" class="bi" alt="">修改密码</p>
+      <img src="assets/images/bi.png" class="bi" alt="">修改密码</p>
     <p class="tuichu" onClick="window.TKH.logout();">
-      <img src="assets/images/dl2.png?1492782987"">退出登录</p>
+      <img src="assets/images/dl2.png">退出登录</p>
     <div class="renWu">
-      <img src="assets/images/renWu.png?1492782987"">
+      <img src="assets/images/renWu.png">
       <p id="userGid"></p>
       <p class="time">123</p>
     </div>
@@ -218,10 +209,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="assets/images/gb.png?1492782987""></a>
+      <img src="assets/images/gb.png"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="assets/images/bi.png?1492782987""></div>
+        <img src="assets/images/bi.png"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -231,6 +222,16 @@
     </div>
   </div>
 </div>
+</body>
+<!-- Javascripts -->
+<script src="assets/javascripts/remJs.js"></script>
+<script src="assets/javascripts/jquery-1.8.0.min.js"></script>
+<script src="assets/javascripts/plugins/layer/layer.js"></script>
+<script src="assets/javascripts/distpicker.data.js"></script>
+<script src="assets/javascripts/distpicker.js"></script>
+<script src="assets/javascripts/server_api.js"></script>
+<script src="assets/javascripts/tkh.js"></script>
+<script src="assets/javascripts/side.js"></script>
 <script>
 $(function(){
   $('#live_dz_distpicker,#work_dz_distpicker').distpicker({autoSelect: false});
@@ -303,12 +304,4 @@ $(function(){
   $("userGid").html(userGid);
 })
 </script>
-
-<script>
-  window.onload = function() {
-    $('#jiaZai').hide();
-    $('#main').show();
-  }
-</script>
-</body>
 </html>

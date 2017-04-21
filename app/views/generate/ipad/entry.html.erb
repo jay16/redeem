@@ -1,47 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-Control" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="renderer" content="webkit">
-<title>消费录入 - 礼品兑换</title>
-<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1492782987">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1492782987">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1492782987">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1492782987">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/entry.css?timestamp=1492782987">
-<script src="assets/javascripts/server_api.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/tkh.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/remJs.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1492782987"></script>
-<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1492782987"></script>
-</head>
-<body>
-<div id="jiaZai">
-  <img src="assets/images/loadbg.png?timestamp=1492782987">
-</div>
-
 <div id="main">
   <div class="title">
     <div>
-      <img src="assets/images/dhlp2.png?timestamp=1492782987">礼品兑换 -
-      <img src="assets/images/qian.png?timestamp=1492782987">消费录入</div>
+      <img src="/images/dhlp2.png?timestamp=<%= Time.now.to_i %>">礼品兑换 -
+      <img src="/images/qian.png?timestamp=<%= Time.now.to_i %>">消费录入</div>
     <div>Gift Redemption - Purchase Entry</div></div>
   <div class="content">
     <div class="content_1">
       <div class="act">
         <p>
-          <img src="assets/images/qian.png?timestamp=1492782987">消费信息录入 / Purchase Entry</p></div>
+          <img src="/images/qian.png?timestamp=<%= Time.now.to_i %>">消费信息录入 / Purchase Entry</p></div>
     </div>
     <div class="content_2">
       <a href="javascript:void (0)" class="xinZeng" onClick="window.TKH.addRecordInput();">增加记录 / Add record</a>
@@ -60,31 +27,31 @@
 <div class="xuanZe">
   <div>
     <a href="javascript:void (0)" class="xuanZe_gb">
-      <img src="assets/images/gb.png?timestamp=1492782987"></a>
+      <img src="/images/gb.png?timestamp=<%= Time.now.to_i %>"></a>
     <p>
-      <img src="assets/images/xuanZe.png?timestamp=1492782987">请选择商户 / Find merchant</p>
+      <img src="/images/xuanZe.png?timestamp=<%= Time.now.to_i %>">请选择商户 / Find merchant</p>
     <div class="hangHu"></div>
   </div>
 </div>
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="assets/images/gn1.png?timestamp=1492782987" class="xs" alt="">
-      <img src="assets/images/gn2.png?timestamp=1492782987" class="yc" alt=""></div>
+      <img src="/images/gn1.png?timestamp=<%= Time.now.to_i %>" class="xs" alt="">
+      <img src="/images/gn2.png?timestamp=<%= Time.now.to_i %>" class="yc" alt=""></div>
     <div>
-      <img src="assets/images/gn2.png?timestamp=1492782987"></div>
+      <img src="/images/gn2.png?timestamp=<%= Time.now.to_i %>"></div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="assets/images/dhlp.png?timestamp=1492782987">礼品兑换</a></p>
+        <img src="/images/dhlp.png?timestamp=<%= Time.now.to_i %>">礼品兑换</a></p>
     <p class="mm">
-      <img src="assets/images/bi.png?timestamp=1492782987" class="bi" alt="">修改密码</p>
+      <img src="/images/bi.png?timestamp=<%= Time.now.to_i %>" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="assets/images/dl2.png?timestamp=1492782987">退出登录</p>
+      <img src="/images/dl2.png?timestamp=<%= Time.now.to_i %>">退出登录</p>
     <div class="renWu">
-      <img src="assets/images/renWu.png?timestamp=1492782987">
+      <img src="/images/renWu.png?timestamp=<%= Time.now.to_i %>">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -93,10 +60,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="assets/images/gb.png?timestamp=1492782987"></a>
+      <img src="/images/gb.png?timestamp=<%= Time.now.to_i %>"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="assets/images/bi.png?timestamp=1492782987"></div>
+        <img src="/images/bi.png?timestamp=<%= Time.now.to_i %>"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -131,7 +98,7 @@ $(function() {
            <p>店铺名称 / Merchant</p>\
            <input type="text" placeholder="店铺名称" class="store-name" value="' + record["name"] + '" />\
            <input type="hidden" placeholder="GNDGID" class="gndgid" value="' + record["gndgid"] + '" />\
-          <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);" class="search"><img src="assets/images/search.png?timestamp=1492782987"/></a>\
+          <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);" class="search"><img src="/images/search.png?timestamp=<%= Time.now.to_i %>"/></a>\
          </div>\
          <div>\
            <p>流水号 / Serial Number</p>\
@@ -229,12 +196,3 @@ $(function() {
   });
 });
 </script>
-
-<script>
-  window.onload = function() {
-    $('#jiaZai').hide();
-    $('#main').show();
-  }
-</script>
-</body>
-</html>

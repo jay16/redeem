@@ -285,6 +285,23 @@ window.ServerAPI = {
       }
     });
   },
+  save_signature: function(data) {
+    console.log('-------->save_signature<----------');
+    console.log(data);
+    console.log('--------<save_signature>----------');
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/signature",
+      type: 'post',
+      async: false,
+      dataType: 'json',
+      data: data,
+      timeout: 10000,
+      success: function(xhr) {
+        console.log(xhr);
+      }
+    });
+  },
   truncate_table: function(table_name) {
     console.log('-------->truncate_table<----------');
     console.log(table_name);
@@ -303,6 +320,6 @@ window.ServerAPI = {
   }
 }
 
-if(window.location.protocol === 'file:') {
+if(window.location.protocol === 'file:' || window.location.host === 'localhost:4567') {
   window.ServerAPI.server = 'http://localhost:4567';
 }
