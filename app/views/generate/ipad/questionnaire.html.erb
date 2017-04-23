@@ -28,10 +28,12 @@
   <div class="dj">
     <div>
       <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
-      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt=""></div>
-    <div>
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt="">
+    </div>
+
+    <div style="display:none;">
       <img src="/images/gn2.png?timestamp=<%= timestamp %>"></div>
-  </div>
+    </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
@@ -317,7 +319,7 @@ function actionLastPage() {
   } else {
     var params = window.TKH.params();
     if(params["from"] &&
-      (params["from"] === 'entry.html' || params["from"] === 'search.html')) {
+      (params["from"] === 'exchange.html' || params["from"] === 'search.html')) {
       window.location.href = params["from"];
     } else {
       window.location.href = "search.html";

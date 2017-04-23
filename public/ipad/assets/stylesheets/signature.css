@@ -1,0 +1,326 @@
+#main {
+    background: url('../images/bg-blur.jpg') no-repeat center;
+    background-size: 100% 100%;
+    -webkit-animation: fadeIn .6s backwards;
+    display: none;
+}
+@media only screen and (min-width: 1366px){
+    #main { background-size: 100% 100%;}
+}
+
+.title img{width: 0.5rem;margin-top: -0.1rem;}
+.title{
+    color: #ddd;
+    font-size: 0.6rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.content{
+    width: 90%;
+    margin: 0.6rem auto 0;
+}
+.content_1{overflow: hidden;}
+.content_1>div{
+    float: left;
+    width: auto;
+    color: #777;
+    background-color: #505050;
+    font-size: 0.4rem;
+    text-align: center;
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+}
+.content_1>div:nth-child(2){margin: 0 0.5%;}
+.content_1 .act{
+    color: #fdc82f;
+    background-color: #303030;
+}
+.act img{
+    width: auto;
+    height: 0.4rem;
+    margin: -0.1rem 0.2rem 0 0;
+}
+.content_1 p{
+    line-height: 1rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.content_2{
+    background-color: #303030;
+    padding: 0 0.8rem 0.3rem;
+    overflow: auto;
+}
+.content_2>div>div{margin-top: 0.3rem;}
+.content_2 p{
+    color: #888;
+    font-size: 0.34rem;
+    text-indent: 10px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.content_2 .xf{
+    width: 100%;
+    padding: 0;
+    display: inline-block;
+    max-width: 800px;
+    cursor: pointer;
+}
+.xf p:nth-child(1){font-weight: bold;}
+.xf p:nth-child(2){
+    color: #fff;
+    background-color: #505050;
+    margin:0.2rem 0 0 0;
+    line-height: 0.8rem;
+}
+.xf img{
+    width: 0.4rem;
+    margin: 0 0.1rem 0 0.2rem;
+}
+
+
+
+.anNiu{
+    width: 90%;
+    margin: 0.6rem auto 0;
+    text-align: center;
+}
+.anNiu a{
+    font-size: 0.34rem;
+    padding: 0.2rem 0;
+    margin-bottom: 0.4rem;
+    display: inline-block;
+    width: 18%;
+    position: relative;
+}
+.anNiu span{
+    position: absolute;
+    width: 0.6rem;
+    line-height: 0.6rem;
+    border-radius: 100%;
+    text-align: center;
+    top: 5%;
+    right: 5%;
+    color: #fff;
+    background-color: #fc1602;
+    display: none;
+}
+.anNiu img{
+    width: 0.4rem;
+}
+@media only screen and (max-width: 766px){
+    .anNiu a{width: 100%;}
+    .anNiu span{
+        width: 0.8rem;
+        line-height: 0.8rem;
+        top: 10%;
+        right: 2%;
+    }
+}
+.xy,.sy{
+    background-color: #B18C20;
+    color: #222;
+}
+.xy:active,.sy:active{background-color: #fdc82f;}
+.duiHuan,.qxDuiHuan,.tiaoGuo{
+    color: #ddd;
+
+}
+.duiHuan{ background: #86a9d0;}
+.duiHuan:active{ background: #96bde9;}
+.qxDuiHuan{ background: #db5b55;}
+.qxDuiHuan:active{ background: #ff5e58;}
+.tiaoGuo{ background: #5db45f;}
+.tiaoGuo:active{ background: #79d67b;}
+.tiaoGuo img{margin-top: -0.12rem;}
+
+.xg input{
+    background-color: inherit;
+    border-bottom: 1px #505050 solid;
+    color:#ddd;
+}
+.xg input:focus{
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(253,200,47,.6);
+    -webkit-transition:box-shadow .7s;
+}
+
+.xg .title{margin-top: 0;}
+
+/*.xg .cs{width: 89%;}*/
+
+.xg .suo{margin-top: 2rem;}
+
+
+.gouXuan{
+    background-color: rgba(0,0,0,0.6);
+    color: #ccc;
+    font-size: 0.4rem;
+    width: 90%;
+    margin: 0 auto;
+    padding: 0.3rem 0;
+}
+.gouXuan img{
+    width: 0.4rem;
+    margin: -0.1rem 0.1rem 0 0.5rem;
+}
+
+.shangPing{
+    width: 90%;
+    margin: 0.5rem auto;
+    text-align: center;
+}
+.shangPing>div{
+    width: 100%;
+    max-width: 840px;
+    min-height: 4rem;
+    display: inline-block;
+    background-color: #fff;
+    font-size: 0.5rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    cursor: pointer;
+    position: relative;
+}
+.shangPing>div>img{
+    width: auto;
+    height: 20%;
+    margin: 2.6% 0 1%;
+}
+.gou{
+    position: absolute;
+    width: 6%;
+    right: 1%;
+    top: 5%;
+    display: none;
+}
+.xuanZhong{box-shadow:0 0 0 5px #e21116;}
+.xuanZhong .gou{display: block;}
+
+.leiJi{
+    background-color: rgba(48, 45, 170, 0.60);
+    color: #ccc;
+    font-size: 0.4rem;
+    width: 90%;
+    margin: 0 auto;
+    padding: 0.3rem 0;
+}
+.leiJi img{
+    width: 0.4rem;
+    margin: -0.1rem 0.1rem 0 0.5rem;
+}
+
+.xin p{
+    position: absolute;
+    width: 100%;
+    top: 30%;
+}
+.xin span{display: block;}
+.xin span:nth-child(1){
+    font-weight: bold;
+    font-size: 0.6rem;
+}
+
+
+.dhlp{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: none;
+}
+.dhlp>div{
+    background-color: #333;
+    width: 94%;
+    overflow: hidden;
+    margin: 3rem auto 0;
+}
+.dhlp .gb{
+    float: right;
+    width: 0.5rem;
+    height: 0.5rem;
+    display: block;
+    margin: 0.3rem 0.5rem 0 0;
+}
+.dhlp .gb img{vertical-align: top;}
+
+.dhlp_content{margin-top: 1.6rem;}
+.dhlp_content>div{float:left;}
+.dhlp .suo{
+    width: 32%;
+    height:8rem;
+    border-right: 1px #fff solid;
+}
+.dhlp .suo img{
+    width: 50%;
+    margin: 0 auto;
+    display: block;
+}
+.dhlp_info{
+    width: 58%;
+    padding: 0 4% 8%;
+}
+.dhlp .title{
+    font-size: 0.8rem;
+    color: #ccc;
+    text-align: center;
+    margin: 0.3rem 0;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.dhlp .sm{
+    font-size: 0.4rem;
+    color: #888;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+.dhlp_info input{
+    background-color: inherit;
+    border-radius: 4px;
+    width: 100%;
+    height: 1.1rem;
+    font-size: 14px;
+    text-indent: 14px;
+    color: #fff;
+    border-bottom: 1px #ccc solid;
+}
+.dhlp_info input:focus{
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(253,200,47,.6);
+    -webkit-transition:box-shadow .7s;
+}
+.dhlp_info .bz{
+    font-size: 0.4rem;
+    color: #ccc;
+    text-indent: 14px;
+    margin-top: 0.5rem;
+}
+.dhlp .cs{
+    float: right;
+    padding: 0 0.6rem;
+    line-height: 1rem;
+    font-size: 14px;
+    color: #222;
+    background-color: #B18C20;
+    text-align: center;
+    margin: 0.5rem 0;
+}
+.dhlp_info>div{
+    background-color: #111;
+    height: 6rem;
+    padding: 1px 0.8rem 0;
+
+}
+.dhlp_info span{
+    color: #ccc;
+    font-size: 0.5rem;
+    background-color: #111;
+    display: block;
+    line-height: 1.8rem;
+    width: 6rem;
+    text-align: center;
+
+}

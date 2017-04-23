@@ -30,8 +30,8 @@
         <img src="/images/duiHuan.png?timestamp=<%= timestamp %>">清除
         <br/>clear
       </a>
-      <a href="javascript:void(0)" onClick="window.TKH.signatureDone();" class="duiHuan">完成兑换
-        <br/>Done
+      <a href="javascript:void(0)" onClick="window.TKH.signatureDone();" class="duiHuan">
+        完成兑换<br/>Done
       </a>
     </div>
   </div>
@@ -42,7 +42,7 @@
         <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
         <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt="">
       </div>
-      <div>
+      <div style="display:none;">
         <img src="/images/gn2.png?timestamp=<%= timestamp %>">
       </div>
     </div>
@@ -99,12 +99,7 @@
     function() {
       $sigdiv.jSignature("reset");
     });
-
-    datapair = $sigdiv.jSignature("getData", "base30");
-    console.log(datapair);;
     $('#main').css({"visibility": "visible"});
-
-    $sigdiv.jSignature("setData", "data:image/jsignature;base30,7M210226663362200Z34340Y378cfmjhid86Z5qq1D1M1U1J1y_3RZ46b7eeb852Y78dhgcba6Z579994200Y45334dabegkh_aM454765444222255aec966a7753_2vbbbhfda7533550Z37aa65364543_ePZ1000Y33434341_2X678c9bdcbbc9");
   })
   /*====签名 end===*/
   </script>

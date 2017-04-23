@@ -66,8 +66,8 @@ if(login_state && login_state.length && login_state === 'yes') {
     window.location.href = 'search.html';
   }
 
-  var expiredIN = window.localStorage.getItem("expiredIN");
-  if(expiredIN === null || (new Date()).valueOf() >= parseInt(expiredIN)) {
+  var expiredIn = window.localStorage.getItem("expiredIn");
+  if(expiredIn === null || (new Date()).valueOf() >= parseInt(expiredIn)) {
     window.TKH.loginWithinIPad(current_path);
   }
 

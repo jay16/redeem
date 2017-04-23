@@ -23,7 +23,7 @@ Date.prototype.format = function(format) {
 window.TKH = {
   version: '0.0.4',
   server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
-  userGid: '500020',
+  userGid: '1000020',
   userPwd: 'CAB371810F12B8C2',
   workStation: '172.17.104.164',
   storeCode: '0210',
@@ -93,7 +93,12 @@ window.TKH = {
           window.localStorage.setItem('sClientCookie', clientCookie);
           window.localStorage.setItem('userGid', userGid);
           window.localStorage.setItem('logined', "yes");
-          window.localStorage.setItem('expiredIN', (new Date()).valueOf() + 1 * 60 * 60 * 1000);
+          var current = new Date(),
+              expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
+          current.setTime(expiredIn);
+          window.localStorage.setItem('expiredIn', expiredIn);
+          window.localStorage.setItem('expiredInDate', current);
+
           window.location.href = toPathName;
         } else {
           layer.msg("用户验证失败", { time: 3000 });
@@ -107,13 +112,13 @@ window.TKH = {
         layer.msg("用户验证失败，请重新登录", {
           time: 0,
           btn: ['确定'],
+          btnAlign: 'c',
           yes: function(index) {
             layer.close(index);
             window.localStorage.setItem('logined', "no");
             window.location.href = 'login.html';
           }
         });
-        $(".layui-layer-btn").css({"text-align": "center"});
       }
     });
   },
@@ -163,11 +168,16 @@ window.TKH = {
         if(clientCookie !== null && clientCookie.length > 0) {
           window.localStorage.setItem('sClientCookie', clientCookie);
           window.localStorage.setItem('userGid', userGid);
-          window.localStorage.setItem('expiredIN', (new Date()).valueOf() + 1 * 60 * 60 * 1000);
+          var current = new Date(),
+              expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
+          current.setTime(expiredIn);
+          window.localStorage.setItem('expiredIn', expiredIn);
+          window.localStorage.setItem('expiredInDate', current);
         } else {
           layer.msg('用户验证失败，请重新登录', {
             time: 0,
             btn: ['知道了'],
+            btnAlign: 'c',
             yes: function(index) {
               window.location.href = "login.html";
             }
@@ -747,10 +757,7 @@ window.TKH = {
           window.localStorage.setItem('current_telphone', JSON.stringify(params));
           window.ServerAPI.save_member(params);
         } else {
-          layer.msg(ret["FMSG"], {
-            time: 2000, //2s后自动关闭
-            // btn: ['明白了', '知道了', '哦']
-          });
+          layer.msg(ret["FMSG"], { time: 2000 });
           $('#wx').parent().css('display', 'none');
           $('#live_dz').parent().css('display', 'none');
           $('.bc, .legal-provision-dz').css('display', 'block');
@@ -1281,23 +1288,19 @@ window.TKH = {
             post_param = JSON.parse(questionPostParam);
             window.ServerAPI.save_answer(post_param);
           }
-          layer.msg(outparams["FMSG"], {
-            time: 4000
-          });
+          layer.msg(outparams["FMSG"], { time: 4000 });
           layer.msg('问卷提交成功', {
             time: 0,
             btn: ['确定'],
+            btnAlign: 'c',
             yes: function(index) {
               layer.close(index);
               window.location.href = "signature.html"
             }
           });
-          $(".layui-layer-btn").css("text-align", "center");
         } else {
           if (outparams["FMSG"].length) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
+            layer.msg(outparams["FMSG"], { time: 2000 });
           }
         }
       },
@@ -1314,8 +1317,7 @@ window.TKH = {
   },
   signatureDone: function() {
     layer.msg('确认签字无误？', {
-      time: 0 //不自动关闭
-        ,
+      time: 0,
       btn: ['确定', '取消'],
       yes: function(index) {
         layer.close(index);

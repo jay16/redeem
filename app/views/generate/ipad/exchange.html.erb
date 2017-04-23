@@ -77,9 +77,12 @@
   <div class="dj">
     <div>
       <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
-      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt=""></div>
-    <div>
-      <img src="/images/gn2.png?timestamp=<%= timestamp %>"></div>
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt="">
+    </div>
+
+    <div style="display:none;">
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>">
+    </div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
@@ -176,7 +179,7 @@ $(function() {
         $(this).find('.guoxiao_id').removeClass('xiaochu');
         $(this).find('.guoxiao_amount').removeClass('xiaochu');
         $(this).find('.guoxiao_store').removeClass('xiaochu');
-        $(this).find('.guoxiao').attr('src', '..//images/wu.png');
+        $(this).find('.guoxiao').attr('src', '../images/wu.png');
         $(this).addClass("checked");
       } else {
         $('#today_amount_guo').html(today_amount + jin);
@@ -184,7 +187,7 @@ $(function() {
         $(this).find('.guoxiao_id').addClass('xiaochu');
         $(this).find('.guoxiao_amount').addClass('xiaochu');
         $(this).find('.guoxiao_store').addClass('xiaochu');
-        $(this).find('.guoxiao').attr('src', '..//images/dui.png');
+        $(this).find('.guoxiao').attr('src', '../images/dui.png');
         $(this).removeClass("checked");
       }
     } else {
@@ -196,8 +199,7 @@ $(function() {
   //取消兑换
   $('.qxDuiHuan').on('click', function() {
     layer.msg('确定要取消兑换吗？', {
-      time: 0 //不自动关闭
-      ,
+      time: 0,
       btn: ['确定', '取消'],
       yes: function(index) {
         layer.close(index);
