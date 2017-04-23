@@ -95,4 +95,8 @@ module ApplicationHelper
     Your browser does not support the video#{extname} tag.
     EOF
   end
+
+  def timestamp
+    Time.now.to_i
+  end
 end

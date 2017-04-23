@@ -15,14 +15,14 @@
     color: #ddd;
     font-size: 0.6rem;
     text-align: center;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .prompt{
     font-size: 0.4rem;
     color: #ddd;
     text-align: center;
-    margin-top: 0.8rem;
+    margin-top: 0.4rem;
 }
 
 .search{
@@ -56,7 +56,7 @@
     margin: 0.6rem auto 0;
 }
 .content_1{overflow: hidden;}
-.content_1>div{
+.content_1 > div{
     float: left;
     width: 33%;
     color: #777;
@@ -66,27 +66,29 @@
     padding: 0.2rem 0;
     cursor: pointer;
 }
-.content_1>div:nth-child(2){margin: 0 0.5%;}
+.content_1 > div:nth-child(2){margin: 0 0.5%;}
 .content_1 .act{
     color: #fdc82f;
     background-color: #303030;
 }
-.content_1 p{
+.content_1 p {
     line-height: 1rem;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
 }
 
-.content_2{
+.content_2 {
     background-color: #303030;
-    padding: 0.6rem 0.3rem;
+    padding: 0.6rem 0rem;
     overflow: hidden;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
 }
-.content_2>div{
+.content_2 > div{
     display: none;
     min-height:6rem;
-    max-height: 12rem;
+    max-height: 8rem;
     overflow: auto;
 }
 .content_2 p{
@@ -94,17 +96,17 @@
     font-size: 0.34rem;
     text-indent: 10px;
 }
-.content_2>div>div{
+.content_2 >div > div{
     float: left;
     width: 46%;
     padding: 0 2%;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 .content_2 input{
     width: 100%;
     border-bottom: 1px #505050 solid;
     background-color: inherit;
-    height: 0.8rem;
+    height: 0.6rem;
     color: #ddd;
     text-indent: 10px;
 }
@@ -215,8 +217,8 @@ label {
     display: inline-block;
     margin-bottom: 0;
     vertical-align: middle;
-    width: 100px;
-    max-width:120px;
+    width: 120px;
+    max-width:150px;
 }
 
 .score-field {

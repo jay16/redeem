@@ -151,6 +151,7 @@
     resize: none;
     display: block;
     margin: 0.2rem auto 0;
+    border: white 1px dotted;
 }
 
 .xz div textarea{
@@ -164,3 +165,4 @@
     display: block;
     margin: 0.2rem auto 0;
 }
+.questionnaire-subject-title { color: black; font-size: 24px; }

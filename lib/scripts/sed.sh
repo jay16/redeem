@@ -6,3 +6,6 @@ grep -lr 'geng-question.html' admin/ | xargs -I filepath sed -i '' s#geng-questi
 grep -lr 'geng-gift-info.html' admin/ | xargs -I filepath sed -i '' s#geng-gift-info.html#sync-gift.html#g filepath
 grep -lr 'geng-store-info.html' admin/ | xargs -I filepath sed -i '' s#geng-store-info.html#sync-store.html#g filepath
 grep -lr 'question.html' admin/ | xargs -I filepath sed -i '' s#question.html#questionnaire.html#g filepath
+
+
+grep -lr 'Time.now.to_i' app/views/generate | xargs -I filepath sed -i '' s#Time.now.to_i#timestamp#g filepath

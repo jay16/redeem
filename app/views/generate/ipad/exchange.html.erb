@@ -11,13 +11,13 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="/images/dhlp2.png?timestamp=<%= Time.now.to_i %>">礼品兑换 - 选择礼品</div>
+      <img src="/images/dhlp2.png?timestamp=<%= timestamp %>">礼品兑换 - 选择礼品</div>
     <div>Gift Redemption - Select Gift</div></div>
   <div class="content">
     <div class="content_1">
       <div class="act">
         <p>
-          <img src="http://project.chenfeng.co/taikooli/public//image/qian.png?timestamp=<%= Time.now.to_i %>">可兑换的消费记录(限当日) / Redeemable</p></div>
+          <img src="/images/qian.png?timestamp=<%= timestamp %>">可兑换的消费记录(限当日) / Redeemable</p></div>
     </div>
     <div class="content_2">
     </div>
@@ -26,27 +26,27 @@
     <a href="javascript:void (0)" class="sy">上一页
       <br/>Previous</a>
     <a href="javascript:void (0)" class="duiHuan">
-      <img src="/images/duiHuan.png?timestamp=<%= Time.now.to_i %>">兑换
+      <img src="/images/duiHuan.png?timestamp=<%= timestamp %>">兑换
       <br/>Redeem
       <span>99</span></a>
     <a href="javascript:void (0)" class="qxDuiHuan">
-      <img src="/images/quXiao.png?timestamp=<%= Time.now.to_i %>">取消兑换
+      <img src="/images/quXiao.png?timestamp=<%= timestamp %>">取消兑换
       <br/>Undo
       <span>99</span></a>
     <a style="display:none;" href="javascript:void (0)" onclick="window.location.href='complete.html'"  class="tiaoGuo">
-      <img src="/images/tiaoGuo.png?timestamp=<%= Time.now.to_i %>">跳过问卷
+      <img src="/images/tiaoGuo.png?timestamp=<%= timestamp %>">跳过问卷
       <br/>Skip survey
       <span>99</span></a>
     <a style="display:none;" href="javascript:void (0)" class="xy" onclick="window.location.href='signature.html'">下一页
       <br/>Next</a></div>
   <div class="gouXuan">
-    <img src="/images/dhlp.png?timestamp=<%= Time.now.to_i %>">已勾选的当日消费：￥
+    <img src="/images/dhlp.png?timestamp=<%= timestamp %>">已勾选的当日消费：￥
     <span id="today_amount_guo">0</span>,可兑换：</div>
   <div class="shangPing jin">
 
   </div>
   <div class="leiJi" style="display: none;">
-    <img src="/images/dhlp.png?timestamp=<%= Time.now.to_i %>">2017：累积消费 ￥ - 已兑换 ￥0 - 本次兑换 ￥
+    <img src="/images/dhlp.png?timestamp=<%= timestamp %>">2017：累积消费 ￥ - 已兑换 ￥0 - 本次兑换 ￥
     <span id="ben_exchange"></span>= 剩余 ￥
     <span id="shen_exchange">
       <input type="hidden" value=""></span>， 暂无可累积兑换礼品</div>
@@ -56,10 +56,10 @@
   <div class="Inputs" style=""></div>
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="/images/gb.png?timestamp=<%= Time.now.to_i %>"></a>
+      <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
     <div class="dhlp_content">
       <div class="suo">
-        <img src="/images/dhlp.png?timestamp=<%= Time.now.to_i %>"></div>
+        <img src="/images/dhlp.png?timestamp=<%= timestamp %>"></div>
       <div class="dhlp_info">
         <p class="title">兑换礼品/Gift Redemption</p>
         <span id="dui_name">X MolesKine 笔记本</span>
@@ -76,22 +76,22 @@
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="/images/gn1.png?timestamp=<%= Time.now.to_i %>" class="xs" alt="">
-      <img src="/images/gn2.png?timestamp=<%= Time.now.to_i %>" class="yc" alt=""></div>
+      <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt=""></div>
     <div>
-      <img src="/images/gn2.png?timestamp=<%= Time.now.to_i %>"></div>
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>"></div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="/images/dhlp.png?timestamp=<%= Time.now.to_i %>">礼品兑换</a></p>
+        <img src="/images/dhlp.png?timestamp=<%= timestamp %>">礼品兑换</a></p>
     <p class="mm">
-      <img src="/images/bi.png?timestamp=<%= Time.now.to_i %>" class="bi" alt="">修改密码</p>
+      <img src="/images/bi.png?timestamp=<%= timestamp %>" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="/images/dl2.png?timestamp=<%= Time.now.to_i %>">退出登录</p>
+      <img src="/images/dl2.png?timestamp=<%= timestamp %>">退出登录</p>
     <div class="renWu">
-      <img src="/images/renWu.png?timestamp=<%= Time.now.to_i %>">
+      <img src="/images/renWu.png?timestamp=<%= timestamp %>">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -100,10 +100,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="/images/gb.png?timestamp=<%= Time.now.to_i %>"></a>
+      <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="/images/bi.png?timestamp=<%= Time.now.to_i %>"></div>
+        <img src="/images/bi.png?timestamp=<%= timestamp %>"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -129,7 +129,7 @@ $(function() {
         <div class="xf checked">\
           <p>消费金额 - 店铺名称 - 礼品 / Amount - Merchant - Redeemable</p>\
           <p>\
-            <img src="http://project.chenfeng.co/taikooli/public//image/dui.png?timestamp=<%= Time.now.to_i %>" class="guoxiao" alt="">\
+            <img src="/images/dui.png?timestamp=<%= timestamp %>" class="guoxiao" alt="">\
             CNY ' + record["amount"] + '- ' + record["name"] + '\
             <input type="hidden" class="guoxiao_id xiaochu" value="' + record["gndgid"] + '">\
             <input type="hidden" class="guoxiao_gndgid xiaochu" value="' + record["gndgid"] + '">\
@@ -176,7 +176,7 @@ $(function() {
         $(this).find('.guoxiao_id').removeClass('xiaochu');
         $(this).find('.guoxiao_amount').removeClass('xiaochu');
         $(this).find('.guoxiao_store').removeClass('xiaochu');
-        $(this).find('.guoxiao').attr('src', '..//image/wu.png');
+        $(this).find('.guoxiao').attr('src', '..//images/wu.png');
         $(this).addClass("checked");
       } else {
         $('#today_amount_guo').html(today_amount + jin);
@@ -184,7 +184,7 @@ $(function() {
         $(this).find('.guoxiao_id').addClass('xiaochu');
         $(this).find('.guoxiao_amount').addClass('xiaochu');
         $(this).find('.guoxiao_store').addClass('xiaochu');
-        $(this).find('.guoxiao').attr('src', '..//image/dui.png');
+        $(this).find('.guoxiao').attr('src', '..//images/dui.png');
         $(this).removeClass("checked");
       }
     } else {

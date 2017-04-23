@@ -1,57 +1,60 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="/images/dhlp2.png?timestamp=<%= Time.now.to_i %>">礼品兑换 -
-      <img src="/images/qian.png?timestamp=<%= Time.now.to_i %>">消费录入</div>
-    <div>Gift Redemption - Purchase Entry</div></div>
+      <img src="/images/dhlp2.png?timestamp=<%= timestamp %>">礼品兑换 -
+      <img src="/images/qian.png?timestamp=<%= timestamp %>">消费录入
+    </div>
+    <div>Gift Redemption - Purchase Entry</div>
+  </div>
   <div class="content">
     <div class="content_1">
       <div class="act">
         <p>
-          <img src="/images/qian.png?timestamp=<%= Time.now.to_i %>">消费信息录入 / Purchase Entry</p></div>
+          <img src="/images/qian.png?timestamp=<%= timestamp %>">
+          消费信息录入 / Purchase Entry
+        </p>
+      </div>
     </div>
     <div class="content_2">
       <a href="javascript:void (0)" class="xinZeng" onClick="window.TKH.addRecordInput();">增加记录 / Add record</a>
     </div>
   </div>
   <div class="anNiu">
-    <a href="search.html" class="sy">上一页
-      <br/>Previous</a>
-    <a href="javascript:void (0)" class="xy
-    ">下一页
-      <br/>Next</a>
-    <!--<a href="javascript:void (0)" class="bc">-->
-    <!--保存<br/>-->
-    <!--Save-->
-    <!--</a>--></div></div>
+    <a href="search.html" class="sy">上一页<br/>Previous</a>
+    <a href="javascript:void (0)" class="xy">下一页<br/>Next</a>
+  </div>
+</div>
 <div class="xuanZe">
   <div>
     <a href="javascript:void (0)" class="xuanZe_gb">
-      <img src="/images/gb.png?timestamp=<%= Time.now.to_i %>"></a>
+      <img src="/images/gb.png?timestamp=<%= timestamp %>">
+    </a>
     <p>
-      <img src="/images/xuanZe.png?timestamp=<%= Time.now.to_i %>">请选择商户 / Find merchant</p>
+      <img src="/images/xuanZe.png?timestamp=<%= timestamp %>">
+      请选择商户 / Find merchant
+    </p>
     <div class="hangHu"></div>
   </div>
 </div>
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="/images/gn1.png?timestamp=<%= Time.now.to_i %>" class="xs" alt="">
-      <img src="/images/gn2.png?timestamp=<%= Time.now.to_i %>" class="yc" alt=""></div>
+      <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt=""></div>
     <div>
-      <img src="/images/gn2.png?timestamp=<%= Time.now.to_i %>"></div>
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>"></div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="/images/dhlp.png?timestamp=<%= Time.now.to_i %>">礼品兑换</a></p>
+        <img src="/images/dhlp.png?timestamp=<%= timestamp %>">礼品兑换</a></p>
     <p class="mm">
-      <img src="/images/bi.png?timestamp=<%= Time.now.to_i %>" class="bi" alt="">修改密码</p>
+      <img src="/images/bi.png?timestamp=<%= timestamp %>" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="/images/dl2.png?timestamp=<%= Time.now.to_i %>">退出登录</p>
+      <img src="/images/dl2.png?timestamp=<%= timestamp %>">退出登录</p>
     <div class="renWu">
-      <img src="/images/renWu.png?timestamp=<%= Time.now.to_i %>">
+      <img src="/images/renWu.png?timestamp=<%= timestamp %>">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -60,10 +63,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="/images/gb.png?timestamp=<%= Time.now.to_i %>"></a>
+      <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="/images/bi.png?timestamp=<%= Time.now.to_i %>"></div>
+        <img src="/images/bi.png?timestamp=<%= timestamp %>"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -98,7 +101,7 @@ $(function() {
            <p>店铺名称 / Merchant</p>\
            <input type="text" placeholder="店铺名称" class="store-name" value="' + record["name"] + '" />\
            <input type="hidden" placeholder="GNDGID" class="gndgid" value="' + record["gndgid"] + '" />\
-          <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);" class="search"><img src="/images/search.png?timestamp=<%= Time.now.to_i %>"/></a>\
+          <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);" class="search"><img src="/images/search.png?timestamp=1492782987"/></a>\
          </div>\
          <div>\
            <p>流水号 / Serial Number</p>\
@@ -129,58 +132,64 @@ $(function() {
     var val = $(this).val();
     var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
     if (!reg.test(val)) {
-      layer.msg('请正确填写金额！', {
-        time: 2000,
-        //2s后自动关闭
-      });
+      layer.msg('请正确填写金额！', { time: 2000 });
     }
   });
 
   //下一页
-  $('.xy').on('click',
-  function() {
-    var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
-    var name = '',
-    amount = '',
-    num = '',
-    code = '',
-    records = [];
-
-    if ($("input.store-name").length === 1) {
-      if ($(this).hasClass('tiaozhuang') && (!$("input.store-name")[0].value || !$("input.serial-num")[0].value || !$("input.amount")[0].value)) {
-        window.location.href = "exchange.html";
-        return false;
-      }
-      if (!$("input.store-name")[0].value && !$("input.serial-num")[0].value && !$("input.amount")[0].value) {
-        layer.msg('你今日还没有消费记录，请填写消费记录！', {
-          time: 2000,
-          //2s后自动关闭
-        });
-        return false;
-      }
+  $('.xy').on('click', function() {
+    if(!$("input.store-name").length) {
+      layer.msg('你今日还没有消费记录，请填写消费记录！', {time: 2000});
+      is_error = 1;
+      return false;
     }
 
-    var is_error = 0;
+    var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/,
+        name = '',
+        amount = '',
+        serialnum = '',
+        serialnums = [],
+        gndgid = '',
+        record = {},
+        records = [],
+        is_error = 0;
     $(".dq-wrapper").each(function() {
-      var record = {};
       name = $(this).find("input.store-name").val();
       serialnum = $(this).find("input.serial-num").val();
       amount = $(this).find("input.amount").val();
       gndgid = $(this).find("input.gndgid").val();
 
-      if (!name.length || !serialnum.length || !amount.length) {
-        var msg = "";
-        if (!name.length && !msg.length) msg = "店铺名称不能为空！";
-        if (!serialnum.length && !msg.length) msg = "流水号不能为空！";
-        if (!amount.length && !msg.length) msg = "请正确填写金额";
-        layer.msg(msg, {
-          time: 2000
-        });
-
+      if(!name.length) {
+        layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
         is_error = 1;
         return false;
       }
 
+      if(!serialnum.length) {
+        layer.tips('流水号不能为空', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
+        is_error = 1;
+        return false;
+      }
+
+      if(!amount.length) {
+        layer.tips('请正确填写金额', $(this).find('.amount'), { tips: [3, '#faab20'] });
+        is_error = 1;
+        return false;
+      }
+
+      if(serialnum.length > 30) {
+        layer.tips('请输入正确的流水号', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
+        is_error = 1;
+        return false;
+      }
+      if(serialnums.indexOf(serialnum) >= 0) {
+        layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
+        is_error = 1;
+        return false;
+      }
+
+      serialnums.push(serialnum);
+      record = {};
       record["name"] = name;
       record["serialnum"] = serialnum;
       record["amount"] = amount;
@@ -190,7 +199,6 @@ $(function() {
 
     if (!is_error) {
       window.localStorage.setItem("records", JSON.stringify(records));
-      //update cynthia 下一页转向
       window.location.href = "exchange.html"
     }
   });

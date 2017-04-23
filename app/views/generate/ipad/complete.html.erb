@@ -3,7 +3,7 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="/images/wc.png?<%= Time.now.to_i %>">兑换完成</div>
+      <img src="/images/wc.png?<%= timestamp %>">兑换完成</div>
     <div>Redeem - Completed</div></div>
   <div class="ewm">
     <div class="xin">
@@ -17,13 +17,13 @@
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="/images/dhlp.png?<%= Time.now.to_i %>">礼品兑换</a></p>
+        <img src="/images/dhlp.png?<%= timestamp %>">礼品兑换</a></p>
     <p class="mm">
-      <img src="/images/bi.png?<%= Time.now.to_i %>" class="bi" alt="">修改密码</p>
+      <img src="/images/bi.png?<%= timestamp %>" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="/images/dl2.png?<%= Time.now.to_i %>">退出登录</p>
+      <img src="/images/dl2.png?<%= timestamp %>">退出登录</p>
     <div class="renWu">
-      <img src="/images/renWu.png?<%= Time.now.to_i %>">
+      <img src="/images/renWu.png?<%= timestamp %>">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -32,10 +32,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="/images/gb.png?<%= Time.now.to_i %>"></a>
+      <img src="/images/gb.png?<%= timestamp %>"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="/images/bi.png?<%= Time.now.to_i %>"></div>
+        <img src="/images/bi.png?<%= timestamp %>"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />

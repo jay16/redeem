@@ -15,24 +15,25 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/public-style.css?timestamp=<%= Time.now.to_i %>">
-<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/animate.min.css?timestamp=<%= Time.now.to_i %>">
-<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/side.css?timestamp=<%= Time.now.to_i %>">
-<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/tc.css?timestamp=<%= Time.now.to_i %>">
-<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/<%= params[:page].split('.')[0] %>.css?timestamp=<%= Time.now.to_i %>">
-<script src="/javascripts/server_api.js?timestamp=<%= Time.now.to_i %>"></script>
-<script src="/javascripts/tkh.js?timestamp=<%= Time.now.to_i %>"></script>
-<script src="/javascripts/remJs.js?timestamp=<%= Time.now.to_i %>"></script>
-<script src="/javascripts/jquery-1.8.0.min.js?timestamp=<%= Time.now.to_i %>"></script>
-<script src="/javascripts/plugins/layer/layer.js?timestamp=<%= Time.now.to_i %>"></script>
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/public-style.css?timestamp=<%= timestamp %>">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/animate.min.css?timestamp=<%= timestamp %>">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/side.css?timestamp=<%= timestamp %>">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/tc.css?timestamp=<%= timestamp %>">
+<link media="all" type="text/css" rel="stylesheet" href="/stylesheets/<%= params[:page].split('.')[0] %>.css?timestamp=<%= timestamp %>">
+<script src="/javascripts/server_api.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/tkh.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/remJs.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/jquery-1.8.0.min.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/plugins/layer/layer.js?timestamp=<%= timestamp %>"></script>
 </head>
 <body>
 <div id="jiaZai">
-  <img src="/images/loadbg.png?timestamp=<%= Time.now.to_i %>">
+  <img src="/images/loadbg.png?timestamp=<%= timestamp %>">
 </div>
 
 <%= yield %>
 
+<script src="/javascripts/side.js?timestamp=<%= timestamp %>"></script>
 <script>
   window.onload = function() {
     $('#jiaZai').hide();

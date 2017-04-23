@@ -1,5 +1,5 @@
-<script src="/javascripts/distpicker.data.js?timestamp=<%= Time.now.to_i %>"></script>
-<script src="/javascripts/distpicker.js?timestamp=<%= Time.now.to_i %>"></script>
+<script src="/javascripts/distpicker.data.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/distpicker.js?timestamp=<%= timestamp %>"></script>
 <style>
 #layui-layer1{ top:223px !important; }
 .tishibuton .cs { margin: 0.5rem !important; }
@@ -8,8 +8,8 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="/images/dhlp2.png?<%= Time.now.to_i %>"">礼品兑换 -
-      <img src="/images/renWu2.png?<%= Time.now.to_i %>"">客户信息
+      <img src="/images/dhlp2.png?<%= timestamp %>"">礼品兑换 -
+      <img src="/images/renWu2.png?<%= timestamp %>"">客户信息
     </div>
     <div>Gift Redemption - Customer</div>
   </div>
@@ -17,10 +17,12 @@
     请输入手机号码 / Mobile phone number:
   </div>
   <div class="search">
-    <input type="tel" id="search" placeholder="手机号码 / Mobile phone number" value="" />
-    <a href="javascript:void(0)" onClick="window.TKH.queryMemberInfoJSON();" id="btn_search">
-      <img src="/images/search.png?<%= Time.now.to_i %>"">
-    </a>
+    <form action="javascript: window.TKH.queryMemberInfoJSON();">
+      <input type="tel" id="search" placeholder="手机号码 / Mobile phone number" value="" />
+      <a href="javascript:void(0)" onClick="window.TKH.queryMemberInfoJSON();" id="btn_search">
+        <img src="/images/search.png?<%= timestamp %>"">
+      </a>
+    </form>
   </div>
   <div class="content">
     <div class="content_1">
@@ -59,19 +61,19 @@
           <form class="form-inline">
             <div id="live_dz_distpicker">
               <div class="form-group">
-                <label class="sr-only" for="province1">选择省</label>
-                <select class="form-control" id="province1"></select>
+                <label class="sr-only" for="ldd_province">选择省</label>
+                <select class="form-control" id="ldd_province"></select>
               </div>
               <div class="form-group">
-                <label class="sr-only" for="city1">选择市</label>
-                <select class="form-control" id="city1"></select>
+                <label class="sr-only" for="ldd_city">选择市</label>
+                <select class="form-control" id="ldd_city"></select>
               </div>
               <div class="form-group">
-                <label class="sr-only" for="district1">选择区</label>
-                <select class="form-control" id="district1"></select>
+                <label class="sr-only" for="ldd_district">选择区</label>
+                <select class="form-control" id="ldd_district"></select>
               </div>
               <div class="form-group">
-                <input style="display:inline-block;min-width:370px;" type="text" id="live_dz" value="" />
+                <input style="display:inline-block;min-width:320px;" type="text" id="live_dz" value="" />
               </div>
             </div>
           </form>
@@ -82,16 +84,16 @@
           <form class="form-inline">
             <div id="work_dz_distpicker">
               <div class="form-group">
-                <label class="sr-only" for="province2">选择省</label>
-                <select class="form-control" id="province2"></select>
+                <label class="sr-only" for="wdd_province">选择省</label>
+                <select class="form-control" id="wdd_province"></select>
               </div>
               <div class="form-group">
-                <label class="sr-only" for="city2">选择市</label>
-                <select class="form-control" id="city2"></select>
+                <label class="sr-only" for="wdd_city">选择市</label>
+                <select class="form-control" id="wdd_city"></select>
               </div>
               <div class="form-group">
-                <label class="sr-only" for="district2">选择区</label>
-                <select class="form-control" id="district2"></select>
+                <label class="sr-only" for="wdd_district">选择区</label>
+                <select class="form-control" id="wdd_district"></select>
               </div>
               <div class="form-group">
                 <input style="display:inline-block;min-width:370px;" type="text" id="work_dz" value="" />
@@ -103,7 +105,7 @@
           <p>
             <input id='checkbox_legal' type="checkbox" checked="checked" style="width: 0.4rem;" />
             同意并愿意遵守兴业太古汇
-            <a class="legal-provision-link" target="_blank" href="legal-provision.html">会员计划章程及细则</a>
+            <a class="legal-provision-link" href="javascript:void(0);">会员计划章程及细则</a>
           </p>
         </div>
       </div>
@@ -153,30 +155,30 @@
     </p>
 
     <p class="sm">请扫描二维码, 同步在微信端绑定会员卡 </p>
-    <p class="sm"><img src="/images/ewm.png?<%= Time.now.to_i %>"" style="max-width:200px; max-height: 200px;" /></p>
+    <p class="sm"><img src="/images/ewm.png?<%= timestamp %>"" style="max-width:200px; max-height: 200px;" /></p>
   </div>
 </div>
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="/images/gn1.png?<%= Time.now.to_i %>"" class="xs" alt="">
-      <img src="/images/gn2.png?<%= Time.now.to_i %>"" class="yc" alt="">
+      <img src="/images/gn1.png?<%= timestamp %>"" class="xs" alt="">
+      <img src="/images/gn2.png?<%= timestamp %>"" class="yc" alt="">
     </div>
     <div>
-      <img src="/images/gn2.png?<%= Time.now.to_i %>"">
+      <img src="/images/gn2.png?<%= timestamp %>"">
     </div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="/images/dhlp.png?<%= Time.now.to_i %>"">礼品兑换</a></p>
+        <img src="/images/dhlp.png?<%= timestamp %>"">礼品兑换</a></p>
     <p class="mm">
-      <img src="/images/bi.png?<%= Time.now.to_i %>"" class="bi" alt="">修改密码</p>
+      <img src="/images/bi.png?<%= timestamp %>"" class="bi" alt="">修改密码</p>
     <p class="tuichu" onClick="window.TKH.logout();">
-      <img src="/images/dl2.png?<%= Time.now.to_i %>"">退出登录</p>
+      <img src="/images/dl2.png?<%= timestamp %>"">退出登录</p>
     <div class="renWu">
-      <img src="/images/renWu.png?<%= Time.now.to_i %>"">
+      <img src="/images/renWu.png?<%= timestamp %>"">
       <p id="userGid"></p>
       <p class="time">123</p>
     </div>
@@ -185,10 +187,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="/images/gb.png?<%= Time.now.to_i %>""></a>
+      <img src="/images/gb.png?<%= timestamp %>""></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="/images/bi.png?<%= Time.now.to_i %>""></div>
+        <img src="/images/bi.png?<%= timestamp %>""></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -203,6 +205,18 @@ $(function(){
   $('#live_dz_distpicker,#work_dz_distpicker').distpicker({autoSelect: false});
 
   $("#ymd").attr("max", (new Date()).format('yyyy-MM-dd'));
+  $(".legal-provision-link").click(function() {
+    layer.open({
+      type: 2,
+      offset: '50px',
+      title: '会员计划章程及细则',
+      area: ['500px', '600px'],
+      content: 'legal-provision.html',
+      success: function(layero){
+        layer.setTop(layero);
+      }
+    });
+  });
   //顾客信息记录选择
   $('.content_1>div').click(function(){
       if(!$(this).hasClass('act')){

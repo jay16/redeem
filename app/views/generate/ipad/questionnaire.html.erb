@@ -1,8 +1,8 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="/images/dhlp2.png?timestamp=<%= Time.now.to_i %>">
-      <img src="/images/diaoCha.png?timestamp=<%= Time.now.to_i %>">
+      <img src="/images/dhlp2.png?timestamp=<%= timestamp %>">
+      <img src="/images/diaoCha.png?timestamp=<%= timestamp %>">
       <span class="questionnaire-title">
           问卷调查
       </span>
@@ -27,22 +27,22 @@
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="/images/gn1.png?timestamp=<%= Time.now.to_i %>" class="xs" alt="">
-      <img src="/images/gn2.png?timestamp=<%= Time.now.to_i %>" class="yc" alt=""></div>
+      <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt=""></div>
     <div>
-      <img src="/images/gn2.png?timestamp=<%= Time.now.to_i %>"></div>
+      <img src="/images/gn2.png?timestamp=<%= timestamp %>"></div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="/images/dhlp.png?timestamp=<%= Time.now.to_i %>">礼品兑换</a></p>
+        <img src="/images/dhlp.png?timestamp=<%= timestamp %>">礼品兑换</a></p>
     <p class="mm">
-      <img src="/images/bi.png?timestamp=<%= Time.now.to_i %>" class="bi" alt="">修改密码</p>
+      <img src="/images/bi.png?timestamp=<%= timestamp %>" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="/images/dl2.png?timestamp=<%= Time.now.to_i %>">退出登录</p>
+      <img src="/images/dl2.png?timestamp=<%= timestamp %>">退出登录</p>
     <div class="renWu">
-      <img src="/images/renWu.png?timestamp=<%= Time.now.to_i %>">
+      <img src="/images/renWu.png?timestamp=<%= timestamp %>">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -51,10 +51,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="/images/gb.png?timestamp=<%= Time.now.to_i %>"></a>
+      <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="/images/bi.png?timestamp=<%= Time.now.to_i %>"></div>
+        <img src="/images/bi.png?timestamp=<%= timestamp %>"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -139,12 +139,12 @@ function skipToQuestionWithIndex(qindex, skipType) {
     $(".questionnaire-title").html(data_item["FNAME"]);
     htmlString += '\
       <div class="wt">\
-       ' + modeldtl_item["FTITLE"] + '\
+       <span class="questionnaire-subject-title">' + modeldtl_item["FTITLE"] + '</span>\
       <input type="hidden" name="fnum" id="fnum" value="' + modeldtl_item["OPTIONDTL"].length + '" />\
       <input type="hidden" name="ftype" id="ftype" value="' + modeldtl_item["FTYPE"] + '" />\
       <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
       <div class="kx">\
-        <img src="/images/diaoCha.png?timestamp=<%= Time.now.to_i %>">\
+        <img src="/images/diaoCha.png?timestamp=<%= timestamp %>">\
         <div class="question-type" style="display:inline;"></div>\
         <span class="optiondtl-num" style="display: none;">' + modeldtl_item["OPTIONDTL"].length + '</span>\
       </div>\
@@ -276,7 +276,7 @@ function storeQuestion() {
 //     <input type="hidden" name="ftitleid" id="ftitleid" value="0" />
 //     <input type="hidden" name="ftype" id="ftype" value="1" /></div>
 //   <div class="kx">
-//     <img src="/images/diaoCha.png?timestamp=<%= Time.now.to_i %>">可选答案
+//     <img src="/images/diaoCha.png?timestamp=<%= timestamp %>">可选答案
 //     <span>8</span></div>
 //   <div class="xz">
 //     <div id="1">自驾</div>

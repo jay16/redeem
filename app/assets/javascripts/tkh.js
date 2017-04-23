@@ -23,7 +23,7 @@ Date.prototype.format = function(format) {
 window.TKH = {
   version: '0.0.4',
   server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
-  userGid: '1000020',
+  userGid: '500020',
   userPwd: 'CAB371810F12B8C2',
   workStation: '172.17.104.164',
   storeCode: '0210',
@@ -46,7 +46,7 @@ window.TKH = {
     var username = $('#yhm').val(),
       password = $('#pwd').val(),
       area_id = $('input[name="area_id"]:checked').val();
-      var loading = layer.msg('登录中...', {
+      layer.msg('登录中...', {
         icon: 16,
         shade: 0.01
       });
@@ -83,7 +83,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: xmlString,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log(xmlHttpRequest);
@@ -153,7 +153,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: xmlString,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log(xmlHttpRequest);
@@ -216,7 +216,7 @@ window.TKH = {
           async: false,
           dataType: 'xml',
           data: xmlString,
-          timeout: 10000,
+          timeout: 5000,
           contentType: "text/xml; charset=UTF-8",
           success: function(xmlHttpRequest) {
             layer.closeAll();
@@ -271,7 +271,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: xmlstring,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log(xmlHttpRequest);
@@ -324,7 +324,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: xmlstring,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log(xmlHttpRequest);
@@ -377,7 +377,7 @@ window.TKH = {
         });
         return false;
       }
-      var loading = layer.msg('操作中...', { icon: 16, shade: 0.01 });
+      layer.msg('操作中...', { icon: 16, shade: 0.01 });
 
       var clientCookie = window.localStorage.getItem('sClientCookie');
       var xmlstring = '<SOAP-ENV:Envelope \
@@ -407,7 +407,7 @@ window.TKH = {
         async: false,
         dataType: 'xml',
         data: xmlstring,
-        timeout: 10000,
+        timeout: 5000,
         contentType: "text/xml; charset=UTF-8",
         success: function(xmlHttpRequest) {
           console.log(xmlHttpRequest);
@@ -429,7 +429,7 @@ window.TKH = {
             window.TKH._doConsumerInfo(ret.ConsumerInfo, false);
             window.TKH._doExchangeInfo(ret.ExchangeInfo, false);
             $('#wx').parent().css('display', 'block');
-            $('#live_dz').parent().css('display', 'block');
+            $('#live_dz').parent().css('display', 'inline-block');
             $('.bc, .legal-provision-dz').css('display', 'none');
             $('.xy').css('display', 'block');
 
@@ -465,7 +465,7 @@ window.TKH = {
             }
 
             $('#wx').parent().css('display', 'block');
-            $('#live_dz').parent().css('display', 'block');
+            $('#live_dz').parent().css('display', 'inline-block');
             $('.bc, .legal-provision-dz').css('display', 'block');
             $('.xy').css('display', 'none');
             // $("#search").val('');
@@ -479,13 +479,82 @@ window.TKH = {
           layer.msg("ERROR - QUERYMEMBERINFOJSON", { time: 3000 });
         }
       });
+
+      return false;
     }
+    return false;
   },
   _do: function(data) {
     $('#mz').val(data.FMEMNAME);
     $('#xb').val(data.FMEMSEX);
-    $('#live_dz').val(data.FMEMADDRESS);
-    // $('#work_dz').val(data.FMEMADDRESS);
+    if(data.FMEMADDRESS && data.FMEMADDRESS.length && data.FMEMADDRESS.split('-').length >= 4) {
+      var ldd_parts = data.FMEMADDRESS.split('-'),
+          ldd_part,
+          ldd_province,
+          ldd_city,
+          ldd_distinct,
+          ldd_other = '';
+      for(var i = 0, len = ldd_parts.length; i < len; i ++) {
+        ldd_part = ldd_parts[i];
+        console.log(i + ' - ' + ldd_part);
+        if(i === 0) {
+          ldd_province = ldd_part;
+        } else if(i === 1) {
+          ldd_city = ldd_part;
+        } else if(i === 2) {
+          ldd_distinct = ldd_part;
+        } else {
+          if(ldd_other.length) {
+            ldd_other += '-' + ldd_part;
+          } else {
+            ldd_other = ldd_part;
+          }
+        }
+      }
+      $("#live_dz_distpicker").distpicker('destroy');
+      $("#live_dz_distpicker").distpicker({
+        province: ldd_province,
+        city: ldd_city,
+        district: ldd_distinct
+      });
+      $("#live_dz").val(ldd_other);
+    } else {
+      $('#live_dz').val(data.FMEMADDRESS);
+    }
+    if(data.FMEMCOMPANY && data.FMEMCOMPANY.length && data.FMEMCOMPANY.split('-').length >= 4) {
+      var wdd_parts = data.FMEMCOMPANY.split('-'),
+          wdd_part,
+          wdd_province,
+          wdd_city,
+          wdd_distinct,
+          wdd_other = '';
+      for(var i = 0, len = wdd_parts.length; i < len; i ++) {
+        wdd_part = wdd_parts[i];
+        if(i === 0) {
+          wdd_province = wdd_part;
+        } else if(i === 1) {
+          wdd_city = wdd_part;
+        } else if(i === 2) {
+          wdd_distinct = wdd_part;
+        } else {
+          if(wdd_other.length) {
+            wdd_other += '-' + wdd_part;
+          } else {
+            wdd_other = wdd_part;
+          }
+        }
+      }
+      $("#work_dz_distpicker").distpicker('destroy');
+      $("#work_dz_distpicker").distpicker({
+        province: ldd_province,
+        city: ldd_city,
+        district: ldd_distinct
+      });
+      $("#work_dz").val(wdd_other);
+    } else {
+      $('#work_dz').val(data.FMEMCOMPANY);
+    }
+
     if (data.FMEMBIRTH) {
       var birthday = data.FMEMBIRTH.substr(0, 4) + '-' + data.FMEMBIRTH.substr(4, 2) + '-' + data.FMEMBIRTH.substr(6, 2);
       $('#ymd').val(birthday);
@@ -598,20 +667,22 @@ window.TKH = {
     var fmbrname = $.trim($('#mz').val()),
         fmbrsex = $.trim($('#xb option:selected').val()),
         fmbrbirth = $.trim($('#ymd').val()),
-        faddress = $.trim($('#live_dz').val());
+        ldd_province = $("#ldd_province").val(),
+        ldd_city = $("#ldd_city").val(),
+        ldd_district = $("#ldd_district").val(),
+        live_dz = $("#live_dz").val(),
+        faddress = ldd_province + '-' + ldd_city + '-' + ldd_district + '-' + live_dz;
 
     if (fmbrname.length == 0) {
-      layer.msg('请输入用户名', {
-        time: 2000
-      });
+      layer.msg('请输入用户名', { time: 2000 });
       return false;
     }
     var fopenid = 'm0' + (new Date()).valueOf(),
-      fcardid = '0210';
+        fcardid = '0210';
     var params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + faddress + '&quot;}';
 
-    var clientCookie = window.localStorage.getItem('sClientCookie');
-    var check_xml = '<SOAP-ENV:Envelope \
+    var clientCookie = window.localStorage.getItem('sClientCookie'),
+        xmlString = '<SOAP-ENV:Envelope \
     xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
     xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
     xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
@@ -637,8 +708,8 @@ window.TKH = {
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: check_xml,
-      timeout: 10000,
+      data: xmlString,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log(xmlHttpRequest);
@@ -769,7 +840,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: check_xml,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log('success');
@@ -850,7 +921,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: check_xml,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log('success');
@@ -951,7 +1022,7 @@ window.TKH = {
         });
       }
     });
-    // var fgndgid = '1000021',
+    // var fgndgid = '500021',
     //     fflowno = (new Date()).valueOf(),
     //     focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss');
     // var fsupplypay_params = '{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;}';
@@ -988,7 +1059,7 @@ window.TKH = {
         });
       }
     });
-    // var flaggid = '1000000',
+    // var flaggid = '500000',
     //     famount = parseInt(Math.random() * 10 + 1);
     // var fsupplydtl_params = '{&quot;FLAGGID&quot;:&quot;' + flaggid + '&quot;,&quot;FAMOUNT&quot;:&quot;' + famount + '&quot;}';
 
@@ -1033,7 +1104,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: check_xml,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log('success');
@@ -1116,7 +1187,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: check_xml,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log('success');
@@ -1191,7 +1262,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: xmlString,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log('success');
@@ -1313,7 +1384,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: xmlString,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log('success');
@@ -1392,7 +1463,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: xmlString,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log('success');
@@ -1421,7 +1492,7 @@ window.TKH = {
             // "FCODE":"00000017",
             // "FQTY":"10261",
             // "FNUM":"02101703310001",
-            // "FGID":"1000000",
+            // "FGID":"500000",
             // "FCLS":"01",
             // "FPRICE":"10"
             // }
@@ -1512,7 +1583,7 @@ window.TKH = {
       async: false,
       dataType: 'xml',
       data: xmlString,
-      timeout: 10000,
+      timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
         console.log('success');
