@@ -7,8 +7,10 @@ if(login_state && login_state.length && login_state === 'yes') {
   if(current_path === 'login.html') {
     window.location.href = 'index.html';
   } else {
+    var href_path = '';
     $('ul.sidebar-menu a').each(function() {
-      if ($(this).attr("href") === current_path) {
+      href_path = ($(this).attr("href") ? $(this).attr("href").split('?')[0] : '')
+      if (href_path === current_path) {
         $(this).parent("li").addClass('active');
         if ($(this).parent().parent().attr('class') === 'treeview-menu') {
           $(this).parent().parent().parent().addClass('active');

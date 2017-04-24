@@ -63,7 +63,7 @@ var url = window.location,
 
 if(login_state && login_state.length && login_state === 'yes') {
   if(current_path === 'login.html') {
-    window.location.href = 'search.html';
+    window.TKH.redirect_to_with_timestamp('search.html');
   }
 
   var expiredIn = window.localStorage.getItem("expiredIn");
@@ -74,7 +74,7 @@ if(login_state && login_state.length && login_state === 'yes') {
   $('#userGid').html(window.localStorage.getItem("username"));
 } else {
   if(current_path !== 'login.html') {
-    window.location.href = 'login.html';
+    window.TKH.redirect_to_with_timestamp('login.html');
   } else {
     var username = window.localStorage.getItem("username"),
         password = window.localStorage.getItem("password");

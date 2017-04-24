@@ -320,9 +320,9 @@ function actionLastPage() {
     var params = window.TKH.params();
     if(params["from"] &&
       (params["from"] === 'exchange.html' || params["from"] === 'search.html')) {
-      window.location.href = params["from"];
+      window.TKH.redirect_to_with_timestamp(params["from"]);
     } else {
-      window.location.href = "search.html";
+      window.TKH.redirect_to_with_timestamp("search.html");
     }
   }
 }
@@ -332,7 +332,7 @@ function actionNextPage() {
       nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
 
   if(qindex === 0 &&  $("#checkbox_skip").prop("checked")) {
-    window.location.href = "signature.html"
+    window.TKH.redirect_to_with_timestamp("signature.html");
   } else {
     $(".questionnaire").attr("qindex", nextQIndex);
     skipToQuestionWithIndex(nextQIndex, 'next');

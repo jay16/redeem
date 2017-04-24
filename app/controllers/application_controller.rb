@@ -67,29 +67,30 @@ class ApplicationController < Sinatra::Base
 
   get '/generate/:part/:page' do
     page_titles = {
-      'answer-list' => '回答列表',
-      'consume' => '消费管理',
-      'exchange' => '兑换信息管理',
-      'gift' => '礼品管理',
-      'index' => '后台首页',
-      'login' => '用户登录',
-      'manager' => '超级管理员管理',
-      'member' => '会员管理',
-      'questionnaire' => '问卷管理',
-      'store' => '店铺管理',
-      'sync-gift' => '同步礼品',
-      'sync-questionnaire' => '同步问卷',
-      'sync-store' => '同步店铺',
-      'user' => '管理员管理',
-      'signature' => '签名管理',
-      'complete' => '兑换完成',
-      'entry' => '消费录入',
-      'exchange' => '选择礼物',
-      'questionnaire' => '问卷调查',
-      'search' => '客户信息',
-      'signature' => '签名兑换完成'
+      'admin:answer-list' => '回答列表',
+      'admin:consume' => '消费管理',
+      'admin:exchange' => '兑换信息管理',
+      'admin:gift' => '礼品管理',
+      'admin:index' => '后台首页',
+      'admin:login' => '用户登录',
+      'admin:manager' => '超级管理员管理',
+      'admin:member' => '会员管理',
+      'admin:questionnaire' => '问卷管理',
+      'admin:store' => '店铺管理',
+      'admin:sync-gift' => '同步礼品',
+      'admin:sync-questionnaire' => '同步问卷',
+      'admin:sync-store' => '同步店铺',
+      'admin:user' => '管理员管理',
+      'admin:signature' => '签名管理',
+      'ipad:complete' => '兑换完成',
+      'ipad:entry' => '消费录入',
+      'ipad:exchange' => '选择礼物',
+      'ipad:questionnaire' => '问卷调查',
+      'ipad:search' => '客户信息',
+      'ipad:signature' => '签名兑换完成'
     }
-    @title = page_titles.fetch(params[:page].split('.')[0], "unknown")
+    page_name = params[:page].split('.')[0]
+    @title = page_titles.fetch("#{params[:part]}:#{page_name}", "unknown")
     erb :"generate/#{params[:part]}/#{params[:page]}", layout: :"generate/#{params[:part]}/layout/layout.html"
   end
 

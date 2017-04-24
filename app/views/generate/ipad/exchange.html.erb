@@ -33,11 +33,11 @@
       <img src="/images/quXiao.png?timestamp=<%= timestamp %>">取消兑换
       <br/>Undo
       <span>99</span></a>
-    <a style="display:none;" href="javascript:void (0)" onclick="window.location.href='complete.html'"  class="tiaoGuo">
+    <a style="display:none;" href="javascript:void (0)" onclick="window.TKH.redirect_to_with_timestamp('complete.html');"  class="tiaoGuo">
       <img src="/images/tiaoGuo.png?timestamp=<%= timestamp %>">跳过问卷
       <br/>Skip survey
       <span>99</span></a>
-    <a style="display:none;" href="javascript:void (0)" class="xy" onclick="window.location.href='signature.html'">下一页
+    <a style="display:none;" href="javascript:void (0)" class="xy" onclick="window.TKH.redirect_to_with_timestamp('signature.html');">下一页
       <br/>Next</a></div>
   <div class="gouXuan">
     <img src="/images/dhlp.png?timestamp=<%= timestamp %>">已勾选的当日消费：￥
@@ -203,8 +203,8 @@ $(function() {
       btn: ['确定', '取消'],
       yes: function(index) {
         layer.close(index);
-        window.location.href = 'search.html';
-        var exchangeId = $('#Exchange_id').val();
+
+        window.TKH.redirect_to_with_timestamp('search.html');
       }
     });
   });
@@ -258,42 +258,6 @@ $(function() {
       });
     }
   });
-
-  // //下一页
-  // $('.xy').click(function() {
-  //   if ($('#Exchange_id').val()) window.location.href = '../home/questniare?exchange=' + $('#Exchange_id').val();
-  //   else {
-  //     layer.msg('本次还未进行兑换！', {
-  //       time: 2000 //2s后自动关闭
-  //     });
-  //   }
-  // });
-
-  //跳过问卷，到签名页
-  $('.tiaoGuo').click(function() {
-    if ($('#Exchange_id').val()) window.location.href = '../home/autograph?type=exchange&exchange=' + $('#Exchange_id').val();
-    else {
-      layer.msg('本次还未进行兑换！', {
-        time: 2000 //2s后自动关闭
-      });
-    }
-  });
-  //上一页
-  $('.sy').click(function() {
-    if (!$('#Exchange_id').val()) {
-      window.location.href = 'entry.html';
-    } else {
-      layer.msg('还有兑换信息没有签名！确定要退出兑换返回上一页吗？', {
-        time: 0 //不自动关闭
-        ,
-        btn: ['确定', '取消'],
-        yes: function(index) {
-          layer.close(index);
-          window.location.href = 'entry.html';
-        }
-      });
-    }
-  });
 })
 
 function querenAuto() {
@@ -301,12 +265,5 @@ function querenAuto() {
   layer.msg('今天还有兑换信息没有签名！', {
     time: 2000 //2s后自动关闭
   });
-  //        layer.confirm('上次兑换的还未签名！是取消该兑换信息还是签名确认兑换？', {
-  //            btn: ['取消兑换','去签名'] //按钮
-  //        }, function(){
-  //            $('.qxDuiHuan').click();
-  //        }, function(){
-  //            $('.tiaoGuo').click();
-  //        });
 }
 </script>

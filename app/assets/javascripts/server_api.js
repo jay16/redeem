@@ -14,6 +14,13 @@ window.ServerAPI = {
 
     return query;
   },
+  redirect_to_with_timestamp: function(pathname) {
+      var timestamp = (new Date()).valueOf(),
+          split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
+          pathname_with_timestamp = pathname + split_str + 'l_timestamp=' + timestamp;
+
+      window.location.href = pathname_with_timestamp;
+  },
   login: function(type) {
     var username = $("#username").val(),
         password = $("#password").val(),
@@ -52,7 +59,7 @@ window.ServerAPI = {
             window.TKH.loginWithinIPad('search.html');
           }
           if(type === 'background') {
-            window.location.href = 'manager.html';
+            window.ServerAPI.redirect_to_with_timestamp('manager.html');
           }
         } else {
           layer.msg(xhr.info, {
@@ -82,7 +89,8 @@ window.ServerAPI = {
         yes: function(index) {
           window.localStorage.setItem("logined", "no");
           layer.close(index);
-          window.location.href = 'login.html';
+
+          window.ServerAPI.redirect_to_with_timestamp('login.html');
         }
       });
     }
@@ -152,7 +160,7 @@ window.ServerAPI = {
           btn: ['确定'],
           yes: function(index) {
             if(xhr.code === 201) {
-              window.location.href = 'login.html';
+              window.ServerAPI.redirect_to_with_timestamp('login.html');
             }
             layer.close(index);
           }
@@ -168,7 +176,8 @@ window.ServerAPI = {
       yes: function(index) {
         window.localStorage.setItem("logined", "no");
         layer.close(index);
-        window.location.href = 'login.html';
+
+        window.ServerAPI.redirect_to_with_timestamp('login.html');
       }
     });
   },

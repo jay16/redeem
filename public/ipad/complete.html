@@ -15,20 +15,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1492935487">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1492935487">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1492935487">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1492935487">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/complete.css?timestamp=1492935487">
-<script src="assets/javascripts/server_api.js?timestamp=1492935487"></script>
-<script src="assets/javascripts/tkh.js?timestamp=1492935487"></script>
-<script src="assets/javascripts/remJs.js?timestamp=1492935487"></script>
-<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1492935487"></script>
-<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1492935487"></script>
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1492997461">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1492997461">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1492997461">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1492997461">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/complete.css?timestamp=1492997461">
+<script src="assets/javascripts/server_api.js?timestamp=1492997461"></script>
+<script src="assets/javascripts/tkh.js?timestamp=1492997461"></script>
+<script src="assets/javascripts/remJs.js?timestamp=1492997461"></script>
+<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1492997461"></script>
+<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1492997461"></script>
 </head>
 <body>
 <div id="jiaZai">
-  <img src="assets/images/loadbg.png?timestamp=1492935487">
+  <img src="assets/images/loadbg.png?timestamp=1492997461">
 </div>
 
 
@@ -36,12 +36,15 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="assets/images/wc.png?1492935487">兑换完成</div>
-    <div>Redeem - Completed</div></div>
+      <img src="assets/images/wc.png?1492997461">兑换完成</div>
+    <div>Redeem - Completed</div>
+  </div>
   <div class="ewm">
     <div class="xin">
-      <a href="javascript:void (0)">开始新调查
-        <br/>New Survey</a></div>
+      <a href="javascript:void (0)" onclick="window.TKH.redirect_to_with_timestamp('search.html');">
+        开始新调查<br/>New Survey
+      </a>
+    </div>
   </div>
 </div>
 <div class="gn">
@@ -50,13 +53,13 @@
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="assets/images/dhlp.png?1492935487">礼品兑换</a></p>
+        <img src="assets/images/dhlp.png?1492997461">礼品兑换</a></p>
     <p class="mm">
-      <img src="assets/images/bi.png?1492935487" class="bi" alt="">修改密码</p>
+      <img src="assets/images/bi.png?1492997461" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="assets/images/dl2.png?1492935487">退出登录</p>
+      <img src="assets/images/dl2.png?1492997461">退出登录</p>
     <div class="renWu">
-      <img src="assets/images/renWu.png?1492935487">
+      <img src="assets/images/renWu.png?1492997461">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -65,10 +68,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="assets/images/gb.png?1492935487"></a>
+      <img src="assets/images/gb.png?1492997461"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="assets/images/bi.png?1492935487"></div>
+        <img src="assets/images/bi.png?1492997461"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -78,112 +81,8 @@
     </div>
   </div>
 </div>
-<script>
-$(function() {
-    var dt = new Date();
-    var m = new Array("Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Spt ", "Oct ", "Nov ", "Dec ");
-    var mn = dt.getMonth();
-    var dn = dt.getDate();
-    $('.time').html(m[mn] + "&nbsp;" + dn + '，' + dt.getFullYear());
-    //右侧功能栏隐藏显示
-    $('.xs').click(function() {
-      $(this).hide();
-      $('.yc').show();
-      $('.gn').css('WebkitAnimation', 'yd2 0.4s forwards');
-    });
-    $('.yc').click(function() {
-      $(this).hide();
-      $('.xs').show();
-      $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
-    });
 
-    //侧栏操作
-    $('.lp').click(function() {
-      $('.yc').hide();
-      $('.xs').show();
-      $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
-    });
-    $('.mm').click(function() {
-      $('.yc').hide();
-      $('.xs').show();
-      $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
-      $('.xg').fadeIn(200);
-    });
-    $('.gb').click(function() {
-      $('.xg').fadeOut(200);
-    });
-
-    $('.tuichu').on('click', function() {
-      $.ajax({
-        url: "user/logout",
-        type: "get",
-        data: {},
-        dataType: "json",
-        success: function(ret) {
-          layer.closeAll();
-          if (ret.status == 1) {
-            var i = 3;
-            setInterval(function() {
-              layer.msg("正在退出 (" + i + ")", {
-                time: 1000
-              });
-              if (i == 0) location.href = '../user/login';
-              i--;
-            },
-            1000);
-          } else {
-            layer.msg(ret.message, {
-              time: 2000
-            });
-          }
-        }
-      })
-    })
-
-    $('.cs').on('click', function() {
-      if (!$(this).hasClass('mima')) return false;
-      var oldpass = $('#oldPassword').val();
-      var newpass = $('#newPassword').val();
-      var repass = $('#rePassword').val();
-      if (newpass != repass) {
-        layer.msg('两次输入的新密码不相同！', {
-          time: 2000
-        });
-        return false;
-      }
-      if (newpass == oldpass) {
-        layer.msg('输入的新旧密码相同！', {
-          time: 2000
-        });
-        return false;
-      }
-      $.ajax({
-        url: "user/password",
-        type: "post",
-        data: {
-          oldpass: oldpass,
-          newpass: newpass,
-          repass: repass
-        },
-        dataType: "json",
-        success: function(ret) {
-          layer.closeAll();
-          if (ret.status == 1) {
-            $('#oldPassword').val('');
-            $('#newPassword').val('');
-            $('#rePassword').val('');
-            $('.xg .gb').click();
-          }
-          layer.msg(ret.message, {
-            time: 2000
-          });
-        }
-      })
-    })
-  });
-</script>
-
-<script src="assets/javascripts/side.js?timestamp=1492935487"></script>
+<script src="assets/javascripts/side.js?timestamp=1492997461"></script>
 <script>
   window.onload = function() {
     $('#jiaZai').hide();

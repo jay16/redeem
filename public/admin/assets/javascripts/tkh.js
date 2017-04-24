@@ -41,6 +41,13 @@ window.TKH = {
 
     return query;
   },
+  redirect_to_with_timestamp: function(pathname) {
+      var timestamp = (new Date()).valueOf(),
+          split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
+          pathname_with_timestamp = pathname + split_str + 'l_timestamp=' + timestamp;
+
+      window.location.href = pathname_with_timestamp;
+  },
   // 3.1.1 登录
   loginWithinIPad: function(toPathName) {
     var username = $('#yhm').val(),
@@ -99,7 +106,7 @@ window.TKH = {
           window.localStorage.setItem('expiredIn', expiredIn);
           window.localStorage.setItem('expiredInDate', current);
 
-          window.location.href = toPathName;
+          window.TKH.redirect_to_with_timestamp(toPathName);
         } else {
           layer.msg("用户验证失败", { time: 3000 });
         }
@@ -116,7 +123,8 @@ window.TKH = {
           yes: function(index) {
             layer.close(index);
             window.localStorage.setItem('logined', "no");
-            window.location.href = 'login.html';
+
+            window.TKH.redirect_to_with_timestamp('login.html');
           }
         });
       }
@@ -179,7 +187,7 @@ window.TKH = {
             btn: ['知道了'],
             btnAlign: 'c',
             yes: function(index) {
-              window.location.href = "login.html";
+              window.TKH.redirect_to_with_timestamp('login.html');
             }
           });
         }
@@ -1145,7 +1153,7 @@ window.TKH = {
           window.ServerAPI.save_redeem(post_param);
 
           window.localStorage.removeItem("records");
-          window.location.href = "questionnaire.html?from=exchange.html"
+          window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
         } else {
           layer.msg(outparams["FMSG"], { time: 2000 });
         }
@@ -1295,7 +1303,8 @@ window.TKH = {
             btnAlign: 'c',
             yes: function(index) {
               layer.close(index);
-              window.location.href = "signature.html"
+
+              window.TKH.redirect_to_with_timestamp("signature.html");
             }
           });
         } else {
@@ -1337,7 +1346,8 @@ window.TKH = {
         window.ServerAPI.save_signature(post_params);
 
         layer.msg('页面跳转...', { icon: 16 ,shade: 0.01 ,time: 1000 });
-        window.location.href = 'complete.html';
+
+        window.TKH.redirect_to_with_timestamp('complete.html');
       }
     });
   },

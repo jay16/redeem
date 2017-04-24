@@ -4,11 +4,14 @@
   <div class="title">
     <div>
       <img src="/images/wc.png?<%= timestamp %>">兑换完成</div>
-    <div>Redeem - Completed</div></div>
+    <div>Redeem - Completed</div>
+  </div>
   <div class="ewm">
     <div class="xin">
-      <a href="javascript:void (0)">开始新调查
-        <br/>New Survey</a></div>
+      <a href="javascript:void (0)" onclick="window.TKH.redirect_to_with_timestamp('search.html');">
+        开始新调查<br/>New Survey
+      </a>
+    </div>
   </div>
 </div>
 <div class="gn">
@@ -45,107 +48,3 @@
     </div>
   </div>
 </div>
-<script>
-$(function() {
-    var dt = new Date();
-    var m = new Array("Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Spt ", "Oct ", "Nov ", "Dec ");
-    var mn = dt.getMonth();
-    var dn = dt.getDate();
-    $('.time').html(m[mn] + "&nbsp;" + dn + '，' + dt.getFullYear());
-    //右侧功能栏隐藏显示
-    $('.xs').click(function() {
-      $(this).hide();
-      $('.yc').show();
-      $('.gn').css('WebkitAnimation', 'yd2 0.4s forwards');
-    });
-    $('.yc').click(function() {
-      $(this).hide();
-      $('.xs').show();
-      $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
-    });
-
-    //侧栏操作
-    $('.lp').click(function() {
-      $('.yc').hide();
-      $('.xs').show();
-      $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
-    });
-    $('.mm').click(function() {
-      $('.yc').hide();
-      $('.xs').show();
-      $('.gn').css('WebkitAnimation', 'yd1 0.4s forwards');
-      $('.xg').fadeIn(200);
-    });
-    $('.gb').click(function() {
-      $('.xg').fadeOut(200);
-    });
-
-    $('.tuichu').on('click', function() {
-      $.ajax({
-        url: "user/logout",
-        type: "get",
-        data: {},
-        dataType: "json",
-        success: function(ret) {
-          layer.closeAll();
-          if (ret.status == 1) {
-            var i = 3;
-            setInterval(function() {
-              layer.msg("正在退出 (" + i + ")", {
-                time: 1000
-              });
-              if (i == 0) location.href = '../user/login';
-              i--;
-            },
-            1000);
-          } else {
-            layer.msg(ret.message, {
-              time: 2000
-            });
-          }
-        }
-      })
-    })
-
-    $('.cs').on('click', function() {
-      if (!$(this).hasClass('mima')) return false;
-      var oldpass = $('#oldPassword').val();
-      var newpass = $('#newPassword').val();
-      var repass = $('#rePassword').val();
-      if (newpass != repass) {
-        layer.msg('两次输入的新密码不相同！', {
-          time: 2000
-        });
-        return false;
-      }
-      if (newpass == oldpass) {
-        layer.msg('输入的新旧密码相同！', {
-          time: 2000
-        });
-        return false;
-      }
-      $.ajax({
-        url: "user/password",
-        type: "post",
-        data: {
-          oldpass: oldpass,
-          newpass: newpass,
-          repass: repass
-        },
-        dataType: "json",
-        success: function(ret) {
-          layer.closeAll();
-          if (ret.status == 1) {
-            $('#oldPassword').val('');
-            $('#newPassword').val('');
-            $('#rePassword').val('');
-            $('.xg .gb').click();
-          }
-          layer.msg(ret.message, {
-            time: 2000
-          });
-        }
-      })
-    })
-  });
-</script>

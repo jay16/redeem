@@ -203,7 +203,7 @@ $(function() {
 
     if (!is_error) {
       window.localStorage.setItem("records", JSON.stringify(records));
-      window.location.href = "exchange.html"
+      window.TKH.redirect_to_with_timestamp('exchange.html');
     }
   });
 });

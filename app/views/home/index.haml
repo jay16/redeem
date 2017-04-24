@@ -1,1 +1,8 @@
-hello world
+:css
+  .btn-area {text-align: center;margin: 50px 10px;}
+  .btn-area a {padding: 10px 50px;}
+.col-sm-offset-4.col-sm-4
+  %div.btn-area
+    = link_to '后台管理', "admin/login.html?timestamp=#{timestamp}", class: 'btn btn-primary btn-lg'
+  %div.btn-area
+    = link_to '礼品兑换', "ipad/login.html?timestamp=#{timestamp}", class: 'btn btn-success btn-lg'
