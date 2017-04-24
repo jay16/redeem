@@ -3040,7 +3040,11 @@ table.text-center th {
 }
 .login-page,
 .register-page {
-  background: #d2d6de;
+  /*background: #d2d6de;*/
+
+    background: url('../images/bg-blur.jpg') no-repeat center;
+    background-size: 100% 100%;
+    -webkit-animation: fadeIn .6s backwards;
 }
 .login-box,
 .register-box {

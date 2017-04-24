@@ -1,7 +1,8 @@
 var url = window.location,
     paths = window.location.pathname.split('/'),
     current_path = paths[paths.length-1],
-    login_state = window.localStorage.getItem("logined");
+    login_state = window.localStorage.getItem("logined"),
+    layer_index = layer.load(1);
 
 if(login_state && login_state.length && login_state === 'yes') {
   if(current_path === 'login.html') {
@@ -41,8 +42,9 @@ if(login_state && login_state.length && login_state === 'yes') {
       $("#remember").attr("checked", true);
     }
   }
-
 }
+
+layer.close(layer_index);
 
 
 

@@ -8,14 +8,12 @@
   .anNiu a{width:30%;}
   .ptt1{color:black;font-size:0.5rem;text-align:center;padding-bottom:10px;}
   #signatureparent{color:#000;padding-bottom:10px;}
-  #signature{margin:0px auto;background:#fff;color:#000;}
+  #signature{height:300px;width:70%;margin:0px auto;background:#fff;color:#000;}
   #jSignature{height:300px;width:70%;}
   #main{display:block;visibility:hidden;}
 
-.content
-  #signatureparent
-  .ptt1 客户签字
-  #signature
+#signature
+
 
 :javascript
   // var $sigdiv = $("#signature");
@@ -24,16 +22,10 @@
   // $sigdiv.jSignature("setData", "data:#{@record.signature}");
 
   $(function() {
-    var $sigdiv = $("#signature");
-    $sigdiv.jSignature({ 'UndoButton': false });
-    $(".clearsign").bind("click",
-    function() {
-      $sigdiv.jSignature("reset");
-    });
+    var $sigdiv = $("#signature").jSignature({ 'UndoButton': false });
 
     datapair = $sigdiv.jSignature("getData", "base30");
-    console.log(datapair);;
-    $('#main').css({"visibility": "visible"});
+    console.log(datapair);
 
     $sigdiv.jSignature("setData", "data:image/jsignature;base30,7M210226663362200Z34340Y378cfmjhid86Z5qq1D1M1U1J1y_3RZ46b7eeb852Y78dhgcba6Z579994200Y45334dabegkh_aM454765444222255aec966a7753_2vbbbhfda7533550Z37aa65364543_ePZ1000Y33434341_2X678c9bdcbbc9");
   })

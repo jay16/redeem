@@ -59,7 +59,7 @@ class Signature < ActiveRecord::Base
 
   def data_table
     html_tags = <<-EOF
-      <a href="#{ENV['API_SERVER']}/api/v1/item/#{self.class_name}/#{self.id}" class="btn btn-primary btn-xs iframe" title="查看题目信息">
+      <a href="javascript:void(0);" data-signature="#{self.signature}" class="btn btn-primary btn-xs iframe" title="查看题目信息">
         查看签名
       </a>
     EOF

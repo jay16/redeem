@@ -18,6 +18,14 @@
     </div>
   </div>
 </section>
+
+<style>
+  #signatureWrapper {display: none;}
+  #signature{height:300px;width:90%;margin:0px auto;background:#fff;color:#000;}
+  #jSignature{height:300px;width:90%;}
+</style>
+<div id="signatureWrapper">
+</div>
 <script type="text/javascript">
 $(document).ready(function() {
   var oTable = $('#tableRecords').DataTable({
@@ -96,22 +104,24 @@ $(document).ready(function() {
       $(".iframe").off('click').on('click',
       function(event) {
         event.preventDefault();
-        var url = $(this).attr('href');
-        var type = BootstrapDialog.TYPE_PRIMARY;
-        if ($(this).attr('title') == '编辑') type = BootstrapDialog.TYPE_PRIMARY;
-        if ($(this).attr('title') == '删除') type = BootstrapDialog.TYPE_DANGER;
-        BootstrapDialog.show({
-          title: $(this).attr('title') + '店铺管理',
-          message: $('<div></div>').load(url),
-          type: type,
+
+        $("#signatureWrapper").html("<div id='signature'></div>");
+        var $sigdiv = $("#signature");
+        $("#signatureWrapper").css({"display": "block"});
+        $sigdiv.jSignature();
+        $sigdiv.jSignature("reset");
+        $sigdiv.jSignature("setData", "data:" +$(this).data("signature"));
+        layer.open({
+          type: 1,
+          title: "查看签名",
+          area: ["400px", "300px"],
+          content: $sigdiv,
+          cancel: function() {
+            $("#signatureWrapper").css({"display": "none"});
+          }
         });
       });
     }
   });
 });
 </script>
-<script src="/javascripts/modernizr.js"></script>
-<script src="/javascripts/jSignature.js"></script>
-<script src="/javascripts/jSignature.CompressorBase30.js"></script>
-<script src="/javascripts/jSignature.CompressorSVG.js"></script>
-<script src="/javascripts/plugins/signhere/jSignature.SignHere.js"></script>

@@ -9,22 +9,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="renderer" content="webkit">
-<title><%= @title %>::管理系统</title>
-<meta name="keywords" content="" />
-<meta name="author" content="" />
-<!-- Google will often use this as its description of your page/site. Make it good. -->
-<meta name="description" content="" />
-<!-- Speaking of Google, don't forget to set your site up: http://google.com/webmasters -->
+<title><%= @title %> - 管理系统</title>
 <meta name="google-site-verification" content="">
 <meta name="DC.title" content="Project Name">
 <meta name="DC.subject" content="">
 <meta name="DC.creator" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<link rel="shortcut icon" href="/images/favicon.ico?timestamp=<%= timestamp %>"><!--
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/ico/apple-touch-icon-144-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/ico/apple-touch-icon-114-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/ico/apple-touch-icon-72-precomposed.png">
-<link rel="apple-touch-icon-precomposed" href="/ico/apple-touch-icon-57-precomposed.png"> -->
+<link rel="shortcut icon" href="/images/favicon.ico?timestamp=<%= timestamp %>">
 <link media="all" type="text/css" rel="stylesheet" href="/stylesheets/bootstrap.min.css?timestamp=<%= timestamp %>">
 <link media="all" type="text/css" rel="stylesheet" href="/stylesheets/font-awesome.min.css?timestamp=<%= timestamp %>">
 <link media="all" type="text/css" rel="stylesheet" href="/stylesheets/ionicons.min.css?timestamp=<%= timestamp %>">
@@ -59,6 +50,14 @@
 <script src="/javascripts/plupload/i18n/zh_CN.js?timestamp=<%= timestamp %>"></script>
 <script src="/javascripts/common_upload.js?timestamp=<%= timestamp %>"></script>
 <script src="/javascripts/ajaxfileupload.min.js?timestamp=<%= timestamp %>"></script>
+
+<%- if params[:page] == 'signature.html' %>
+<script src="/javascripts/modernizr.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/jSignature.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/jSignature.CompressorBase30.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/jSignature.CompressorSVG.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/plugins/signhere/jSignature.SignHere.js?timestamp=<%= timestamp %>"></script>
+<% end %>
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">

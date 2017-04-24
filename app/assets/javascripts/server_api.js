@@ -326,6 +326,9 @@ window.ServerAPI = {
         console.log(xhr);
       }
     });
+  },
+  view_signature: function(ctl) {
+    alert($(ctl).data("signature"));
   }
 }
 

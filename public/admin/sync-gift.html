@@ -1,267 +1,124 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-Control" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="renderer" content="webkit">
-<title>同步礼品::管理系统</title>
-<meta name="keywords" content="" />
-<meta name="author" content="" />
-<!-- Google will often use this as its description of your page/site. Make it good. -->
-<meta name="description" content="" />
-<!-- Speaking of Google, don't forget to set your site up: http://google.com/webmasters -->
-<meta name="google-site-verification" content="">
-<meta name="DC.title" content="Project Name">
-<meta name="DC.subject" content="">
-<meta name="DC.creator" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<link rel="shortcut icon" href="assets/images/favicon.ico?timestamp=1492997461"><!--
-<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/ico/apple-touch-icon-144-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/ico/apple-touch-icon-114-precomposed.png">
-<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/ico/apple-touch-icon-72-precomposed.png">
-<link rel="apple-touch-icon-precomposed" href="/ico/apple-touch-icon-57-precomposed.png"> -->
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/bootstrap.min.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/font-awesome.min.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/ionicons.min.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/AdminLTE.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/skins/_all-skins.min.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/bootstrap-dialog.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/sco.message.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/dataTables.bootstrap.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/jquery.dataTables.yadcf.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/dataTables.colVis.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/jquery-ui.min.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/lightbox.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/common.css?timestamp=1492997461">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/layer.css?v=3.0.11110&timestamp=1492997461">
-
-<script src="assets/javascripts/jquery-2.1.1.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/jquery-ui.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/bootstrap.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/plugins/slimScroll/jquery.slimscroll.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/plugins/fastclick/fastclick.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/bootstrap-dialog.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/sco.message.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/jquery.dataTables.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/jquery.dataTables.yadcf.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/dataTables.colVis.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/dataTables.bootstrap.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/lightbox.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/app.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/plupload/plupload.full.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/plupload/jquery.plupload.queue/jquery.plupload.queue.min.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/plupload/i18n/zh_CN.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/common_upload.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/ajaxfileupload.min.js?timestamp=1492997461"></script>
-</head>
-<body class="skin-blue sidebar-mini">
-<div class="wrapper">
-
-  <header class="main-header">
-        <!-- Logo -->
-        <a href="#" class="logo">
-          <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>管理系统</b></span>
-          <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b></b>管理系统</span>
-        </a>
-        <!-- Header Navbar: style can be found in header.less -->
-        <nav class="navbar navbar-static-top" role="navigation">
-          <!-- Sidebar toggle button-->
-          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-          </a>
-          <div class="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-              <!-- User Account: style can be found in dropdown.less -->
-              <li class="dropdown user user-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <span class="hidden-xs">
-                        <i class="fa fa-user fa-fw"></i>
-                         admin <i class="fa fa-caret-down"></i>
-                    </span>
-                </a>
-                <ul class="dropdown-menu">
-                  <!-- Menu Footer-->
-                  <li class="user-footer">
-                    <div class="pull-right">
-                      <a href="javascript:void(0);" onclick="window.ServerAPI.logout();">
-                        <i class="fa fa-sign-out fa-fw"></i>
-                        退出登录
-                      </a>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </header>
-
-<aside class="main-sidebar">
-  <!-- sidebar: style can be found in sidebar.less -->
-  <section class="sidebar" style="height: auto;">
-    <!-- sidebar menu: : style can be found in sidebar.less -->
-    <ul class="sidebar-menu">
-      <li class="treeview treeview-manager">
-        <a href="#">
-          <i class="fa fa-fw fa-dashboard"></i>
-          <span>管理员管理</span>
-          <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li>
-            <a href="manager.html?timestamp=1492997461" data-parent="treeview-manager">
-              <i class="fa fa-fw fa-info"></i>后端管理员</a>
-          </li>
-          <li>
-            <a href="user.html?timestamp=1492997461" data-parent="treeview-manager">
-              <i class="fa fa-fw fa-info"></i>管理员管理</a>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a href="member.html?timestamp=1492997461">
-          <i class="fa fa-fw fa-paper-plane-o"></i>会员管理</a>
-      </li>
-      <li>
-        <a href="consume.html?timestamp=1492997461">
-          <i class="fa fa-fw fa-paper-plane-o"></i>消费管理</a>
-      </li>
-      <li class="treeview treeview-store">
-        <a href="#">
-          <i class="fa fa-fw  fa-dashboard"></i>
-          <span>店铺管理</span>
-          <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li>
-            <a href="store.html?timestamp=1492997461" data-parent="treeview-store">
-              <i class="fa fa-fw fa-info"></i>店铺列表</a>
-          </li>
-          <li>
-            <a href="sync-store.html?timestamp=1492997461" data-parent="treeview-store">
-              <i class="fa fa-fw fa-info"></i>同步店铺</a>
-          </li>
-        </ul>
-      </li>
-      <li class="treeview treeview-gift">
-        <a href="#">
-          <i class="fa fa-fw  fa-dashboard"></i>
-          <span>礼品管理</span>
-          <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li>
-            <a href="gift.html?timestamp=1492997461" data-parent="treeview-gift">
-              <i class="fa fa-fw fa-info"></i>礼品列表</a>
-          </li>
-          <li>
-            <a href="sync-gift.html?timestamp=1492997461" data-parent="treeview-gift">
-              <i class="fa fa-fw fa-info"></i>同步礼品</a>
-          </li>
-        </ul>
-      </li>
-      <li class="treeview treeview-questionnaire">
-        <a href="#">
-          <i class="fa fa-fw  fa-dashboard"></i>
-          <span>问卷管理</span>
-          <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li>
-            <a href="questionnaire.html?timestamp=1492997461" data-parent="treeview-questionnaire">
-              <i class="fa fa-fw fa-info"></i>问卷列表</a>
-          </li>
-          <li>
-            <a href="answer-list.html?timestamp=1492997461" data-parent="treeview-questionnaire">
-              <i class="fa fa-fw fa-info"></i>回答列表</a>
-          </li>
-          <li>
-            <a href="sync-questionnaire.html?timestamp=1492997461" data-parent="treeview-questionnaire">
-              <i class="fa fa-fw fa-info"></i>同步问卷</a>
-          </li>
-          <li style="display: none;">
-            <a href="ipad-setting.html?timestamp=1492997461" data-parent="treeview-questionnaire">
-              <i class="fa fa-fw fa-info"></i>前台配置</a>
-          </li>
-          <li style="display: none;">
-            <a href="question-data-com.html?timestamp=1492997461" data-parent="treeview-questionnaire">
-              <i class="fa fa-fw fa-info"></i>问卷重新提交</a>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a href="exchange.html?timestamp=1492997461">
-          <i class="fa fa-fw fa-paper-plane-o"></i>兑换信息管理</a>
-      </li>
-      <li>
-        <a href="signature.html?timestamp=1492997461">
-          <i class="fa fa-fw fa-paper-plane-o"></i>签名管理</a>
-      </li>
-    </ul>
-  </section>
-</aside>
-
-
-  <div class="content-wrapper">
-    <section class="content-header">
-      <h1>同步礼品</h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="index.html">
-            <i class="fa fa-dashboard"></i>首页</a>
-        </li>
-        <li>同步礼品</li></ol>
-    </section>
-
-    <section class="content">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="panel panel-default" id="sync_state">同步中...</div></div>
-  </div>
-</section>
-
-<script type="text/javascript">
-$(function() {
-  window.TKH.queryGiftForSync();
-})
-</script>
-
-  </div>
-
-  <footer class="main-footer">
-  <div class="pull-right hidden-xs">
-    version: <b>0.3.4</b>
-  </div>
-  <span id="copyright"></span> all rights reserved.
-</footer>
-<script type="text/javascript">
-$(document).ready(function() {
-  var developedYear = "2017",
-      todayYear = (new Date()).getFullYear(),
-      copyrightYield = developedYear;
-
-  if(parseInt(developedYear) < parseInt(todayYear)) {
-    copyrightYield = developedYear + '-' + todayYear;
-  }
-  document.getElementById("copyright").innerHTML = "copyright © " + copyrightYield + " <a href='#'>hd studio</a>.";
-});
-</script>
-
-</div>
-<script src="assets/javascripts/server_api.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/tkh.js?timestamp=1492997461"></script>
-<script src="assets/javascripts/common.js?timestamp=1492997461"></script>
-<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-<script src="assets/javascripts/html5.js"></script>
-<![endif]-->
-</body>
-</html>
+NoMethodError: undefined method `-@' for nil:NilClass
+	/Users/lijunjie/Work/redeem/app/views/generate/admin/layout/layout.html.erb:60:in `block in singleton class'
+	/Users/lijunjie/Work/redeem/app/views/generate/admin/layout/layout.html.erb:-6:in `instance_eval'
+	/Users/lijunjie/Work/redeem/app/views/generate/admin/layout/layout.html.erb:-6:in `singleton class'
+	/Users/lijunjie/Work/redeem/app/views/generate/admin/layout/layout.html.erb:-8:in `__tilt_70198082402780'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/tilt-2.0.7/lib/tilt/template.rb:170:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/tilt-2.0.7/lib/tilt/template.rb:170:in `evaluate'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/tilt-2.0.7/lib/tilt/template.rb:109:in `render'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:823:in `render'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:832:in `block in render'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:832:in `catch'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:832:in `render'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:667:in `erb'
+	/Users/lijunjie/Work/redeem/app/controllers/application_controller.rb:94:in `block in <class:ApplicationController>'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1611:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1611:in `block in compile!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:975:in `block (3 levels) in route!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:994:in `route_eval'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:975:in `block (2 levels) in route!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1015:in `block in process_route'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1013:in `catch'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1013:in `process_route'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:973:in `block in route!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:972:in `each'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:972:in `route!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1085:in `block in dispatch!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `block in invoke'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `catch'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `invoke'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1082:in `dispatch!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:907:in `block in call!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `block in invoke'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `catch'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `invoke'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:907:in `call!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:895:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:954:in `forward'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1028:in `route_missing'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:989:in `route!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:985:in `route!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1085:in `block in dispatch!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `block in invoke'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `catch'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `invoke'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1082:in `dispatch!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:907:in `block in call!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `block in invoke'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `catch'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1067:in `invoke'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:907:in `call!'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:895:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/xss_header.rb:18:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/base.rb:49:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/base.rb:49:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/path_traversal.rb:16:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/json_csrf.rb:18:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/base.rb:49:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/base.rb:49:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/frame_options.rb:31:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/session/abstract/id.rb:225:in `context'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/session/abstract/id.rb:220:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/logger.rb:15:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:212:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/head.rb:13:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/methodoverride.rb:22:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/show_exceptions.rb:25:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:182:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:2013:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/xss_header.rb:18:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/base.rb:49:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/base.rb:49:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/path_traversal.rb:16:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/json_csrf.rb:18:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/base.rb:49:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/base.rb:49:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-protection-1.5.3/lib/rack/protection/frame_options.rb:31:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/session/abstract/id.rb:225:in `context'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/session/abstract/id.rb:220:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/logger.rb:15:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:212:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/head.rb:13:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/methodoverride.rb:22:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/show_exceptions.rb:25:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:182:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:2013:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1487:in `block in call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1787:in `synchronize'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:1487:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/urlmap.rb:66:in `block in call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/urlmap.rb:50:in `each'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/urlmap.rb:50:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/tempfile_reaper.rb:15:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/lint.rb:49:in `_call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/lint.rb:37:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/showexceptions.rb:24:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/commonlogger.rb:33:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/sinatra-1.4.8/lib/sinatra/base.rb:219:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/chunked.rb:54:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/rack-1.6.5/lib/rack/content_length.rb:15:in `call'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/unicorn-5.0.1/lib/unicorn/http_server.rb:562:in `process_client'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/unicorn-worker-killer-0.4.4/lib/unicorn/worker_killer.rb:52:in `process_client'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/unicorn-worker-killer-0.4.4/lib/unicorn/worker_killer.rb:92:in `process_client'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/unicorn-5.0.1/lib/unicorn/oob_gc.rb:70:in `process_client'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/unicorn-5.0.1/lib/unicorn/http_server.rb:658:in `worker_loop'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/unicorn-5.0.1/lib/unicorn/http_server.rb:508:in `spawn_missing_workers'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/unicorn-5.0.1/lib/unicorn/http_server.rb:132:in `start'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/unicorn-5.0.1/bin/unicorn:126:in `<top (required)>'
+	/Users/lijunjie/.rbenv/versions/2.3.0/bin/unicorn:23:in `load'
+	/Users/lijunjie/.rbenv/versions/2.3.0/bin/unicorn:23:in `<top (required)>'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/cli/exec.rb:74:in `load'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/cli/exec.rb:74:in `kernel_load'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/cli/exec.rb:27:in `run'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/cli.rb:332:in `exec'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/vendor/thor/lib/thor/command.rb:27:in `run'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/vendor/thor/lib/thor/invocation.rb:126:in `invoke_command'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/vendor/thor/lib/thor.rb:359:in `dispatch'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/cli.rb:20:in `dispatch'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/vendor/thor/lib/thor/base.rb:440:in `start'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/cli.rb:11:in `start'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/exe/bundle:34:in `block in <top (required)>'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/lib/bundler/friendly_errors.rb:100:in `with_friendly_errors'
+	/Users/lijunjie/.rbenv/versions/2.3.0/lib/ruby/gems/2.3.0/gems/bundler-1.13.5/exe/bundle:26:in `<top (required)>'
+	/Users/lijunjie/.rbenv/versions/2.3.0/bin/bundle:23:in `load'
+	/Users/lijunjie/.rbenv/versions/2.3.0/bin/bundle:23:in `<main>'
