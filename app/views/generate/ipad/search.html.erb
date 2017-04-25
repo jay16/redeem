@@ -142,7 +142,8 @@
 <div class="tishibuton-area" style="display:none;">
   <div style="min-height:120px; text-align:center; font-size:16px; line-height:30px; background: #333; color:lightgray;padding-top:20px;">
     <p class="">是否只做问卷，不添加消费信息、兑换信息等？</p>
-    <div style="width:250px; margin: 0 auto;">
+    <div style="margin: 0 auto;margin-top:20px;">
+    <a href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('score-input.html');" class="button score-input" style='display: none;'>积分录入</a>
     <a href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('questionnaire.html');" class="button">填写问卷</a>
     <a style="margin-right:20px"  href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('entry.html?from=search.html');" class="button">消费兑换</a>
   </div>
@@ -219,40 +220,43 @@ $(function(){
     });
   });
   //顾客信息记录选择
-  $('.content_1>div').click(function(){
+  $('.content_1 > div').click(function() {
       if(!$(this).hasClass('act')){
-          $('.content_1 .act').removeClass('act');
-          $(this).addClass('act');
-          $('.content_2>div').hide();
-          $('.content_2>div:eq('+$(this).index()+')').show();
+        $('.content_1 .act').removeClass('act');
+        $(this).addClass('act');
+        $('.content_2>div').hide();
+        $('.content_2>div:eq('+$(this).index()+')').show();
       }
 
       var sFCardNum = window.localStorage.getItem('sFCARDNUM');
       if($(this).hasClass("score-information")) {
-          if(sFCardNum !== null) {
-              layer.msg('获取中...', {
-                  icon: 16
-                  ,shade: 0.01
-                  ,time: 1000
-              });
+        if(sFCardNum) {
+          layer.msg('获取中...', {
+              icon: 16
+              ,shade: 0.01
+              ,time: 1000
+          });
 
-              var userJSONstr = window.localStorage.getItem("current_telphone"),
-                  userJSON = JSON.parse(userJSONstr);
-              $("#ScoreInfo .member-name").val(userJSON["name"]);
-              $("#ScoreInfo .member-card-number").val(userJSON["card_number"]);
-              $("#ScoreInfo .member-score").val(userJSON["total_score"]);
+          var userJSONstr = window.localStorage.getItem("current_telphone");
+
+          if(userJSONstr) {
+            var userJSON = JSON.parse(userJSONstr);
+            $("#ScoreInfo .member-name").val(userJSON["name"]);
+            $("#ScoreInfo .member-card-number").val(userJSON["card_number"]);
+            $("#ScoreInfo .member-score").val(userJSON["total_score"]);
           }
+        }
       }
 
       if($(this).hasClass("redeem-history")) {
           if(sFCardNum !== null) {
-              layer.msg('获取中...', {
-                  icon: 16
-                  ,shade: 0.01
-                  ,time: 1000
-              });
+            layer.msg('获取中...', {
+                icon: 16
+                ,shade: 0.01
+                ,time: 1000
+            });
 
-              window.TKH.queryScorePrizeBillJson();
+            window.TKH.queryScorePrizeBillJson();
           }
       }
   })
@@ -272,11 +276,15 @@ $(function(){
         layer.msg('请输入正确的手机号码',{time: 2000});
         return false;
       }
-      // $('.tishibuton').fadeIn(200);
+
+      var card_number = window.localStorage.getItem('sFCARDNUM');
+      if(card_number && !isNaN(card_number)) {
+        $(".tishibuton-area .score-input").css({"display": "inline"});
+      }
       layer.open({
-          type:1,
-          area:"450px",
-          content:$('.tishibuton-area')
+        type:1,
+        area:"450px",
+        content:$('.tishibuton-area')
       });
   });
 

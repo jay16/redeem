@@ -62,8 +62,8 @@
 .xg .cs,
 .xg .button,
 .tishibuton-area .button {
-    float: right;
-    padding: 0 0.6rem;
+/*    float: right;*/
+    padding: 0.3rem 0.6rem;
     line-height: 1rem;
     font-size: 14px;
     color: #222;

@@ -328,11 +328,8 @@ window.ServerAPI = {
     });
   },
   view_signature: function(ctl) {
-    var $sigdiv = $("#signature");
-    $sigdiv.jSignature();
-    $sigdiv.jSignature("setData", "data:" +$(ctl).data("signature"));
+    alert($(ctl).data("signature"));
   }
-
 }
 
 if(window.location.protocol === 'file:' || window.location.host === 'localhost:4567') {

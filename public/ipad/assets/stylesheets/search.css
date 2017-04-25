@@ -139,9 +139,12 @@ select option{
     font-size: 0.4rem;
 }
 .dz{width: 95%!important;}
-.content_2 .xf{
-    width: 100%;
-    padding: 0;
+.content_2 .xf {
+    width: 42%;
+    padding: 10px 20px;
+}
+.content_2 .xf p {
+    border-bottom: 1px gray dotted;
 }
 .xf p:nth-child(1){
     font-weight: bold;

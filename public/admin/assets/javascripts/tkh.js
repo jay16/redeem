@@ -313,11 +313,11 @@ window.TKH = {
   // 3.2.37 查询会员兑奖单信息（通过测试）
   queryScorePrizeBillJson: function() {
     var clientCookie = window.localStorage.getItem('sClientCookie'),
-      fcardnum = window.localStorage.getItem('sFCARDNUM'),
-      fpageindex = 0,
-      fpagesize = 0;
-    var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
-    var xmlstring = '<SOAP-ENV:Envelope \
+        fcardnum = window.localStorage.getItem('sFCARDNUM'),
+        fpageindex = 0,
+        fpagesize = 0;
+    var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}',
+        xmlstring = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
       xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
@@ -505,12 +505,18 @@ window.TKH = {
   _do: function(data) {
     $('#mz').val(data.FMEMNAME);
     $('#xb').val(data.FMEMSEX);
+
+    var ldd_province = '选择省',
+        ldd_city = '选择市',
+        ldd_distinct = '选择区',
+        dist_json = {
+          province: ldd_province,
+          city: ldd_city,
+          district: ldd_distinct
+        };
     if(data.FMEMADDRESS && data.FMEMADDRESS.length && data.FMEMADDRESS.split('-').length >= 4) {
       var ldd_parts = data.FMEMADDRESS.split('-'),
-          ldd_part,
-          ldd_province,
-          ldd_city,
-          ldd_distinct,
+          ldd_part = [],
           ldd_other = '';
       for(var i = 0, len = ldd_parts.length; i < len; i ++) {
         ldd_part = ldd_parts[i];
@@ -529,14 +535,17 @@ window.TKH = {
           }
         }
       }
-      $("#live_dz_distpicker").distpicker('destroy');
-      $("#live_dz_distpicker").distpicker({
+      dist_json = {
         province: ldd_province,
         city: ldd_city,
         district: ldd_distinct
-      });
+      };
+      console.log(dist_json);
+      $("#live_dz_distpicker").distpicker('destroy');
+      $("#live_dz_distpicker").distpicker(dist_json);
       $("#live_dz").val(ldd_other);
     } else {
+      $("#live_dz_distpicker").distpicker('reset', true);
       $('#live_dz').val(data.FMEMADDRESS);
     }
     if(data.FMEMCOMPANY && data.FMEMCOMPANY.length && data.FMEMCOMPANY.split('-').length >= 4) {
@@ -628,8 +637,9 @@ window.TKH = {
         var ye = xia;
       }
       var html = '';
-      for (var i = 0, ilen = ExchangeInfo.length; i < ilen; i++) {
-        html += '<div class="xf"><p>兑换记录 : 礼品 / Redemption date : gifts</p>';
+      // only show first 10
+      for (var i = 0, ilen = (ExchangeInfo.length > 9 ? 9 : ExchangeInfo.length); i < ilen; i++) {
+        html += '<div class="xf">'; //<p>兑换记录 : 礼品 / Redemption date : gifts</p>
         for (var j = 0, jlen = ExchangeInfo[i]["FGOODS"].length; j < jlen; j++) {
           html += ' <p>' + ExchangeInfo[i].FBILLNUM + ':CNY ' + ExchangeInfo[i]["FGOODS"][j].AMOUNT + ' - ' + ExchangeInfo[i]["FGOODS"][j].NAME + '</p></div>';
         }
@@ -781,7 +791,7 @@ window.TKH = {
       }
     });
   },
-  // 消费录入，打开商户选择
+  // 消费录入/积分录入，打开商户选择
   searchDQM: function(ctl) {
     var dpm = null,
       gndgid = null;
@@ -792,11 +802,12 @@ window.TKH = {
 
     window.TKH.queryMallGndWeb();
   },
-  // 消费录入，选择商户选择
+  // 消费录入/积分录入，选择商户选择
   selectedDQM: function(ctl) {
     console.log($(ctl).find('.gndname').val());
     $(".suoding").find(".store-name").val($(ctl).find('.gndname').val());
     $(".suoding").find(".gndgid").val($(ctl).find('.gndgid').val());
+    $(".suoding").find(".store-code").val($(ctl).find('.gndcode').val());
     $('.xuanZe').fadeOut(200);
     $(".suoding").removeClass("suoding");
   },
@@ -807,9 +818,13 @@ window.TKH = {
     $('.content_2').append(
       '<div class="dq-wrapper dq-wrapper-' + dq_count + '">\
          <div class="dp"> \
-           <p>店铺名称 / Merchant</p>\
-           <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/><input type="hidden" placeholder="GNDGID" class="gndgid"/>\
-          <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);"  class="search"><img src="assets/images/search.png"/></a>\
+            <p>店铺名称 / Merchant</p>\
+            <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/>\
+            <input type="hidden" class="gndgid"/>\
+            <input type="hidden" class="store-code"/>\
+            <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);"  class="search">\
+              <img src="assets/images/search.png"/>\
+            </a>\
          </div>\
          <div>\
            <p>流水号 / Serial Number</p>\
@@ -1351,7 +1366,104 @@ window.TKH = {
       }
     });
   },
+  // 积分录入，添加录入框
+  addScoreInput: function() {
+    var dq_count = $(".content_2 .dq-wrapper").length + 1;
 
+    $('.content_2').append(
+      '<div class="dq-wrapper dq-wrapper-' + dq_count + '">\
+         <div class="dp"> \
+            <p>店铺名称 / Merchant</p>\
+            <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/>\
+            <input type="hidden" class="gndgid"/>\
+            <input type="hidden" class="store-code"/>\
+            <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);"  class="search">\
+              <img src="assets/images/search.png"/>\
+            </a>\
+         </div>\
+         <div>\
+           <p>流水号 / Serial Number</p>\
+           <input type="text" placeholder="流水号" class="serial-num" value=""/>\
+         </div>\
+         <div>\
+           <p>消费金额 / Amount</p>\
+           <input type="number" placeholder="0.00" class="amount"/>\
+         </div>\
+       </div>'
+    )
+  },
+  // 3.2.18 生成HDMall消费积分单
+  calcMallScoreExWeb: function(data) {
+    var clientCookie = window.localStorage.getItem('sClientCookie');
+    var card_num = data.card_number,
+        trant_time = (new Date()).format('yyyyMMddhhmmss'),
+        show_code = data.show_code,
+        real_amt = data.real_amt,
+        score = data.score,
+        params = '{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;,&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;,&quot;FSHOPCODE&quot;:&quot;' + show_code + '&quot;,&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;,&quot;FSCORE&quot;:&quot;' + score + '&quot;}';
+    var xmlString = '<SOAP-ENV:Envelope \
+    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+    <SOAP-ENV:Header/>\
+      <ns2:Body>\
+        <ns0:DoClientCommand>\
+          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+          <sCommand xsi:type="ns3:string">CRMCalcMallScoreExWeb</sCommand>\
+          <sParams xsi:type="ns3:string">' + params + '</sParams>\
+        </ns0:DoClientCommand>\
+      </ns2:Body>\
+    </SOAP-ENV:Envelope>'
+
+    console.log(params);
+    console.log(xmlString);
+    $.ajax({
+        url: window.TKH.server + "?op=DoClientCommand",
+        type: 'POST',
+        async: false,
+        dataType: 'xml',
+        data: xmlString,
+        timeout: 5000,
+        contentType: "text/xml; charset=UTF-8",
+        success: function(xmlHttpRequest) {
+          console.log('success');
+          console.log(xmlHttpRequest);
+          var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
+          console.log(errMsg);
+          var resultstring = $(xmlHttpRequest).find('sOutParams').text();
+          console.log(resultstring);
+          var outparams = JSON.parse(resultstring);
+          if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+            layer.msg('恭喜您成功积分', {
+              time: 0,
+              btn: ['确定'],
+              btnAlign: 'c',
+              yes: function(index) {
+                layer.close(index);
+                window.TKH.redirect_to_with_timestamp("complete.html");
+              }
+            });
+          } else {
+            if (outparams["FMSG"].length) {
+              layer.msg(outparams["FMSG"], { time: 2000 });
+            }
+          }
+        },
+        complete: function(xmlHttpRequest, status) {
+            console.log('complete');
+            console.log(xmlHttpRequest);
+        },
+        error: function(xmlHttpRequest) {
+            console.log('error');
+            console.log(xmlHttpRequest);
+        }
+    });
+  },
   // 3.2.7 查询有效商铺信息，后台同步使用该接口
   queryStoreForSync: function() {
     var clientCookie = window.localStorage.getItem('sClientCookie');
