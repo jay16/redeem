@@ -1450,7 +1450,7 @@ window.TKH = {
             });
           } else {
             if (outparams["FMSG"].length) {
-              layer.msg(outparams["FMSG"], { time: 2000 });
+              layer.msg('错误：' + outparams["FMSG"], { time: 2000 });
             }
           }
         },
