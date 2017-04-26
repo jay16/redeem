@@ -295,7 +295,7 @@ function storeQuestion() {
     if(questionResult !== null) {
       resultJSON = JSON.parse(questionResult);
     }
-    resultJSON[ftitleid] = { "ftitleid": ftitleid, fvalue: fvalues.join(','), fvalueid: fvalueids.join(',')}
+    resultJSON[ftitleid] = { "ftitleid": ftitleid, fvalue: fvalues.join(';'), fvalueid: fvalueids.join(';')}
 
     window.localStorage.setItem("questionResult", JSON.stringify(resultJSON));
 }
