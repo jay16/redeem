@@ -15,20 +15,20 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1493198012">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1493198012">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1493198012">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1493198012">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/questionnaire.css?timestamp=1493198012">
-<script src="assets/javascripts/server_api.js?timestamp=1493198012"></script>
-<script src="assets/javascripts/tkh.js?timestamp=1493198012"></script>
-<script src="assets/javascripts/remJs.js?timestamp=1493198012"></script>
-<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1493198012"></script>
-<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1493198012"></script>
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1493199348">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1493199348">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1493199348">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1493199348">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/questionnaire.css?timestamp=1493199348">
+<script src="assets/javascripts/server_api.js?timestamp=1493199348"></script>
+<script src="assets/javascripts/tkh.js?timestamp=1493199348"></script>
+<script src="assets/javascripts/remJs.js?timestamp=1493199348"></script>
+<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1493199348"></script>
+<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1493199348"></script>
 </head>
 <body>
 <div id="jiaZai">
-  <img src="assets/images/loadbg.png?timestamp=1493198012">
+  <img src="assets/images/loadbg.png?timestamp=1493199348">
 </div>
 
 
@@ -120,284 +120,287 @@ if(questionnaireString === null) {
   // window.TKH.queryCRMQuestionnaireMode();
   window.ServerAPI.ipad_selected_questionnaire();
 }
-questionnaireString = window.localStorage.getItem("questionnaire");
+var questionnaireState = window.localStorage.getItem("questionnaire_state");
+if(questionnaireState === '200') {
+  questionnaireString = window.localStorage.getItem("questionnaire");
+  if(questionnaireString === null) {
+    layer.msg("加载问卷失败，请刷新页面", {
+      time: 0,
+      btn: ['确定'],
+      btnAlign: 'c',
+      yes: function(index) {
+        layer.close(index);
 
-if(questionnaireString === null) {
-  layer.msg("加载问卷失败，请刷新页面", {
-    time: 0,
-    btn: ['确定'],
-    btnAlign: 'c',
-    yes: function(index) {
-      layer.close(index);
+        window.location.reload();
+      }
+    });
+  }
 
-      window.location.reload();
-    }
-  });
-}
+  var qindex = parseInt($(".questionnaire").attr("qindex"));
+  skipToQuestionWithIndex(qindex, 'last');
 
-var qindex = parseInt($(".questionnaire").attr("qindex"));
-skipToQuestionWithIndex(qindex, 'last');
+  // {
+  //   "FRESULT": "0",
+  //   "FMSG": "成功",
+  //   "DATA": [
+  //     {
+  //       "FNUM": "02101703070001",
+  //       "FNAME": "开业活动调查",
+  //       "MODEDTL": [
+  //         {
+  //           "FTITLEID": "0",
+  //           "FTITLE": "你对今天的活动满意吗",
+  //           "FTYPE": "0",
+  //           "OPTIONDTL": [
+  //             {
+  //               "FVALUEID": "1",
+  //               "FVALUE": "满意"
+  //             },
+  //             {
+  //               "FVALUEID": "2",
+  //               "FVALUE": "不满意"
+  //             }
+  //           ]
+  //         }
+  //       ]
+  //   ]
+  // }
+  function skipToQuestionWithIndex(qindex, skipType) {
+      if(qindex === "0" || qindex === 0) {
+        $("#checkbox_skip_wrapper").css("display", "inline");
+      } else {
+        $("#checkbox_skip_wrapper").css("display", "none");
+      }
 
-// {
-//   "FRESULT": "0",
-//   "FMSG": "成功",
-//   "DATA": [
-//     {
-//       "FNUM": "02101703070001",
-//       "FNAME": "开业活动调查",
-//       "MODEDTL": [
-//         {
-//           "FTITLEID": "0",
-//           "FTITLE": "你对今天的活动满意吗",
-//           "FTYPE": "0",
-//           "OPTIONDTL": [
-//             {
-//               "FVALUEID": "1",
-//               "FVALUE": "满意"
-//             },
-//             {
-//               "FVALUEID": "2",
-//               "FVALUE": "不满意"
-//             }
-//           ]
-//         }
-//       ]
-//   ]
-// }
-function skipToQuestionWithIndex(qindex, skipType) {
-    if(qindex === "0" || qindex === 0) {
-      $("#checkbox_skip_wrapper").css("display", "inline");
-    } else {
-      $("#checkbox_skip_wrapper").css("display", "none");
-    }
+      var questionnaireString = window.localStorage.getItem("questionnaire");
+      if(questionnaireString === null) { return }
 
-    var questionnaireString = window.localStorage.getItem("questionnaire");
-    if(questionnaireString === null) { return }
+      var questionnaireJSON = JSON.parse(questionnaireString);
+          data_item = questionnaireJSON,
+          modeldtl_item = data_item["MODEDTL"][qindex],
+          htmlString = '';
 
-    var questionnaireJSON = JSON.parse(questionnaireString);
-        data_item = questionnaireJSON,
-        modeldtl_item = data_item["MODEDTL"][qindex],
-        htmlString = '';
+      if(skipType === 'next') {
+        storeQuestion();
+      }
+      if(qindex === 0) {
+          $(".last-option").html("上一页");
+          $(".next-option").html("下一题");
+      } else {
+          $(".last-option").html("上一题");
+          $(".next-option").html("下一题");
 
-    if(skipType === 'next') {
-      storeQuestion();
-    }
-    if(qindex === 0) {
-        $(".last-option").html("上一页");
-        $(".next-option").html("下一题");
-    } else {
-        $(".last-option").html("上一题");
-        $(".next-option").html("下一题");
+          if(qindex === data_item["MODEDTL"].length - 1) {
+              $(".next-option").html("下一页");
+          }
+      }
 
-        if(qindex === data_item["MODEDTL"].length - 1) {
-            $(".next-option").html("下一页");
+      if(qindex >= data_item["MODEDTL"].length){
+          window.TKH.saveCRMQuestionnaire();
+          return;
+      }
+
+      // FTYPE: 0 选择题,1 多选题,2 填空题
+      $(".questionnaire-title").html(data_item["FNAME"]);
+      htmlString += '\
+        <div class="wt">\
+         <span class="questionnaire-subject-title">' + modeldtl_item["FTITLE"] + '</span>\
+        <input type="hidden" name="fnum" id="fnum" value="' + modeldtl_item["OPTIONDTL"].length + '" />\
+        <input type="hidden" name="ftype" id="ftype" value="' + modeldtl_item["FTYPE"] + '" />\
+        <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
+        <div class="kx">\
+          <img src="assets/images/diaoCha.png?timestamp=1493162260">\
+          <div class="question-type" style="display:inline;"></div>\
+          <span class="optiondtl-num" style="display: none;">' + modeldtl_item["OPTIONDTL"].length + '</span>\
+        </div>\
+        <div class="xz">';
+      if(modeldtl_item["FTYPE"] === "2") {
+        htmlString += '<textarea id="ques_hui" fvalueid="-1"></textarea>';
+      } else {
+        var option_item;
+        for(var i = 0, len = modeldtl_item["OPTIONDTL"].length; i < len; i ++) {
+          option_item = modeldtl_item["OPTIONDTL"][i];
+          htmlString += '<div  onclick="actionSelectQestion(this);" class="fvalueid" fvalueid="' + option_item["FVALUEID"] + '">' + option_item["FVALUE"] + '</div>';
         }
-    }
-
-    if(qindex >= data_item["MODEDTL"].length){
-        window.TKH.saveCRMQuestionnaire();
-        return;
-    }
-
-    // FTYPE: 0 选择题,1 多选题,2 填空题
-    $(".questionnaire-title").html(data_item["FNAME"]);
-    htmlString += '\
-      <div class="wt">\
-       <span class="questionnaire-subject-title">' + modeldtl_item["FTITLE"] + '</span>\
-      <input type="hidden" name="fnum" id="fnum" value="' + modeldtl_item["OPTIONDTL"].length + '" />\
-      <input type="hidden" name="ftype" id="ftype" value="' + modeldtl_item["FTYPE"] + '" />\
-      <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
-      <div class="kx">\
-        <img src="assets/images/diaoCha.png?timestamp=1493162260">\
-        <div class="question-type" style="display:inline;"></div>\
-        <span class="optiondtl-num" style="display: none;">' + modeldtl_item["OPTIONDTL"].length + '</span>\
-      </div>\
-      <div class="xz">';
-    if(modeldtl_item["FTYPE"] === "2") {
-      htmlString += '<textarea id="ques_hui" fvalueid="-1"></textarea>';
-    } else {
-      var option_item;
-      for(var i = 0, len = modeldtl_item["OPTIONDTL"].length; i < len; i ++) {
-        option_item = modeldtl_item["OPTIONDTL"][i];
-        htmlString += '<div  onclick="actionSelectQestion(this);" class="fvalueid" fvalueid="' + option_item["FVALUEID"] + '">' + option_item["FVALUE"] + '</div>';
       }
-    }
-    htmlString += '\
-      </div>\
-    </div>';
+      htmlString += '\
+        </div>\
+      </div>';
 
-    $(".questionnaire").html(htmlString);
-    if(modeldtl_item["FTYPE"] === "0") {
-      $(".question-type").html("单选题");
-      $(".optiondtl-num").css("display", "none");
-    } else if(modeldtl_item["FTYPE"] === "1") {
-      $(".question-type").html("多选题");
-      $(".optiondtl-num").css("display", "block");
-    } else if(modeldtl_item["FTYPE"] === "2") {
-      $(".question-type").html("填空题");
-      $(".optiondtl-num").css("display", "none");
-    }
-}
+      $(".questionnaire").html(htmlString);
+      if(modeldtl_item["FTYPE"] === "0") {
+        $(".question-type").html("单选题");
+        $(".optiondtl-num").css("display", "none");
+      } else if(modeldtl_item["FTYPE"] === "1") {
+        $(".question-type").html("多选题");
+        $(".optiondtl-num").css("display", "block");
+      } else if(modeldtl_item["FTYPE"] === "2") {
+        $(".question-type").html("填空题");
+        $(".optiondtl-num").css("display", "none");
+      }
+  }
 
-function storeQuestion() {
-    var ftitleid = $("#ftitleid").val(),
-      ftype = $("#ftype").val(),
-      fvalues = [],
-      fvalueids = [],
-      fvalueid;
+  function storeQuestion() {
+      var ftitleid = $("#ftitleid").val(),
+        ftype = $("#ftype").val(),
+        fvalues = [],
+        fvalueids = [],
+        fvalueid;
 
-    if(ftitleid === undefined) return;
+      if(ftitleid === undefined) return;
 
 
-    // # field2, subject_index, 题目序号
-    // # field6, answer_id, 选项ID
-    // # field7, answer, 回答内容
-    // # field11, other_state, 是否其他回答
-    //
-    var questionnaireString = window.localStorage.getItem("questionnaire"),
-        questionnaireJSON = JSON.parse(questionnaireString),
-        qindex = parseInt($(".questionnaire").attr("qindex")) - 1,
-        data_item =questionnaireJSON,
-        modeldtl_item = data_item["MODEDTL"][qindex],
-        post_param = {},
-        fcardnum = window.localStorage.getItem('sFCARDNUM'),
-        currentQueryMember = window.localStorage.getItem('current_telphone'),
-        currentQueryMemberJSON = JSON.parse(currentQueryMember);
-    var subject_type = "",
-        answers = [];
-    if(ftype === '0') {
-      subject_type = "单选题";
-    } else if(ftype === '1') {
-      subject_type = "多选题";
-    } else {
-      subject_type = "填空题";
-    }
-
-    // ftype: 0 单选，1 多选，2 填空
-    if(ftype === "2") {
-      fvalueid = $("#ques_hui").attr("fvalueid");
-      if(fvalueids.indexOf(fvalueid) < 0) {
-        fvalueids.push(fvalueid);
-        fvalues.push($("#ques_hui").val());
-        answers.push({
-          "answer": $("#ques_hui").val(),
-          "answer_id": fvalueid
-        });
+      // # field2, subject_index, 题目序号
+      // # field6, answer_id, 选项ID
+      // # field7, answer, 回答内容
+      // # field11, other_state, 是否其他回答
+      //
+      var questionnaireString = window.localStorage.getItem("questionnaire"),
+          questionnaireJSON = JSON.parse(questionnaireString),
+          qindex = parseInt($(".questionnaire").attr("qindex")) - 1,
+          data_item =questionnaireJSON,
+          modeldtl_item = data_item["MODEDTL"][qindex],
+          post_param = {},
+          fcardnum = window.localStorage.getItem('sFCARDNUM'),
+          currentQueryMember = window.localStorage.getItem('current_telphone'),
+          currentQueryMemberJSON = JSON.parse(currentQueryMember);
+      var subject_type = "",
+          answers = [];
+      if(ftype === '0') {
+        subject_type = "单选题";
+      } else if(ftype === '1') {
+        subject_type = "多选题";
+      } else {
+        subject_type = "填空题";
       }
 
-    } else {
-      $(".xz .xuanZhong").each(function() {
-        fvalueid = $(this).attr("fvalueid")
+      // ftype: 0 单选，1 多选，2 填空
+      if(ftype === "2") {
+        fvalueid = $("#ques_hui").attr("fvalueid");
         if(fvalueids.indexOf(fvalueid) < 0) {
           fvalueids.push(fvalueid);
-          fvalues.push($(this).html());
-
+          fvalues.push($("#ques_hui").val());
           answers.push({
-            "answer": $(this).html(),
+            "answer": $("#ques_hui").val(),
             "answer_id": fvalueid
           });
         }
-      });
-    }
 
-    var questionPostParam = window.localStorage.getItem("questionPostParam");
-    if(questionPostParam !== null) {
-      post_param = JSON.parse(questionPostParam);
-    }
+      } else {
+        $(".xz .xuanZhong").each(function() {
+          fvalueid = $(this).attr("fvalueid")
+          if(fvalueids.indexOf(fvalueid) < 0) {
+            fvalueids.push(fvalueid);
+            fvalues.push($(this).html());
 
-    post_param[modeldtl_item["FTITLEID"]] = {
-      "questionnaire_code": data_item["FNUM"],
-      "questionnaire_name": data_item["FNAME"],
-      "subject": modeldtl_item["FTITLE"],
-      "subject_id": modeldtl_item["FTITLEID"],
-      "subject_type":subject_type,
-      "card_number": fcardnum,
-      "member": currentQueryMemberJSON["name"],
-      "telphone": currentQueryMemberJSON["telphone"],
-      "answers":answers
-    };
-
-    if(answers.length) {
-      post_param[modeldtl_item["FTITLEID"]]["answer"] = answers[0].answer;
-      post_param[modeldtl_item["FTITLEID"]]["answer_id"] = answers[0].answer_id;
-    }
-    window.localStorage.setItem("questionPostParam", JSON.stringify(post_param));
-
-    var questionResult = window.localStorage.getItem("questionResult"),
-        resultJSON = {};
-    if(questionResult !== null) {
-      resultJSON = JSON.parse(questionResult);
-    }
-    resultJSON[ftitleid] = { "ftitleid": ftitleid, fvalue: fvalues.join(';'), fvalueid: fvalueids.join(';')}
-
-    window.localStorage.setItem("questionResult", JSON.stringify(resultJSON));
-}
-
-// <div class="questionnaire">
-//   <div class="wt">您如何到成都远洋太古汇? 需时多久?
-//     <input type="hidden" name="ftitleid" id="ftitleid" value="0" />
-//     <input type="hidden" name="ftype" id="ftype" value="1" /></div>
-//   <div class="kx">
-//     <img src="assets/images/diaoCha.png?timestamp=1493162260">可选答案
-//     <span>8</span></div>
-//   <div class="xz">
-//     <div id="1">自驾</div>
-//     <div id="2">出租车</div>
-//     <div id="3">公共汽车</div>
-//     <div id="4">地铁</div>
-//     <div id="5" class="xuanZhong">自行车</div>
-//     <div id="6">步行</div>
-//     <div id="7" class="xuanZhong">通常需要__分钟到达这里</div>
-//     <div id="others">其他 Others(请注明)
-//       <textarea class="ques_others"></textarea></div>
-//   </div>
-// </div>
-
-//商品选中
-function actionSelectQestion(ctl) {
-    // ftype: 0 单选，2 多选，3 填空
-    if ($('#ftype').val() == '0') {
-        $('.xz .xuanZhong').removeClass('xuanZhong');
-        $(ctl).addClass('xuanZhong');
-    } else {
-      // $('#others').removeClass('xuanZhong');
-      if ($(ctl).hasClass('xuanZhong')) {
-        $(ctl).removeClass('xuanZhong');
+            answers.push({
+              "answer": $(this).html(),
+              "answer_id": fvalueid
+            });
+          }
+        });
       }
-      else {
-        $(ctl).addClass('xuanZhong');
+
+      var questionPostParam = window.localStorage.getItem("questionPostParam");
+      if(questionPostParam !== null) {
+        post_param = JSON.parse(questionPostParam);
+      }
+
+      post_param[modeldtl_item["FTITLEID"]] = {
+        "questionnaire_code": data_item["FNUM"],
+        "questionnaire_name": data_item["FNAME"],
+        "subject": modeldtl_item["FTITLE"],
+        "subject_id": modeldtl_item["FTITLEID"],
+        "subject_type":subject_type,
+        "card_number": fcardnum,
+        "member": currentQueryMemberJSON["name"],
+        "telphone": currentQueryMemberJSON["telphone"],
+        "answers":answers
+      };
+
+      if(answers.length) {
+        post_param[modeldtl_item["FTITLEID"]]["answer"] = answers[0].answer;
+        post_param[modeldtl_item["FTITLEID"]]["answer_id"] = answers[0].answer_id;
+      }
+      window.localStorage.setItem("questionPostParam", JSON.stringify(post_param));
+
+      var questionResult = window.localStorage.getItem("questionResult"),
+          resultJSON = {};
+      if(questionResult !== null) {
+        resultJSON = JSON.parse(questionResult);
+      }
+      resultJSON[ftitleid] = { "ftitleid": ftitleid, fvalue: fvalues.join(';'), fvalueid: fvalueids.join(';')}
+
+      window.localStorage.setItem("questionResult", JSON.stringify(resultJSON));
+  }
+
+  // <div class="questionnaire">
+  //   <div class="wt">您如何到成都远洋太古汇? 需时多久?
+  //     <input type="hidden" name="ftitleid" id="ftitleid" value="0" />
+  //     <input type="hidden" name="ftype" id="ftype" value="1" /></div>
+  //   <div class="kx">
+  //     <img src="assets/images/diaoCha.png?timestamp=1493162260">可选答案
+  //     <span>8</span></div>
+  //   <div class="xz">
+  //     <div id="1">自驾</div>
+  //     <div id="2">出租车</div>
+  //     <div id="3">公共汽车</div>
+  //     <div id="4">地铁</div>
+  //     <div id="5" class="xuanZhong">自行车</div>
+  //     <div id="6">步行</div>
+  //     <div id="7" class="xuanZhong">通常需要__分钟到达这里</div>
+  //     <div id="others">其他 Others(请注明)
+  //       <textarea class="ques_others"></textarea></div>
+  //   </div>
+  // </div>
+
+  //商品选中
+  function actionSelectQestion(ctl) {
+      // ftype: 0 单选，2 多选，3 填空
+      if ($('#ftype').val() == '0') {
+          $('.xz .xuanZhong').removeClass('xuanZhong');
+          $(ctl).addClass('xuanZhong');
+      } else {
+        // $('#others').removeClass('xuanZhong');
+        if ($(ctl).hasClass('xuanZhong')) {
+          $(ctl).removeClass('xuanZhong');
+        }
+        else {
+          $(ctl).addClass('xuanZhong');
+        }
+      }
+  };
+
+  // 上一页
+  function actionLastPage() {
+    var lastQIndex = parseInt($(".questionnaire").attr("qindex")) - 1;
+    $(".questionnaire").attr("qindex", lastQIndex);
+    if(lastQIndex >= 0) {
+      skipToQuestionWithIndex(lastQIndex, 'last');
+    } else {
+      var params = window.TKH.params();
+      if(params["from"] &&
+        (params["from"] === 'exchange.html' || params["from"] === 'search.html')) {
+        window.TKH.redirect_to_with_timestamp(params["from"]);
+      } else {
+        window.TKH.redirect_to_with_timestamp("search.html");
       }
     }
-};
+  }
+  // 下一页
+  function actionNextPage() {
+    var qindex = parseInt($(".questionnaire").attr("qindex")),
+        nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
 
-// 上一页
-function actionLastPage() {
-  var lastQIndex = parseInt($(".questionnaire").attr("qindex")) - 1;
-  $(".questionnaire").attr("qindex", lastQIndex);
-  if(lastQIndex >= 0) {
-    skipToQuestionWithIndex(lastQIndex, 'last');
-  } else {
-    var params = window.TKH.params();
-    if(params["from"] &&
-      (params["from"] === 'exchange.html' || params["from"] === 'search.html')) {
-      window.TKH.redirect_to_with_timestamp(params["from"]);
+    if(qindex === 0 &&  $("#checkbox_skip").prop("checked")) {
+      window.TKH.redirect_to_with_timestamp("signature.html");
     } else {
-      window.TKH.redirect_to_with_timestamp("search.html");
+      $(".questionnaire").attr("qindex", nextQIndex);
+      skipToQuestionWithIndex(nextQIndex, 'next');
     }
   }
 }
-// 下一页
-function actionNextPage() {
-  var qindex = parseInt($(".questionnaire").attr("qindex")),
-      nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
 
-  if(qindex === 0 &&  $("#checkbox_skip").prop("checked")) {
-    window.TKH.redirect_to_with_timestamp("signature.html");
-  } else {
-    $(".questionnaire").attr("qindex", nextQIndex);
-    skipToQuestionWithIndex(nextQIndex, 'next');
-  }
-}
 $(function() {
   $('.ques_others').focus(function() {
       $(this).parent().find('#others').addClass('xuanZhong');
@@ -405,7 +408,7 @@ $(function() {
 });
 </script>
 
-<script src="assets/javascripts/side.js?timestamp=1493198012"></script>
+<script src="assets/javascripts/side.js?timestamp=1493199348"></script>
 <script>
   window.onload = function() {
     $('#jiaZai').hide();

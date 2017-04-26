@@ -341,10 +341,12 @@ window.ServerAPI = {
       timeout: 10000,
       success: function(xhr) {
         console.log(xhr);
+
+        window.localStorage.setItem("questionnaire_state", xhr.code);
         if(xhr.code === 200) {
           window.localStorage.setItem("questionnaire", xhr.data);
         } else {
-          layer.msg(xhr.info + "\n返回会员查询页面", {
+          layer.msg(xhr.info + "，\n返回『客户信息』页面", {
             time: 0,
             btn: ['确定'],
             btnAlign: 'c',
