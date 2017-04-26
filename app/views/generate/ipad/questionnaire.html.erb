@@ -338,33 +338,33 @@ if(questionnaireState === '200') {
       }
   };
 
-  // 上一页
-  function actionLastPage() {
-    var lastQIndex = parseInt($(".questionnaire").attr("qindex")) - 1;
-    $(".questionnaire").attr("qindex", lastQIndex);
-    if(lastQIndex >= 0) {
-      skipToQuestionWithIndex(lastQIndex, 'last');
+}
+// 上一页
+function actionLastPage() {
+  var lastQIndex = parseInt($(".questionnaire").attr("qindex")) - 1;
+  $(".questionnaire").attr("qindex", lastQIndex);
+  if(lastQIndex >= 0) {
+    skipToQuestionWithIndex(lastQIndex, 'last');
+  } else {
+    var params = window.TKH.params();
+    if(params["from"] &&
+      (params["from"] === 'exchange.html' || params["from"] === 'search.html')) {
+      window.TKH.redirect_to_with_timestamp(params["from"]);
     } else {
-      var params = window.TKH.params();
-      if(params["from"] &&
-        (params["from"] === 'exchange.html' || params["from"] === 'search.html')) {
-        window.TKH.redirect_to_with_timestamp(params["from"]);
-      } else {
-        window.TKH.redirect_to_with_timestamp("search.html");
-      }
+      window.TKH.redirect_to_with_timestamp("search.html");
     }
   }
-  // 下一页
-  function actionNextPage() {
-    var qindex = parseInt($(".questionnaire").attr("qindex")),
-        nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
+}
+// 下一页
+function actionNextPage() {
+  var qindex = parseInt($(".questionnaire").attr("qindex")),
+      nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
 
-    if(qindex === 0 &&  $("#checkbox_skip").prop("checked")) {
-      window.TKH.redirect_to_with_timestamp("signature.html");
-    } else {
-      $(".questionnaire").attr("qindex", nextQIndex);
-      skipToQuestionWithIndex(nextQIndex, 'next');
-    }
+  if(qindex === 0 &&  $("#checkbox_skip").prop("checked")) {
+    window.TKH.redirect_to_with_timestamp("signature.html");
+  } else {
+    $(".questionnaire").attr("qindex", nextQIndex);
+    skipToQuestionWithIndex(nextQIndex, 'next');
   }
 }
 

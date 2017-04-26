@@ -831,7 +831,11 @@ window.TKH = {
            <p>流水号 / Serial Number</p>\
            <input type="text" placeholder="流水号" class="serial-num" value=""/>\
          </div>\
-         <div>\
+         <div style="width: 28%;">\
+           <p>消费时间 / Time</p>\
+           <input type="datetime-local" value="2017-04-26 18:18:18" placeholder="" class="datetime"/>\
+         </div>\
+         <div style="width: 12%;">\
            <p>消费金额 / Amount</p>\
            <input type="number" placeholder="0.00" class="amount"/>\
          </div>\

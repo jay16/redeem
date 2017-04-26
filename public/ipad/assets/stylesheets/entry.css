@@ -75,14 +75,14 @@
     overflow:hidden;
     text-overflow:ellipsis;
 }
-.content_2>div{
+.content_2 > div{
     overflow: hidden;
     margin-top: 0.2rem;
     position: relative;
 }
-.content_2>div>div{
+.content_2 > div > div{
     float: left;
-    width: 31.2%;
+    width: 25%;
     padding: 0 1%;
     margin-bottom: 0.5rem;
 }
@@ -100,7 +100,7 @@
 }
 
 .dp input{
-    width: 85%;
+    width: 80%;
 }
 .search{
     float: right;

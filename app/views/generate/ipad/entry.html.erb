@@ -85,6 +85,7 @@
 $(function() {
   // 初始一个，消费记录输入框
   window.TKH.addRecordInput();
+  $(".datetime").val((new Date).format('yyyy-MM-ddThh:mm'));
 
   // 若已录入消费记录，此处还原
   // 场景：录入后，从兑奖页面返回时
