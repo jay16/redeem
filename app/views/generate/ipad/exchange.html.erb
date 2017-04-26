@@ -23,21 +23,21 @@
     </div>
   </div>
   <div class="anNiu">
-    <a href="javascript:void (0)" class="sy">上一页
+    <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("entry.html");'>上一页
       <br/>Previous</a>
-    <a href="javascript:void (0)" class="duiHuan">
+    <a href="javascript:void(0);" class="duiHuan">
       <img src="/images/duiHuan.png?timestamp=<%= timestamp %>">兑换
       <br/>Redeem
       <span>99</span></a>
-    <a href="javascript:void (0)" class="qxDuiHuan">
+    <a href="javascript:void(0);" class="qxDuiHuan">
       <img src="/images/quXiao.png?timestamp=<%= timestamp %>">取消兑换
       <br/>Undo
       <span>99</span></a>
-    <a style="display:none;" href="javascript:void (0)" onclick="window.TKH.redirect_to_with_timestamp('complete.html');"  class="tiaoGuo">
+    <a style="display:none;" href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('complete.html');"  class="tiaoGuo">
       <img src="/images/tiaoGuo.png?timestamp=<%= timestamp %>">跳过问卷
       <br/>Skip survey
       <span>99</span></a>
-    <a style="display:none;" href="javascript:void (0)" class="xy" onclick="window.TKH.redirect_to_with_timestamp('signature.html');">下一页
+    <a style="display:none;" href="javascript:void(0);" class="xy" onclick="window.TKH.redirect_to_with_timestamp('signature.html');">下一页
       <br/>Next</a></div>
   <div class="gouXuan">
     <img src="/images/dhlp.png?timestamp=<%= timestamp %>">已勾选的当日消费：￥
@@ -55,7 +55,7 @@
 <div class="dhlp">
   <div class="Inputs" style=""></div>
   <div>
-    <a href="javascript:void (0)" class="gb">
+    <a href="javascript:void(0);" class="gb">
       <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
     <div class="dhlp_content">
       <div class="suo">
@@ -68,7 +68,7 @@
           <input type="text" name="remark" />
           <p class="bz">备注2</p>
           <input type="text" name="desc" /></div>
-        <a id="queren" href="javascript:void (0)" onClick="window.TKH.genMallSupplyBill();" class="cs queren">确认兑换</a></div>
+        <a id="queren" href="javascript:void(0);" onClick="window.TKH.genMallSupplyBill();" class="cs queren">确认兑换</a></div>
     </div>
   </div>
 </div>
@@ -102,7 +102,7 @@
 </div>
 <div class="xg">
   <div>
-    <a href="javascript:void (0)" class="gb">
+    <a href="javascript:void(0);" class="gb">
       <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
     <div class="xg_content">
       <div class="suo">
@@ -155,8 +155,7 @@ $(function() {
   });
 
   //商品选中
-  $(document).on('click', '.shangPing>div',
-  function() {
+  $(document).on('click', '.shangPing>div', function() {
     console.log('2 = ' + this);
     if (!$('#Exchange_id').val()) {
       $('.shangPing>div').removeClass('xuanZhong');
@@ -179,7 +178,7 @@ $(function() {
         $(this).find('.guoxiao_id').removeClass('xiaochu');
         $(this).find('.guoxiao_amount').removeClass('xiaochu');
         $(this).find('.guoxiao_store').removeClass('xiaochu');
-        $(this).find('.guoxiao').attr('src', '../images/wu.png');
+        $(this).find('.guoxiao').attr('src', 'assets/images/wu.png');
         $(this).addClass("checked");
       } else {
         $('#today_amount_guo').html(today_amount + jin);
@@ -187,7 +186,7 @@ $(function() {
         $(this).find('.guoxiao_id').addClass('xiaochu');
         $(this).find('.guoxiao_amount').addClass('xiaochu');
         $(this).find('.guoxiao_store').addClass('xiaochu');
-        $(this).find('.guoxiao').attr('src', '../images/dui.png');
+        $(this).find('.guoxiao').attr('src', 'assets/images/dui.png');
         $(this).removeClass("checked");
       }
     } else {

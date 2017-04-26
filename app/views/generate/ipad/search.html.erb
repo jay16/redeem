@@ -41,21 +41,21 @@
     </div>
     <div class="content_2">
       <div data-id='1' style="display: block;">
-        <div style="max-width: 25%;">
+        <div style="width: 90%;display:block;">
           <p>姓名 / Full name</p>
-          <input type="text" id="mz" value="" />
+          <input type="text" id="mz" value="" style="width:50%;" />
         </div>
-        <div style="max-width: 25%;">
+        <div style="max-width: 45%;">
+          <p>出生日期 / Birthday</p>
+          <input type="date" id="ymd" value="" />
+        </div>
+        <div style="max-width: 45%;">
           <p>性别 / Gender</p>
           <select name="" id="xb">
             <option value="男" selected>男 / M</option>
             <option value="女">女 / F</option></select>
         </div>
-        <div style="max-width: 25%;">
-          <p>出生日期 / Birthday</p>
-          <input type="date" id="ymd" value="" />
-        </div>
-        <div class="dz" style="">
+        <div class="dz" style="display:inline;width: 45%!important">
           <p>居住地址 / Live Address</p>
 
           <form class="form-inline">
@@ -72,13 +72,10 @@
                 <label class="sr-only" for="ldd_district">选择区</label>
                 <select class="form-control" id="ldd_district"></select>
               </div>
-              <div class="form-group">
-                <input style="display:inline-block;min-width:320px;" type="text" id="live_dz" value="" />
-              </div>
             </div>
           </form>
         </div>
-        <div class="dz">
+        <div class="dz" style="display:inline;width: 45%!important">
           <p>工作地址 / Work Address</p>
 
           <form class="form-inline">
@@ -94,9 +91,6 @@
               <div class="form-group">
                 <label class="sr-only" for="wdd_district">选择区</label>
                 <select class="form-control" id="wdd_district"></select>
-              </div>
-              <div class="form-group">
-                <input style="display:inline-block;min-width:370px;" type="text" id="work_dz" value="" />
               </div>
             </div>
           </form>
@@ -143,9 +137,9 @@
   <div style="min-height:120px; text-align:center; font-size:16px; line-height:30px; background: #333; color:lightgray;padding-top:20px;">
     <p class="">是否只做问卷，不添加消费信息、兑换信息等？</p>
     <div style="margin: 0 auto;margin-top:20px;">
-    <a href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('score-input.html');" class="button score-input" style='display: none;'>积分录入</a>
-    <a href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('questionnaire.html');" class="button">填写问卷</a>
+    <a href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('score-input.html');" class="button score-input" style='display: none;margin-right:20px'>消费积分</a>
     <a style="margin-right:20px"  href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('entry.html?from=search.html');" class="button">消费兑换</a>
+    <a href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('questionnaire.html');" class="button">填写问卷</a>
   </div>
   </div>
 </div>

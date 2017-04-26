@@ -448,7 +448,6 @@ window.TKH = {
             window.TKH._doConsumerInfo(ret.ConsumerInfo, false);
             window.TKH._doExchangeInfo(ret.ExchangeInfo, false);
             $('#wx').parent().css('display', 'block');
-            $('#live_dz').parent().css('display', 'inline-block');
             $('.bc, .legal-provision-dz').css('display', 'none');
             $('.xy').css('display', 'block');
 
@@ -484,7 +483,6 @@ window.TKH = {
             }
 
             $('#wx').parent().css('display', 'block');
-            $('#live_dz').parent().css('display', 'inline-block');
             $('.bc, .legal-provision-dz').css('display', 'block');
             $('.xy').css('display', 'none');
             // $("#search").val('');
@@ -544,12 +542,10 @@ window.TKH = {
       console.log(dist_json);
       $("#live_dz_distpicker").distpicker('destroy');
       $("#live_dz_distpicker").distpicker(dist_json);
-      $("#live_dz").val(ldd_other);
     } else {
       $("#live_dz_distpicker").distpicker('reset', true);
-      $('#live_dz').val(data.FMEMADDRESS);
     }
-    if(data.FMEMCOMPANY && data.FMEMCOMPANY.length && data.FMEMCOMPANY.split('-').length >= 4) {
+    if(data.FMEMCOMPANY && data.FMEMCOMPANY.length && data.FMEMCOMPANY.split('-').length >= 3) {
       var wdd_parts = data.FMEMCOMPANY.split('-'),
           wdd_part,
           wdd_province,
@@ -578,9 +574,6 @@ window.TKH = {
         city: ldd_city,
         district: ldd_distinct
       });
-      $("#work_dz").val(wdd_other);
-    } else {
-      $('#work_dz').val(data.FMEMCOMPANY);
     }
 
     if (data.FMEMBIRTH) {
@@ -657,7 +650,6 @@ window.TKH = {
   _chu: function() {
     $('#mz').val('');
     $('#xb').val('');
-    $('#live_dz').val('');
     // $('#work_dz').val();
     $('#ymd').val('');
   },
@@ -675,14 +667,13 @@ window.TKH = {
     if($("#checkbox_legal").prop('checked')) {
       window.TKH.CRMWeiXinOpenCardJson();
     } else {
-     window.localStorage.setItem('sFCARDNUM', '-');
-     layer.open({
-          type:1,
-          area:"450px",
-          content:$('.tishibuton')
+      window.localStorage.setItem('sFCARDNUM', '-');
+
+      layer.open({
+        type:1,
+        area:"450px",
+        content:$('.tishibuton-area')
       });
-      $(".layui-layer").css({"top": "30%", "min-height": "230px"});
-      $(".button, .tishibuton").css({"display": "block"});
     }
   },
   // 注册会员
@@ -698,9 +689,8 @@ window.TKH = {
         fmbrbirth = $.trim($('#ymd').val()),
         ldd_province = $("#ldd_province").val(),
         ldd_city = $("#ldd_city").val(),
-        ldd_district = $("#ldd_district").val(),
-        live_dz = $("#live_dz").val(),
-        faddress = ldd_province + '-' + ldd_city + '-' + ldd_district + '-' + live_dz;
+        ldd_district = $("#ldd_district").val();
+        faddress = ldd_province + '-' + ldd_city + '-' + ldd_district;
 
     if (fmbrname.length == 0) {
       layer.msg('请输入用户名', { time: 2000 });
@@ -1776,5 +1766,5 @@ window.TKH = {
         layer.msg("ERROR - CRMQueryCRMQuestionnaireMode", { time: 2000 });
       }
     });
-  },
+  }
 }
