@@ -1,6 +1,8 @@
 #main {
-    background: url('../images/bg-blur.jpg') no-repeat center;
-    background-size: 100% 100%;
+    background:url('../images/bg-blur.jpg');
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
     -webkit-animation: fadeIn .6s backwards;
     display: none;
 }
@@ -53,7 +55,7 @@
 
 .content{
     width: 90%;
-    margin: 0.6rem auto 0;
+    margin: 0.1rem auto 0;
 }
 .content_1{overflow: hidden;}
 .content_1 > div{
@@ -65,14 +67,15 @@
     text-align: center;
     padding: 0.2rem 0;
     cursor: pointer;
+    height: 60px;
 }
 .content_1 > div:nth-child(2){margin: 0 0.5%;}
-.content_1 .act{
+.content_1 .act {
     color: #fdc82f;
     background-color: #303030;
 }
 .content_1 p {
-    line-height: 1rem;
+    line-height: 0.8rem;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;

@@ -1,6 +1,8 @@
 #main {
-    background: url('../images/bg-blur.jpg') no-repeat center;
-    background-size: 100% 100%;
+    background:url('../images/bg-blur.jpg');
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
     -webkit-animation: fadeIn .6s backwards;
     display: none;
 }
