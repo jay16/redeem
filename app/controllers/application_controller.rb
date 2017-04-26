@@ -76,6 +76,7 @@ class ApplicationController < Sinatra::Base
       'admin:manager' => '超级管理员管理',
       'admin:member' => '会员管理',
       'admin:questionnaire' => '问卷管理',
+      'admin:ipad-setting' => 'iPad 设置',
       'admin:store' => '店铺管理',
       'admin:sync-gift' => '同步礼品',
       'admin:sync-questionnaire' => '同步问卷',

@@ -7,6 +7,9 @@ module API
       params.to_inspect
     end
 
+    #
+    # authentication
+    #
     post '/authen/login' do
       result_hash = User.authen(params)
 
@@ -96,6 +99,48 @@ module API
       end
 
       respond_with_json({}, 200)
+    end
+
+    #
+    # ipad selected questionnaire
+    #
+    get '/ipad/questionnaire' do
+      result_hash = {info: '后台未指定问卷', code: 404}
+      if wconfig = WConfig.ipad_selected_questionnaire
+        result_hash = {data: wconfig.content, code: 200}
+      end
+
+      respond_with_json(result_hash, 200)
+    end
+
+    post '/ipad/setting' do
+      result_hash = {info: '配置失败，未找到指定的问卷', code: 404}
+      if questionnaire = Questionnaire.find_by(field0: params[:questionnaire_code])
+        config_params = {
+          keyname: 'ipad-selected-questionnaire',
+          content: questionnaire.questionnaire_content,
+          remark: params[:questionnaire_code]
+        }
+        WConfig.update_or_create_with_params(config_params)
+        result_hash = {info: '配置成功', code: 200}
+      end
+
+      respond_with_json(result_hash, 200)
+    end
+
+    get '/ipad/setting' do
+      questionnaires = Questionnaire.select('distinct field0, field1').map { |h| [h.field0, h.field1] }
+      selected_questionnaire = WConfig.ipad_selected_questionnaire
+      questionnaire_code = selected_questionnaire && selected_questionnaire.remark ? selected_questionnaire.remark : ''
+
+      result_hash = {
+        data: questionnaires,
+        selected: questionnaire_code
+      }
+      respond_with_json(result_hash, 200)
+    end
+
+    post '/ipad/setting' do
     end
   end
 end

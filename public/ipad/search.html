@@ -15,24 +15,24 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1493162260">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1493162260">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1493162260">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1493162260">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/search.css?timestamp=1493162260">
-<script src="assets/javascripts/server_api.js?timestamp=1493162260"></script>
-<script src="assets/javascripts/tkh.js?timestamp=1493162260"></script>
-<script src="assets/javascripts/remJs.js?timestamp=1493162260"></script>
-<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1493162260"></script>
-<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1493162260"></script>
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1493197684">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1493197684">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1493197684">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1493197684">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/search.css?timestamp=1493197684">
+<script src="assets/javascripts/server_api.js?timestamp=1493197684"></script>
+<script src="assets/javascripts/tkh.js?timestamp=1493197684"></script>
+<script src="assets/javascripts/remJs.js?timestamp=1493197684"></script>
+<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1493197684"></script>
+<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1493197684"></script>
 </head>
 <body>
 <div id="jiaZai">
-  <img src="assets/images/loadbg.png?timestamp=1493162260">
+  <img src="assets/images/loadbg.png?timestamp=1493197684">
 </div>
 
-<script src="assets/javascripts/distpicker.data.js?timestamp=1493162260"></script>
-<script src="assets/javascripts/distpicker.js?timestamp=1493162260"></script>
+<script src="assets/javascripts/distpicker.data.js?timestamp=1493197684"></script>
+<script src="assets/javascripts/distpicker.js?timestamp=1493197684"></script>
 <style>
 #layui-layer1{ top:223px !important; }
 .tishibuton .cs { margin: 0.5rem !important; }
@@ -238,6 +238,7 @@
 $(function(){
   $('#live_dz_distpicker,#work_dz_distpicker').distpicker({autoSelect: false});
   window.localStorage.removeItem("current_telphone");
+  window.localStorage.removeItem("questionnaire");
 
   $("#ymd").attr("max", (new Date()).format('yyyy-MM-dd'));
   $(".legal-provision-link").click(function() {
@@ -327,7 +328,7 @@ $(function(){
 })
 </script>
 
-<script src="assets/javascripts/side.js?timestamp=1493162260"></script>
+<script src="assets/javascripts/side.js?timestamp=1493197684"></script>
 <script>
   window.onload = function() {
     $('#jiaZai').hide();

@@ -12,6 +12,7 @@ require 'sinatra/activerecord'
 # sys_model_6, Redeem, 礼品兑换
 # sys_model_7, Gift, 礼品列表
 # sys_model_8, Signautre, 签字
+# sys_model_9, WConfig, 全局配置
 
 # 管理员
 class User < ActiveRecord::Base
@@ -99,12 +100,18 @@ class User < ActiveRecord::Base
 
     def authen(params)
       authen_hash = {}
-      if record = find_by(field0: params[:username], field1: params[:password])
-        authen_hash[:code] = 200
-        authen_hash[:info] = 'succesfully'
+      if record = find_by(field0: params[:username])
+        puts "#{record.password};#{record.field1},#{params[:password]}"
+        if record.password == params[:password]
+          authen_hash[:code] = 200
+          authen_hash[:info] = 'succesfully'
+        else
+          authen_hash[:code] = 201
+          authen_hash[:info] = '用户密码错误'
+        end
       else
         authen_hash[:code] = 201
-        authen_hash[:info] = '用户验证失败'
+        authen_hash[:info] = '用户不存在'
       end
 
       authen_hash

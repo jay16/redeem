@@ -62,13 +62,9 @@ end
 
 def alias_field
   string = <<-EOF
-  # field0, name, 会员名称
-  # field1, telphone, 会员手机号
-  # field2, card_number, 会员卡号
-  # field3, questionnaire_code, 问卷编号
-  # field4, questionnaire_name, 问卷名称
-  # field5, encode_type, 签字加密类型
-  # text, signature, 签字
+  # field0, keyname, 键名
+  # field1, description, 描述
+  # text1, content, 键值
   EOF
 
   string.split("\n").map(&:strip).each do |line|

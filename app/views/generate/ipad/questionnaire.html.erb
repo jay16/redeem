@@ -1,8 +1,9 @@
+
 <div id="main">
   <div class="title">
     <div>
-      <img src="/images/dhlp2.png?timestamp=<%= timestamp %>">
-      <img src="/images/diaoCha.png?timestamp=<%= timestamp %>">
+      <img src="/images/dhlp2.png?timestamp=1493162260">
+      <img src="/images/diaoCha.png?timestamp=1493162260">
       <span class="questionnaire-title">
           问卷调查
       </span>
@@ -27,24 +28,24 @@
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
-      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt="">
+      <img src="/images/gn1.png?timestamp=1493162260" class="xs" alt="">
+      <img src="/images/gn2.png?timestamp=1493162260" class="yc" alt="">
     </div>
 
     <div style="display:none;">
-      <img src="/images/gn2.png?timestamp=<%= timestamp %>"></div>
+      <img src="/images/gn2.png?timestamp=1493162260"></div>
     </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="/images/dhlp.png?timestamp=<%= timestamp %>">礼品兑换</a></p>
+        <img src="/images/dhlp.png?timestamp=1493162260">礼品兑换</a></p>
     <p class="mm">
-      <img src="/images/bi.png?timestamp=<%= timestamp %>" class="bi" alt="">修改密码</p>
+      <img src="/images/bi.png?timestamp=1493162260" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="/images/dl2.png?timestamp=<%= timestamp %>">退出登录</p>
+      <img src="/images/dl2.png?timestamp=1493162260">退出登录</p>
     <div class="renWu">
-      <img src="/images/renWu.png?timestamp=<%= timestamp %>">
+      <img src="/images/renWu.png?timestamp=1493162260">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -53,10 +54,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
+      <img src="/images/gb.png?timestamp=1493162260"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="/images/bi.png?timestamp=<%= timestamp %>"></div>
+        <img src="/images/bi.png?timestamp=1493162260"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -67,9 +68,38 @@
   </div>
 </div>
 <script>
+var currentQueryMember = window.localStorage.getItem('current_telphone');
+if(currentQueryMember === null) {
+  layer.msg("请确认已成功查询会员信息", {
+    time: 0,
+    btn: ['确定'],
+    btnAlign: 'c',
+    yes: function(index) {
+      layer.close(index);
+
+      window.TKH.redirect_to_with_timestamp('search.html');
+    }
+  });
+}
+
 var questionnaireString = window.localStorage.getItem("questionnaire");
 if(questionnaireString === null) {
-  window.TKH.queryCRMQuestionnaireMode();
+  // window.TKH.queryCRMQuestionnaireMode();
+  window.ServerAPI.ipad_selected_questionnaire();
+}
+questionnaireString = window.localStorage.getItem("questionnaire");
+
+if(questionnaireString === null) {
+  layer.msg("加载问卷失败，请刷新页面", {
+    time: 0,
+    btn: ['确定'],
+    btnAlign: 'c',
+    yes: function(index) {
+      layer.close(index);
+
+      window.location.reload();
+    }
+  });
 }
 
 var qindex = parseInt($(".questionnaire").attr("qindex"));
@@ -112,8 +142,7 @@ function skipToQuestionWithIndex(qindex, skipType) {
     if(questionnaireString === null) { return }
 
     var questionnaireJSON = JSON.parse(questionnaireString);
-        data_items = questionnaireJSON["DATA"],
-        data_item = data_items[0],
+        data_item = questionnaireJSON,
         modeldtl_item = data_item["MODEDTL"][qindex],
         htmlString = '';
 
@@ -146,7 +175,7 @@ function skipToQuestionWithIndex(qindex, skipType) {
       <input type="hidden" name="ftype" id="ftype" value="' + modeldtl_item["FTYPE"] + '" />\
       <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
       <div class="kx">\
-        <img src="/images/diaoCha.png?timestamp=<%= timestamp %>">\
+        <img src="/images/diaoCha.png?timestamp=1493162260">\
         <div class="question-type" style="display:inline;"></div>\
         <span class="optiondtl-num" style="display: none;">' + modeldtl_item["OPTIONDTL"].length + '</span>\
       </div>\
@@ -195,14 +224,12 @@ function storeQuestion() {
     var questionnaireString = window.localStorage.getItem("questionnaire"),
         questionnaireJSON = JSON.parse(questionnaireString),
         qindex = parseInt($(".questionnaire").attr("qindex")) - 1,
-        data_items = questionnaireJSON["DATA"],
-        data_item = data_items[0],
+        data_item =questionnaireJSON,
         modeldtl_item = data_item["MODEDTL"][qindex],
         post_param = {},
         fcardnum = window.localStorage.getItem('sFCARDNUM'),
         currentQueryMember = window.localStorage.getItem('current_telphone'),
         currentQueryMemberJSON = JSON.parse(currentQueryMember);
-
     var subject_type = "",
         answers = [];
     if(ftype === '0') {
@@ -278,7 +305,7 @@ function storeQuestion() {
 //     <input type="hidden" name="ftitleid" id="ftitleid" value="0" />
 //     <input type="hidden" name="ftype" id="ftype" value="1" /></div>
 //   <div class="kx">
-//     <img src="/images/diaoCha.png?timestamp=<%= timestamp %>">可选答案
+//     <img src="/images/diaoCha.png?timestamp=1493162260">可选答案
 //     <span>8</span></div>
 //   <div class="xz">
 //     <div id="1">自驾</div>
@@ -343,6 +370,4 @@ $(function() {
       $(this).parent().find('#others').addClass('xuanZhong');
   })
 });
-
-
 </script>

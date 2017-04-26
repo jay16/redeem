@@ -19,6 +19,7 @@ class Questionnaire < ActiveRecord::Base
   # field4, subject, 题目内容
   # field5, subject_type, 题目类型
   # text1, options, 问题选项
+  # text2, questionnaire_content, 整个问卷原内容
   alias_attribute :questionnaire_code, :field0 # 问卷单号(单据号)
   alias_attribute :questionnaire_name, :field1 # 问卷名称
   alias_attribute :subject_index, :field2 # 题目序号
@@ -26,6 +27,8 @@ class Questionnaire < ActiveRecord::Base
   alias_attribute :subject, :field4 # 题目内容
   alias_attribute :subject_type, :field5 # 题目类型
   alias_attribute :options, :text1 # 问题选项
+  alias_attribute :questionnaire_content, :text2 # 整个问卷原内容
+
   def self.extract_params(params)
     options = {}
     options[:field0] = params[:questionnaire_code] if params[:questionnaire_code]
@@ -35,6 +38,7 @@ class Questionnaire < ActiveRecord::Base
     options[:field4] = params[:subject] if params[:subject]
     options[:field5] = params[:subject_type] if params[:subject_type]
     options[:text1] = params[:options] if params[:options]
+    options[:text2] = params[:questionnaire_content] if params[:questionnaire_content]
     options
   end
 

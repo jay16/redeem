@@ -1,6 +1,6 @@
 window.ServerAPI = {
-  version: '0.0.3',
-  server: 'http://123.56.91.131:4567',
+  version: '0.4.26',
+  server: '',
   params: function() {
     var query = {},
         search = window.location.search.substring(1),
@@ -329,9 +329,74 @@ window.ServerAPI = {
   },
   view_signature: function(ctl) {
     alert($(ctl).data("signature"));
+  },
+  // window.TKH.queryCRMQuestionnaireMode();
+  ipad_selected_questionnaire: function() {
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/ipad/questionnaire",
+      type: 'get',
+      async: false,
+      dataType: 'json',
+      timeout: 10000,
+      success: function(xhr) {
+        console.log(xhr);
+        if(xhr.code === 200) {
+          window.localStorage.setItem("questionnaire", xhr.data);
+        } else {
+          layer.msg(xhr.info + "\n返回会员查询页面", {
+            time: 0,
+            btn: ['确定'],
+            btnAlign: 'c',
+            yes: function(index) {
+              layer.close(index);
+              window.TKH.redirect_to_with_timestamp('search.html');
+            }
+          });
+        }
+      },
+      error: function(xhr) {
+      }
+    });
+  },
+  generate_questionnaire_options: function() {
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/ipad/setting",
+      type: 'get',
+      async: true,
+      dataType: 'json',
+      timeout: 10000,
+      success: function(xhr) {
+        console.log(xhr);
+        if(xhr.code === 200) {
+          var $select = $("select[name=questionnaire_code]"),
+              item,
+              option;
+          $select.children("option").remove();
+          $select.append("<option value='404'>请选择问卷</option>");
+          for(var i = 0, len = xhr.data.length; i < len; i ++) {
+            item = xhr.data[i];
+            option = "<option value='" + item[0] + "'";
+            if(xhr.selected === item[0]) {
+              option += " selected='selected' ";
+            }
+            option += " >" + item[1] + "</option>";
+            console.log(option);
+            $select.append(option);
+          }
+
+        } else {
+          alert(xhr.info);
+        }
+      },
+      error: function(xhr) {
+        console.log(xhr);
+      }
+    });
   }
 }
 
-if(window.location.protocol === 'file:' || window.location.host === 'localhost:4567') {
+if(window.location.protocol === 'file:') {
   window.ServerAPI.server = 'http://localhost:4567';
 }

@@ -8,8 +8,8 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="/images/dhlp2.png?timestamp=<%= timestamp %>">礼品兑换 -
-      <img src="/images/renWu2.png?timestamp=<%= timestamp %>">客户信息
+      <img src="/images/dhlp2.png?timestamp=1493162260">礼品兑换 -
+      <img src="/images/renWu2.png?timestamp=1493162260">客户信息
     </div>
     <div>Gift Redemption - Customer</div>
   </div>
@@ -20,7 +20,7 @@
     <form action="javascript: window.TKH.queryMemberInfoJSON();">
       <input type="tel" id="search" placeholder="手机号码 / Mobile phone number" value="" />
       <a href="javascript:void(0)" onClick="window.TKH.queryMemberInfoJSON();" id="btn_search">
-        <img src="/images/search.png?timestamp=<%= timestamp %>">
+        <img src="/images/search.png?timestamp=1493162260">
       </a>
     </form>
   </div>
@@ -156,30 +156,30 @@
     </p>
 
     <p class="sm">请扫描二维码, 同步在微信端绑定会员卡 </p>
-    <p class="sm"><img src="/images/ewm.png?timestamp=<%= timestamp %>" style="max-width:200px; max-height: 200px;" /></p>
+    <p class="sm"><img src="/images/ewm.png?timestamp=1493162260" style="max-width:200px; max-height: 200px;" /></p>
   </div>
 </div>
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
-      <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt="">
+      <img src="/images/gn1.png?timestamp=1493162260" class="xs" alt="">
+      <img src="/images/gn2.png?timestamp=1493162260" class="yc" alt="">
     </div>
     <div style="display:none;">
-      <img src="/images/gn2.png?timestamp=<%= timestamp %>">
+      <img src="/images/gn2.png?timestamp=1493162260">
     </div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="/images/dhlp.png?timestamp=<%= timestamp %>">礼品兑换</a></p>
+        <img src="/images/dhlp.png?timestamp=1493162260">礼品兑换</a></p>
     <p class="mm">
-      <img src="/images/bi.png?timestamp=<%= timestamp %>" class="bi" alt="">修改密码</p>
+      <img src="/images/bi.png?timestamp=1493162260" class="bi" alt="">修改密码</p>
     <p class="tuichu" onClick="window.TKH.logout();">
-      <img src="/images/dl2.png?timestamp=<%= timestamp %>">退出登录</p>
+      <img src="/images/dl2.png?timestamp=1493162260">退出登录</p>
     <div class="renWu">
-      <img src="/images/renWu.png?timestamp=<%= timestamp %>">
+      <img src="/images/renWu.png?timestamp=1493162260">
       <p id="userGid"></p>
       <p class="time">123</p>
     </div>
@@ -188,10 +188,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void (0)" class="gb">
-      <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
+      <img src="/images/gb.png?timestamp=1493162260"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="/images/bi.png?timestamp=<%= timestamp %>"></div>
+        <img src="/images/bi.png?timestamp=1493162260"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -205,6 +205,7 @@
 $(function(){
   $('#live_dz_distpicker,#work_dz_distpicker').distpicker({autoSelect: false});
   window.localStorage.removeItem("current_telphone");
+  window.localStorage.removeItem("questionnaire");
 
   $("#ymd").attr("max", (new Date()).format('yyyy-MM-dd'));
   $(".legal-provision-link").click(function() {

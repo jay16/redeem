@@ -21,7 +21,7 @@ Date.prototype.format = function(format) {
 }
 
 window.TKH = {
-  version: '0.0.4',
+  version: '0.4.26',
   server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
   userGid: '1000020',
   userPwd: 'CAB371810F12B8C2',
@@ -108,7 +108,7 @@ window.TKH = {
 
           window.TKH.redirect_to_with_timestamp(toPathName);
         } else {
-          layer.msg("用户验证失败", { time: 3000 });
+          layer.msg("『底层接口』用户验证失败", { time: 3000 });
         }
       },
       complete: function(xmlHttpRequest, status) {
@@ -116,7 +116,7 @@ window.TKH = {
         console.log(xmlHttpRequest);
       },
       error: function(xmlHttpRequest) {
-        layer.msg("用户验证失败，请重新登录", {
+        layer.msg("『底层接口』用户验证失败，请重新登录", {
           time: 0,
           btn: ['确定'],
           btnAlign: 'c',
@@ -182,7 +182,7 @@ window.TKH = {
           window.localStorage.setItem('expiredIn', expiredIn);
           window.localStorage.setItem('expiredInDate', current);
         } else {
-          layer.msg('用户验证失败，请重新登录', {
+          layer.msg('『底层接口』用户验证失败，请重新登录', {
             time: 0,
             btn: ['知道了'],
             btnAlign: 'c',
@@ -197,7 +197,7 @@ window.TKH = {
         console.log(xmlHttpRequest);
       },
       error: function(xmlHttpRequest) {
-        alert("登录失败");
+        alert("『底层接口』登录失败");
       }
     });
   },
@@ -209,44 +209,45 @@ window.TKH = {
       yes: function(index) {
         window.localStorage.setItem("logined", "no");
         layer.close(index);
+        window.TKH.redirect_to_with_timestamp('login.html');
 
-        var clientCookie = window.localStorage.getItem('sClientCookie');
-        var xmlString = '<SOAP-ENV:Envelope \
-          xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-          xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-          xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-          xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-          xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-          xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-          SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-          <SOAP-ENV:Header/>\
-            <ns2:Body>\
-              <ns0:LogOut>\
-              <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-              </ns0:LogOut>\
-            </ns2:Body>4\
-        </SOAP-ENV:Envelope>'
+        // var clientCookie = window.localStorage.getItem('sClientCookie');
+        // var xmlString = '<SOAP-ENV:Envelope \
+        //   xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+        //   xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+        //   xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+        //   xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+        //   xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+        //   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+        //   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+        //   SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+        //   <SOAP-ENV:Header/>\
+        //     <ns2:Body>\
+        //       <ns0:LogOut>\
+        //       <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+        //       </ns0:LogOut>\
+        //     </ns2:Body>4\
+        // </SOAP-ENV:Envelope>'
 
-        $.ajax({
-          url: window.TKH.server + "?op=LogOut",
-          type: 'POST',
-          async: false,
-          dataType: 'xml',
-          data: xmlString,
-          timeout: 5000,
-          contentType: "text/xml; charset=UTF-8",
-          success: function(xmlHttpRequest) {
-            layer.closeAll();
-              window.localStorage.setItem('logined', "no");
-            layer.msg("退出成功", { time: 3000 });
-            location.href = 'login.html';
-          },
-          complete: function(xmlHttpRequest, status) {},
-          error: function(xmlHttpRequest) {
-            layer.msg("退出失败", { time: 2000 });
-          }
-        });
+        // $.ajax({
+        //   url: window.TKH.server + "?op=LogOut",
+        //   type: 'POST',
+        //   async: false,
+        //   dataType: 'xml',
+        //   data: xmlString,
+        //   timeout: 5000,
+        //   contentType: "text/xml; charset=UTF-8",
+        //   success: function(xmlHttpRequest) {
+        //     layer.closeAll();
+        //     window.localStorage.setItem('logined', "no");
+        //     layer.msg("退出成功", { time: 3000 });
+        //     window.TKH.redirect_to_with_timestamp('login.html');
+        //   },
+        //   complete: function(xmlHttpRequest, status) {},
+        //   error: function(xmlHttpRequest) {
+        //     layer.msg("退出失败", { time: 2000 });
+        //   }
+        // });
       }
     });
   },
@@ -1450,7 +1451,7 @@ window.TKH = {
             });
           } else {
             if (outparams["FMSG"].length) {
-              layer.msg('错误：' + outparams["FMSG"], { time: 2000 });
+              layer.msg(outparams["FMSG"], { time: 2000 });
             }
           }
         },
@@ -1738,6 +1739,7 @@ window.TKH = {
               post_param['subject_id'] = data_items[j].FTITLEID;
               post_param['subject'] = data_items[j].FTITLE;
               post_param['subject_type'] = window.TKH.questionnaireOptionType(data_items[j].FTYPE);
+              post_param['questionnaire_content'] = JSON.stringify(data[i]);
               data_item = data_items[i].OPTIONDTL;
               data_item_options = [];
               for(var k = 0, klen = data_item.length; k < klen; k ++) {
