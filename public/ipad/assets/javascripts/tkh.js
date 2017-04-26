@@ -656,12 +656,12 @@ window.TKH = {
   _chuExchangeInfo: function() {
     $("#ExchangeInfo").empty();
     var html = '<div class="xf"><p>兑换日期 : 礼品 / Redemption date : gifts</p><p></p></div>';
-    $("#ExchangeInfo").append(html);
+    $("#ExchangeInfo").append('');
   },
   _chuConsumerInf: function() {
     $("#ConsumerInfo").empty();
     var html = '<div class="xf"><p>消费日期 : 消费金额 - 店铺名称 / Date : Amount - Merchant name</p><p></p></div>';
-    $("#ConsumerInfo").append(html);
+    $("#ConsumerInfo").append('');
   },
   openCardJson: function() {
     if($("#checkbox_legal").prop('checked')) {
@@ -805,7 +805,6 @@ window.TKH = {
   // 消费录入，添加录入框
   addRecordInput: function() {
     var dq_count = $(".content_2 .dq-wrapper").length + 1;
-
     $('.content_2').append(
       '<div class="dq-wrapper dq-wrapper-' + dq_count + '">\
          <div class="dp"> \
@@ -823,7 +822,7 @@ window.TKH = {
          </div>\
          <div style="width: 28%;">\
            <p>消费时间 / Time</p>\
-           <input type="datetime-local" value="2017-04-26 18:18:18" placeholder="" class="datetime"/>\
+           <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
          </div>\
          <div style="width: 12%;">\
            <p>消费金额 / Amount</p>\
@@ -831,7 +830,7 @@ window.TKH = {
          </div>\
          <a href="javascript:void(0);" class="jian">-</a>\
        </div>'
-    )
+    );
   },
   // 3.2.7 查询有效商铺信息
   queryMallGndWeb: function() {
@@ -1298,6 +1297,7 @@ window.TKH = {
         var outparams = JSON.parse(resultstring);
         if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
           window.localStorage.removeItem("questionnaire");
+          window.localStorage.removeItem("questionnaire_state");
           window.localStorage.removeItem("questionResult");
 
 
@@ -1380,10 +1380,15 @@ window.TKH = {
            <p>流水号 / Serial Number</p>\
            <input type="text" placeholder="流水号" class="serial-num" value=""/>\
          </div>\
-         <div>\
+         <div style="width: 28%;">\
+           <p>消费时间 / Time</p>\
+           <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
+         </div>\
+         <div style="width: 12%;">\
            <p>消费金额 / Amount</p>\
            <input type="number" placeholder="0.00" class="amount"/>\
          </div>\
+         <a href="javascript:void(0);" class="jian">-</a>\
        </div>'
     )
   },
@@ -1434,7 +1439,7 @@ window.TKH = {
           console.log(resultstring);
           var outparams = JSON.parse(resultstring);
           if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-            layer.msg('恭喜您成功积分', {
+            layer.msg('恭喜您积分成功', {
               time: 0,
               btn: ['确定'],
               btnAlign: 'c',

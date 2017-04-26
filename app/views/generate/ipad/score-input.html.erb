@@ -2,10 +2,10 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="/images/dhlp2.png?timestamp=<%= timestamp %>">礼品兑换 -
-      <img src="/images/qian.png?timestamp=<%= timestamp %>">积分录入
+      <img src="/images/dhlp2.png?timestamp=<%= timestamp %>">消费积分 -
+      <img src="/images/qian.png?timestamp=<%= timestamp %>">消费录入
     </div>
-    <div>Gift Redemption - Score Input</div>
+    <div>Purchase Points - Purchase Entry</div>
   </div>
   <div class="content">
     <div class="content_1">
@@ -17,16 +17,17 @@
       </div>
     </div>
     <div class="content_2">
+      <a href="javascript:void (0)" class="xinZeng" onClick="window.TKH.addScoreInput();">增加记录 / Add record</a>
     </div>
   </div>
   <div class="anNiu">
     <a href="search.html" class="sy">上一页<br/>Previous</a>
-    <a href="javascript:void (0)" class="xy">提交<br/>Submit</a>
+    <a href="javascript:void(0);" class="xy">提交<br/>Submit</a>
   </div>
 </div>
 <div class="xuanZe">
   <div>
-    <a href="javascript:void (0)" class="xuanZe_gb">
+    <a href="javascript:void(0);" class="xuanZe_gb">
       <img src="/images/gb.png?timestamp=<%= timestamp %>">
     </a>
     <p>
@@ -105,6 +106,11 @@ $(function() {
 
   //下一页
   $('.xy').on('click', function() {
+    if(!$("input.store-name").length) {
+      layer.msg('你今日还没有消费记录，请填写消费记录！', {time: 2000});
+      is_error = 1;
+      return false;
+    }
     var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/,
         store_code = '',
         amount,
@@ -116,6 +122,7 @@ $(function() {
       amount = $(this).find("input.amount").val();
       serialnum = $(this).find("input.serial-num").val();
       score = $(this).find("input.score").val();
+      is_error = 0;
 
       if(!store_code.length) {
         layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
@@ -147,12 +154,12 @@ $(function() {
         real_amt: amount,
         score: parseInt(amount)
       };
-    })
 
-    console.log(data);
-    if (!is_error) {
-      window.TKH.calcMallScoreExWeb(data);
-    }
+      console.log(data);
+      if (!is_error) {
+        window.TKH.calcMallScoreExWeb(data);
+      }
+    })
   });
 });
 </script>

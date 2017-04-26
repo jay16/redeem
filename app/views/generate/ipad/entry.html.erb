@@ -85,7 +85,6 @@
 $(function() {
   // 初始一个，消费记录输入框
   window.TKH.addRecordInput();
-  $(".datetime").val((new Date).format('yyyy-MM-ddThh:mm'));
 
   // 若已录入消费记录，此处还原
   // 场景：录入后，从兑奖页面返回时
@@ -114,11 +113,12 @@ $(function() {
          </div>\
          <div style="width: 28%;">\
            <p>消费时间 / Time</p>\
-           <input type="datetime-local" value="2017-04-26 18:18:18" placeholder="" class="datetime"/>\
-         </div style="width: 12%;">\
-         <div style="width: 12%;">\
+           <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
+         </div>\
+         <div  style="width: 12%;">\
            <p>消费金额 / Amount</p>\
            <input type="number" placeholder="0.00" class="amount" value="' + record["amount"] + '" />\
+         </div>\
          </div>\
          <a href="javascript:void (0)" class="jian">-</a>\
        </div>');
