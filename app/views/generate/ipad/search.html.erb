@@ -104,17 +104,21 @@
         </div>
       </div>
       <div data-id="2" id="ScoreInfo">
-        <div style="display: block;width: 50%;margin: 0 20%;margin-bottom: 15px;">
-          <p style="display: inline-block;">姓&nbsp;&nbsp;名: </p>
-          <input style="width: 80%;" type="text" class="score-field member-name" value="" />
+        <div style="width: 45%;">
+          <div style="display: block;width: 90%;margin: 0 20%;margin-bottom: 15px;">
+            <p style="display: inline-block;">姓&nbsp;&nbsp;名: </p>
+            <input style="width: 80%;" type="text" class="score-field member-name" value="" />
+          </div>
+          <div style="display: block;width: 90%;margin: 0 20%;margin-bottom: 15px;">
+            <p style="display: inline-block;">会员号: </p>
+            <input style="width: 80%;" type="text" class="score-field member-card-number" value="" />
+          </div>
+          <div style="display: block;width: 90%;margin: 0 20%;margin-bottom: 15px;">
+            <p style="display: inline-block;">总积分: </p>
+            <input style="width: 80%;" type="text" class='score-field member-score' value="" />
+          </div>
         </div>
-        <div style="display: block;width: 50%;margin: 0 20%;margin-bottom: 15px;">
-          <p style="display: inline-block;">会员号: </p>
-          <input style="width: 80%;" type="text" class="score-field member-card-number" value="" />
-        </div>
-        <div style="display: block;width: 50%;margin: 0 20%;margin-bottom: 15px;">
-          <p style="display: inline-block;">总积分: </p>
-          <input style="width: 80%;" type="text" class='score-field member-score' value="" />
+        <div style="width: 45%;">
         </div>
       </div>
       <div data-id="3" id="ExchangeInfo">
@@ -216,8 +220,8 @@ $(function(){
       if(!$(this).hasClass('act')){
         $('.content_1 .act').removeClass('act');
         $(this).addClass('act');
-        $('.content_2>div').hide();
-        $('.content_2>div:eq('+$(this).index()+')').show();
+        $('.content_2 > div').hide();
+        $('.content_2 > div:eq('+$(this).index()+')').show();
       }
 
       var sFCardNum = window.localStorage.getItem('sFCARDNUM');
@@ -236,6 +240,9 @@ $(function(){
             $("#ScoreInfo .member-name").val(userJSON["name"]);
             $("#ScoreInfo .member-card-number").val(userJSON["card_number"]);
             $("#ScoreInfo .member-score").val(userJSON["total_score"]);
+            if(!$("#ScoreInfo .member-score").val().length) {
+              $("#ScoreInfo .member-score").val("0");
+            }
           }
         }
       }

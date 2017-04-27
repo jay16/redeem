@@ -443,6 +443,8 @@ window.TKH = {
           ret.ConsumerInfo = [];
           ret.ExchangeInfo = [];
           if (ret.status === 0 || ret.status === "0") {
+            $('.content_1 > div:eq(0)').click();
+
             window.localStorage.setItem('sFCARDNUM', outparams["FCARDNUM"]);
             window.TKH._do(ret.data);
             window.TKH._doConsumerInfo(ret.ConsumerInfo, false);
@@ -479,7 +481,7 @@ window.TKH = {
             window.TKH._chuExchangeInfo();
 
             if (typeof(outparams['FMSG']) === 'string' && outparams['FMSG'].length > 0) {
-              layer.msg(outparams['FMSG'], { time: 2000 });
+              layer.msg("『底层接口』ERROR - " + outparams['FMSG'], { time: 2000 });
             }
 
             $('#wx').parent().css('display', 'block');
@@ -493,7 +495,7 @@ window.TKH = {
         },
         error: function(xmlHttpRequest) {
           console.log(xmlHttpRequest);
-          layer.msg("ERROR - QUERYMEMBERINFOJSON", { time: 3000 });
+          layer.msg("『底层接口』ERROR - QUERYMEMBERINFOJSON", { time: 3000 });
         }
       });
 
@@ -766,7 +768,7 @@ window.TKH = {
           window.localStorage.setItem('current_telphone', JSON.stringify(params));
           window.ServerAPI.save_member(params);
         } else {
-          layer.msg(ret["FMSG"], { time: 2000 });
+          layer.msg("『底层接口』ERROR - " + ret["FMSG"], { time: 2000 });
           $('#wx').parent().css('display', 'none');
           $('#live_dz').parent().css('display', 'none');
           $('.bc, .legal-provision-dz').css('display', 'block');
@@ -778,7 +780,7 @@ window.TKH = {
         console.log(xmlHttpRequest);
       },
       error: function(xmlHttpRequest) {
-        layer.msg("ERROR - CRMWeiXinOpenCardJson", { time: 3000 });
+        layer.msg("『底层接口』ERROR - CRMWeiXinOpenCardJson", { time: 3000 });
       }
     });
   },
@@ -897,7 +899,7 @@ window.TKH = {
           $('.xuanZe .hangHu').append(html);
         } else {
           if (outparams["FMSG"].length > 0) {
-            layer.msg(outparams["FMSG"], { time: 3000 });
+            layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 3000 });
           }
         }
         console.log(resultstring)
@@ -909,7 +911,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        layer.msg("ERROR - QueryMallGndWeb", { time: 3000 });
+        layer.msg("『底层接口』ERROR - QueryMallGndWeb", { time: 3000 });
       }
     });
   },
@@ -982,9 +984,7 @@ window.TKH = {
           $('.shangPing.jin').append(html);
         } else {
           if (outparams["FMSG"].length > 0) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
+            layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 2000 });
           }
         }
 
@@ -996,7 +996,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMQueryMallGiftPromInfo", { time: 3000 });
+        layer.msg("『底层接口』ERROR - CRMQueryMallGiftPromInfo", { time: 3000 });
       }
     });
   },
@@ -1164,7 +1164,7 @@ window.TKH = {
           window.localStorage.removeItem("records");
           window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
         } else {
-          layer.msg(outparams["FMSG"], { time: 2000 });
+          layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 2000 });
         }
       },
       complete: function(xmlHttpRequest, status) {
@@ -1174,7 +1174,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMGenMallSupplyBill", { time: 2000 });
+        layer.msg("『底层接口』ERROR - CRMGenMallSupplyBill", { time: 2000 });
       }
     });
   },
@@ -1225,9 +1225,7 @@ window.TKH = {
           window.localStorage.setItem("questionnaire", resultstring);
         } else {
           if (outparams["FMSG"].length) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
+            layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 2000 });
           }
         }
       },
@@ -1238,7 +1236,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMQueryCRMQuestionnaireMode", { time: 2000 });
+        layer.msg("『底层接口』ERROR - CRMQueryCRMQuestionnaireMode", { time: 2000 });
       }
     });
   },
@@ -1306,7 +1304,6 @@ window.TKH = {
             post_param = JSON.parse(questionPostParam);
             window.ServerAPI.save_answer(post_param);
           }
-          layer.msg(outparams["FMSG"], { time: 4000 });
           layer.msg('问卷提交成功', {
             time: 0,
             btn: ['确定'],
@@ -1319,7 +1316,7 @@ window.TKH = {
           });
         } else {
           if (outparams["FMSG"].length) {
-            layer.msg(outparams["FMSG"], { time: 2000 });
+            layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 3000 });
           }
         }
       },
@@ -1330,7 +1327,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMSaveCRMQuestionnaire", { time: 2000 });
+        layer.msg("『底层接口』ERROR - CRMSaveCRMQuestionnaire", { time: 2000 });
       }
     });
   },
@@ -1389,8 +1386,7 @@ window.TKH = {
            <input type="number" placeholder="0.00" class="amount"/>\
          </div>\
          <a href="javascript:void(0);" class="jian">-</a>\
-       </div>'
-    )
+       </div>');
   },
   // 3.2.18 生成HDMall消费积分单
   calcMallScoreExWeb: function(data) {
@@ -1450,7 +1446,7 @@ window.TKH = {
             });
           } else {
             if (outparams["FMSG"].length) {
-              layer.msg(outparams["FMSG"], { time: 2000 });
+              layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 2000 });
             }
           }
         },
@@ -1528,8 +1524,8 @@ window.TKH = {
 
           $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份店铺");
         } else {
-          if (outparams["FMSG"].length > 0) {
-            alert(outparams["FMSG"]);
+          if (outparams["FMSG"].length) {
+            layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 2000 });
           }
         }
         console.log(resultstring)
@@ -1636,9 +1632,7 @@ window.TKH = {
           $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份礼品");
         } else {
           if (outparams["FMSG"].length > 0) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
+            layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 2000 });
           }
         }
       },
@@ -1755,9 +1749,7 @@ window.TKH = {
           }
         } else {
           if (outparams["FMSG"].length) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
+            layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 2000 });
           }
         }
       },

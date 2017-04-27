@@ -42,9 +42,6 @@ else
   ENV['API_SERVER'] = 'http://123.56.91.131:4567'
 end
 
-puts ENV['PLATFORM_OS']
-puts ENV['API_SERVER']
-
 # 扩充require路径数组
 # require 文件时会在$:数组中查找是否存在
 $LOAD_PATH.unshift(root_path)
