@@ -766,9 +766,9 @@ window.TKH = {
            <p>消费时间 / Time</p>\
            <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
          </div>\
-         <div style="width: 12%;">\
+         <div style="width: 14%;">\
            <p>消费金额 / Amount</p>\
-           <input type="number" placeholder="0.00" class="amount"/>\
+           <input style="width:60%" type="number" placeholder="0.00" class="amount"/>\
            <a href="javascript:void(0);" class="jian">-</a>\
          </div>\
        </div>'
@@ -1350,9 +1350,9 @@ window.TKH = {
            <p>消费时间 / Time</p>\
            <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
          </div>\
-         <div style="width: 12%;">\
+         <div style="width: 14%;">\
            <p>消费金额 / Amount</p>\
-           <input type="number" placeholder="0.00" class="amount"/>\
+           <input style="width: 60%" type="number" placeholder="0.00" class="amount"/>\
            <a href="javascript:void(0);" class="jian">-</a>\
          </div>\
        </div>');
@@ -1792,7 +1792,8 @@ window.TKH = {
               // SCORE=24624600
               // NUM=02100000006295170427105404
               var temp_array = resultstring.split('FSCOREDETAIL'),
-                  temp_str;
+                  temp_str,
+                  limit_time = 0;
               $("#ScoreInfo > div:eq(1)").html('');
               for(var i = 0, len = temp_array.length; i < len; i ++) {
                 temp_str = temp_array[i];
@@ -1802,8 +1803,11 @@ window.TKH = {
                 if(mm1) {
                   console.log(mm1[1]);
                   console.log(mm2[1]);
-                  input_string = "<input type=text value='" + mm1[1] + '    ' + mm2[1] + "'>";
-                  $("#ScoreInfo > div:eq(1)").append(input_string);
+                  if(limit_time < 5) {
+                    input_string = "<input type=text value='" + mm1[1] + '    ' + mm2[1] + "'>";
+                    $("#ScoreInfo > div:eq(1)").append(input_string);
+                  }
+                  limit_time += 1;
                 }
               }
           },
