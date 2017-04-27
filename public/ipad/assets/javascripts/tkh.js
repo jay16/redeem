@@ -446,7 +446,7 @@ window.TKH = {
           city: ldd_city,
           district: ldd_distinct
         };
-    if(data.FMEMADDRESS && data.FMEMADDRESS.length && data.FMEMADDRESS.split('-').length >= 4) {
+    if(data.FMEMADDRESS && data.FMEMADDRESS.length && data.FMEMADDRESS.split('-').length >= 3) {
       var ldd_parts = data.FMEMADDRESS.split('-'),
           ldd_part = [],
           ldd_other = '';
