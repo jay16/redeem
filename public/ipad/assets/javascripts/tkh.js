@@ -899,8 +899,13 @@ window.TKH = {
         if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
           $('.shangPing.jin').empty();
           var html = '',
-            item = {};
+            item = {},
+            gift_image;
           for (var i = 0, len = outparams["Data"].length; i < len; i++) {
+            gift_image = 'gift.png';
+            if(['1000000', '1000001', '1000020'].indexOf(item["FGID"]) >= 0) {
+              gift_image = 'gift-' + item["FGID"] + '.jpg';
+            }
             item = outparams["Data"][i];
             html += "<div class='xuzh_jin' style='display: none;'>"
             html += "  <input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
@@ -914,7 +919,7 @@ window.TKH = {
             html += "  <input type='hidden' class='price' value='" + item["FPRICE"] + "'/>";
             html += "  <input type='hidden' class='count' value='" + item["FQTY"] + "'/>";
             html += "  <input type='hidden' class='min_amount' value='" + item["FLOWAMT"] + "'/>";
-            html += "  <img style='' src='assets/images/gift.png'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
+            html += "  <img style='' src='assets/images/" + gift_image + "'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
             html += "  <div class='gou'>";
             html += "  <img src='assets/images/gou.png' />";
             html += "  </div>";
