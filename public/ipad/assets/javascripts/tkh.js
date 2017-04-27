@@ -902,7 +902,7 @@ window.TKH = {
             item = {};
           for (var i = 0, len = outparams["Data"].length; i < len; i++) {
             item = outparams["Data"][i];
-            html += "<div class='xuzh_jin'>"
+            html += "<div class='xuzh_jin' style='display: none;'>"
             html += "  <input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
             html += "  <input type='hidden' class='fnum' value='" + item["FNUM"] + "'/>";
             html += "  <input type='hidden' class='gift_code' value='" + item["FCODE"] + "'/>";
@@ -938,6 +938,30 @@ window.TKH = {
         layer.msg("『底层接口』ERROR - CRMQueryMallGiftPromInfo", { time: 3000 });
       }
     });
+  },
+  displayGiftWithAmount: function(today_amount) {
+    var temp_gift_num = 0, ok_gift_num = 0;
+    $(".xuzh_jin").each(function() {
+      $(this).css({"display": "none"});
+    });
+
+    $(".xuzh_jin").each(function() {
+      temp_gift_num += 1;
+      var gift_price = $(this).find(".min_amount").val();
+      console.log(gift_price);
+      if(!isNaN(gift_price)) {
+        if(today_amount >= parseFloat(gift_price)) {
+          $(this).css({"display": "block"});
+          ok_gift_num += 1;
+        }
+      }
+    });
+
+    if(temp_gift_num > 0 && ok_gift_num == 0) {
+      layer.msg('消费金额暂无合适礼品可兑换！', {
+        time: 3000 //2s后自动关闭
+      });
+    }
   },
   // 3.2.31 生成赠品发放单接口
   genMallSupplyBill: function() {

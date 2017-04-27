@@ -119,6 +119,9 @@
 
 <script>
 $(function() {
+  // 3.2.3 查询有效的赠品促销接口
+  window.TKH.queryMallGiftPromInfo();
+
   // 消费记录
   var recordString = window.localStorage.getItem("records");
   if (recordString !== null && recordString.length > 0) {
@@ -144,10 +147,8 @@ $(function() {
       today_amount += parseFloat(record["amount"]);
     }
     $("#today_amount_guo").html(today_amount);
+    window.TKH.displayGiftWithAmount(today_amount);
   }
-
-  // 3.2.3 查询有效的赠品促销接口
-  window.TKH.queryMallGiftPromInfo();
 
   $('.gb').click(function() {
     $('.xg').fadeOut(200);
@@ -159,8 +160,12 @@ $(function() {
     console.log('2 = ' + this);
     if (!$('#Exchange_id').val()) {
       $('.shangPing>div').removeClass('xuanZhong');
-      if ($(this).hasClass('xuanZhong')) $(this).removeClass('xuanZhong');
-      else $(this).addClass('xuanZhong');
+      if ($(this).hasClass('xuanZhong')) {
+        $(this).removeClass('xuanZhong');
+      }
+      else {
+        $(this).addClass('xuanZhong');
+      }
     } else {
       layer.msg('本次已兑换！', {
         time: 2000 //2s后自动关闭
@@ -178,7 +183,7 @@ $(function() {
         $(this).find('.guoxiao_id').removeClass('xiaochu');
         $(this).find('.guoxiao_amount').removeClass('xiaochu');
         $(this).find('.guoxiao_store').removeClass('xiaochu');
-        $(this).find('.guoxiao').attr('src', 'assets/images/wu.png');
+        $(this).find('.guoxiao').attr('src', '/images/wu.png');
         $(this).addClass("checked");
       } else {
         $('#today_amount_guo').html(today_amount + jin);
@@ -186,9 +191,11 @@ $(function() {
         $(this).find('.guoxiao_id').addClass('xiaochu');
         $(this).find('.guoxiao_amount').addClass('xiaochu');
         $(this).find('.guoxiao_store').addClass('xiaochu');
-        $(this).find('.guoxiao').attr('src', 'assets/images/dui.png');
+        $(this).find('.guoxiao').attr('src', '/images/dui.png');
         $(this).removeClass("checked");
       }
+
+      window.TKH.displayGiftWithAmount(today_amount);
     } else {
       layer.msg('本次已兑换！', {
         time: 2000 //2s后自动关闭
