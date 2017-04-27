@@ -19,8 +19,8 @@
 
 <hr>
 
-<button onClick="CRMQueryLAGSupplyInfo(13584977519);">1.查询赠品发放信息接口</button><br>
-<button onClick="QueryCardScoreDetails('80000258');">3.2.4 积分明细查询</button><br>
+<button onClick="CRMQueryLAGSupplyInfo(18020285885);">1.查询赠品发放信息接口</button><br>
+<button onClick="QueryCardScoreDetails('00000021');">3.2.4 积分明细查询</button><br>
 <button onClick="CRMCalcMallScoreExWeb();">3.2.18 生成HDMall消费积分单</button><br>
 
 <script src="jquery.min.js" type="text/javascript"></script>
@@ -915,7 +915,7 @@ function QueryCardScoreDetails(cardnum) {
     now.setTime(now.valueOf() - 30 * 24 * 60 * 60 * 1000);
     end_date = now.format('yyyy.MM.dd hh:mm:ss');
 
-    var params = "[\\]\nFACCOUNTNO=80001972\nFSCORESORT=-\nFSTARTDATE=2017.03.24\nFENDTDATE=2017.04.25\n",
+    var params = "[\\]\nFACCOUNTNO=" + cardnum + "\nFSCORESORT=-\nFSTARTDATE=" + end_date + "\nFENDTDATE=" + start_date + "\n",
         xmlString = '<SOAP-ENV:Envelope \
     xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
     xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \

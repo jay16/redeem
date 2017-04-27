@@ -838,34 +838,34 @@ window.TKH = {
   queryMallGndWeb: function() {
     var clientCookie = window.localStorage.getItem('sClientCookie');
     var fstorecode = '0210',
-      fpageindex = '1',
-      fpagesize = '30';
+        fpageindex = '1',
+        fpagesize = '30';
     var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
-
-    var check_xml = '<SOAP-ENV:Envelope \
-            xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-            SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-            <SOAP-ENV:Header/>\
-              <ns2:Body>\
-                <ns0:DoClientCommand>\
-                  <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-                  <sCommand xsi:type="ns3:string">QueryMallGndWeb</sCommand>\
-                  <sParams xsi:type="ns3:string">' + params + '</sParams>\
-                </ns0:DoClientCommand>\
-              </ns2:Body>\
-            </SOAP-ENV:Envelope>';
+    var xmlString = '<SOAP-ENV:Envelope \
+      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+      xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+      <SOAP-ENV:Header/>\
+        <ns2:Body>\
+          <ns0:DoClientCommand>\
+            <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+            <sCommand xsi:type="ns3:string">QueryMallGndWeb</sCommand>\
+            <sParams xsi:type="ns3:string">' + params + '</sParams>\
+          </ns0:DoClientCommand>\
+        </ns2:Body>\
+      </SOAP-ENV:Envelope>';
+    console.log(xmlString);
     $.ajax({
       url: window.TKH.server + "?op=DoClientCommand",
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: check_xml,
+      data: xmlString,
       timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
@@ -875,7 +875,7 @@ window.TKH = {
         var resultstring = $(xmlHttpRequest).find('sOutParams').text();
         console.log(resultstring)
         var outparams = JSON.parse(resultstring);
-        if (outparams["FRESULT"] === 0) {
+        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
 
           $('.xuanZe .hangHu').html('');
           $('.xuanZe').fadeIn(200);
@@ -895,7 +895,6 @@ window.TKH = {
                         <input type='hidden' value='" + data[i].RN + "' class='rn'/>\
                       </div> ";
           }
-          console.log(html);
           $('.xuanZe .hangHu').append(html);
         } else {
           if (outparams["FMSG"].length > 0) {
@@ -923,7 +922,7 @@ window.TKH = {
     console.log(ffildate);
     var params = '{&quot;FFILDATE&quot;:&quot;' + ffildate + '&quot;}';
     console.log(params);
-    var check_xml = '<SOAP-ENV:Envelope \
+    var xmlString = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
       xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
@@ -946,7 +945,7 @@ window.TKH = {
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: check_xml,
+      data: xmlString,
       timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
@@ -1103,7 +1102,7 @@ window.TKH = {
                    &quot;FSUPPLYPAY&quot;:[' + paies.join(",") + '],\
                    &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + ']\
                  }';
-    var check_xml = '<SOAP-ENV:Envelope \
+    var xmlString = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
       xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
@@ -1121,13 +1120,14 @@ window.TKH = {
           </ns0:DoClientCommand>\
         </ns2:Body>\
       </SOAP-ENV:Envelope>';
+    console.log(xmlString);
 
     $.ajax({
       url: window.TKH.server + "?op=DoClientCommand",
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: check_xml,
+      data: xmlString,
       timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
@@ -1187,7 +1187,7 @@ window.TKH = {
     var params = '{&quot;FNAME&quot;:&quot;' + fname + '&quot;}';
 
     console.log(params);
-    var check_xml = '<SOAP-ENV:Envelope \
+    var xmlString = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
       xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
@@ -1210,7 +1210,7 @@ window.TKH = {
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: check_xml,
+      data: xmlString,
       timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {

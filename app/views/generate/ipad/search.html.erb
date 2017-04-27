@@ -122,6 +122,10 @@
         </div>
       </div>
       <div data-id="3" id="ExchangeInfo">
+        <div style="width: 45%;">
+        </div>
+        <div style="width: 45%;">
+        </div>
       </div>
     </div>
   </div>
@@ -243,6 +247,8 @@ $(function(){
             if(!$("#ScoreInfo .member-score").val().length) {
               $("#ScoreInfo .member-score").val("0");
             }
+
+            window.TKH.queryCardScoreDetails();
           }
         }
       }
@@ -254,8 +260,7 @@ $(function(){
                 ,shade: 0.01
                 ,time: 1000
             });
-
-            window.TKH.queryScorePrizeBillJson();
+            window.TKH.queryLAGSupplyInfo();
           }
       }
   })

@@ -296,7 +296,11 @@ if(questionnaireState === '200') {
       if(questionResult !== null) {
         resultJSON = JSON.parse(questionResult);
       }
-      resultJSON[ftitleid] = { "ftitleid": ftitleid, fvalue: fvalues.join(';'), fvalueid: fvalueids.join(';')}
+      var temp_values = fvalues.join(';');
+      if(modeldtl_item["FTYPE"] !== "2") {
+        temp_values = '';
+      }
+      resultJSON[ftitleid] = { "ftitleid": ftitleid, fvalue: temp_values, fvalueid: fvalueids.join(';')}
 
       window.localStorage.setItem("questionResult", JSON.stringify(resultJSON));
   }
