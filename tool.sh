@@ -118,6 +118,10 @@ case "$1" in
         git checkout ./
         /bin/bash "$0" git:pull
     ;;
+    deploy:server:auto|dsa)
+        /bin/bash "$0" deploy:server
+        /bin/bash "$0" restart:force
+    ;;
 
     git:push)
         git_current_branch=$(git rev-parse --abbrev-ref HEAD)

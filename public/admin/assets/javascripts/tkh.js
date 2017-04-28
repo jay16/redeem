@@ -609,6 +609,14 @@ window.TKH = {
             "telphone": fmbrmobilephone,
             "card_number": '-'
           };
+
+      if(fmbrbirth.length === 10) {
+        ymd_date = new Date(Date.parse(fmbrbirth.replace("-", "/")));
+        if(ymd_date > (new Date())) {
+          layer.msg('请入合理出生日期', { time: 2000 });
+          return false;
+        }
+      }
       window.localStorage.setItem('current_telphone', JSON.stringify(params));
       // window.TKH.genMallSupplyBill();
       layer.open({
@@ -638,6 +646,14 @@ window.TKH = {
       layer.msg('请输入用户名', { time: 2000 });
       return false;
     }
+    if(fmbrbirth.length === 10) {
+      ymd_date = new Date(Date.parse(fmbrbirth.replace("-", "/")));
+      if(ymd_date > (new Date())) {
+        layer.msg('请入合理出生日期', { time: 2000 });
+        return false;
+      }
+    }
+
     var fopenid = 'm0' + (new Date()).valueOf(),
         fcardid = '0210';
     var params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + faddress + '&quot;}';
@@ -740,7 +756,7 @@ window.TKH = {
     console.log($(ctl).find('.gndname').val());
     $(".suoding").find(".store-name").val($(ctl).find('.gndname').val());
     $(".suoding").find(".gndgid").val($(ctl).find('.gndgid').val());
-    $(".suoding").find(".store-code").val($(ctl).find('.gndcode').val());
+    $(".suoding").find(".gndcode").val($(ctl).find('.gndcode').val());
     $('.xuanZe').fadeOut(200);
     $(".suoding").removeClass("suoding");
   },
@@ -753,8 +769,8 @@ window.TKH = {
             <p>店铺名称 / Merchant</p>\
             <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/>\
             <input type="hidden" class="gndgid"/>\
-            <input type="hidden" class="store-code"/>\
-            <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);"  class="search">\
+            <input type="hidden" class="gndcode"/>\
+            <a href="javascript:void(0);" onClick="window.TKH.searchDQM(this);"  class="search">\
               <img src="assets/images/search.png"/>\
             </a>\
          </div>\
@@ -956,7 +972,7 @@ window.TKH = {
       console.log(gift_price);
       if(!isNaN(gift_price)) {
         if(today_amount >= parseFloat(gift_price)) {
-          $(this).css({"display": "block"});
+          $(this).css({"display": "inline-block"});
           ok_gift_num += 1;
         }
       }
@@ -988,6 +1004,7 @@ window.TKH = {
     $(".xf").each(function() {
       if ($(this).hasClass("checked")) {
         var fgndgid = $(this).find(".guoxiao_gndgid").val(),
+            fgndcode = $(this).find(".guoxiao_gndcode").val()
             storename = $(this).find(".guoxiao_store").val(),
             fflowno = $(this).find(".guoxiao_serialnum").val(),
             famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
@@ -1009,9 +1026,19 @@ window.TKH = {
           "card_number": fcardnum,
           "serial_number": fflowno,
           "amount": famt,
-          "store_code": fgndgid,
+          "store_code": fgndcode,
           "store_name": storename
         });
+
+        if(fcardnum !== null && fcardnum !== '-') {
+          var score_data = {
+            card_number: fcardnum,
+            show_code: fgndcode,
+            real_amt: famt,
+            score: parseInt(famt)
+          };
+          window.TKH.calcMallScoreExWeb(score_data, 0);
+        }
       }
     });
     // var fgndgid = '500021',
@@ -1337,7 +1364,7 @@ window.TKH = {
             <p>店铺名称 / Merchant</p>\
             <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/>\
             <input type="hidden" class="gndgid"/>\
-            <input type="hidden" class="store-code"/>\
+            <input type="hidden" class="gndcode"/>\
             <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);"  class="search">\
               <img src="assets/images/search.png"/>\
             </a>\
@@ -1358,7 +1385,8 @@ window.TKH = {
        </div>');
   },
   // 3.2.18 生成HDMall消费积分单
-  calcMallScoreExWeb: function(data) {
+  // display_alert: 1/0
+  calcMallScoreExWeb: function(data, display_alert) {
     var clientCookie = window.localStorage.getItem('sClientCookie');
     var card_num = data.card_number,
         trant_time = (new Date()).format('yyyyMMddhhmmss'),
@@ -1403,7 +1431,7 @@ window.TKH = {
           var resultstring = $(xmlHttpRequest).find('sOutParams').text();
           console.log(resultstring);
           var outparams = JSON.parse(resultstring);
-          if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+          if (display_alert === 1 && (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0")) {
             layer.msg('恭喜您积分成功', {
               time: 0,
               btn: ['确定'],
@@ -1773,7 +1801,7 @@ window.TKH = {
           async: false,
           dataType: 'xml',
           data: xmlString,
-          timeout: 10000,
+          timeout: 5000,
           contentType: "text/xml; charset=UTF-8",
           success: function(xmlHttpRequest) {
               console.log('success');
@@ -1795,7 +1823,7 @@ window.TKH = {
                   temp_str,
                   limit_time = 0;
               $("#ScoreInfo > div:eq(1)").html('');
-              for(var i = 0, len = temp_array.length; i < len; i ++) {
+              for(var len = temp_array.length, i = len - 1; i >= 0; i --) {
                 temp_str = temp_array[i];
                 var mm1 = temp_str.match(/LSTUPDTIME=(.*?)\n/),
                     mm2 = temp_str.match(/SCORE=(.*?)\n/),
@@ -1863,7 +1891,7 @@ window.TKH = {
           async: false,
           dataType: 'xml',
           data: xmlString,
-          timeout: 10000,
+          timeout: 5000,
           contentType: "text/xml; charset=UTF-8",
           success: function(xmlHttpRequest) {
               console.log('success');

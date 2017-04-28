@@ -203,6 +203,7 @@
 $(function(){
   $('#live_dz_distpicker,#work_dz_distpicker').distpicker({autoSelect: false});
   // 清除已查询用户信息
+  window.localStorage.removeItem("sFCARDNUM");
   window.localStorage.removeItem("current_telphone");
   // 清除已录入消费信息
   window.localStorage.removeItem("records");
@@ -271,22 +272,26 @@ $(function(){
   })
 
   //下一页
-  $('.xy').on('click',function(){
+  $('.xy').on('click',function() {
+      var card_number = window.localStorage.getItem('sFCARDNUM');
+      if(card_number === null) {
+        layer.msg('请『搜索』会员信息',{time: 2000});
+        return false;
+      }
       var phone = $('#search').val();
       var name =  $('#mz').val();
-          if (!phone || !name) {
-              layer.tips('请输入手机号码,查询用户或新增用户！', '#search', {
-                tips: [3, '#faab20']
-              });
-              return false;
-          }
+      if (!phone || !name) {
+          layer.tips('请输入手机号码,查询用户或新增用户！', '#search', {
+            tips: [3, '#faab20']
+          });
+          return false;
+      }
       var $phe=/^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
       if(!($phe.test(phone))){
         layer.msg('请输入正确的手机号码',{time: 2000});
         return false;
       }
 
-      var card_number = window.localStorage.getItem('sFCARDNUM');
       if(card_number && !isNaN(card_number)) {
         $(".tishibuton-area .score-input").css({"display": "inline"});
       }

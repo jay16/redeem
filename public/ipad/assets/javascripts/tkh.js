@@ -609,6 +609,14 @@ window.TKH = {
             "telphone": fmbrmobilephone,
             "card_number": '-'
           };
+
+      if(fmbrbirth.length === 10) {
+        ymd_date = new Date(Date.parse(fmbrbirth.replace("-", "/")));
+        if(ymd_date > (new Date())) {
+          layer.msg('请入合理出生日期', { time: 2000 });
+          return false;
+        }
+      }
       window.localStorage.setItem('current_telphone', JSON.stringify(params));
       // window.TKH.genMallSupplyBill();
       layer.open({
@@ -638,6 +646,14 @@ window.TKH = {
       layer.msg('请输入用户名', { time: 2000 });
       return false;
     }
+    if(fmbrbirth.length === 10) {
+      ymd_date = new Date(Date.parse(fmbrbirth.replace("-", "/")));
+      if(ymd_date > (new Date())) {
+        layer.msg('请入合理出生日期', { time: 2000 });
+        return false;
+      }
+    }
+
     var fopenid = 'm0' + (new Date()).valueOf(),
         fcardid = '0210';
     var params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + faddress + '&quot;}';
@@ -1785,7 +1801,7 @@ window.TKH = {
           async: false,
           dataType: 'xml',
           data: xmlString,
-          timeout: 10000,
+          timeout: 5000,
           contentType: "text/xml; charset=UTF-8",
           success: function(xmlHttpRequest) {
               console.log('success');
@@ -1875,7 +1891,7 @@ window.TKH = {
           async: false,
           dataType: 'xml',
           data: xmlString,
-          timeout: 10000,
+          timeout: 5000,
           contentType: "text/xml; charset=UTF-8",
           success: function(xmlHttpRequest) {
               console.log('success');
