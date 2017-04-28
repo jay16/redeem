@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="content_2">
-      <a href="javascript:void (0)" class="xinZeng" onClick="window.TKH.addScoreInput();">增加记录 / Add record</a>
+      <a href="javascript:void (0)" class="xinZeng" onClick="window.TKH.addRecordInput();">增加记录 / Add record</a>
     </div>
   </div>
   <div class="anNiu">
@@ -84,7 +84,7 @@
 <script>
 $(function() {
   // 初始一个，积分输入框
-  window.TKH.addScoreInput();
+  window.TKH.addRecordInput();
 
   //删除新增
   $(document).on('click', '.jian', function() {
@@ -115,51 +115,75 @@ $(function() {
         store_code = '',
         amount,
         score,
+        serialnum = '',
+        serialnums = [],
         is_error = 0,
-        data = null;
+        all_is_ok = 1,
+        name = '',
+        amount = '',
+        gndgid = '',
+        record = {},
+        records = [],
+        data = null,
+        datas = [],
+        card_number = window.localStorage.getItem('sFCARDNUM');
     $(".dq-wrapper").each(function() {
-      store_code = $(this).find("input.store-code").val();
-      amount = $(this).find("input.amount").val();
+      name = $(this).find("input.store-name").val();
       serialnum = $(this).find("input.serial-num").val();
-      score = $(this).find("input.score").val();
+      amount = $(this).find("input.amount").val();
+      gndgid = $(this).find("input.gndgid").val();
+      gndcode = $(this).find("input.gndcode").val();
       is_error = 0;
 
-      if(!store_code.length) {
+      if(!name.length) {
         layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
         is_error = 1;
+        all_is_ok = 0;
         return false;
       }
 
       if(!serialnum.length) {
         layer.tips('流水号不能为空', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
         is_error = 1;
+        all_is_ok = 0;
         return false;
       }
 
       if(serialnum.length > 30) {
         layer.tips('请输入正确的流水号', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
         is_error = 1;
+        all_is_ok = 0;
         return false;
       }
 
       if(!amount.length) {
         layer.tips('请正确填写金额', $(this).find('.amount'), { tips: [3, '#faab20'] });
         is_error = 1;
+        all_is_ok = 0;
+        return false;
+      }
+      if(serialnums.indexOf(serialnum) >= 0) {
+        layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
+        is_error = 1;
+        all_is_ok = 0;
         return false;
       }
 
+      serialnums.push(serialnum);
       data = {
-        card_number: window.localStorage.getItem('sFCARDNUM'),
-        show_code: store_code,
+        card_number: card_number,
+        show_code: gndcode,
         real_amt: amount,
         score: parseInt(amount)
       };
-
+      datas.push(data);
       console.log(data);
-      if (!is_error) {
-        window.TKH.calcMallScoreExWeb(data);
+    });
+    if (all_is_ok) {
+      for(var i = 0, len = datas.length; i < len; i ++) {
+        window.TKH.calcMallScoreExWeb(datas[i], (i === len -1) ? 1 : 0);
       }
-    })
+    }
   });
 });
 </script>

@@ -139,6 +139,7 @@ $(function() {
             CNY ' + record["amount"] + '- ' + record["name"] + '\
             <input type="hidden" class="guoxiao_id xiaochu" value="' + record["gndgid"] + '">\
             <input type="hidden" class="guoxiao_gndgid xiaochu" value="' + record["gndgid"] + '">\
+            <input type="hidden" class="guoxiao_gndcode xiaochu" value="' + record["gndcode"] + '">\
             <input type="hidden" class="guoxiao_amount xiaochu" value="' + record["amount"] + '">\
             <input type="hidden" class="guoxiao_store xiaochu" value="' + record["name"] + '">\
             <input type="hidden" class="guoxiao_serialnum xiaochu" value="' + record["serialnum"] + '">\
@@ -210,6 +211,7 @@ $(function() {
       yes: function(index) {
         layer.close(index);
 
+        window.localStorage.removeItem("records");
         window.TKH.redirect_to_with_timestamp('search.html');
       }
     });
@@ -226,15 +228,11 @@ $(function() {
       var type = 0;
       if (!$('.shangPing>div.xuanZhong').hasClass('xuzh_jin')) type = 1;
       if (((today_amount == 0 && type == 0) || (shene == 0 && type == 1)) && length != 0) {
-        layer.msg('没有勾选的或累积的消费金额进行兑换！', {
-          time: 2000 //2s后自动关闭
-        });
+        layer.msg('没有勾选的或累积的消费金额进行兑换！', { time: 2000 });
         return false;
       }
       if (length == 0) {
-        layer.msg('请选择礼品进行兑换！', {
-          time: 2000 //2s后自动关闭
-        });
+        layer.msg('请选择礼品进行兑换！', { time: 2000 });
         return false;
       }
       for (i = 0; i < xuanze_id_length; i++) {
@@ -259,9 +257,7 @@ $(function() {
       $('.dhlp').find('input[name="remark"]').val('');
       $('.dhlp').find('input[name="desc"]').val('');
     } else {
-      layer.msg('本次已兑换！', {
-        time: 2000 //2s后自动关闭
-      });
+      layer.msg('本次已兑换！', { time: 2000 });
     }
   });
 })

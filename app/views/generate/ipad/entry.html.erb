@@ -104,7 +104,8 @@ $(function() {
          <div class="dp"> \
            <p>店铺名称 / Merchant</p>\
            <input type="text" placeholder="店铺名称" class="store-name" value="' + record["name"] + '" />\
-           <input type="hidden" placeholder="GNDGID" class="gndgid" value="' + record["gndgid"] + '" />\
+           <input type="hidden" class="gndgid" value="' + record["gndgid"] + '" />\
+            <input type="hidden" class="gndcode" value="' + record["gndcode"] + '" />\
           <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);" class="search"><img src="/images/search.png?timestamp=1492782987"/></a>\
          </div>\
          <div>\
@@ -158,6 +159,7 @@ $(function() {
         serialnum = '',
         serialnums = [],
         gndgid = '',
+        gndcode = '',
         record = {},
         records = [],
         is_error = 0;
@@ -166,6 +168,7 @@ $(function() {
       serialnum = $(this).find("input.serial-num").val();
       amount = $(this).find("input.amount").val();
       gndgid = $(this).find("input.gndgid").val();
+      gndcode = $(this).find("input.gndcode").val();
 
       if(!name.length) {
         layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
@@ -202,6 +205,7 @@ $(function() {
       record["serialnum"] = serialnum;
       record["amount"] = amount;
       record["gndgid"] = gndgid;
+      record["gndcode"] = gndcode;
       records.push(record);
     })
 
