@@ -48,7 +48,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: params,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         if(xhr.code === 200) {
           window.localStorage.setItem("username", username);
@@ -118,7 +118,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: {"username": username, "password": old_password, "new_password": new_password},
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         layer.msg(xhr.info, {
           time: 0,
@@ -153,7 +153,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: {"email": email},
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         layer.msg(xhr.info, {
           time: 0,
@@ -189,7 +189,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -203,7 +203,7 @@ window.ServerAPI = {
       async: true,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -220,7 +220,7 @@ window.ServerAPI = {
       async: true,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -237,7 +237,7 @@ window.ServerAPI = {
       async: true,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -254,7 +254,7 @@ window.ServerAPI = {
       async: true,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -271,7 +271,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -288,7 +288,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -305,7 +305,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -321,7 +321,7 @@ window.ServerAPI = {
       type: 'post',
       async: true,
       dataType: 'json',
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -338,7 +338,7 @@ window.ServerAPI = {
       type: 'get',
       async: false,
       dataType: 'json',
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
 
@@ -368,7 +368,7 @@ window.ServerAPI = {
       type: 'get',
       async: true,
       dataType: 'json',
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
         if(xhr.code === 200) {

@@ -21,7 +21,7 @@ Date.prototype.format = function(format) {
 }
 
 window.TKH = {
-  version: '0.4.37',
+  version: '0.4.34',
   server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
   userGid: '1000020',
   userPwd: 'CAB371810F12B8C2',
@@ -254,7 +254,7 @@ window.TKH = {
   // 所有操作的通用接口
   hdClientCommand: function(data, callback) {
     var clientCookie = window.localStorage.getItem('sClientCookie'),
-        xmlString = '\
+        xmlstring = '\
         <SOAP-ENV:Envelope \
           xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
           xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
@@ -275,21 +275,16 @@ window.TKH = {
         </SOAP-ENV:Envelope>',
         index_loading_layer = -1;
 
-    console.log((new Date()).format('yy-MM-dd hh:mm:ss start load ') + data.command);
-    console.log('api version:' + window.TKH.version);
-    console.log('xml params:');
-    console.log(xmlString);
     index_loading_layer = layer.load(0);
     $.ajax({
       url: window.TKH.server + "?op=DoClientCommand",
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: xmlString,
+      data: xmlstring,
       timeout: 5000,
       contentType: "text/xml; charset=UTF-8"
     }).done(function(result) {
-      console.log('response:');
       console.log(result);
       if(callback) { callback(result); }
     }).fail(function(xhr, textstatus, errorThrown) {
@@ -326,10 +321,10 @@ window.TKH = {
       console.log('errorThrown: ');
       console.log(errorThrown);
     }).always(function(result, textstatus, xhr) {
-      if(index_loading_layer) {
+      console.log('index_loading_layer:' + index_loading_layer);
+      if(index_loading_layer >= 0) {
         layer.close(index_loading_layer);
       }
-      console.log((new Date()).format('yy-MM-dd hh:mm:ss deal ') + data.command + ' done');
     });
   },
   // 查询会员信息
@@ -795,17 +790,13 @@ window.TKH = {
       var errMsg = $(xmlHttpRequest).find('sErrMsg').text(),
           resultstring = $(xmlHttpRequest).find('sOutParams').text(),
           outparams = JSON.parse(resultstring);
+      console.log(resultstring);
 
       if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
         $('.shangPing.jin').empty();
         var html = '',
             item = {},
             gift_image;
-
-        if(outparams["Data"] === undefined || !outparams["Data"].length) {
-          layer.msg("赠品已全部被兑换", { time: 3000 });
-          return false;
-        }
         for (var i = 0, len = outparams["Data"].length; i < len; i++) {
           gift_image = 'gift.png';
           if(['1000000', '1000001', '1000020'].indexOf(item["FGID"]) >= 0) {
@@ -847,6 +838,7 @@ window.TKH = {
     $(".xuzh_jin").each(function() {
       temp_gift_num += 1;
       var gift_price = $(this).find(".min_amount").val();
+      console.log(gift_price);
       if(!isNaN(gift_price)) {
         if(today_amount >= parseFloat(gift_price)) {
           $(this).css({"display": "inline-block"});

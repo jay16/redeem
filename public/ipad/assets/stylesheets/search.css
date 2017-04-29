@@ -88,18 +88,18 @@
     margin-bottom: 0px;
     padding-bottom: 0px;
 }
-.content_2 > div{
+.content_2 > div {
     display: none;
-    min-height:6rem;
-    max-height: 8rem;
+    min-height: 6rem;
+    max-height: 9rem;
     overflow: auto;
 }
-.content_2 p{
+.content_2 p {
     color: #888;
     font-size: 0.34rem;
     text-indent: 10px;
 }
-.content_2 >div > div{
+.content_2 > div > div{
     float: left;
     width: 46%;
     padding: 0 2%;
