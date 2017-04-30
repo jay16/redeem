@@ -1,5 +1,5 @@
 window.ServerAPI = {
-  version: '0.4.26',
+  version: '0.4.27',
   server: '',
   params: function() {
     var query = {},
@@ -15,11 +15,11 @@ window.ServerAPI = {
     return query;
   },
   redirect_to_with_timestamp: function(pathname) {
-      var timestamp = (new Date()).valueOf(),
-          split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
-          pathname_with_timestamp = pathname + split_str + 'l_timestamp=' + timestamp;
+    var timestamp = (new Date()).valueOf(),
+        split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
+        pathname_with_timestamp = pathname + split_str + 'l_timestamp=' + timestamp;
 
-      window.location.href = pathname_with_timestamp;
+    window.location.href = pathname_with_timestamp;
   },
   login: function(type) {
     var username = $("#username").val(),
@@ -30,15 +30,11 @@ window.ServerAPI = {
           "password": password
         };
     if (!username.length) {
-      layer.tips('请输入用户名', '#username', {
-        tips: [2, '#faab20']
-      });
+      layer.tips('请输入用户名', '#username', { tips: [2, '#faab20'] });
       return false;
     }
     if (!password.length) {
-      layer.tips('请输入密码', '#password', {
-        tips: [2, '#faab20']
-      });
+      layer.tips('请输入密码', '#password', { tips: [2, '#faab20'] });
       return false;
     }
     $.ajax({
@@ -384,10 +380,8 @@ window.ServerAPI = {
               option += " selected='selected' ";
             }
             option += " >" + item[1] + "</option>";
-            console.log(option);
             $select.append(option);
           }
-
         } else {
           alert(xhr.info);
         }

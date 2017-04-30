@@ -21,7 +21,7 @@ Date.prototype.format = function(format) {
 }
 
 window.TKH = {
-  version: '0.4.37',
+  version: '0.4.38',
   server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
   userGid: '1000020',
   userPwd: 'CAB371810F12B8C2',
@@ -51,19 +51,14 @@ window.TKH = {
   // 3.1.1 登录
   loginWithinIPad: function(toPathName) {
     var username = $('#yhm').val(),
-      password = $('#pwd').val(),
-      area_id = $('input[name="area_id"]:checked').val();
-      layer.msg('登录中...', {
-        icon: 16,
-        shade: 0.01
-      });
-    var clientCookie,
+        password = $('#pwd').val(),
+        area_id = $('input[name="area_id"]:checked').val(),
         userGid = window.TKH.userGid,
         userPwd = window.TKH.userPwd,
         workStation = window.TKH.workStation,
         storeCode = window.TKH.storeCode,
-        Oper = window.TKH.oper;
-    var xmlString = '<?xml version="1.0" encoding="utf-8"?>\
+        oper = window.TKH.oper,
+        xmlString = '<?xml version="1.0" encoding="utf-8"?>\
       <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
@@ -74,7 +69,7 @@ window.TKH = {
       SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
         <ns2:Body>\
           <ns0:LogIn>\
-            <sOper xsi:type="ns3:string">HDCRM[0]</sOper>\
+            <sOper xsi:type="ns3:string">' + oper + '</sOper>\
             <sStoreCode xsi:type="ns3:string">' + storeCode + '</sStoreCode>\
             <sWorkStation xsi:type="ns3:string">' + workStation + '</sWorkStation>\
             <nUserGid xsi:type="ns3:int">' + userGid + '</nUserGid>\
@@ -82,7 +77,9 @@ window.TKH = {
             <sClientCookie xsi:type="ns3:string"/>\
           </ns0:LogIn>\
         </ns2:Body>\
-      </SOAP-ENV:Envelope>';
+      </SOAP-ENV:Envelope>',
+      index_loading_layer = layer.load(0);
+
     console.log(xmlString);
     $.ajax({
       url: window.TKH.server + "?op=LogIn",
@@ -91,52 +88,74 @@ window.TKH = {
       dataType: 'xml',
       data: xmlString,
       timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
-        console.log(clientCookie);
-        if(clientCookie !== null && clientCookie.length > 0) {
-          window.localStorage.setItem('sClientCookie', clientCookie);
-          window.localStorage.setItem('userGid', userGid);
-          window.localStorage.setItem('logined', "yes");
-          var current = new Date(),
-              expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
-          current.setTime(expiredIn);
-          window.localStorage.setItem('expiredIn', expiredIn);
-          window.localStorage.setItem('expiredInDate', current);
+      contentType: "text/xml; charset=UTF-8"
+    }).done(function(xmlHttpRequest) {
+      var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
+      console.log(xmlHttpRequest);
+      console.log(clientCookie);
+      if(clientCookie !== null && clientCookie.length > 0) {
+        window.localStorage.setItem('sClientCookie', clientCookie);
+        window.localStorage.setItem('userGid', userGid);
+        window.localStorage.setItem('logined', "yes");
+        var current = new Date(),
+            expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
+        current.setTime(expiredIn);
+        window.localStorage.setItem('expiredIn', expiredIn);
+        window.localStorage.setItem('expiredInDate', current);
 
-          window.TKH.redirect_to_with_timestamp(toPathName);
-        } else {
-          layer.msg("『底层接口』用户验证失败", { time: 3000 });
-        }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log(status);
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        layer.msg("『底层接口』用户验证失败，请重新登录", {
+        window.TKH.redirect_to_with_timestamp(toPathName);
+      } else {
+        layer.msg('『底层接口』用户验证失败，请重新登录', {
           time: 0,
-          btn: ['确定'],
+          btn: ['知道了'],
           btnAlign: 'c',
           yes: function(index) {
             layer.close(index);
-            window.localStorage.setItem('logined', "no");
-
-            window.TKH.redirect_to_with_timestamp('login.html');
           }
         });
+      }
+    }).fail(function(xhr, textstatus, errorThrown) {
+      // XMLHttpRequest.readyState: 状态码的意思
+      // 0 － （未初始化）还没有调用send()方法
+      // 1 － （载入）已调用send()方法，正在发送请求
+      // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
+      // 3 － （交互）正在解析响应内容
+      // 4 － （完成）响应内容解析完成，可以在客户端调用了
+
+      var error_msg = '';
+      if(xhr.readyState === 0) {
+        error_msg = '请确认网络环境正常';
+      } else if(xhr.readyState === 1 || xhr.readyState === 2) {
+        error_msg = '请确认网络环境正常，请求发出前出现异常';
+      } else if(xhr.readyState === 3) {
+        error_msg = '请确认网络环境正常，解析响应内容时异常';
+      } else if(xhr.readyState === 4) {
+        error_msg = '本地回调函数处理异常';
+      } else {
+        error_msg = '未知处理异常(' + xhr.readyState + ')' + errorThrown;
+      }
+
+      layer.msg(error_msg, {
+        time: 0,
+        btnAlign: 'c',
+        btn: ['确定'],
+        yes: function(index) {
+          layer.close(index);
+        }
+      });
+    }).always(function(result, textstatus, xhr) {
+      if(index_loading_layer) {
+        layer.close(index_loading_layer);
       }
     });
   },
   loginWithinAdmin: function() {
-    var clientCookie,
-        userGid = window.TKH.userGid,
+    var userGid = window.TKH.userGid,
         userPwd = window.TKH.userPwd,
         workStation = window.TKH.workStation,
         storeCode = window.TKH.storeCode,
-        Oper = window.TKH.oper;
+        oper = window.TKH.oper,
+        index_loading_layer = layer.load(0);
 
     window.localStorage.removeItem('sClientCookie');
     window.localStorage.removeItem('userGid');
@@ -151,7 +170,7 @@ window.TKH = {
       SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
         <ns2:Body>\
           <ns0:LogIn>\
-            <sOper xsi:type="ns3:string">HDCRM[0]</sOper>\
+            <sOper xsi:type="ns3:string">' + oper + '</sOper>\
             <sStoreCode xsi:type="ns3:string">' + storeCode + '</sStoreCode>\
             <sWorkStation xsi:type="ns3:string">' + workStation + '</sWorkStation>\
             <nUserGid xsi:type="ns3:int">' + userGid + '</nUserGid>\
@@ -167,37 +186,63 @@ window.TKH = {
       dataType: 'xml',
       data: xmlString,
       timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        console.log(xmlHttpRequest.responseText);
-        clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
-        console.log(clientCookie);
-        if(clientCookie !== null && clientCookie.length > 0) {
-          window.localStorage.setItem('sClientCookie', clientCookie);
-          window.localStorage.setItem('userGid', userGid);
-          var current = new Date(),
-              expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
-          current.setTime(expiredIn);
-          window.localStorage.setItem('expiredIn', expiredIn);
-          window.localStorage.setItem('expiredInDate', current);
-        } else {
-          layer.msg('『底层接口』用户验证失败，请重新登录', {
-            time: 0,
-            btn: ['知道了'],
-            btnAlign: 'c',
-            yes: function(index) {
-              window.TKH.redirect_to_with_timestamp('login.html');
-            }
-          });
+      contentType: "text/xml; charset=UTF-8"
+    }).done(function(xmlHttpRequest) {
+      var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
+
+      console.log(xmlHttpRequest);
+      console.log(clientCookie);
+      if(clientCookie !== null && clientCookie.length > 0) {
+        window.localStorage.setItem('sClientCookie', clientCookie);
+        window.localStorage.setItem('userGid', userGid);
+        var current = new Date(),
+            expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
+        current.setTime(expiredIn);
+        window.localStorage.setItem('expiredIn', expiredIn);
+        window.localStorage.setItem('expiredInDate', current);
+      } else {
+        layer.msg('『底层接口』用户验证失败，请重新登录', {
+          time: 0,
+          btn: ['知道了'],
+          btnAlign: 'c',
+          yes: function(index) {
+            layer.close(index);
+            window.TKH.redirect_to_with_timestamp('login.html');
+          }
+        });
+      }
+    }).fail(function(xhr, textstatus, errorThrown) {
+      // XMLHttpRequest.readyState: 状态码的意思
+      // 0 － （未初始化）还没有调用send()方法
+      // 1 － （载入）已调用send()方法，正在发送请求
+      // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
+      // 3 － （交互）正在解析响应内容
+      // 4 － （完成）响应内容解析完成，可以在客户端调用了
+
+      var error_msg = '';
+      if(xhr.readyState === 0) {
+        error_msg = '请确认网络环境正常';
+      } else if(xhr.readyState === 1 || xhr.readyState === 2) {
+        error_msg = '请确认网络环境正常，请求发出前出现异常';
+      } else if(xhr.readyState === 3) {
+        error_msg = '请确认网络环境正常，解析响应内容时异常';
+      } else if(xhr.readyState === 4) {
+        error_msg = '本地回调函数处理异常';
+      } else {
+        error_msg = '未知处理异常(' + xhr.readyState + ')' + errorThrown;
+      }
+
+      layer.msg(error_msg, {
+        time: 0,
+        btnAlign: 'c',
+        btn: ['确定'],
+        yes: function(index) {
+          layer.close(index);
         }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log(status);
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        alert("『底层接口』登录失败");
+      });
+    }).always(function(result, textstatus, xhr) {
+      if(index_loading_layer) {
+        layer.close(index_loading_layer);
       }
     });
   },
@@ -345,7 +390,6 @@ window.TKH = {
       layer.msg('请输入正确的手机号码', { time: 2000 });
       return false;
     }
-
 
     window.localStorage.removeItem('sFCARDNUM');
     window.localStorage.removeItem('current_telphone');

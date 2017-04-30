@@ -1,6 +1,6 @@
 window.ServerAPI = {
-  version: '0.0.3',
-  server: 'http://123.56.91.131:4567',
+  version: '0.4.27',
+  server: '',
   params: function() {
     var query = {},
         search = window.location.search.substring(1),
@@ -15,11 +15,11 @@ window.ServerAPI = {
     return query;
   },
   redirect_to_with_timestamp: function(pathname) {
-      var timestamp = (new Date()).valueOf(),
-          split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
-          pathname_with_timestamp = pathname + split_str + 'l_timestamp=' + timestamp;
+    var timestamp = (new Date()).valueOf(),
+        split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
+        pathname_with_timestamp = pathname + split_str + 'l_timestamp=' + timestamp;
 
-      window.location.href = pathname_with_timestamp;
+    window.location.href = pathname_with_timestamp;
   },
   login: function(type) {
     var username = $("#username").val(),
@@ -30,15 +30,11 @@ window.ServerAPI = {
           "password": password
         };
     if (!username.length) {
-      layer.tips('请输入用户名', '#username', {
-        tips: [2, '#faab20']
-      });
+      layer.tips('请输入用户名', '#username', { tips: [2, '#faab20'] });
       return false;
     }
     if (!password.length) {
-      layer.tips('请输入密码', '#password', {
-        tips: [2, '#faab20']
-      });
+      layer.tips('请输入密码', '#password', { tips: [2, '#faab20'] });
       return false;
     }
     $.ajax({
@@ -48,7 +44,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: params,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         if(xhr.code === 200) {
           window.localStorage.setItem("username", username);
@@ -118,7 +114,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: {"username": username, "password": old_password, "new_password": new_password},
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         layer.msg(xhr.info, {
           time: 0,
@@ -153,7 +149,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: {"email": email},
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         layer.msg(xhr.info, {
           time: 0,
@@ -189,7 +185,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -203,7 +199,7 @@ window.ServerAPI = {
       async: true,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -220,7 +216,7 @@ window.ServerAPI = {
       async: true,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -237,7 +233,7 @@ window.ServerAPI = {
       async: true,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -254,7 +250,7 @@ window.ServerAPI = {
       async: true,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -271,7 +267,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -288,7 +284,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -305,7 +301,7 @@ window.ServerAPI = {
       async: false,
       dataType: 'json',
       data: data,
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -321,7 +317,7 @@ window.ServerAPI = {
       type: 'post',
       async: true,
       dataType: 'json',
-      timeout: 10000,
+      timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
       }
@@ -329,9 +325,74 @@ window.ServerAPI = {
   },
   view_signature: function(ctl) {
     alert($(ctl).data("signature"));
+  },
+  // window.TKH.queryCRMQuestionnaireMode();
+  ipad_selected_questionnaire: function() {
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/ipad/questionnaire",
+      type: 'get',
+      async: false,
+      dataType: 'json',
+      timeout: 5000,
+      success: function(xhr) {
+        console.log(xhr);
+
+        window.localStorage.setItem("questionnaire_state", xhr.code);
+        if(xhr.code === 200) {
+          window.localStorage.setItem("questionnaire", xhr.data);
+        } else {
+          layer.msg(xhr.info + "，\n返回『客户信息』页面", {
+            time: 0,
+            btn: ['确定'],
+            btnAlign: 'c',
+            yes: function(index) {
+              layer.close(index);
+              window.TKH.redirect_to_with_timestamp('search.html');
+            }
+          });
+        }
+      },
+      error: function(xhr) {
+      }
+    });
+  },
+  generate_questionnaire_options: function() {
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/ipad/setting",
+      type: 'get',
+      async: true,
+      dataType: 'json',
+      timeout: 5000,
+      success: function(xhr) {
+        console.log(xhr);
+        if(xhr.code === 200) {
+          var $select = $("select[name=questionnaire_code]"),
+              item,
+              option;
+          $select.children("option").remove();
+          $select.append("<option value='404'>请选择问卷</option>");
+          for(var i = 0, len = xhr.data.length; i < len; i ++) {
+            item = xhr.data[i];
+            option = "<option value='" + item[0] + "'";
+            if(xhr.selected === item[0]) {
+              option += " selected='selected' ";
+            }
+            option += " >" + item[1] + "</option>";
+            $select.append(option);
+          }
+        } else {
+          alert(xhr.info);
+        }
+      },
+      error: function(xhr) {
+        console.log(xhr);
+      }
+    });
   }
 }
 
-if(window.location.protocol === 'file:' || window.location.host === 'localhost:4567') {
+if(window.location.protocol === 'file:') {
   window.ServerAPI.server = 'http://localhost:4567';
 }

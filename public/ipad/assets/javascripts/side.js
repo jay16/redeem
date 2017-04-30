@@ -38,7 +38,7 @@ $(function() {
     });
 
     var myDate = new Date();
-    $('.info p').html(myDate.toLocaleDateString());
+    $('.info .date-version').html(myDate.toLocaleDateString() + "/" + window.TKH.version);
 
     //显示重置密码
     $('.wj, .hf').click(function() {

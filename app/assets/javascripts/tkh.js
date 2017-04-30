@@ -21,7 +21,7 @@ Date.prototype.format = function(format) {
 }
 
 window.TKH = {
-  version: '0.0.4',
+  version: '0.4.38',
   server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
   userGid: '1000020',
   userPwd: 'CAB371810F12B8C2',
@@ -51,19 +51,14 @@ window.TKH = {
   // 3.1.1 登录
   loginWithinIPad: function(toPathName) {
     var username = $('#yhm').val(),
-      password = $('#pwd').val(),
-      area_id = $('input[name="area_id"]:checked').val();
-      layer.msg('登录中...', {
-        icon: 16,
-        shade: 0.01
-      });
-    var clientCookie,
+        password = $('#pwd').val(),
+        area_id = $('input[name="area_id"]:checked').val(),
         userGid = window.TKH.userGid,
         userPwd = window.TKH.userPwd,
         workStation = window.TKH.workStation,
         storeCode = window.TKH.storeCode,
-        Oper = window.TKH.oper;
-    var xmlString = '<?xml version="1.0" encoding="utf-8"?>\
+        oper = window.TKH.oper,
+        xmlString = '<?xml version="1.0" encoding="utf-8"?>\
       <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
@@ -74,7 +69,7 @@ window.TKH = {
       SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
         <ns2:Body>\
           <ns0:LogIn>\
-            <sOper xsi:type="ns3:string">HDCRM[0]</sOper>\
+            <sOper xsi:type="ns3:string">' + oper + '</sOper>\
             <sStoreCode xsi:type="ns3:string">' + storeCode + '</sStoreCode>\
             <sWorkStation xsi:type="ns3:string">' + workStation + '</sWorkStation>\
             <nUserGid xsi:type="ns3:int">' + userGid + '</nUserGid>\
@@ -82,7 +77,9 @@ window.TKH = {
             <sClientCookie xsi:type="ns3:string"/>\
           </ns0:LogIn>\
         </ns2:Body>\
-      </SOAP-ENV:Envelope>';
+      </SOAP-ENV:Envelope>',
+      index_loading_layer = layer.load(0);
+
     console.log(xmlString);
     $.ajax({
       url: window.TKH.server + "?op=LogIn",
@@ -91,52 +88,74 @@ window.TKH = {
       dataType: 'xml',
       data: xmlString,
       timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
-        console.log(clientCookie);
-        if(clientCookie !== null && clientCookie.length > 0) {
-          window.localStorage.setItem('sClientCookie', clientCookie);
-          window.localStorage.setItem('userGid', userGid);
-          window.localStorage.setItem('logined', "yes");
-          var current = new Date(),
-              expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
-          current.setTime(expiredIn);
-          window.localStorage.setItem('expiredIn', expiredIn);
-          window.localStorage.setItem('expiredInDate', current);
+      contentType: "text/xml; charset=UTF-8"
+    }).done(function(xmlHttpRequest) {
+      var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
+      console.log(xmlHttpRequest);
+      console.log(clientCookie);
+      if(clientCookie !== null && clientCookie.length > 0) {
+        window.localStorage.setItem('sClientCookie', clientCookie);
+        window.localStorage.setItem('userGid', userGid);
+        window.localStorage.setItem('logined', "yes");
+        var current = new Date(),
+            expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
+        current.setTime(expiredIn);
+        window.localStorage.setItem('expiredIn', expiredIn);
+        window.localStorage.setItem('expiredInDate', current);
 
-          window.TKH.redirect_to_with_timestamp(toPathName);
-        } else {
-          layer.msg("用户验证失败", { time: 3000 });
-        }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log(status);
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        layer.msg("用户验证失败，请重新登录", {
+        window.TKH.redirect_to_with_timestamp(toPathName);
+      } else {
+        layer.msg('『底层接口』用户验证失败，请重新登录', {
           time: 0,
-          btn: ['确定'],
+          btn: ['知道了'],
           btnAlign: 'c',
           yes: function(index) {
             layer.close(index);
-            window.localStorage.setItem('logined', "no");
-
-            window.TKH.redirect_to_with_timestamp('login.html');
           }
         });
+      }
+    }).fail(function(xhr, textstatus, errorThrown) {
+      // XMLHttpRequest.readyState: 状态码的意思
+      // 0 － （未初始化）还没有调用send()方法
+      // 1 － （载入）已调用send()方法，正在发送请求
+      // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
+      // 3 － （交互）正在解析响应内容
+      // 4 － （完成）响应内容解析完成，可以在客户端调用了
+
+      var error_msg = '';
+      if(xhr.readyState === 0) {
+        error_msg = '请确认网络环境正常';
+      } else if(xhr.readyState === 1 || xhr.readyState === 2) {
+        error_msg = '请确认网络环境正常，请求发出前出现异常';
+      } else if(xhr.readyState === 3) {
+        error_msg = '请确认网络环境正常，解析响应内容时异常';
+      } else if(xhr.readyState === 4) {
+        error_msg = '本地回调函数处理异常';
+      } else {
+        error_msg = '未知处理异常(' + xhr.readyState + ')' + errorThrown;
+      }
+
+      layer.msg(error_msg, {
+        time: 0,
+        btnAlign: 'c',
+        btn: ['确定'],
+        yes: function(index) {
+          layer.close(index);
+        }
+      });
+    }).always(function(result, textstatus, xhr) {
+      if(index_loading_layer) {
+        layer.close(index_loading_layer);
       }
     });
   },
   loginWithinAdmin: function() {
-    var clientCookie,
-        userGid = window.TKH.userGid,
+    var userGid = window.TKH.userGid,
         userPwd = window.TKH.userPwd,
         workStation = window.TKH.workStation,
         storeCode = window.TKH.storeCode,
-        Oper = window.TKH.oper;
+        oper = window.TKH.oper,
+        index_loading_layer = layer.load(0);
 
     window.localStorage.removeItem('sClientCookie');
     window.localStorage.removeItem('userGid');
@@ -151,7 +170,7 @@ window.TKH = {
       SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
         <ns2:Body>\
           <ns0:LogIn>\
-            <sOper xsi:type="ns3:string">HDCRM[0]</sOper>\
+            <sOper xsi:type="ns3:string">' + oper + '</sOper>\
             <sStoreCode xsi:type="ns3:string">' + storeCode + '</sStoreCode>\
             <sWorkStation xsi:type="ns3:string">' + workStation + '</sWorkStation>\
             <nUserGid xsi:type="ns3:int">' + userGid + '</nUserGid>\
@@ -167,37 +186,63 @@ window.TKH = {
       dataType: 'xml',
       data: xmlString,
       timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        console.log(xmlHttpRequest.responseText);
-        clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
-        console.log(clientCookie);
-        if(clientCookie !== null && clientCookie.length > 0) {
-          window.localStorage.setItem('sClientCookie', clientCookie);
-          window.localStorage.setItem('userGid', userGid);
-          var current = new Date(),
-              expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
-          current.setTime(expiredIn);
-          window.localStorage.setItem('expiredIn', expiredIn);
-          window.localStorage.setItem('expiredInDate', current);
-        } else {
-          layer.msg('用户验证失败，请重新登录', {
-            time: 0,
-            btn: ['知道了'],
-            btnAlign: 'c',
-            yes: function(index) {
-              window.TKH.redirect_to_with_timestamp('login.html');
-            }
-          });
+      contentType: "text/xml; charset=UTF-8"
+    }).done(function(xmlHttpRequest) {
+      var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
+
+      console.log(xmlHttpRequest);
+      console.log(clientCookie);
+      if(clientCookie !== null && clientCookie.length > 0) {
+        window.localStorage.setItem('sClientCookie', clientCookie);
+        window.localStorage.setItem('userGid', userGid);
+        var current = new Date(),
+            expiredIn = current.valueOf() + 1 * 60 * 60 * 1000;
+        current.setTime(expiredIn);
+        window.localStorage.setItem('expiredIn', expiredIn);
+        window.localStorage.setItem('expiredInDate', current);
+      } else {
+        layer.msg('『底层接口』用户验证失败，请重新登录', {
+          time: 0,
+          btn: ['知道了'],
+          btnAlign: 'c',
+          yes: function(index) {
+            layer.close(index);
+            window.TKH.redirect_to_with_timestamp('login.html');
+          }
+        });
+      }
+    }).fail(function(xhr, textstatus, errorThrown) {
+      // XMLHttpRequest.readyState: 状态码的意思
+      // 0 － （未初始化）还没有调用send()方法
+      // 1 － （载入）已调用send()方法，正在发送请求
+      // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
+      // 3 － （交互）正在解析响应内容
+      // 4 － （完成）响应内容解析完成，可以在客户端调用了
+
+      var error_msg = '';
+      if(xhr.readyState === 0) {
+        error_msg = '请确认网络环境正常';
+      } else if(xhr.readyState === 1 || xhr.readyState === 2) {
+        error_msg = '请确认网络环境正常，请求发出前出现异常';
+      } else if(xhr.readyState === 3) {
+        error_msg = '请确认网络环境正常，解析响应内容时异常';
+      } else if(xhr.readyState === 4) {
+        error_msg = '本地回调函数处理异常';
+      } else {
+        error_msg = '未知处理异常(' + xhr.readyState + ')' + errorThrown;
+      }
+
+      layer.msg(error_msg, {
+        time: 0,
+        btnAlign: 'c',
+        btn: ['确定'],
+        yes: function(index) {
+          layer.close(index);
         }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log(status);
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        alert("登录失败");
+      });
+    }).always(function(result, textstatus, xhr) {
+      if(index_loading_layer) {
+        layer.close(index_loading_layer);
       }
     });
   },
@@ -209,9 +254,53 @@ window.TKH = {
       yes: function(index) {
         window.localStorage.setItem("logined", "no");
         layer.close(index);
+        window.TKH.redirect_to_with_timestamp('login.html');
 
-        var clientCookie = window.localStorage.getItem('sClientCookie');
-        var xmlString = '<SOAP-ENV:Envelope \
+        // var clientCookie = window.localStorage.getItem('sClientCookie');
+        // var xmlString = '<SOAP-ENV:Envelope \
+        //   xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+        //   xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+        //   xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+        //   xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+        //   xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+        //   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+        //   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
+        //   SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+        //   <SOAP-ENV:Header/>\
+        //     <ns2:Body>\
+        //       <ns0:LogOut>\
+        //       <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
+        //       </ns0:LogOut>\
+        //     </ns2:Body>4\
+        // </SOAP-ENV:Envelope>'
+
+        // $.ajax({
+        //   url: window.TKH.server + "?op=LogOut",
+        //   type: 'POST',
+        //   async: false,
+        //   dataType: 'xml',
+        //   data: xmlString,
+        //   timeout: 5000,
+        //   contentType: "text/xml; charset=UTF-8",
+        //   success: function(xmlHttpRequest) {
+        //     layer.closeAll();
+        //     window.localStorage.setItem('logined', "no");
+        //     layer.msg("退出成功", { time: 3000 });
+        //     window.TKH.redirect_to_with_timestamp('login.html');
+        //   },
+        //   complete: function(xmlHttpRequest, status) {},
+        //   error: function(xmlHttpRequest) {
+        //     layer.msg("退出失败", { time: 2000 });
+        //   }
+        // });
+      }
+    });
+  },
+  // 所有操作的通用接口
+  hdClientCommand: function(data, callback) {
+    var clientCookie = window.localStorage.getItem('sClientCookie'),
+        xmlString = '\
+        <SOAP-ENV:Envelope \
           xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
           xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
           xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
@@ -221,285 +310,154 @@ window.TKH = {
           xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
           SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
           <SOAP-ENV:Header/>\
-            <ns2:Body>\
-              <ns0:LogOut>\
+          <ns2:Body>\
+            <ns0:DoClientCommand>\
               <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-              </ns0:LogOut>\
-            </ns2:Body>4\
-        </SOAP-ENV:Envelope>'
+              <sCommand xsi:type="ns3:string">' + data.command + '</sCommand>\
+              <sParams xsi:type="ns3:string">' + data.params + '</sParams>\
+            </ns0:DoClientCommand>\
+          </ns2:Body>\
+        </SOAP-ENV:Envelope>',
+        index_loading_layer = -1;
 
-        $.ajax({
-          url: window.TKH.server + "?op=LogOut",
-          type: 'POST',
-          async: false,
-          dataType: 'xml',
-          data: xmlString,
-          timeout: 5000,
-          contentType: "text/xml; charset=UTF-8",
-          success: function(xmlHttpRequest) {
-            layer.closeAll();
-              window.localStorage.setItem('logined', "no");
-            layer.msg("退出成功", { time: 3000 });
-            location.href = 'login.html';
-          },
-          complete: function(xmlHttpRequest, status) {},
-          error: function(xmlHttpRequest) {
-            layer.msg("退出失败", { time: 2000 });
-          }
-        });
-      }
-    });
-  },
-  // 3.2.17 查询HDMall交易卡流水（查询用户信息，消费记录）（通过测试）
-  queryMallTranhst: function() {
-    var clientCookie = window.localStorage.getItem('sClientCookie'),
-      sFCardNum = window.localStorage.getItem('sFCARDNUM'),
-      today = new Date();
-
-    today.setDate(today.getDate() + 1);
-    endDateStr = today.format('yyyy.MM.dd');
-
-    today.setDate(today.getDate() - 365);
-    beginDateStr = today.format('yyyy.MM.dd');
-    var params = "[\\]\nFCardNum=" + sFCardNum + "\nFBeginDate=" + beginDateStr + "\nFEndDate=" + endDateStr + "\nFPageIndex=1\nFPageSize=10\n";
-
-    console.log(params);
-    var xmlstring = '<SOAP-ENV:Envelope \
-    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-    <SOAP-ENV:Header/>\
-      <ns2:Body>\
-        <ns0:DoClientCommand>\
-          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-          <sCommand xsi:type="ns3:string">QUERYMALLTRANSHSTJSON</sCommand>\
-          <sParams xsi:type="ns3:string">' + params + '</sParams>\
-        </ns0:DoClientCommand>\
-      </ns2:Body>\
-    </SOAP-ENV:Envelope>'
-
+    console.log((new Date()).format('yy-MM-dd hh:mm:ss start load ') + data.command);
+    console.log('api version:' + window.TKH.version);
+    console.log('xml params:');
+    console.log(xmlString);
+    index_loading_layer = layer.load(0);
     $.ajax({
       url: window.TKH.server + "?op=DoClientCommand",
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: xmlstring,
+      data: xmlString,
       timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        console.log(resultstring);
-        var items = resultstring.split('FDATA='),
-        jsonString = $.trim(items[1]);
-        console.log(jsonString);
-        var outparams = JSON.parse(jsonString);
-        window.TKH._doConsumerInfo(outparams['Data'], false);
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - QUERYMALLTRANSHSTJSON", { time: 3000 });
-      }
-    });
-  },
-  // 3.2.37 查询会员兑奖单信息（通过测试）
-  queryScorePrizeBillJson: function() {
-    var clientCookie = window.localStorage.getItem('sClientCookie'),
-        fcardnum = window.localStorage.getItem('sFCARDNUM'),
-        fpageindex = 0,
-        fpagesize = 0;
-    var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}',
-        xmlstring = '<SOAP-ENV:Envelope \
-      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-      xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-      <SOAP-ENV:Header/>\
-        <ns2:Body>\
-          <ns0:DoClientCommand>\
-            <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-            <sCommand xsi:type="ns3:string">CRMQueryScorePrizeBillJson</sCommand>\
-            <sParams xsi:type="ns3:string">' + params + '</sParams>\
-          </ns0:DoClientCommand>\
-        </ns2:Body>\
-      </SOAP-ENV:Envelope>'
+      contentType: "text/xml; charset=UTF-8"
+    }).done(function(result) {
+      console.log('response:');
+      console.log(result);
+      if(callback) { callback(result); }
+    }).fail(function(xhr, textstatus, errorThrown) {
+      // XMLHttpRequest.readyState: 状态码的意思
+      // 0 － （未初始化）还没有调用send()方法
+      // 1 － （载入）已调用send()方法，正在发送请求
+      // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
+      // 3 － （交互）正在解析响应内容
+      // 4 － （完成）响应内容解析完成，可以在客户端调用了
 
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: xmlstring,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        console.log(resultstring);
-        if (errMsg.length > 0) {
-          layer.msg(errMsg, { time: 3000 });
-        }
-        console.log(resultstring);
-        var outparams = JSON.parse(resultstring);
-        if (outparams["FRESULT"] === 0) {
-          console.log(outparams['FDATA']);
-          var array = (typeof(outparams['FDATA']) === 'string' ? [] : outparams['FDATA']);
-          console.log(array);
-          window.TKH._doExchangeInfo(array, false);
-
-        } else {
-          if (outparams['FMSG'].length > 0) {
-            layer.closeAll();
-            layer.msg(outparams['FMSG'], {
-              shade: 0.01,
-              time: 2000
-            });
-          }
-        }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMQueryScorePrizeBillJson", { time: 3000 });
+      var error_msg = '';
+      if(xhr.readyState === 0) {
+        error_msg = '请确认网络环境正常';
+      } else if(xhr.readyState === 1 || xhr.readyState === 2) {
+        error_msg = '请确认网络环境正常，请求发出前出现异常';
+      } else if(xhr.readyState === 3) {
+        error_msg = '请确认网络环境正常，解析响应内容时异常';
+      } else if(xhr.readyState === 4) {
+        error_msg = '本地回调函数处理异常';
+      } else {
+        error_msg = '未知处理异常(' + xhr.readyState + ')' + errorThrown;
       }
+
+      layer.msg(error_msg, {
+        time: 0,
+        btnAlign: 'c',
+        btn: ['确定'],
+        yes: function(index) {
+          layer.close(index);
+        }
+      });
+
+      console.log('readyState: ' + xhr.readyState + ',status: ' + xhr.status);
+      console.log('errorThrown: ');
+      console.log(errorThrown);
+    }).always(function(result, textstatus, xhr) {
+      if(index_loading_layer) {
+        layer.close(index_loading_layer);
+      }
+      console.log((new Date()).format('yy-MM-dd hh:mm:ss deal ') + data.command + ' done');
     });
   },
   // 查询会员信息
   queryMemberInfoJSON: function() {
     var phone = $('#search').val();
     if (!phone) {
-      layer.tips('请输入手机号码', '#search', {
-        tips: [3, '#faab20']
-      });
-      return false;
-    } else {
-      var $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
-      if (!($phe.test(phone))) {
-        layer.msg('请输入正确的手机号码', {
-          time: 2000
-        });
-        return false;
-      }
-      layer.msg('操作中...', { icon: 16, shade: 0.01 });
-
-      var clientCookie = window.localStorage.getItem('sClientCookie');
-      var xmlstring = '<SOAP-ENV:Envelope \
-        xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-        xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-        xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-        xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-        xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-        SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-        <SOAP-ENV:Header/>\
-          <ns2:Body>\
-            <ns0:DoClientCommand>\
-              <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-              <sCommand xsi:type="ns3:string">QUERYMEMBERINFOJSON</sCommand>\
-              <sParams xsi:type="ns3:string">{&quot;FCARDNUM&quot;:&quot;&quot;,&quot;FMOBILEPHONE&quot;:&quot;' + phone + '&quot;, &quot;FQUERYTYPE&quot;:&quot;1&quot;,&quot;FCARNUM&quot;:&quot;&quot;}</sParams>\
-            </ns0:DoClientCommand>\
-          </ns2:Body>\
-        </SOAP-ENV:Envelope>';
-
-      window.localStorage.removeItem('sFCARDNUM');
-      window.localStorage.removeItem('current_telphone');
-      $.ajax({
-        url: window.TKH.server + "?op=DoClientCommand",
-        type: 'POST',
-        async: false,
-        dataType: 'xml',
-        data: xmlstring,
-        timeout: 5000,
-        contentType: "text/xml; charset=UTF-8",
-        success: function(xmlHttpRequest) {
-          console.log(xmlHttpRequest);
-          var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-          var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-
-          window.localStorage.setItem('sOutParams', resultstring);
-          var outparams = JSON.parse(resultstring);
-          var result = outparams["FRESULT"];
-
-          var ret = {};
-          ret.status = outparams["FRESULT"];
-          ret.data = outparams;
-          ret.ConsumerInfo = [];
-          ret.ExchangeInfo = [];
-          if (ret.status === 0 || ret.status === "0") {
-            window.localStorage.setItem('sFCARDNUM', outparams["FCARDNUM"]);
-            window.TKH._do(ret.data);
-            window.TKH._doConsumerInfo(ret.ConsumerInfo, false);
-            window.TKH._doExchangeInfo(ret.ExchangeInfo, false);
-            $('#wx').parent().css('display', 'block');
-            $('#live_dz').parent().css('display', 'inline-block');
-            $('.bc, .legal-provision-dz').css('display', 'none');
-            $('.xy').css('display', 'block');
-
-            for(var key in outparams) {
-              console.log(key + ": " + outparams[key]);
-            }
-
-            // # field7, married, 婚姻状态
-            // # field8, id_number, 身份证号
-            // # field9, qq, qq 号
-            // # field10, landline, 座机
-            var params = {
-              "name": outparams["FMEMNAME"],
-              "sex": outparams["FMEMSEX"],
-              "birthday": outparams["FMEMBIRTH"],
-              "address": outparams["FMEMADDRESS"],
-              "telphone": outparams["FMEMMOBILEPHONE"],
-              "card_number": outparams["FCARDNUM"],
-              "email": outparams["FMEMEMAILADR"],
-            };
-            window.ServerAPI.save_member(params);
-            params["total_score"] = outparams["FCARDTOTALSCORE"];
-            params["balance"] = outparams["FCARDBALANCE"];
-            window.localStorage.setItem('current_telphone', JSON.stringify(params));
-          } else {
-            window.localStorage.removeItem('sFCARDNUM');
-            window.TKH._chu();
-            window.TKH._chuConsumerInf();
-            window.TKH._chuExchangeInfo();
-
-            if (typeof(outparams['FMSG']) === 'string' && outparams['FMSG'].length > 0) {
-              layer.msg(outparams['FMSG'], { time: 2000 });
-            }
-
-            $('#wx').parent().css('display', 'block');
-            $('#live_dz').parent().css('display', 'inline-block');
-            $('.bc, .legal-provision-dz').css('display', 'block');
-            $('.xy').css('display', 'none');
-            // $("#search").val('');
-          };
-        },
-        complete: function(xmlHttpRequest, status) {
-          console.log(xmlHttpRequest);
-        },
-        error: function(xmlHttpRequest) {
-          console.log(xmlHttpRequest);
-          layer.msg("ERROR - QUERYMEMBERINFOJSON", { time: 3000 });
-        }
-      });
-
+      layer.tips('请输入手机号码', '#search', { tips: [3, '#faab20'] });
       return false;
     }
+
+    var $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+    if (!($phe.test(phone))) {
+      layer.msg('请输入正确的手机号码', { time: 2000 });
+      return false;
+    }
+
+    window.localStorage.removeItem('sFCARDNUM');
+    window.localStorage.removeItem('current_telphone');
+
+    var data = {
+      command: 'QUERYMEMBERINFOJSON',
+      params: '{&quot;FCARDNUM&quot;:&quot;&quot;,&quot;FMOBILEPHONE&quot;:&quot;' + phone + '&quot;, &quot;FQUERYTYPE&quot;:&quot;1&quot;,&quot;FCARNUM&quot;:&quot;&quot;}'
+    };
+    window.TKH.hdClientCommand(data, function(result) {
+      console.log(result);
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text();
+
+      window.localStorage.setItem('sOutParams', resultstring);
+      var outparams = JSON.parse(resultstring),
+          ret = {};
+      ret.status = outparams["FRESULT"];
+      ret.data = outparams;
+      ret.ConsumerInfo = [];
+      ret.ExchangeInfo = [];
+      if (ret.status === 0 || ret.status === "0") {
+        $('.content_1 > div:eq(0)').click();
+
+        window.localStorage.setItem('sFCARDNUM', outparams["FCARDNUM"]);
+        window.TKH._do(ret.data);
+        window.TKH._doConsumerInfo(ret.ConsumerInfo, false);
+        window.TKH._doExchangeInfo(ret.ExchangeInfo, false);
+        $('#wx').parent().css('display', 'block');
+        $('.bc, .legal-provision-dz').css('display', 'none');
+        $('.xy').css('display', 'block');
+
+        for(var key in outparams) {
+          console.log(key + ": " + outparams[key]);
+        }
+
+        // # field7, married, 婚姻状态
+        // # field8, id_number, 身份证号
+        // # field9, qq, qq 号
+        // # field10, landline, 座机
+        var params = {
+          "name": outparams["FMEMNAME"],
+          "sex": outparams["FMEMSEX"],
+          "birthday": outparams["FMEMBIRTH"],
+          "address": outparams["FMEMADDRESS"],
+          "telphone": outparams["FMEMMOBILEPHONE"],
+          "card_number": outparams["FCARDNUM"],
+          "email": outparams["FMEMEMAILADR"],
+        };
+        window.ServerAPI.save_member(params);
+        params["total_score"] = outparams["FCARDTOTALSCORE"];
+        params["balance"] = outparams["FCARDBALANCE"];
+        window.localStorage.setItem('current_telphone', JSON.stringify(params));
+      } else {
+        window.localStorage.removeItem('sFCARDNUM');
+        window.TKH._chu();
+        window.TKH._chuConsumerInf();
+        window.TKH._chuExchangeInfo();
+
+        if (typeof(outparams['FMSG']) === 'string' && outparams['FMSG'].length > 0) {
+          layer.msg(outparams['FMSG'], { time: 2000 });
+        }
+
+        $('#wx').parent().css('display', 'block');
+        $('.bc, .legal-provision-dz').css('display', 'block');
+        $('.xy').css('display', 'none');
+        // $("#search").val('');
+      };
+    });
     return false;
   },
   _do: function(data) {
@@ -514,7 +472,7 @@ window.TKH = {
           city: ldd_city,
           district: ldd_distinct
         };
-    if(data.FMEMADDRESS && data.FMEMADDRESS.length && data.FMEMADDRESS.split('-').length >= 4) {
+    if(data.FMEMADDRESS && data.FMEMADDRESS.length && data.FMEMADDRESS.split('-').length >= 3) {
       var ldd_parts = data.FMEMADDRESS.split('-'),
           ldd_part = [],
           ldd_other = '';
@@ -543,12 +501,10 @@ window.TKH = {
       console.log(dist_json);
       $("#live_dz_distpicker").distpicker('destroy');
       $("#live_dz_distpicker").distpicker(dist_json);
-      $("#live_dz").val(ldd_other);
     } else {
       $("#live_dz_distpicker").distpicker('reset', true);
-      $('#live_dz').val(data.FMEMADDRESS);
     }
-    if(data.FMEMCOMPANY && data.FMEMCOMPANY.length && data.FMEMCOMPANY.split('-').length >= 4) {
+    if(data.FMEMCOMPANY && data.FMEMCOMPANY.length && data.FMEMCOMPANY.split('-').length >= 3) {
       var wdd_parts = data.FMEMCOMPANY.split('-'),
           wdd_part,
           wdd_province,
@@ -577,9 +533,6 @@ window.TKH = {
         city: ldd_city,
         district: ldd_distinct
       });
-      $("#work_dz").val(wdd_other);
-    } else {
-      $('#work_dz').val(data.FMEMCOMPANY);
     }
 
     if (data.FMEMBIRTH) {
@@ -626,29 +579,22 @@ window.TKH = {
   },
   _doExchangeInfo: function(ExchangeInfo, xia) {
     if (ExchangeInfo.length > 0) {
-      if (!xia) {
-        $("#ExchangeInfo").empty();
-        var html = '';
-        var ye = 1;
-      } else {
-        $("#ExchangeInfo").find('.gengduo').remove();
-        var html = $("#ExchangeInfo").html();
-        $("#ExchangeInfo").empty();
-        var ye = xia;
-      }
-      var html = '';
+      $("#ExchangeInfo > div:eq(0)").empty();
+      $("#ExchangeInfo > div:eq(1)").empty();
+
       // only show first 10
+      var html = '';
       for (var i = 0, ilen = (ExchangeInfo.length > 9 ? 9 : ExchangeInfo.length); i < ilen; i++) {
-        html += '<div class="xf">'; //<p>兑换记录 : 礼品 / Redemption date : gifts</p>
+        html = '<div class="xf">'; //<p>兑换记录 : 礼品 / Redemption date : gifts</p>
         for (var j = 0, jlen = ExchangeInfo[i]["FGOODS"].length; j < jlen; j++) {
           html += ' <p>' + ExchangeInfo[i].FBILLNUM + ':CNY ' + ExchangeInfo[i]["FGOODS"][j].AMOUNT + ' - ' + ExchangeInfo[i]["FGOODS"][j].NAME + '</p></div>';
         }
+        if(i <= 4) {
+          $("#ExchangeInfo > div:eq(0)").append(html);
+        } else {
+          $("#ExchangeInfo > div:eq(1)").append(html);
+        }
       }
-      if (ExchangeInfo.length == 10) {
-        html += '<div class="xf gengduo"><p></p><p class="ExchangeInfo" style="text-align: center"><input type="hidden" value="' + ye + '">加载更多</p></div>';
-      }
-      console.log(html);
-      $("#ExchangeInfo").append(html);
     } else {
       window.TKH._chuExchangeInfo()
     }
@@ -656,38 +602,62 @@ window.TKH = {
   _chu: function() {
     $('#mz').val('');
     $('#xb').val('');
-    $('#live_dz').val('');
     // $('#work_dz').val();
     $('#ymd').val('');
   },
   _chuExchangeInfo: function() {
-    $("#ExchangeInfo").empty();
-    var html = '<div class="xf"><p>兑换日期 : 礼品 / Redemption date : gifts</p><p></p></div>';
-    $("#ExchangeInfo").append(html);
+    $("#ExchangeInfo > div:eq(0)").empty();
+    $("#ExchangeInfo > div:eq(1)").empty();
   },
   _chuConsumerInf: function() {
     $("#ConsumerInfo").empty();
     var html = '<div class="xf"><p>消费日期 : 消费金额 - 店铺名称 / Date : Amount - Merchant name</p><p></p></div>';
-    $("#ConsumerInfo").append(html);
+    $("#ConsumerInfo").append('');
   },
   openCardJson: function() {
-    if($("#checkbox_legal").prop('checked')) {
-      window.TKH.CRMWeiXinOpenCardJson();
-    } else {
-     window.localStorage.setItem('sFCARDNUM', '-');
-     layer.open({
-          type:1,
-          area:"450px",
-          content:$('.tishibuton')
+    // 非会员通道
+    if(!$("#checkbox_legal").prop('checked')) {
+      window.localStorage.setItem('sFCARDNUM', '-');
+      var fmbrmobilephone = $('#search').val(),
+          fmbrname = $.trim($('#mz').val()),
+          fmbrsex = $.trim($('#xb option:selected').val()),
+          fmbrbirth = $.trim($('#ymd').val()),
+          ldd_province = $("#ldd_province").val(),
+          ldd_city = $("#ldd_city").val(),
+          ldd_district = $("#ldd_district").val(),
+          faddress = ldd_province + '-' + ldd_city + '-' + ldd_district,
+          params = {
+            "name": fmbrname,
+            "sex": fmbrsex,
+            "birthday": fmbrbirth,
+            "address": faddress,
+            "telphone": fmbrmobilephone,
+            "card_number": '-'
+          };
+
+      if(fmbrbirth.length === 10) {
+        ymd_date = new Date(Date.parse(fmbrbirth.replace("-", "/")));
+        if(ymd_date > (new Date())) {
+          layer.msg('请入合理出生日期', { time: 2000 });
+          return false;
+        }
+      }
+      window.localStorage.setItem('current_telphone', JSON.stringify(params));
+      // window.TKH.genMallSupplyBill();
+      layer.open({
+        type:1,
+        area:"450px",
+        content:$('.tishibuton-area')
       });
-      $(".layui-layer").css({"top": "30%", "min-height": "230px"});
-      $(".button, .tishibuton").css({"display": "block"});
+      return false;
     }
+    // 会员通道
+    window.TKH.weiXinOpenCardJson();
   },
   // 注册会员
-  CRMWeiXinOpenCardJson: function() {
-    var fmbrmobilephone = $('#search').val();
-    var $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+  weiXinOpenCardJson: function() {
+    var fmbrmobilephone = $('#search').val(),
+        $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
     if (!($phe.test(fmbrmobilephone))) {
       layer.msg('请输入正确的手机号码', { time: 2000 });
       return false;
@@ -697,98 +667,72 @@ window.TKH = {
         fmbrbirth = $.trim($('#ymd').val()),
         ldd_province = $("#ldd_province").val(),
         ldd_city = $("#ldd_city").val(),
-        ldd_district = $("#ldd_district").val(),
-        live_dz = $("#live_dz").val(),
-        faddress = ldd_province + '-' + ldd_city + '-' + ldd_district + '-' + live_dz;
+        ldd_district = $("#ldd_district").val();
+        faddress = ldd_province + '-' + ldd_city + '-' + ldd_district;
 
     if (fmbrname.length == 0) {
       layer.msg('请输入用户名', { time: 2000 });
       return false;
     }
-    var fopenid = 'm0' + (new Date()).valueOf(),
-        fcardid = '0210';
-    var params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + faddress + '&quot;}';
+    if(fmbrbirth.length === 10) {
+      ymd_date = new Date(Date.parse(fmbrbirth.replace("-", "/")));
+      if(ymd_date > (new Date())) {
+        layer.msg('请入合理出生日期', { time: 2000 });
+        return false;
+      }
+    }
 
-    var clientCookie = window.localStorage.getItem('sClientCookie'),
-        xmlString = '<SOAP-ENV:Envelope \
-    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-    <SOAP-ENV:Header/>\
-      <ns2:Body>\
-        <ns0:DoClientCommand>\
-          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-          <sCommand xsi:type="ns3:string">CRMWeiXinOpenCardJson</sCommand>\
-          <sParams xsi:type="ns3:string">' + params + '</sParams>\
-        </ns0:DoClientCommand>\
-      </ns2:Body>\
-    </SOAP-ENV:Envelope>';
+    var fopenid = 'm0' + (new Date()).valueOf(),
+        fcardid = window.TKH.storeCode,
+        params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + faddress + '&quot;}',
+        data = {
+          params: params,
+          command: 'CRMWeiXinOpenCardJson'
+        };
 
     window.localStorage.removeItem('sFCARDNUM');
     window.localStorage.removeItem('current_telphone');
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: xmlString,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        var ret = JSON.parse(resultstring);
-        layer.closeAll();
-        if (ret["FRESULT"] === 0) {
-          $("#fnum_span").html(ret["FCARDNUM"]);
-          layer.open({
-              type:1,
-              area:"450px",
-              content:$('.regisitered-area')
-          });
+    window.TKH.hdClientCommand(data, function(result) {
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text(),
+          ret = JSON.parse(resultstring);
+      layer.closeAll();
+      if (ret["FRESULT"] === 0 || ret["FRESULT"] === '0') {
+        $("#fnum_span").html(ret["FCARDNUM"]);
+        layer.open({
+          type:1,
+          area: "450px",
+          content:$('.regisitered-area')
+        });
 
-          $(".layui-layer-page").css({"top": "20%"});
-          $('.bc, .legal-provision-dz').css('display', 'none');
-          $('.xy').css('display', 'block');
+        $(".layui-layer-page").css({"top": "20%"});
+        $('.bc, .legal-provision-dz').css('display', 'none');
+        $('.xy').css('display', 'block');
 
-          // # field5, email, 邮箱
-          // # field6, sex, 性别
-          // # field7, married, 婚姻状态
-          // # field8, id_number, 身份证号
-          // # field9, qq, qq 号
-          // # field10, landline, 座机
-          var params = {
-            "name": fmbrname,
-            "sex": fmbrsex,
-            "birthday": fmbrbirth,
-            "address": faddress,
-            "telphone": fmbrmobilephone,
-            "card_number": ret["FCARDNUM"]
-          };
-          window.localStorage.setItem('sFCARDNUM', ret["FCARDNUM"]);
-          window.localStorage.setItem('current_telphone', JSON.stringify(params));
-          window.ServerAPI.save_member(params);
-        } else {
-          layer.msg(ret["FMSG"], { time: 2000 });
-          $('#wx').parent().css('display', 'none');
-          $('#live_dz').parent().css('display', 'none');
-          $('.bc, .legal-provision-dz').css('display', 'block');
-          $('.xy').css('display', 'block');
+        // # field5, email, 邮箱
+        // # field6, sex, 性别
+        // # field7, married, 婚姻状态
+        // # field8, id_number, 身份证号
+        // # field9, qq, qq 号
+        // # field10, landline, 座机
+        var post_params = {
+          "name": fmbrname,
+          "sex": fmbrsex,
+          "birthday": fmbrbirth,
+          "address": faddress,
+          "telphone": fmbrmobilephone,
+          "card_number": ret["FCARDNUM"]
         };
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log('complete');
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        layer.msg("ERROR - CRMWeiXinOpenCardJson", { time: 3000 });
-      }
+        window.localStorage.setItem('sFCARDNUM', ret["FCARDNUM"]);
+        window.localStorage.setItem('current_telphone', JSON.stringify(post_params));
+        window.ServerAPI.save_member(post_params);
+      } else {
+        layer.msg("『底层接口』提示： " + ret["FMSG"], { time: 2000 });
+        $('#wx').parent().css('display', 'none');
+        $('#live_dz').parent().css('display', 'none');
+        $('.bc, .legal-provision-dz').css('display', 'block');
+        $('.xy').css('display', 'block');
+      };
     });
   },
   // 消费录入/积分录入，打开商户选择
@@ -807,22 +751,21 @@ window.TKH = {
     console.log($(ctl).find('.gndname').val());
     $(".suoding").find(".store-name").val($(ctl).find('.gndname').val());
     $(".suoding").find(".gndgid").val($(ctl).find('.gndgid').val());
-    $(".suoding").find(".store-code").val($(ctl).find('.gndcode').val());
+    $(".suoding").find(".gndcode").val($(ctl).find('.gndcode').val());
     $('.xuanZe').fadeOut(200);
     $(".suoding").removeClass("suoding");
   },
   // 消费录入，添加录入框
   addRecordInput: function() {
     var dq_count = $(".content_2 .dq-wrapper").length + 1;
-
     $('.content_2').append(
       '<div class="dq-wrapper dq-wrapper-' + dq_count + '">\
          <div class="dp"> \
             <p>店铺名称 / Merchant</p>\
             <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/>\
             <input type="hidden" class="gndgid"/>\
-            <input type="hidden" class="store-code"/>\
-            <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);"  class="search">\
+            <input type="hidden" class="gndcode"/>\
+            <a href="javascript:void(0);" onClick="window.TKH.searchDQM(this);"  class="search">\
               <img src="assets/images/search.png"/>\
             </a>\
          </div>\
@@ -830,181 +773,137 @@ window.TKH = {
            <p>流水号 / Serial Number</p>\
            <input type="text" placeholder="流水号" class="serial-num" value=""/>\
          </div>\
-         <div>\
-           <p>消费金额 / Amount</p>\
-           <input type="number" placeholder="0.00" class="amount"/>\
+         <div style="width: 28%;">\
+           <p>消费时间 / Time</p>\
+           <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
          </div>\
-         <a href="javascript:void(0);" class="jian">-</a>\
+         <div style="width: 14%;">\
+           <p>消费金额 / Amount</p>\
+           <input style="width:60%" type="number" placeholder="0.00" class="amount"/>\
+           <a href="javascript:void(0);" class="jian">-</a>\
+         </div>\
        </div>'
-    )
+    );
   },
   // 3.2.7 查询有效商铺信息
   queryMallGndWeb: function() {
-    var clientCookie = window.localStorage.getItem('sClientCookie');
-    var fstorecode = '0210',
-      fpageindex = '1',
-      fpagesize = '30';
-    var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
-
-    var check_xml = '<SOAP-ENV:Envelope \
-            xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-            SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-            <SOAP-ENV:Header/>\
-              <ns2:Body>\
-                <ns0:DoClientCommand>\
-                  <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-                  <sCommand xsi:type="ns3:string">QueryMallGndWeb</sCommand>\
-                  <sParams xsi:type="ns3:string">' + params + '</sParams>\
-                </ns0:DoClientCommand>\
-              </ns2:Body>\
-            </SOAP-ENV:Envelope>';
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: check_xml,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log('success');
-        console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        console.log(resultstring)
-        var outparams = JSON.parse(resultstring);
-        if (outparams["FRESULT"] === 0) {
-
-          $('.xuanZe .hangHu').html('');
-          $('.xuanZe').fadeIn(200);
-          var html = '';
-          var data = outparams["FDATA"];
-          for (i = 0; i < data.length; i++) {
-            html += "<div class='soudingname' onClick='window.TKH.selectedDQM(this);'>\
-                        <div>\
-                          <p>" + data[i].GNDNAME + "</p>\
-                          <p>\
-                            <b>" + data[i].GNDGID + "</b>\
-                          </p>\
-                        </div>\
-                        <input type='hidden' value='" + data[i].GNDGID + "' class='gndgid'/>\
-                        <input type='hidden' value='" + data[i].GNDNAME + "' class='gndname'/>\
-                        <input type='hidden' value='" + data[i].GNDCODE + "' class='gndcode'/>\
-                        <input type='hidden' value='" + data[i].RN + "' class='rn'/>\
-                      </div> ";
-          }
-          console.log(html);
-          $('.xuanZe .hangHu').append(html);
-        } else {
-          if (outparams["FMSG"].length > 0) {
-            layer.msg(outparams["FMSG"], { time: 3000 });
-          }
+    var fstorecode = window.TKH.storeCode,
+        fpageindex = '1',
+        fpagesize = '30',
+        params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}',
+        data = {
+          params: params,
+          command: 'QueryMallGndWeb'
+        };
+    window.TKH.hdClientCommand(data, function(result) {
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring);
+      if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        $('.xuanZe .hangHu').html('');
+        $('.xuanZe').fadeIn(200);
+        var html = '',
+            fdata = outparams["FDATA"];
+        for (i = 0; i < fdata.length; i++) {
+          html += "<div class='soudingname' onClick='window.TKH.selectedDQM(this);'>\
+                      <div>\
+                        <p>" + fdata[i].GNDNAME + "</p>\
+                        <p>\
+                          <b>" + fdata[i].GNDGID + "</b>\
+                        </p>\
+                      </div>\
+                      <input type='hidden' value='" + fdata[i].GNDGID + "' class='gndgid'/>\
+                      <input type='hidden' value='" + fdata[i].GNDNAME + "' class='gndname'/>\
+                      <input type='hidden' value='" + fdata[i].GNDCODE + "' class='gndcode'/>\
+                      <input type='hidden' value='" + fdata[i].RN + "' class='rn'/>\
+                    </div> ";
         }
-        console.log(resultstring)
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log('complete');
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log('error');
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - QueryMallGndWeb", { time: 3000 });
+        $('.xuanZe .hangHu').append(html);
+      } else {
+        if (outparams["FMSG"].length) {
+          layer.msg("『底层接口』提示 " + outparams["FMSG"], { time: 3000 });
+        }
       }
     });
   },
   // 3.2.30 查询有效的赠品促销接口（P.53)
   // 兑奖页面，查询可用兑奖项
   queryMallGiftPromInfo: function() {
-    var clientCookie = window.localStorage.getItem('sClientCookie');
-    var ffildate = (new Date()).format('yyyy.MM.dd hh:mm:ss');
-    console.log(ffildate);
-    var params = '{&quot;FFILDATE&quot;:&quot;' + ffildate + '&quot;}';
-    console.log(params);
-    var check_xml = '<SOAP-ENV:Envelope \
-      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-      xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-      <SOAP-ENV:Header/>\
-        <ns2:Body>\
-          <ns0:DoClientCommand>\
-            <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-            <sCommand xsi:type="ns3:string">CRMQueryMallGiftPromInfo</sCommand>\
-            <sParams xsi:type="ns3:string">' + params + '</sParams>\
-          </ns0:DoClientCommand>\
-        </ns2:Body>\
-      </SOAP-ENV:Envelope>';
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: check_xml,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log('success');
-        console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        console.log(resultstring);
-        var outparams = JSON.parse(resultstring);
+    var ffildate = (new Date()).format('yyyy.MM.dd hh:mm:ss'),
+        params = '{&quot;FFILDATE&quot;:&quot;' + ffildate + '&quot;}',
+        data = {
+          params: params,
+          command: 'CRMQueryMallGiftPromInfo'
+        };
+    window.TKH.hdClientCommand(data, function(xmlHttpRequest) {
+      var errMsg = $(xmlHttpRequest).find('sErrMsg').text(),
+          resultstring = $(xmlHttpRequest).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring);
 
-        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-          $('.shangPing.jin').empty();
-          var html = '',
-            item = {};
-          for (var i = 0, len = outparams["Data"].length; i < len; i++) {
-            item = outparams["Data"][i];
-            html += "<div class='xuzh_jin'>"
-            html += "  <input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
-            html += "  <input type='hidden' class='fnum' value='" + item["FNUM"] + "'/>";
-            html += "  <input type='hidden' class='gift_code' value='" + item["FCODE"] + "'/>";
-            html += "  <input type='hidden' class='gift_name' value='" + item["FNAME"] + "'/>";
-            html += "  <input type='hidden' class='address' value='" + item["FLOCATION"] + "'/>";
-            html += "  <input type='hidden' class='begin_date' value='" + item["FENDTIME"] + "'/>";
-            html += "  <input type='hidden' class='end_date' value='" + item["FENDTIME"] + "'/>";
-            html += "  <input type='hidden' class='theme_name' value='" + item["FSUBJECT"] + "'/>";
-            html += "  <input type='hidden' class='price' value='" + item["FPRICE"] + "'/>";
-            html += "  <input type='hidden' class='count' value='" + item["FQTY"] + "'/>";
-            html += "  <input type='hidden' class='min_amount' value='" + item["FLOWAMT"] + "'/>";
-            html += "  <img style='' src='assets/images/gift.png'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
-            html += "  <div class='gou'>";
-            html += "  <img src='assets/images/gou.png' />";
-            html += "  </div>";
-            html += "</div>";
-          }
-          $('.shangPing.jin').append(html);
-        } else {
-          if (outparams["FMSG"].length > 0) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
-          }
+      if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        $('.shangPing.jin').empty();
+        var html = '',
+            item = {},
+            gift_image;
+
+        if(outparams["Data"] === undefined || !outparams["Data"].length) {
+          layer.msg("赠品已全部被兑换", { time: 3000 });
+          return false;
         }
-
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log('complete');
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log('error');
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMQueryMallGiftPromInfo", { time: 3000 });
+        for (var i = 0, len = outparams["Data"].length; i < len; i++) {
+          gift_image = 'gift.png';
+          if(['1000000', '1000001', '1000020'].indexOf(item["FGID"]) >= 0) {
+            gift_image = 'gift-' + item["FGID"] + '.jpg';
+          }
+          item = outparams["Data"][i];
+          html += "<div class='xuzh_jin' style='display: none;'>"
+          html += "  <input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
+          html += "  <input type='hidden' class='fnum' value='" + item["FNUM"] + "'/>";
+          html += "  <input type='hidden' class='gift_code' value='" + item["FCODE"] + "'/>";
+          html += "  <input type='hidden' class='gift_name' value='" + item["FNAME"] + "'/>";
+          html += "  <input type='hidden' class='address' value='" + item["FLOCATION"] + "'/>";
+          html += "  <input type='hidden' class='begin_date' value='" + item["FENDTIME"] + "'/>";
+          html += "  <input type='hidden' class='end_date' value='" + item["FENDTIME"] + "'/>";
+          html += "  <input type='hidden' class='theme_name' value='" + item["FSUBJECT"] + "'/>";
+          html += "  <input type='hidden' class='price' value='" + item["FPRICE"] + "'/>";
+          html += "  <input type='hidden' class='count' value='" + item["FQTY"] + "'/>";
+          html += "  <input type='hidden' class='min_amount' value='" + item["FLOWAMT"] + "'/>";
+          html += "  <img style='' src='assets/images/" + gift_image + "'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
+          html += "  <div class='gou'>";
+          html += "  <img src='assets/images/gou.png' />";
+          html += "  </div>";
+          html += "</div>";
+        }
+        $('.shangPing.jin').append(html);
+      } else {
+        if (outparams["FMSG"].length) {
+          layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
+        }
       }
     });
+  },
+  displayGiftWithAmount: function(today_amount) {
+    var temp_gift_num = 0, ok_gift_num = 0;
+    $(".xuzh_jin").each(function() {
+      $(this).css({"display": "none"});
+    });
+
+    $(".xuzh_jin").each(function() {
+      temp_gift_num += 1;
+      var gift_price = $(this).find(".min_amount").val();
+      if(!isNaN(gift_price)) {
+        if(today_amount >= parseFloat(gift_price)) {
+          $(this).css({"display": "inline-block"});
+          ok_gift_num += 1;
+        }
+      }
+    });
+
+    if(temp_gift_num > 0 && ok_gift_num == 0) {
+      layer.msg('消费金额暂无合适礼品可兑换！', {
+        time: 3000 //2s后自动关闭
+      });
+    }
   },
   // 3.2.31 生成赠品发放单接口
   genMallSupplyBill: function() {
@@ -1026,6 +925,7 @@ window.TKH = {
     $(".xf").each(function() {
       if ($(this).hasClass("checked")) {
         var fgndgid = $(this).find(".guoxiao_gndgid").val(),
+            fgndcode = $(this).find(".guoxiao_gndcode").val()
             storename = $(this).find(".guoxiao_store").val(),
             fflowno = $(this).find(".guoxiao_serialnum").val(),
             famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
@@ -1047,9 +947,19 @@ window.TKH = {
           "card_number": fcardnum,
           "serial_number": fflowno,
           "amount": famt,
-          "store_code": fgndgid,
+          "store_code": fgndcode,
           "store_name": storename
         });
+
+        if(fcardnum !== null && fcardnum !== '-') {
+          var score_data = {
+            card_number: fcardnum,
+            show_code: fgndcode,
+            real_amt: famt,
+            score: parseInt(famt)
+          };
+          window.TKH.calcMallScoreExWeb(score_data, 0);
+        }
       }
     });
     // var fgndgid = '500021',
@@ -1095,10 +1005,10 @@ window.TKH = {
 
     var fnum = $(".shangPing .xuanZhong .fnum").val();
         ftotal = $("#today_amount_guo").html(),
-        fmember = '',
-        fmobilephone = '',
-        fcardid = '',
-        femail = '';
+        fmember = currentQueryMemberJSON["name"],
+        fmobilephone = currentQueryMemberJSON["telphone"],
+        fcardid = fcardnum,
+        femail = currentQueryMemberJSON["email"];
     var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
                    &quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,\
                    &quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,\
@@ -1108,79 +1018,43 @@ window.TKH = {
                    &quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,\
                    &quot;FSUPPLYPAY&quot;:[' + paies.join(",") + '],\
                    &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + ']\
-                 }';
-    var check_xml = '<SOAP-ENV:Envelope \
-      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-      xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-      <SOAP-ENV:Header/>\
-        <ns2:Body>\
-          <ns0:DoClientCommand>\
-            <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-            <sCommand xsi:type="ns3:string">CRMGenMallSupplyBill</sCommand>\
-            <sParams xsi:type="ns3:string">' + params + '</sParams>\
-          </ns0:DoClientCommand>\
-        </ns2:Body>\
-      </SOAP-ENV:Envelope>';
+                 }',
+        data = {
+          params: params,
+          command: 'CRMGenMallSupplyBill'
+        };
+    window.TKH.hdClientCommand(data, function(result) {
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring);
 
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: check_xml,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log('success');
-        console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        console.log(resultstring);
-        var outparams = JSON.parse(resultstring);
+      if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        // # field3, amount, 兑换金额
+        // # field4, redeem_state, 兑换状态
+        // # field5, gift_name, 礼品名称
+        // # field6, gift_id, 礼品ID
+        // # field7, store_id, 门店ID
+        // # field8, store_name, 门店名称
+        // # field9, serial_number, 流水号
+        // # text1, consumers, 消费列表
+        // # text2, gifts, 礼品信息
+        post_param = {
+          "member": currentQueryMemberJSON["name"],
+          "card_number": fcardnum,
+          "telphone": currentQueryMemberJSON["telphone"],
+          "amount": ftotal,
+          "gift_name": $(".xuanZhong").find(".gift_name").val(),
+          "gift_id": $(".xuanZhong").find(".gift_code").val(),
+          "consumes": post_param_consumes,
+          "gifts": post_param_gifts,
+          "redeem_state": "兑换成功"
+        };
+        window.ServerAPI.save_redeem(post_param);
 
-        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-          // # field3, amount, 兑换金额
-          // # field4, redeem_state, 兑换状态
-          // # field5, gift_name, 礼品名称
-          // # field6, gift_id, 礼品ID
-          // # field7, store_id, 门店ID
-          // # field8, store_name, 门店名称
-          // # field9, serial_number, 流水号
-          // # text1, consumers, 消费列表
-          // # text2, gifts, 礼品信息
-          post_param = {
-            "member": currentQueryMemberJSON["name"],
-            "card_number": fcardnum,
-            "telphone": currentQueryMemberJSON["telphone"],
-            "amount": ftotal,
-            "gift_name": $(".xuanZhong").find(".gift_name").val(),
-            "gift_id": $(".xuanZhong").find(".gift_code").val(),
-            "consumes": post_param_consumes,
-            "gifts": post_param_gifts,
-            "redeem_state": "兑换成功"
-          };
-          window.ServerAPI.save_redeem(post_param);
-
-          window.localStorage.removeItem("records");
-          window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
-        } else {
-          layer.msg(outparams["FMSG"], { time: 2000 });
-        }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log('complete');
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log('error');
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMGenMallSupplyBill", { time: 2000 });
+        window.localStorage.removeItem("records");
+        window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
+      } else {
+        layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
       }
     });
   },
@@ -1193,7 +1067,7 @@ window.TKH = {
     var params = '{&quot;FNAME&quot;:&quot;' + fname + '&quot;}';
 
     console.log(params);
-    var check_xml = '<SOAP-ENV:Envelope \
+    var xmlString = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
       xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
@@ -1216,7 +1090,7 @@ window.TKH = {
       type: 'POST',
       async: false,
       dataType: 'xml',
-      data: check_xml,
+      data: xmlString,
       timeout: 5000,
       contentType: "text/xml; charset=UTF-8",
       success: function(xmlHttpRequest) {
@@ -1231,9 +1105,7 @@ window.TKH = {
           window.localStorage.setItem("questionnaire", resultstring);
         } else {
           if (outparams["FMSG"].length) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
+            layer.msg("『底层接口』ERROR - " + outparams["FMSG"], { time: 2000 });
           }
         }
       },
@@ -1244,7 +1116,7 @@ window.TKH = {
       error: function(xmlHttpRequest) {
         console.log('error');
         console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMQueryCRMQuestionnaireMode", { time: 2000 });
+        layer.msg("『底层接口』ERROR - CRMQueryCRMQuestionnaireMode", { time: 2000 });
       }
     });
   },
@@ -1263,79 +1135,42 @@ window.TKH = {
       fdata_params.push('{&quot;FTITELID&quot;:&quot;' + item["ftitleid"] + '&quot;,&quot;FVALUEID&quot;:&quot;' + item["fvalueid"] + '&quot;,&quot;FVALUE&quot;:&quot;' + item["fvalue"] + '&quot;}')
     }
     // '{&quot;FTITELID&quot;:&quot;' + ftitelid + '&quot;,&quot;FVALUEID&quot;:&quot;' + fvalueid + '&quot;,&quot;FVALUE&quot;:&quot;' + fvalue + '&quot;}';
+    var fnum = $("#fnum").val(),
+        params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FDATA&quot;:[' + fdata_params.join(',') + ']}',
+        data = {
+          params: params,
+          command: 'CRMSaveCRMQuestionnaire'
+        };
 
-    var fnum = $("#fnum").val();
-    var params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FDATA&quot;:[' + fdata_params.join(',') + ']}';
+    window.TKH.hdClientCommand(data, function(result) {
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring);
 
-    console.log(params);
-    var xmlString = '<SOAP-ENV:Envelope \
-      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-      xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-      <SOAP-ENV:Header/>\
-        <ns2:Body>\
-          <ns0:DoClientCommand>\
-            <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-            <sCommand xsi:type="ns3:string">CRMSaveCRMQuestionnaire </sCommand>\
-            <sParams xsi:type="ns3:string">' + params + '</sParams>\
-          </ns0:DoClientCommand>\
-        </ns2:Body>\
-      </SOAP-ENV:Envelope>';
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: xmlString,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log('success');
-        console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        console.log(resultstring);
-        var outparams = JSON.parse(resultstring);
-        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-          window.localStorage.removeItem("questionnaire");
-          window.localStorage.removeItem("questionResult");
+      if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        window.localStorage.removeItem("questionnaire");
+        window.localStorage.removeItem("questionnaire_state");
+        window.localStorage.removeItem("questionResult");
 
-
-          var questionPostParam = window.localStorage.getItem("questionPostParam");
-          if(questionPostParam !== null) {
-            post_param = JSON.parse(questionPostParam);
-            window.ServerAPI.save_answer(post_param);
-          }
-          layer.msg(outparams["FMSG"], { time: 4000 });
-          layer.msg('问卷提交成功', {
-            time: 0,
-            btn: ['确定'],
-            btnAlign: 'c',
-            yes: function(index) {
-              layer.close(index);
-
-              window.TKH.redirect_to_with_timestamp("signature.html");
-            }
-          });
-        } else {
-          if (outparams["FMSG"].length) {
-            layer.msg(outparams["FMSG"], { time: 2000 });
-          }
+        var questionPostParam = window.localStorage.getItem("questionPostParam");
+        if(questionPostParam !== null) {
+          post_param = JSON.parse(questionPostParam);
+          window.ServerAPI.save_answer(post_param);
         }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log('complete');
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log('error');
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMSaveCRMQuestionnaire", { time: 2000 });
+        layer.msg('问卷提交成功', {
+          time: 0,
+          btn: ['确定'],
+          btnAlign: 'c',
+          yes: function(index) {
+            layer.close(index);
+
+            window.TKH.redirect_to_with_timestamp("signature.html");
+          }
+        });
+      } else {
+        if (outparams["FMSG"].length) {
+          layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 3000 });
+        }
       }
     });
   },
@@ -1376,7 +1211,7 @@ window.TKH = {
             <p>店铺名称 / Merchant</p>\
             <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/>\
             <input type="hidden" class="gndgid"/>\
-            <input type="hidden" class="store-code"/>\
+            <input type="hidden" class="gndcode"/>\
             <a href="javascript:void (0)" onClick="window.TKH.searchDQM(this);"  class="search">\
               <img src="assets/images/search.png"/>\
             </a>\
@@ -1385,89 +1220,55 @@ window.TKH = {
            <p>流水号 / Serial Number</p>\
            <input type="text" placeholder="流水号" class="serial-num" value=""/>\
          </div>\
-         <div>\
-           <p>消费金额 / Amount</p>\
-           <input type="number" placeholder="0.00" class="amount"/>\
+         <div style="width: 28%;">\
+           <p>消费时间 / Time</p>\
+           <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
          </div>\
-       </div>'
-    )
+         <div style="width: 14%;">\
+           <p>消费金额 / Amount</p>\
+           <input style="width: 60%" type="number" placeholder="0.00" class="amount"/>\
+           <a href="javascript:void(0);" class="jian">-</a>\
+         </div>\
+       </div>');
   },
   // 3.2.18 生成HDMall消费积分单
-  calcMallScoreExWeb: function(data) {
-    var clientCookie = window.localStorage.getItem('sClientCookie');
+  // display_alert: 1/0
+  calcMallScoreExWeb: function(data, display_alert) {
     var card_num = data.card_number,
         trant_time = (new Date()).format('yyyyMMddhhmmss'),
         show_code = data.show_code,
         real_amt = data.real_amt,
         score = data.score,
-        params = '{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;,&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;,&quot;FSHOPCODE&quot;:&quot;' + show_code + '&quot;,&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;,&quot;FSCORE&quot;:&quot;' + score + '&quot;}';
-    var xmlString = '<SOAP-ENV:Envelope \
-    xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-    xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-    xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-    SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-    <SOAP-ENV:Header/>\
-      <ns2:Body>\
-        <ns0:DoClientCommand>\
-          <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-          <sCommand xsi:type="ns3:string">CRMCalcMallScoreExWeb</sCommand>\
-          <sParams xsi:type="ns3:string">' + params + '</sParams>\
-        </ns0:DoClientCommand>\
-      </ns2:Body>\
-    </SOAP-ENV:Envelope>'
-
-    console.log(params);
-    console.log(xmlString);
-    $.ajax({
-        url: window.TKH.server + "?op=DoClientCommand",
-        type: 'POST',
-        async: false,
-        dataType: 'xml',
-        data: xmlString,
-        timeout: 5000,
-        contentType: "text/xml; charset=UTF-8",
-        success: function(xmlHttpRequest) {
-          console.log('success');
-          console.log(xmlHttpRequest);
-          var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-          console.log(errMsg);
-          var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-          console.log(resultstring);
-          var outparams = JSON.parse(resultstring);
-          if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-            layer.msg('恭喜您成功积分', {
-              time: 0,
-              btn: ['确定'],
-              btnAlign: 'c',
-              yes: function(index) {
-                layer.close(index);
-                window.TKH.redirect_to_with_timestamp("complete.html");
-              }
-            });
-          } else {
-            if (outparams["FMSG"].length) {
-              layer.msg(outparams["FMSG"], { time: 2000 });
-            }
+        params = '{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;,&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;,&quot;FSHOPCODE&quot;:&quot;' + show_code + '&quot;,&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;,&quot;FSCORE&quot;:&quot;' + score + '&quot;}',
+        ajax_data = {
+          params: params,
+          command: 'CRMCalcMallScoreExWeb'
+        };
+    window.TKH.hdClientCommand(ajax_data, function(result) {
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring);
+      if (display_alert === 1 && (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0")) {
+        layer.msg('恭喜您积分成功', {
+          time: 0,
+          btn: ['确定'],
+          btnAlign: 'c',
+          yes: function(index) {
+            layer.close(index);
+            window.TKH.redirect_to_with_timestamp("complete.html");
           }
-        },
-        complete: function(xmlHttpRequest, status) {
-            console.log('complete');
-            console.log(xmlHttpRequest);
-        },
-        error: function(xmlHttpRequest) {
-            console.log('error');
-            console.log(xmlHttpRequest);
+        });
+      } else {
+        if (outparams["FMSG"].length) {
+          layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
         }
+      }
     });
   },
   // 3.2.7 查询有效商铺信息，后台同步使用该接口
   queryStoreForSync: function() {
     var clientCookie = window.localStorage.getItem('sClientCookie');
-        fstorecode = '0210',
+        fstorecode = window.TKH.storeCode,
         fpageindex = '1',
         fpagesize = '30';
 
@@ -1483,65 +1284,31 @@ window.TKH = {
 
     $("#sync_state").html("开始同步店铺...");
     window.ServerAPI.truncate_table('store');
-    var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}';
-    var xmlString = '<SOAP-ENV:Envelope \
-            xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-            SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-            <SOAP-ENV:Header/>\
-              <ns2:Body>\
-                <ns0:DoClientCommand>\
-                  <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-                  <sCommand xsi:type="ns3:string">QueryMallGndWeb</sCommand>\
-                  <sParams xsi:type="ns3:string">' + params + '</sParams>\
-                </ns0:DoClientCommand>\
-              </ns2:Body>\
-            </SOAP-ENV:Envelope>';
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: xmlString,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log('success');
-        console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        var outparams = JSON.parse(resultstring);
-        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-          var data = outparams["FDATA"],
-              post_param = {};
-          for (i = 0; i < data.length; i++) {
-            post_param["name"] = data[i].GNDNAME;
-            post_param["gid"] = data[i].GNDGID;
-            post_param["code"] = data[i].GNDCODE;
-            window.ServerAPI.save_store(post_param);
-          }
+    var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}',
+        data = {
+          params: params,
+          command: 'QueryMallGndWeb'
+        };
+    window.TKH.hdClientCommand(data, function(result) {
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring);
 
-          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份店铺");
-        } else {
-          if (outparams["FMSG"].length > 0) {
-            alert(outparams["FMSG"]);
-          }
+      if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        var fdata = outparams["FDATA"],
+            post_param = {};
+        for (i = 0; i < fdata.length; i++) {
+          post_param["name"] = fdata[i].GNDNAME;
+          post_param["gid"] = fdata[i].GNDGID;
+          post_param["code"] = fdata[i].GNDCODE;
+          window.ServerAPI.save_store(post_param);
         }
-        console.log(resultstring)
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log('complete');
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log('error');
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - QueryMallGndWeb", { time: 3000 });
+
+        $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + fdata.length + " 份店铺");
+      } else {
+        if (outparams["FMSG"].length) {
+          layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
+        }
       }
     });
   },
@@ -1563,93 +1330,57 @@ window.TKH = {
     window.ServerAPI.truncate_table('gift');
     var ffildate = (new Date()).format('yyyy.MM.dd hh:mm:ss'),
         params = '{&quot;FFILDATE&quot;:&quot;' + ffildate + '&quot;}',
-        xmlString = '<SOAP-ENV:Envelope \
-      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-      xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-      <SOAP-ENV:Header/>\
-        <ns2:Body>\
-          <ns0:DoClientCommand>\
-            <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-            <sCommand xsi:type="ns3:string">CRMQueryMallGiftPromInfo</sCommand>\
-            <sParams xsi:type="ns3:string">' + params + '</sParams>\
-          </ns0:DoClientCommand>\
-        </ns2:Body>\
-      </SOAP-ENV:Envelope>';
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: xmlString,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log('success');
-        console.log(xmlHttpRequest);
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        console.log(resultstring);
-        var outparams = JSON.parse(resultstring);
+        data = {
+          params: params,
+          command: 'CRMQueryMallGiftPromInfo'
+        };
 
-        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-          var data = outparams["Data"],
-              post_param = {};
-          for (i = 0; i < data.length; i++) {
-            console.log(data[i]);
-            // {
-            // "FBGNTIME":"2017.03.01",
-            // "FMUNIT":"个",
-            // "FLOWAMT":"",
-            // "FSUBJECT":"121212",
-            // "FRULENAME":"",
-            // "FRULECODE":"",
-            // "FLOCATION":"",
-            // "FENDTIME":"2020.04.30 23:59:59",
-            // "FSUMMUL":"",
-            // "FADDTOPROM":"0",
-            // "FNAME":"精美钥匙扣",
-            // "FCODE":"00000017",
-            // "FQTY":"10261",
-            // "FNUM":"02101703310001",
-            // "FGID":"500000",
-            // "FCLS":"01",
-            // "FPRICE":"10"
-            // }
-            post_param['theme_code'] = data[i].FGID;
-            post_param['theme_name'] = data[i].FSUBJECT;
-            post_param['begin_date'] = data[i].FBGNTIME;
-            post_param['end_date'] = data[i].FENDTIME;
-            post_param['address'] = data[i].FLOCATION;
-            post_param['gift_code'] = data[i].FCODE;
-            post_param['gift_name'] = data[i].FNAME;
-            post_param['count'] = data[i].FQTY;
-            post_param['min_amount'] = data[i].FLOWAMT;
-            post_param['price'] = data[i].FPRICE;
-            window.ServerAPI.save_gift(post_param);
-          }
+    window.TKH.hdClientCommand(data, function(xmlHttpRequest) {
+      var resultstring = $(xmlHttpRequest).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring);
 
-          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份礼品");
-        } else {
-          if (outparams["FMSG"].length > 0) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
-          }
+      if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        var fdata = outparams["Data"],
+            post_param = {};
+        for (i = 0; i < fdata.length; i++) {
+          console.log(fdata[i]);
+          // {
+          // "FBGNTIME":"2017.03.01",
+          // "FMUNIT":"个",
+          // "FLOWAMT":"",
+          // "FSUBJECT":"121212",
+          // "FRULENAME":"",
+          // "FRULECODE":"",
+          // "FLOCATION":"",
+          // "FENDTIME":"2020.04.30 23:59:59",
+          // "FSUMMUL":"",
+          // "FADDTOPROM":"0",
+          // "FNAME":"精美钥匙扣",
+          // "FCODE":"00000017",
+          // "FQTY":"10261",
+          // "FNUM":"02101703310001",
+          // "FGID":"500000",
+          // "FCLS":"01",
+          // "FPRICE":"10"
+          // }
+          post_param['theme_code'] = fdata[i].FGID;
+          post_param['theme_name'] = fdata[i].FSUBJECT;
+          post_param['begin_date'] = fdata[i].FBGNTIME;
+          post_param['end_date'] = fdata[i].FENDTIME;
+          post_param['address'] = fdata[i].FLOCATION;
+          post_param['gift_code'] = fdata[i].FCODE;
+          post_param['gift_name'] = fdata[i].FNAME;
+          post_param['count'] = fdata[i].FQTY;
+          post_param['min_amount'] = fdata[i].FLOWAMT;
+          post_param['price'] = fdata[i].FPRICE;
+          window.ServerAPI.save_gift(post_param);
         }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log('complete');
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log('error');
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMQueryMallGiftPromInfo", { time: 3000 });
+
+        $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份礼品");
+      } else {
+        if (outparams["FMSG"].length) {
+          layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
+        }
       }
     });
   },
@@ -1681,94 +1412,162 @@ window.TKH = {
 
     $("#sync_state").html("开始同步问卷...");
     window.ServerAPI.truncate_table('questionnaire');
+
     var fname = '',
-        params = '{&quot;FNAME&quot;:&quot;' + fname + '&quot;}';
-        xmlString = '<SOAP-ENV:Envelope \
-      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-      xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
-      <SOAP-ENV:Header/>\
-        <ns2:Body>\
-          <ns0:DoClientCommand>\
-            <sClientCookie xsi:type="ns3:string">' + clientCookie + '</sClientCookie>\
-            <sCommand xsi:type="ns3:string">CRMQueryCRMQuestionnaireMode </sCommand>\
-            <sParams xsi:type="ns3:string">' + params + '</sParams>\
-          </ns0:DoClientCommand>\
-        </ns2:Body>\
-      </SOAP-ENV:Envelope>';
-    $.ajax({
-      url: window.TKH.server + "?op=DoClientCommand",
-      type: 'POST',
-      async: false,
-      dataType: 'xml',
-      data: xmlString,
-      timeout: 5000,
-      contentType: "text/xml; charset=UTF-8",
-      success: function(xmlHttpRequest) {
-        console.log('success');
-        console.log(xmlHttpRequest);
-        var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
-        var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-        console.log(resultstring);
-        var outparams = JSON.parse(resultstring);
+        params = '{&quot;FNAME&quot;:&quot;' + fname + '&quot;}',
+        data = {
+          params: params,
+          command: 'CRMQueryCRMQuestionnaireMode'
+        };
+    window.TKH.hdClientCommand(data, function(xmlHttpRequest) {
+      var errMsg = $(xmlHttpRequest).find('sErrMsg').text(),
+          resultstring = $(xmlHttpRequest).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring);
 
-        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-          var data = outparams["DATA"],
-              post_param = {},
-              data_items = [],
-              data_item = {},
-              data_item_options = [];
+      if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        var fdata = outparams["DATA"],
+            post_param = {},
+            data_items = [],
+            data_item = {},
+            data_item_options = [];
 
-          // 问卷
-          for (var i = 0, ilen = data.length; i < ilen; i++) {
-            post_param['questionnaire_code'] = data[i].FNUM;
-            post_param['questionnaire_name'] = data[i].FNAME;
+        // 问卷
+        for (var i = 0, ilen = fdata.length; i < ilen; i++) {
+          post_param['questionnaire_code'] = fdata[i].FNUM;
+          post_param['questionnaire_name'] = fdata[i].FNAME;
 
-            data_items = data[i].MODEDTL;
+          data_items = fdata[i].MODEDTL;
 
-            $("#sync_state").html("正在同步 " + (i+1) + "/" + ilen + " 份问卷...");
-            // 题目
-            for (var j = 0, jlen = data_items.length; j < jlen; j ++) {
-              post_param['subject_index'] = (j + 1);
-              post_param['subject_id'] = data_items[j].FTITLEID;
-              post_param['subject'] = data_items[j].FTITLE;
-              post_param['subject_type'] = window.TKH.questionnaireOptionType(data_items[j].FTYPE);
-              data_item = data_items[i].OPTIONDTL;
-              data_item_options = [];
-              for(var k = 0, klen = data_item.length; k < klen; k ++) {
-                data_item_options.push({
-                  "option_index": (k + 1),
-                  "option_id": data_item[k].FVALUEID,
-                  "option_value": data_item[k].FVALUE
-                });
-              }
-              post_param['options'] = data_item_options;
-              window.ServerAPI.save_questionnaire(post_param);
+          $("#sync_state").html("正在同步 " + (i+1) + "/" + ilen + " 份问卷...");
+          // 题目
+          for (var j = 0, jlen = data_items.length; j < jlen; j ++) {
+            post_param['subject_index'] = (j + 1);
+            post_param['subject_id'] = data_items[j].FTITLEID;
+            post_param['subject'] = data_items[j].FTITLE;
+            post_param['subject_type'] = window.TKH.questionnaireOptionType(data_items[j].FTYPE);
+            post_param['questionnaire_content'] = JSON.stringify(fdata[i]);
+            data_item = data_items[i].OPTIONDTL;
+            data_item_options = [];
+            for(var k = 0, klen = data_item.length; k < klen; k ++) {
+              data_item_options.push({
+                "option_index": (k + 1),
+                "option_id": data_item[k].FVALUEID,
+                "option_value": data_item[k].FVALUE
+              });
             }
-            $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份问卷");
+            post_param['options'] = data_item_options;
+            window.ServerAPI.save_questionnaire(post_param);
           }
-        } else {
-          if (outparams["FMSG"].length) {
-            layer.msg(outparams["FMSG"], {
-              time: 2000
-            });
-          }
+          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + fdata.length + " 份问卷");
         }
-      },
-      complete: function(xmlHttpRequest, status) {
-        console.log('complete');
-        console.log(xmlHttpRequest);
-      },
-      error: function(xmlHttpRequest) {
-        console.log('error');
-        console.log(xmlHttpRequest);
-        layer.msg("ERROR - CRMQueryCRMQuestionnaireMode", { time: 2000 });
+      } else {
+        if (outparams["FMSG"].length) {
+          layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
+        }
       }
     });
   },
+  // 3.2.4 积分明细查询
+  queryCardScoreDetails: function() {
+    var fcardnum = window.localStorage.getItem('sFCARDNUM'),
+        now = new Date(),
+        start_date = now.format('yyyy.MM.dd hh:mm:ss'),
+        end_date;
+
+    now.setTime(now.valueOf() - 30 * 24 * 60 * 60 * 1000);
+    end_date = now.format('yyyy.MM.dd hh:mm:ss');
+
+    var params = "[\\]\nFACCOUNTNO=" + fcardnum + "\nFSCORESORT=-\nFSTARTDATE=" + end_date + "\nFENDTDATE=" + start_date + "\n",
+        data = {
+          params: params,
+          command: 'QueryCardScoreDetails'
+        };
+    window.TKH.hdClientCommand(data, function(result) {
+        var errMsg = $(result).find('sErrMsg').text(),
+            resultstring = $(result).find('sOutParams').text();
+        // [\]
+        // FRESULT=0
+        // FMSG=
+        // FCOUNT=1
+
+        // [FSCOREDETAIL1]
+        // LSTUPDTIME=2017.04.27 10:54:04
+        // SCORESORT=-
+        // SCORE=24624600
+        // NUM=02100000006295170427105404
+        var temp_array = resultstring.split('FSCOREDETAIL'),
+            temp_str,
+            limit_time = 0;
+        $("#ScoreInfo > div:eq(1)").html('');
+        for(var len = temp_array.length, i = len - 1; i >= 0; i --) {
+          temp_str = temp_array[i];
+          var mm1 = temp_str.match(/LSTUPDTIME=(.*?)\n/),
+              mm2 = temp_str.match(/SCORE=(.*?)\n/),
+              input_string = '';
+          if(mm1) {
+            console.log(mm1[1]);
+            console.log(mm2[1]);
+            if(limit_time < 5) {
+              input_string = "<input disabled='disabled' type=text value='" + mm1[1] + '    ' + mm2[1] + "'>";
+              $("#ScoreInfo > div:eq(1)").append(input_string);
+            }
+            limit_time += 1;
+          }
+        }
+    });
+  },
+  // 1.查询赠品发放信息接口
+  queryLAGSupplyInfo: function() {
+    var clientCookie = window.localStorage.getItem('sClientCookie'),
+        fcardnum = window.localStorage.getItem('sFCARDNUM'),
+        currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = {};
+
+      if(currentQueryMember && currentQueryMember.length) {
+        currentQueryMemberJSON = JSON.parse(currentQueryMember);
+      } else {
+        layer.msg('已查询会员信息不全', { icon: 16 ,shade: 0.01 ,time: 1000 });
+        return false;
+      }
+      var params = '{&quot;FPHONE&quot;:&quot;' + currentQueryMemberJSON["telphone"] + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + 1 + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + 10 + '&quot;}',
+          data = {
+            params: params,
+            command: 'CRMQueryLAGSupplyInfo'
+          };
+
+      window.TKH.hdClientCommand(data, function(result) {
+        var errMsg = $(result).find('sErrMsg').text(),
+            resultstring = $(result).find('sOutParams').text(),
+            outparams = JSON.parse(resultstring);
+
+        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+          var fdata = outparams["FDATA"];
+
+          $("#ExchangeInfo > div:eq(0)").html('');
+          $("#ExchangeInfo > div:eq(1)").html('');
+          var input_items = [],
+              focrtime,
+              gift;
+          for(var i = 0, len = fdata.length; i < len; i ++) {
+            focrtime = fdata[i]["FOCRTIME"];
+            for(var j = 0, jlen = fdata[i]["FGIFT"].length; j < jlen; j ++) {
+              gift = fdata[i]["FGIFT"][j];
+              input_items.push("<input disabled='disabled' type=text value='" + focrtime + '    ' + gift["FGIFTNAME"] + ' x ' + gift["FQTY"] + "'>");
+            }
+          }
+          console.log(input_items);
+          for(var i = 0; i < 9; i ++) {
+            if(i < 5) {
+              $("#ExchangeInfo > div:eq(0)").append(input_items[i]);
+            } else {
+              $("#ExchangeInfo > div:eq(1)").append(input_items[i]);
+            }
+          }
+        } else {
+          if (outparams["FMSG"].length) {
+            layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
+          }
+        }
+    });
+  }
 }
