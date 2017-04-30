@@ -9,7 +9,7 @@ if(login_state && login_state.length && login_state === 'yes') {
   } else {
     $('ul.sidebar-menu a').filter(function() {
       console.log($(this).attr("href"));
-      if ($(this).attr("href") === current_path) {
+      if($(this).attr("href") === current_path) {
         $(this).parent().addClass('active');
         if ($(this).parent().parent().attr('class') == 'treeview-menu') {
           $(this).parent().parent().parent().addClass('active');

@@ -83,6 +83,7 @@ class ApplicationController < Sinatra::Base
       'admin:sync-store' => '同步店铺',
       'admin:user' => '管理员管理',
       'admin:signature' => '签名管理',
+      'ipad:login' => '登录',
       'ipad:complete' => '兑换完成',
       'ipad:entry' => '消费录入',
       'ipad:score-input' => '消费积分',

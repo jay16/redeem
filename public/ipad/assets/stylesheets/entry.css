@@ -7,10 +7,8 @@
     display: none;
 }
 @media only screen and (min-width: 1366px){
-#main { background-size: 100% 100%;}
+  #main { background-size: 100% 100%;}
 }
-
-
 
 .title img{width: 0.5rem;margin-top: -0.1rem;}
 .title img:nth-child(2){width: 0.4rem;}

@@ -1,0 +1,46 @@
+<div id="main">
+  <div class="login">
+    <div class="tb">
+      <img src="/images/login-header.png?timestamp=<%= timestamp %>"></div>
+    <div class="info">
+      <input type="text" id="username" name="username" placeholder="用户名" />
+      <input type="password" id="password" name="password" placeholder="密码" />
+      <a href="javascript:void(0);" onClick="window.ServerAPI.login('ipad');" id="btn_login">登 录</a>
+      <p class="date-version"></p>
+    </div>
+    <a href="javascript:void(0);" class="wj">
+      <img src="/images/suo.png?timestamp=<%= timestamp %>">忘记密码</a></div>
+  <div class="logo">
+    <img style='display: none;' src="/images/logo.png?timestamp=<%= timestamp %>"></div>
+  <div class="gn">
+    <div class="dj">
+      <div>
+        <img src="/images/gn1.png?timestamp=<%= timestamp %>" class="xs" alt="">
+        <img src="/images/gn2.png?timestamp=<%= timestamp %>" class="yc" alt=""></div>
+      <div style='display: none;'>
+        <img src="/images/gn2.png?timestamp=<%= timestamp %>">
+      </div>
+    </div>
+    <div class="nr">
+      <div>礼品兑换系统</div>
+      <p class="dl">
+        <img src="/images/dl.png?timestamp=<%= timestamp %>">用户登录</p>
+      <p class="hf">
+        <img src="/images/suo.png?timestamp=<%= timestamp %>">密码恢复</p></div>
+  </div>
+</div>
+<div class="xg chongshe">
+  <div>
+    <a href="javascript:void(0);" class="gb">
+      <img src="/images/gb.png?timestamp=<%= timestamp %>"></a>
+    <div class="xg_content">
+      <div class="suo">
+        <img src="/images/suo.png?timestamp=<%= timestamp %>"></div>
+      <div class="xg_info">
+        <p class="title">忘记密码了么?</p>
+        <p class="sm">没关系. 请输入您注册会员的电子邮件地址，我们会将新的密码发给您。</p>
+        <input type="text" id="xg_yj" placeholder="电子邮件地址" />
+        <a href="javascript:void(0)" onclick='window.ServerAPI.forgetPassword();' class="cs chongshemima">重设密码</a></div>
+    </div>
+  </div>
+</div>

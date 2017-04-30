@@ -35,11 +35,23 @@
 <%= yield %>
 
 <script src="/javascripts/side.js?timestamp=<%= timestamp %>"></script>
-<script>
+<script type="text/javascript">
   window.onload = function() {
     $('#jiaZai').hide();
     $('#main').show();
   }
+  window.onresize = function() {
+    console.log("width = " + window.innerWidth + ";height=" + window.innerHeight);
+    $("#main").css({
+      "background": "url('/images/bg-blur.jpg')",
+      "filter": "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')",
+      "-moz-background-size": "100% 100%",
+      "background-size": "100% 100%",
+      "-webkit-animation": "fadeIn .6s backwards",
+      "display": "block"
+    });
+  }
+
 </script>
 </body>
 </html>
