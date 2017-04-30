@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 #
-echo "## install readline-devel mysql-devel nginx gcc-c++"
+# $ useradd hd
+# $ passwd hd
+# hd123
+#
+# $ sudo vim /etc/sudoers
+# hd ALL=(ALL) ALL
+#
+#
+echo "## install readline-devel mysql-server mysql-devel nginx gcc-c++"
 sudo yum install -y vim redhat-lsb git wget bzip2 readline-devel mysql-devel nginx gcc-c++
 
 echo "## install redis"
@@ -33,11 +41,11 @@ gem install bundle
 bundle config mirror.https://rubygems.org https://gems.ruby-china.org
 
 echo "## git clone and bundle"
-[[ -d /home/www ]] || mkdir /home/www
-cd /home/www
-[[ -d wutian-search ]] || git clone https://github.com/jay16/wutian-search
+mkdir -p ~/www
+cd ~/www
+[[ -d redeem ]] || git clone https://github.com/jay16/redeem
 
-cd wutian-search
+cd redeem
 rbenv local 2.3.0
 gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
 bundle config mirror.https://rubygems.org https://gems.ruby-china.org

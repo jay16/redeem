@@ -1,4 +1,4 @@
-class CreateModel10 < ActiveRecord::Migration
+class CreateModel10 < ActiveRecord::Migration[5.0]
   def change
     # [<tt>:force</tt>]
     #   Set to true to drop the table before creating it.
