@@ -176,31 +176,31 @@ $(function() {
 
   $(document).on('click', '.xf', function() {
     if (!$('#Exchange_id').val() && !$(this).find('p').hasClass('shanchu')) {
-      var today_amount = parseFloat($('#today_amount_guo').html());
-      var jin = parseFloat($(this).find('.guoxiao_amount').val());
+      var today_amount = parseFloat($('#today_amount_guo').html()),
+          jin = parseFloat($(this).find('.guoxiao_amount').val()),
+          now_amount = 0;
       if ($(this).find('.guoxiao_id').hasClass('xiaochu')) {
-        $('#today_amount_guo').html(today_amount - jin);
+        now_amount = today_amount - jin;
 
         $(this).find('.guoxiao_id').removeClass('xiaochu');
         $(this).find('.guoxiao_amount').removeClass('xiaochu');
         $(this).find('.guoxiao_store').removeClass('xiaochu');
         $(this).find('.guoxiao').attr('src', '/images/wu.png');
-        $(this).addClass("checked");
+        $(this).removeClass("checked");
       } else {
-        $('#today_amount_guo').html(today_amount + jin);
+        now_amount = today_amount + jin;
 
         $(this).find('.guoxiao_id').addClass('xiaochu');
         $(this).find('.guoxiao_amount').addClass('xiaochu');
         $(this).find('.guoxiao_store').addClass('xiaochu');
         $(this).find('.guoxiao').attr('src', '/images/dui.png');
-        $(this).removeClass("checked");
+        $(this).addClass("checked");
       }
 
-      window.TKH.displayGiftWithAmount(today_amount);
+      $('#today_amount_guo').html(now_amount);
+      window.TKH.displayGiftWithAmount(now_amount);
     } else {
-      layer.msg('本次已兑换！', {
-        time: 2000 //2s后自动关闭
-      });
+      layer.msg('本次已兑换！', { time: 2000 });
     }
   });
   //取消兑换

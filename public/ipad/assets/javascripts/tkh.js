@@ -21,7 +21,7 @@ Date.prototype.format = function(format) {
 }
 
 window.TKH = {
-  version: '0.4.40',
+  version: '0.4.42',
   environment: '',
   server: '',
   userGid: '',
@@ -30,7 +30,7 @@ window.TKH = {
   storeCode: '',
   oper: '',
   setting: {
-    production_hosts: ['10.254.2.9', 'localhost'],
+    production_hosts: ['10.254.2.9', 'localhost1'],
     development: {
       server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
       userGid: '1000020',
@@ -41,8 +41,8 @@ window.TKH = {
     },
     production: {
       server: 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService',
-      userGid: '1000040',
-      userPwd: '32ABE611E9277052',
+      userGid: '1000185',
+      userPwd: 'B3E6E46E1BC2C968',
       storeCode: '0210',
       workStation: '10.254.2.9',
       oper: 'website'

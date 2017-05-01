@@ -21,13 +21,64 @@ Date.prototype.format = function(format) {
 }
 
 window.TKH = {
-  version: '0.4.38',
-  server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
-  userGid: '1000020',
-  userPwd: 'CAB371810F12B8C2',
-  workStation: '172.17.104.164',
-  storeCode: '0210',
-  oper: 'HDCRM[0]',
+  version: '0.4.42',
+  environment: '',
+  server: '',
+  userGid: '',
+  userPwd: '',
+  workStation: '',
+  storeCode: '',
+  oper: '',
+  setting: {
+    production_hosts: ['10.254.2.9', 'localhost1'],
+    development: {
+      server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
+      userGid: '1000020',
+      userPwd: 'CAB371810F12B8C2',
+      storeCode: '0210',
+      workStation: '172.17.104.164',
+      oper: 'HDCRM[0]'
+    },
+    production: {
+      server: 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService',
+      userGid: '1000185',
+      userPwd: 'B3E6E46E1BC2C968',
+      storeCode: '0210',
+      workStation: '10.254.2.9',
+      oper: 'website'
+    }
+  },
+  initialized: function() {
+    var host_origin = window.location.host,
+        port = window.location.port,
+        host = host_origin.replace(":" + port, ""),
+        setting = {},
+        environment;
+
+    environment = (window.TKH.setting.production_hosts.indexOf(host) >= 0 ? "production" : "development");
+    setting = window.TKH.setting[environment];
+
+    window.TKH.environment = environment;
+    window.TKH.server = setting.server;
+    window.TKH.userGid = setting.userGid;
+    window.TKH.userPwd = setting.userPwd;
+    window.TKH.workStation = setting.workStation;
+    window.TKH.storeCode = setting.storeCode;
+    window.TKH.oper = setting.oper;
+  },
+  version_info: function() {
+    console.log({
+      timestamp: (new Date()).format('yyyy-MM-dd hh:mm:ss'),
+      version: window.TKH.version,
+      environemnt: window.TKH.environment,
+      server: window.TKH.server,
+      userGid: window.TKH.userGid,
+      userPwd: window.TKH.userPwd,
+      workStation: window.TKH.workStation,
+      storeCode: window.TKH.storeCode,
+      oper: window.TKH.oper
+    });
+  },
   params: function() {
     var query = {},
         search = window.location.search.substring(1),
@@ -1571,3 +1622,5 @@ window.TKH = {
     });
   }
 }
+window.TKH.initialized();
+window.TKH.version_info();
