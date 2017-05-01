@@ -20,6 +20,21 @@ Date.prototype.format = function(format) {
   return format;
 }
 
+window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,errorObj) {
+   console.log('--------------------');
+   console.log("错误信息：" , errorMessage);
+   console.log("出错文件：" , scriptURI);
+   console.log("出错行号：" , lineNumber);
+   console.log("出错列号：" , columnNumber);
+   console.log("错误详情：" , errorObj);
+   console.log(errorObj);
+   console.log(typeof(errorObj));
+   console.log('--------------------');
+
+   layer.closeAll();
+   alert("错误详情: \n" + errorObj);
+}
+
 window.TKH = {
   version: '0.4.42',
   environment: '',
@@ -30,7 +45,7 @@ window.TKH = {
   storeCode: '',
   oper: '',
   setting: {
-    production_hosts: ['10.254.2.9', 'localhost1'],
+    production_hosts: ['10.254.2.9', 'localhost'],
     development: {
       server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
       userGid: '1000020',
@@ -1427,7 +1442,7 @@ window.TKH = {
           window.ServerAPI.save_gift(post_param);
         }
 
-        $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + data.length + " 份礼品");
+        $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + fdata.length + " 份礼品");
       } else {
         if (outparams["FMSG"].length) {
           layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
