@@ -38,7 +38,7 @@ function SelectDate(obj, strFormat, x, y) {
   }
   var date = new Date();
   var by = date.getFullYear() - 50; //最小值 → 50 年前
-  var ey = date.getFullYear() + 50; //最大值 → 50 年后
+  var ey = date.getFullYear() + 0; //最大值 → 50 年后
   //cal = new Calendar(by, ey,1,strFormat);    //初始化英文版，0 为中文版
   cal = (cal == null) ? new Calendar(by, ey, 0) : cal; //不用每次都初始化 2006-12-03 修正
   cal.DateMode = pickMode["second"]; //复位

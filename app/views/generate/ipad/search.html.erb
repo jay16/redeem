@@ -1,11 +1,11 @@
 <script src="/javascripts/distpicker.data.js?timestamp=<%= timestamp %>"></script>
 <script src="/javascripts/distpicker.js?timestamp=<%= timestamp %>"></script>
-<script src="/javascripts/datetimepicker.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/jquery.jedate.js?timestamp=<%= timestamp %>"></script>
+<link type="text/css" rel="stylesheet" href="/stylesheets/jquery.jedate.css?timestamp=<%= timestamp %>">
 <style>
 #layui-layer1{ top:223px !important; }
 .tishibuton .cs { margin: 0.5rem !important; }
 .tishibuton .button { margin: 0.5rem !important; }
-#ui-datepicker-div { font-size: 16px; }
 </style>
 <div id="main">
   <div class="title">
@@ -55,7 +55,7 @@
         </div>
         <div>
           <p>出生日期 / Birthday</p>
-          <input type="text" name="birthday" id="birthday" autocomplete="off" value="" onclick="SelectDate(this,'yyyy-MM-dd')"  />
+          <input type="text" name="birthday" id="birthday" autocomplete="off" readonly />
         </div>
         <div class="dz" style="display:inline;width: 45%!important">
           <p>居住地址 / Live Address</p>
@@ -202,8 +202,7 @@
   </div>
 </div>
 <script>
-$(function(){
-  $('#live_dz_distpicker,#work_dz_distpicker').distpicker({autoSelect: false});
+$(function() {
   // 清除已查询用户信息
   window.localStorage.removeItem("sFCARDNUM");
   window.localStorage.removeItem("current_telphone");
@@ -214,6 +213,20 @@ $(function(){
   // 清除问卷回答信息
   window.localStorage.removeItem("questionnaire_state");
 
+  // 地址控件
+  $('#live_dz_distpicker,#work_dz_distpicker').distpicker({autoSelect: false});
+  // 日期控件
+  $("#birthday").jeDate({
+      isinitVal: true,
+      festival: false,
+      ishmsVal: false,
+      minDate: '1800-12-28 23:59:59',
+      maxDate: (new Date()).format('yyyy-MM-dd hh:mm:ss'),
+      format: "YYYY-MM-DD",
+      zIndex: 3000
+  })
+
+  // 全员章程
   $(".legal-provision-link").click(function(e) {
     e.stopPropagation();
 

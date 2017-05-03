@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.5.2',
+  version: '0.5.5',
   environment: '',
   server: '',
   userGid: '',
@@ -45,7 +45,7 @@ window.TKH = {
   storeCode: '',
   oper: '',
   setting: {
-    production_hosts: ['10.254.2.9', 'localhost1'],
+    production_hosts: ['10.254.2.9', 'localhost'],
     development: {
       server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
       userGid: '1000020',
@@ -531,40 +531,26 @@ window.TKH = {
     $('#mz').val(data.FMEMNAME);
     $('#xb').val(data.FMEMSEX);
 
-    var ldd_province = '选择省',
-        ldd_city = '选择市',
-        ldd_distinct = '选择区',
-        dist_json = {
-          province: ldd_province,
-          city: ldd_city,
-          district: ldd_distinct
+    var dist_json = {
+          province: '选择省',
+          city: '选择市',
+          district: '选择区'
         };
-    if(data.FMEMADDRESS && data.FMEMADDRESS.length && data.FMEMADDRESS.split('-').length >= 3) {
+    if(data.FMEMADDRESS && data.FMEMADDRESS.length) {
       var ldd_parts = data.FMEMADDRESS.split('-'),
-          ldd_part = [],
-          ldd_other = '';
+          ldd_part = [];
       for(var i = 0, len = ldd_parts.length; i < len; i ++) {
         ldd_part = ldd_parts[i];
         console.log(i + ' - ' + ldd_part);
         if(i === 0) {
-          ldd_province = ldd_part;
+          dist_json.province = ldd_part;
         } else if(i === 1) {
-          ldd_city = ldd_part;
+          dist_json.city = ldd_part;
         } else if(i === 2) {
-          ldd_distinct = ldd_part;
-        } else {
-          if(ldd_other.length) {
-            ldd_other += '-' + ldd_part;
-          } else {
-            ldd_other = ldd_part;
-          }
+          dist_json.district = ldd_part;
         }
       }
-      dist_json = {
-        province: ldd_province,
-        city: ldd_city,
-        district: ldd_distinct
-      };
+      console.log(data.FMEMADDRESS);
       console.log(dist_json);
       $("#live_dz_distpicker").distpicker('destroy');
       $("#live_dz_distpicker").distpicker(dist_json);
@@ -826,11 +812,23 @@ window.TKH = {
     $('.xuanZe').fadeOut(200);
     $(".suoding").removeClass("suoding");
   },
+  initJEDate: function(datetimeId) {
+    $("#" + datetimeId).jeDate({
+        isinitVal: true,
+        festival: false,
+        ishmsVal: false,
+        minDate: '1800-12-28 23:59:59',
+        maxDate: (new Date()).format('yyyy.MM.dd hh:mm:ss'),
+        format: "YYYY.MM.DD hh:mm:ss",
+        zIndex: 3000
+    })
+  },
   // 消费录入，添加录入框
   addRecordInput: function() {
-    var dq_count = $(".content_2 .dq-wrapper").length + 1;
+    var dqCount = $(".content_2 .dq-wrapper").length + 1,
+        datetimeId = "datetime_" + dqCount;
     $('.content_2').append(
-      '<div class="dq-wrapper dq-wrapper-' + dq_count + '">\
+      '<div class="dq-wrapper dq-wrapper-' + dqCount + '">\
          <div class="dp"> \
             <p>店铺名称 / Merchant</p>\
             <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/>\
@@ -846,7 +844,7 @@ window.TKH = {
          </div>\
          <div style="width: 28%;">\
            <p>消费时间 / Time</p>\
-           <input type="text" value="' + (new Date).format('yyyy.MM.dd hh:mm:ss') + '" onclick="SelectDate(this, \'yyyy.MM.dd hh:mm:ss\');" class="datetime"/>\
+           <input type="text" id="' + datetimeId + '" value="' + (new Date).format('yyyy.MM.dd hh:mm:ss') + '" class="datetime" readonly />\
          </div>\
          <div style="width: 14%;">\
            <p>消费金额 / Amount</p>\
@@ -855,6 +853,7 @@ window.TKH = {
          </div>\
        </div>'
     );
+    window.TKH.initJEDate(datetimeId);
   },
   // 3.2.7 查询有效商铺信息
   queryMallGndWeb: function(fpageindex) {
