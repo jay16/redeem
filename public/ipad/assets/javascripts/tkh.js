@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.5.5',
+  version: '0.5.6',
   environment: '',
   server: '',
   userGid: '',
@@ -538,10 +538,17 @@ window.TKH = {
         };
     if(data.FMEMADDRESS && data.FMEMADDRESS.length) {
       var ldd_parts = data.FMEMADDRESS.split('-'),
-          ldd_part = [];
+          ldd_part = [],
+          distSuffix = ["市", "省", "区", "县", "盟", "旗", "州", "里", "路", "湾", "岛", "域", "辖"],
+          tempSuffix = "";
       for(var i = 0, len = ldd_parts.length; i < len; i ++) {
-        ldd_part = ldd_parts[i];
+        ldd_part = $.trim(ldd_parts[i]);
         console.log(i + ' - ' + ldd_part);
+        if(!ldd_part.length) { continue; }
+
+        tempSuffix = ldd_part.charAt(ldd_part.length - 1)
+        if(distSuffix.indexOf(tempSuffix) < 0) { continue; }
+
         if(i === 0) {
           dist_json.province = ldd_part;
         } else if(i === 1) {

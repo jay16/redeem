@@ -224,7 +224,7 @@
     height: 85%;
     margin:0.8rem auto 0;
     overflow: auto;
-    text-align: left;
+    text-align: center;
 }
 .hangHu>div{
     display: inline-block;
