@@ -62,12 +62,11 @@
         <img src="/images/dhlp.png?timestamp=<%= timestamp %>"></div>
       <div class="dhlp_info">
         <p class="title">兑换礼品/Gift Redemption</p>
-        <span id="dui_name">X MolesKine 笔记本</span>
-        <div>
-          <p class="bz">备注1</p>
-          <input type="text" name="remark" />
-          <p class="bz">备注2</p>
-          <input type="text" name="desc" /></div>
+        <span id="dui_name"></span>
+        <div style="text-align:center;">
+          <p class="bz" style="text-align:left;margin-left:10px;">备注</p>
+          <textarea id="questionnaire_remark" style="margin-top:15px;width: 90%;height: 50%;" /> </textarea>
+          </div>
         <a id="queren" href="javascript:void(0);" onClick="window.TKH.genMallSupplyBill();" class="cs queren">确认兑换</a></div>
     </div>
   </div>
@@ -136,13 +135,13 @@ $(function() {
           <p>消费金额 - 店铺名称 - 礼品 / Amount - Merchant - Redeemable</p>\
           <p>\
             <img src="/images/dui.png?timestamp=<%= timestamp %>" class="guoxiao" alt="">\
-            CNY ' + record["amount"] + '- ' + record["name"] + '\
+            CNY ' + record["amount"] + ' - ' + record["name"] + '\
             <input type="hidden" class="guoxiao_id xiaochu" value="' + record["gndgid"] + '">\
             <input type="hidden" class="guoxiao_gndgid xiaochu" value="' + record["gndgid"] + '">\
             <input type="hidden" class="guoxiao_gndcode xiaochu" value="' + record["gndcode"] + '">\
             <input type="hidden" class="guoxiao_amount xiaochu" value="' + record["amount"] + '">\
             <input type="hidden" class="guoxiao_store xiaochu" value="' + record["name"] + '">\
-            <input type="hidden" class="guoxiao_serialnum xiaochu" value="' + record["serialnum"] + '">\
+            <input type="hidden" class="guoxiao_serialnum xiaochu" value="' + record["serialnum"] + '">\<input type="hidden" class="guoxiao_datetime xiaochu" value="' + record["datetime"] + '">\
           </p>\
         </div>');
       today_amount += parseFloat(record["amount"]);
@@ -240,7 +239,7 @@ $(function() {
       }
       gift_id = ob_jin.find('input').val();
 
-      var giftname = ob_jin.find(".gift_name").html();
+      var giftname = ob_jin.find(".gift_name").val();
       var xuan_ids = xua_id.substr(1).split(';');
       $('.dhlp').find('.Inputs').empty();
       var html = "\
@@ -252,7 +251,7 @@ $(function() {
         <input type='hidden' name='xuan_ids' value='" + xuan_ids + "'/>";
 
       $('.dhlp').css('display', 'block');
-      $('.dhlp').find('#dui_name').html(giftname);
+      $('#dui_name').html(giftname);
       $('.dhlp').find('.Inputs').append(html);
       $('.dhlp').find('input[name="remark"]').val('');
       $('.dhlp').find('input[name="desc"]').val('');

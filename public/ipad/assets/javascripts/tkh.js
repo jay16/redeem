@@ -31,12 +31,12 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
    console.log(typeof(errorObj));
    console.log('--------------------');
 
-   layer.closeAll();
+   if(layer) { layer.closeAll(); }
    alert("错误详情: \n" + errorObj);
 }
 
 window.TKH = {
-  version: '0.4.42',
+  version: '0.5.1',
   environment: '',
   server: '',
   userGid: '',
@@ -83,8 +83,9 @@ window.TKH = {
   },
   version_info: function() {
     console.log({
-      timestamp: (new Date()).format('yyyy-MM-dd hh:mm:ss'),
       version: window.TKH.version,
+      jquery: window.$.fn.jquery,
+      timestamp: (new Date()).format('yyyy-MM-dd hh:mm:ss'),
       environemnt: window.TKH.environment,
       server: window.TKH.server,
       userGid: window.TKH.userGid,
@@ -603,7 +604,12 @@ window.TKH = {
 
     if (data.FMEMBIRTH) {
       var birthday = data.FMEMBIRTH.substr(0, 4) + '-' + data.FMEMBIRTH.substr(4, 2) + '-' + data.FMEMBIRTH.substr(6, 2);
-      $('#ymd').val(birthday);
+      $('#birthday').val(birthday);
+      $("#birthday").datepicker({
+        maxDate: 0,
+        dateFormat: "yy-mm-dd",
+        setDate: birthday
+      });
     }
   },
   _doConsumerInfo: function(ConsumerInfo, xia) {
@@ -669,7 +675,7 @@ window.TKH = {
     $('#mz').val('');
     $('#xb').val('');
     // $('#work_dz').val();
-    $('#ymd').val('');
+    $('#birthday').val('');
   },
   _chuExchangeInfo: function() {
     $("#ExchangeInfo > div:eq(0)").empty();
@@ -687,7 +693,7 @@ window.TKH = {
       var fmbrmobilephone = $('#search').val(),
           fmbrname = $.trim($('#mz').val()),
           fmbrsex = $.trim($('#xb option:selected').val()),
-          fmbrbirth = $.trim($('#ymd').val()),
+          fmbrbirth = $.trim($('#birthday').val()),
           ldd_province = $("#ldd_province").val(),
           ldd_city = $("#ldd_city").val(),
           ldd_district = $("#ldd_district").val(),
@@ -730,7 +736,7 @@ window.TKH = {
     }
     var fmbrname = $.trim($('#mz').val()),
         fmbrsex = $.trim($('#xb option:selected').val()),
-        fmbrbirth = $.trim($('#ymd').val()),
+        fmbrbirth = $.trim($('#birthday').val()),
         ldd_province = $("#ldd_province").val(),
         ldd_city = $("#ldd_city").val(),
         ldd_district = $("#ldd_district").val();
@@ -748,7 +754,7 @@ window.TKH = {
       }
     }
 
-    var fopenid = 'm0' + (new Date()).valueOf(),
+    var fopenid = 'IPAD' + (new Date()).valueOf() + 'r' + Math.floor(Math.random() * 100000 + 1),
         fcardid = window.TKH.storeCode,
         params = '{&quot;FOPENID&quot;:&quot;' + fopenid + '&quot;,&quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,&quot;FMBRNAME&quot;:&quot;' + fmbrname + '&quot;,&quot;FMBRSEX&quot;:&quot;' + fmbrsex + '&quot;,&quot;FMBRBIRTH&quot;:&quot;' + fmbrbirth + '&quot;,&quot;FMBRMOBILEPHONE&quot;:&quot;' + fmbrmobilephone + '&quot;,&quot;FADDRESS&quot;:&quot;' + faddress + '&quot;}',
         data = {
@@ -810,7 +816,7 @@ window.TKH = {
     dpm.parent(".dp").addClass('suoding');
     var dpm_val = dpm.val();
 
-    window.TKH.queryMallGndWeb();
+    window.TKH.queryMallGndWeb(1);
   },
   // 消费录入/积分录入，选择商户选择
   selectedDQM: function(ctl) {
@@ -852,30 +858,32 @@ window.TKH = {
     );
   },
   // 3.2.7 查询有效商铺信息
-  queryMallGndWeb: function() {
+  queryMallGndWeb: function(fpageindex) {
     var fstorecode = window.TKH.storeCode,
-        fpageindex = '1',
-        fpagesize = '30',
+        fpagesize = '100',
         params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}',
         data = {
           params: params,
           command: 'QueryMallGndWeb'
         };
+        // fpageindex = 1
     window.TKH.hdClientCommand(data, function(result) {
       var errMsg = $(result).find('sErrMsg').text(),
           resultstring = $(result).find('sOutParams').text(),
           outparams = JSON.parse(resultstring);
       if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-        $('.xuanZe .hangHu').html('');
+        if(fpageindex === 1 || fpageindex === '1') {
+          $('.xuanZe .hangHu').html('');
+        }
         $('.xuanZe').fadeIn(200);
         var html = '',
             fdata = outparams["FDATA"];
         for (i = 0; i < fdata.length; i++) {
-          html += "<div class='soudingname' onClick='window.TKH.selectedDQM(this);'>\
+          html += "<div class='soudingname' data-name='" + fdata[i].GNDNAME + "' onclick='window.TKH.selectedDQM(this);'>\
                       <div>\
                         <p>" + fdata[i].GNDNAME + "</p>\
                         <p>\
-                          <b>" + fdata[i].GNDGID + "</b>\
+                          <b>" + fdata[i].GNDCODE + "</b>\
                         </p>\
                       </div>\
                       <input type='hidden' value='" + fdata[i].GNDGID + "' class='gndgid'/>\
@@ -884,7 +892,11 @@ window.TKH = {
                       <input type='hidden' value='" + fdata[i].RN + "' class='rn'/>\
                     </div> ";
         }
+        console.log(html);
         $('.xuanZe .hangHu').append(html);
+        if(fdata.length) {
+          window.TKH.queryMallGndWeb(fpageindex + 1);
+        }
       } else {
         if (outparams["FMSG"].length) {
           layer.msg("『底层接口』提示 " + outparams["FMSG"], { time: 3000 });
@@ -995,7 +1007,8 @@ window.TKH = {
             storename = $(this).find(".guoxiao_store").val(),
             fflowno = $(this).find(".guoxiao_serialnum").val(),
             famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
-            focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss');
+            focrtime = $(this).find(".guoxiao_datetime").val();
+            // (new Date()).format('yyyy.MM.dd hh:mm:ss');
 
         console.log('fgndgid - ' + fgndgid);
         paies.push('{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;,&quot;FAMT&quot;:&quot;' + famt + '&quot;}');
@@ -1033,7 +1046,7 @@ window.TKH = {
     //     focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss');
     // var fsupplypay_params = '{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;}';
 
-    // 消费记录
+    // 礼品
     var gifts = [], gift_id, amount = 1;
     $(".xuzh_jin").each(function() {
       if ($(this).hasClass("xuanZhong")) {
@@ -1074,7 +1087,8 @@ window.TKH = {
         fmember = currentQueryMemberJSON["name"],
         fmobilephone = currentQueryMemberJSON["telphone"],
         fcardid = fcardnum,
-        femail = currentQueryMemberJSON["email"];
+        femail = currentQueryMemberJSON["email"],
+        questionnaire_remark = $("#questionnaire_remark").val();
     var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
                    &quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,\
                    &quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,\
@@ -1083,7 +1097,8 @@ window.TKH = {
                    &quot;FNUM&quot;:&quot;' + fnum + '&quot;,\
                    &quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,\
                    &quot;FSUPPLYPAY&quot;:[' + paies.join(",") + '],\
-                   &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + ']\
+                   &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + '],\
+                   &quot;FCARDID&quot;:&quot;' + questionnaire_remark + '&quot;\
                  }',
         data = {
           params: params,

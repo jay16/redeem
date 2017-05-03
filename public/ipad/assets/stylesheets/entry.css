@@ -10,6 +10,16 @@
   #main { background-size: 100% 100%;}
 }
 
+
+.search-store {
+    height: 1rem;
+    width: 70%;
+    margin-top: -0.2rem;
+    text-indent: 14px;
+    font-size: 0.4rem;
+    color: #333;
+}
+
 .title img{width: 0.5rem;margin-top: -0.1rem;}
 .title img:nth-child(2){width: 0.4rem;}
 .title{
@@ -218,7 +228,7 @@
 }
 .hangHu>div{
     display: inline-block;
-    width: 48.7%;
+    width: 23%; /*48.7%;*/
     height: 3.4rem;
     max-width: 199px;
     position: relative;

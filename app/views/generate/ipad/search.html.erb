@@ -4,6 +4,7 @@
 #layui-layer1{ top:223px !important; }
 .tishibuton .cs { margin: 0.5rem !important; }
 .tishibuton .button { margin: 0.5rem !important; }
+#ui-datepicker-div { font-size: 16px; }
 </style>
 <div id="main">
   <div class="title">
@@ -51,9 +52,9 @@
             <option value="男" selected>男 / M</option>
             <option value="女">女 / F</option></select>
         </div>
-        <div style="max-width: 45%;">
+        <div>
           <p>出生日期 / Birthday</p>
-          <input type="date" id="ymd" value="" />
+          <input type="text" name="birthday" id="birthday" autocomplete="off" value="" />
         </div>
         <div class="dz" style="display:inline;width: 45%!important">
           <p>居住地址 / Live Address</p>
@@ -212,7 +213,11 @@ $(function(){
   // 清除问卷回答信息
   window.localStorage.removeItem("questionnaire_state");
 
-  $("#ymd").attr("max", (new Date()).format('yyyy-MM-dd'));
+  $("#birthday").datepicker({
+    maxDate: 0,
+    dateFormat: "yy-mm-dd"
+  });
+
   $(".legal-provision-link").click(function(e) {
     e.stopPropagation();
 

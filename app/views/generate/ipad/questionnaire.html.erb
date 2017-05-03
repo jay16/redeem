@@ -251,7 +251,6 @@ if(questionnaireState === '200') {
             "answer_id": fvalueid
           });
         }
-
       } else {
         $(".xz .xuanZhong").each(function() {
           fvalueid = $(this).attr("fvalueid")
@@ -326,18 +325,25 @@ if(questionnaireState === '200') {
 
   //商品选中
   function actionSelectQestion(ctl) {
-      // ftype: 0 单选，2 多选，3 填空
-      if ($('#ftype').val() == '0') {
+      var ftype = $('#ftype').val();
+      // ftype: 0 单选，1 多选，2 填空
+      if (ftype == '0') {
           $('.xz .xuanZhong').removeClass('xuanZhong');
           $(ctl).addClass('xuanZhong');
-      } else {
-        // $('#others').removeClass('xuanZhong');
+      } else if (ftype == '1')  {
+        // TODO: 暂定最多选三选
         if ($(ctl).hasClass('xuanZhong')) {
           $(ctl).removeClass('xuanZhong');
         }
         else {
-          $(ctl).addClass('xuanZhong');
+          if($(".xz").children(".xuanZhong").length < 3) {
+            $(ctl).addClass('xuanZhong');
+          } else {
+            layer.msg("最多选择 3 项", { time: 1000 });
+          }
         }
+      } else {
+        console.log("unknown ftype: " + ftype);
       }
   };
 

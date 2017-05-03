@@ -92,11 +92,8 @@
 /*====签名 start===*/
   $(function() {
     var $sigdiv = $("#signature");
-    $sigdiv.jSignature({
-      'UndoButton': false
-    });
-    $(".clearsign").bind("click",
-    function() {
+    $sigdiv.jSignature({ 'UndoButton': false });
+    $(".clearsign").bind("click", function() {
       $sigdiv.jSignature("reset");
     });
     $('#main').css({"visibility": "visible"});

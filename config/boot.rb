@@ -36,11 +36,6 @@ end
 # end
 ENV['PLATFORM_OS'] = `uname -s`.strip.downcase
 ENV['APP_RUNNER'] = `whoami`.strip.downcase
-if ENV['PLATFORM_OS'] == 'darwin'
-  ENV['API_SERVER'] = 'http://localhost:4567'
-else
-  ENV['API_SERVER'] = 'http://123.56.91.131:4567'
-end
 
 # 扩充require路径数组
 # require 文件时会在$:数组中查找是否存在
@@ -78,4 +73,5 @@ ENV['REDIS_URL'] ||= Setting.redis_url
 ENV['REDIS_PID_PATH'] ||= %(#{root_path}/tmp/pids/redis.pid)
 ENV['UNICORN_PID_PATH'] ||= %(#{root_path}/tmp/pids/unicorn.pid)
 ENV['SIDEKIQ_PID_PATH'] ||= %(#{root_path}/tmp/pids/sidekiq.pid)
-ENV['STARTUP'] = Time.now.to_s
+ENV['API_SERVER'] = Setting.website.api_server
+ENV['STARTUP']    = Time.now.to_s

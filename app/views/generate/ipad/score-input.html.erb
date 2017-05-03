@@ -34,6 +34,9 @@
       <img src="/images/xuanZe.png?timestamp=<%= timestamp %>">
       请选择商户 / Find merchant
     </p>
+    <p>
+      <input type="search" class='search-store'  placeholder="商户 / merchant" />
+    </p>
     <div class="hangHu"></div>
   </div>
 </div>
@@ -85,6 +88,32 @@
 $(function() {
   // 初始一个，积分输入框
   window.TKH.addRecordInput();
+
+  // 搜索
+  function display_searched_store(keywords) {
+    var store_name = "",
+        matched = false;
+    $(".hangHu .soudingname").each(function() {
+      store_name = $(this).data("name").toLowerCase();
+      matched = false;
+      for(var i = 0, len = keywords.length; i < len; i ++) {
+        if(store_name.indexOf(keywords[i]) >= 0) {  matched = true; }
+      }
+
+      $(this).css("display", (matched ? "inline-block" : "none"));
+    });
+  }
+  $(".search-store").bind("keyup", function() {
+    var keyword = $.trim($(this).val()),
+        keywords = [];
+    if(!keyword.length) {
+      $(".hangHu .soudingname").css("display", "inline-block");
+      return false;
+    }
+    keywords = keyword.toLowerCase().split(/\s+/);
+    console.log(keywords);
+    display_searched_store(keywords);
+  });
 
   //删除新增
   $(document).on('click', '.jian', function() {

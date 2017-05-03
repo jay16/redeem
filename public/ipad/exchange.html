@@ -16,20 +16,22 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1493616118">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1493616118">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1493616118">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1493616118">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/exchange.css?timestamp=1493616118">
-<script src="assets/javascripts/server_api.js?timestamp=1493616118"></script>
-<script src="assets/javascripts/tkh.js?timestamp=1493616118"></script>
-<script src="assets/javascripts/remJs.js?timestamp=1493616118"></script>
-<script src="assets/javascripts/jquery-1.8.0.min.js?timestamp=1493616118"></script>
-<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1493616118"></script>
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1493780346">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1493780346">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1493780346">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1493780346">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/jquery-ui.css?timestamp=1493780346">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/exchange.css?timestamp=1493780346">
+<script src="assets/javascripts/remJs.js?timestamp=1493780346"></script>
+<script src="assets/javascripts/jquery-1.12.4.js?timestamp=1493780346"></script>
+<script src="assets/javascripts/jquery-ui.js?timestamp=1493780346"></script>
+<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1493780346"></script>
+<script src="assets/javascripts/server_api.js?timestamp=1493780346"></script>
+<script src="assets/javascripts/tkh.js?timestamp=1493780346"></script>
 </head>
 <body>
 <div id="jiaZai">
-  <img src="assets/images/loadbg.png?timestamp=1493616118">
+  <img src="assets/images/loadbg.png?timestamp=1493780346">
 </div>
 
 <style>
@@ -45,13 +47,13 @@
 <div id="main">
   <div class="title">
     <div>
-      <img src="assets/images/dhlp2.png?timestamp=1493616118">礼品兑换 - 选择礼品</div>
+      <img src="assets/images/dhlp2.png?timestamp=1493780346">礼品兑换 - 选择礼品</div>
     <div>Gift Redemption - Select Gift</div></div>
   <div class="content">
     <div class="content_1">
       <div class="act">
         <p>
-          <img src="assets/images/qian.png?timestamp=1493616118">可兑换的消费记录(限当日) / Redeemable</p></div>
+          <img src="assets/images/qian.png?timestamp=1493780346">可兑换的消费记录(限当日) / Redeemable</p></div>
     </div>
     <div class="content_2">
     </div>
@@ -60,27 +62,27 @@
     <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("entry.html");'>上一页
       <br/>Previous</a>
     <a href="javascript:void(0);" class="duiHuan">
-      <img src="assets/images/duiHuan.png?timestamp=1493616118">兑换
+      <img src="assets/images/duiHuan.png?timestamp=1493780346">兑换
       <br/>Redeem
       <span>99</span></a>
     <a href="javascript:void(0);" class="qxDuiHuan">
-      <img src="assets/images/quXiao.png?timestamp=1493616118">取消兑换
+      <img src="assets/images/quXiao.png?timestamp=1493780346">取消兑换
       <br/>Undo
       <span>99</span></a>
     <a style="display:none;" href="javascript:void(0);" onclick="window.TKH.redirect_to_with_timestamp('complete.html');"  class="tiaoGuo">
-      <img src="assets/images/tiaoGuo.png?timestamp=1493616118">跳过问卷
+      <img src="assets/images/tiaoGuo.png?timestamp=1493780346">跳过问卷
       <br/>Skip survey
       <span>99</span></a>
     <a style="display:none;" href="javascript:void(0);" class="xy" onclick="window.TKH.redirect_to_with_timestamp('signature.html');">下一页
       <br/>Next</a></div>
   <div class="gouXuan">
-    <img src="assets/images/dhlp.png?timestamp=1493616118">已勾选的当日消费：￥
+    <img src="assets/images/dhlp.png?timestamp=1493780346">已勾选的当日消费：￥
     <span id="today_amount_guo">0</span>,可兑换：</div>
   <div class="shangPing jin">
 
   </div>
   <div class="leiJi" style="display: none;">
-    <img src="assets/images/dhlp.png?timestamp=1493616118">2017：累积消费 ￥ - 已兑换 ￥0 - 本次兑换 ￥
+    <img src="assets/images/dhlp.png?timestamp=1493780346">2017：累积消费 ￥ - 已兑换 ￥0 - 本次兑换 ￥
     <span id="ben_exchange"></span>= 剩余 ￥
     <span id="shen_exchange">
       <input type="hidden" value=""></span>， 暂无可累积兑换礼品</div>
@@ -90,18 +92,17 @@
   <div class="Inputs" style=""></div>
   <div>
     <a href="javascript:void(0);" class="gb">
-      <img src="assets/images/gb.png?timestamp=1493616118"></a>
+      <img src="assets/images/gb.png?timestamp=1493780346"></a>
     <div class="dhlp_content">
       <div class="suo">
-        <img src="assets/images/dhlp.png?timestamp=1493616118"></div>
+        <img src="assets/images/dhlp.png?timestamp=1493780346"></div>
       <div class="dhlp_info">
         <p class="title">兑换礼品/Gift Redemption</p>
-        <span id="dui_name">X MolesKine 笔记本</span>
-        <div>
-          <p class="bz">备注1</p>
-          <input type="text" name="remark" />
-          <p class="bz">备注2</p>
-          <input type="text" name="desc" /></div>
+        <span id="dui_name"></span>
+        <div style="text-align:center;">
+          <p class="bz" style="text-align:left;margin-left:10px;">备注</p>
+          <textarea id="questionnaire_remark" style="margin-top:15px;width: 90%;height: 50%;" /> </textarea>
+          </div>
         <a id="queren" href="javascript:void(0);" onClick="window.TKH.genMallSupplyBill();" class="cs queren">确认兑换</a></div>
     </div>
   </div>
@@ -110,25 +111,25 @@
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="assets/images/gn1.png?timestamp=1493616118" class="xs" alt="">
-      <img src="assets/images/gn2.png?timestamp=1493616118" class="yc" alt="">
+      <img src="assets/images/gn1.png?timestamp=1493780346" class="xs" alt="">
+      <img src="assets/images/gn2.png?timestamp=1493780346" class="yc" alt="">
     </div>
 
     <div style="display:none;">
-      <img src="assets/images/gn2.png?timestamp=1493616118">
+      <img src="assets/images/gn2.png?timestamp=1493780346">
     </div>
   </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="assets/images/dhlp.png?timestamp=1493616118">礼品兑换</a></p>
+        <img src="assets/images/dhlp.png?timestamp=1493780346">礼品兑换</a></p>
     <p class="mm">
-      <img src="assets/images/bi.png?timestamp=1493616118" class="bi" alt="">修改密码</p>
+      <img src="assets/images/bi.png?timestamp=1493780346" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="assets/images/dl2.png?timestamp=1493616118">退出登录</p>
+      <img src="assets/images/dl2.png?timestamp=1493780346">退出登录</p>
     <div class="renWu">
-      <img src="assets/images/renWu.png?timestamp=1493616118">
+      <img src="assets/images/renWu.png?timestamp=1493780346">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -137,10 +138,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void(0);" class="gb">
-      <img src="assets/images/gb.png?timestamp=1493616118"></a>
+      <img src="assets/images/gb.png?timestamp=1493780346"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="assets/images/bi.png?timestamp=1493616118"></div>
+        <img src="assets/images/bi.png?timestamp=1493780346"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -169,14 +170,14 @@ $(function() {
         <div class="xf checked">\
           <p>消费金额 - 店铺名称 - 礼品 / Amount - Merchant - Redeemable</p>\
           <p>\
-            <img src="assets/images/dui.png?timestamp=1493616118" class="guoxiao" alt="">\
-            CNY ' + record["amount"] + '- ' + record["name"] + '\
+            <img src="assets/images/dui.png?timestamp=1493780346" class="guoxiao" alt="">\
+            CNY ' + record["amount"] + ' - ' + record["name"] + '\
             <input type="hidden" class="guoxiao_id xiaochu" value="' + record["gndgid"] + '">\
             <input type="hidden" class="guoxiao_gndgid xiaochu" value="' + record["gndgid"] + '">\
             <input type="hidden" class="guoxiao_gndcode xiaochu" value="' + record["gndcode"] + '">\
             <input type="hidden" class="guoxiao_amount xiaochu" value="' + record["amount"] + '">\
             <input type="hidden" class="guoxiao_store xiaochu" value="' + record["name"] + '">\
-            <input type="hidden" class="guoxiao_serialnum xiaochu" value="' + record["serialnum"] + '">\
+            <input type="hidden" class="guoxiao_serialnum xiaochu" value="' + record["serialnum"] + '">\<input type="hidden" class="guoxiao_datetime xiaochu" value="' + record["datetime"] + '">\
           </p>\
         </div>');
       today_amount += parseFloat(record["amount"]);
@@ -274,7 +275,7 @@ $(function() {
       }
       gift_id = ob_jin.find('input').val();
 
-      var giftname = ob_jin.find(".gift_name").html();
+      var giftname = ob_jin.find(".gift_name").val();
       var xuan_ids = xua_id.substr(1).split(';');
       $('.dhlp').find('.Inputs').empty();
       var html = "\
@@ -286,7 +287,7 @@ $(function() {
         <input type='hidden' name='xuan_ids' value='" + xuan_ids + "'/>";
 
       $('.dhlp').css('display', 'block');
-      $('.dhlp').find('#dui_name').html(giftname);
+      $('#dui_name').html(giftname);
       $('.dhlp').find('.Inputs').append(html);
       $('.dhlp').find('input[name="remark"]').val('');
       $('.dhlp').find('input[name="desc"]').val('');
@@ -304,7 +305,7 @@ function querenAuto() {
 }
 </script>
 
-<script src="assets/javascripts/side.js?timestamp=1493616118"></script>
+<script src="assets/javascripts/side.js?timestamp=1493780346"></script>
 <script type="text/javascript">
   window.onload = function() {
     $('#jiaZai').hide();

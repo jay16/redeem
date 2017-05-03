@@ -11,6 +11,14 @@
 }
 
 
+.search-store {
+    height: 1rem;
+    width: 70%;
+    margin-top: -0.2rem;
+    text-indent: 14px;
+    font-size: 0.4rem;
+    color: #333;
+}
 
 .title img{width: 0.5rem;margin-top: -0.1rem;}
 .title img:nth-child(2){width: 0.4rem;}

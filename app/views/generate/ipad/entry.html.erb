@@ -33,6 +33,9 @@
       <img src="/images/xuanZe.png?timestamp=<%= timestamp %>">
       请选择商户 / Find merchant
     </p>
+    <p>
+      <input type="search" class='search-store'  placeholder="商户 / merchant" />
+    </p>
     <div class="hangHu"></div>
   </div>
 </div>
@@ -126,6 +129,32 @@ $(function() {
     }
   }
 
+  // 搜索
+  function display_searched_store(keywords) {
+    var store_name = "",
+        matched = false;
+    $(".hangHu .soudingname").each(function() {
+      store_name = $(this).data("name").toLowerCase();
+      matched = false;
+      for(var i = 0, len = keywords.length; i < len; i ++) {
+        if(store_name.indexOf(keywords[i]) >= 0) {  matched = true; }
+      }
+
+      $(this).css("display", (matched ? "inline-block" : "none"));
+    });
+  }
+  $(".search-store").bind("keyup", function() {
+    var keyword = $.trim($(this).val()),
+        keywords = [];
+    if(!keyword.length) {
+      $(".hangHu .soudingname").css("display", "inline-block");
+      return false;
+    }
+    keywords = keyword.toLowerCase().split(/\s+/);
+    console.log(keywords);
+    display_searched_store(keywords);
+  });
+
   //删除新增
   $(document).on('click', '.jian', function() {
     $(this).closest('.dq-wrapper').remove();
@@ -136,8 +165,7 @@ $(function() {
     $('.xuanZe').fadeOut(200);
   });
 
-  $(document).on('blur', '.amount',
-  function() {
+  $(document).on('blur', '.amount', function() {
     var val = $(this).val();
     var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
     if (!reg.test(val)) {
@@ -160,6 +188,7 @@ $(function() {
         serialnums = [],
         gndgid = '',
         gndcode = '',
+        datetime = '',
         record = {},
         records = [],
         is_error = 0;
@@ -169,6 +198,7 @@ $(function() {
       amount = $(this).find("input.amount").val();
       gndgid = $(this).find("input.gndgid").val();
       gndcode = $(this).find("input.gndcode").val();
+      datetime = $(this).find("input.datetime").val();
 
       if(!name.length) {
         layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
@@ -199,6 +229,14 @@ $(function() {
         return false;
       }
 
+      var random_seconds = Math.floor(Math.random() * 60);
+      if(random_seconds < 10) {
+        random_seconds = "0" + random_seconds;
+      }
+      datetime = datetime.replace("T", " ") + ":" + random_seconds;
+      while(datetime.indexOf("-") >= 0) {
+        datetime = datetime.replace("-", ".");
+      }
       serialnums.push(serialnum);
       record = {};
       record["name"] = name;
@@ -206,6 +244,8 @@ $(function() {
       record["amount"] = amount;
       record["gndgid"] = gndgid;
       record["gndcode"] = gndcode;
+      record["datetime"] = datetime;
+      console.log(datetime);
       records.push(record);
     })
 
