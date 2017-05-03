@@ -1,5 +1,6 @@
 <script src="/javascripts/distpicker.data.js?timestamp=<%= timestamp %>"></script>
 <script src="/javascripts/distpicker.js?timestamp=<%= timestamp %>"></script>
+<script src="/javascripts/datetimepicker.js?timestamp=<%= timestamp %>"></script>
 <style>
 #layui-layer1{ top:223px !important; }
 .tishibuton .cs { margin: 0.5rem !important; }
@@ -54,7 +55,7 @@
         </div>
         <div>
           <p>出生日期 / Birthday</p>
-          <input type="text" name="birthday" id="birthday" autocomplete="off" value="" />
+          <input type="text" name="birthday" id="birthday" autocomplete="off" value="" onclick="SelectDate(this,'yyyy-MM-dd')"  />
         </div>
         <div class="dz" style="display:inline;width: 45%!important">
           <p>居住地址 / Live Address</p>
@@ -212,11 +213,6 @@ $(function(){
   window.localStorage.removeItem("questionnaire");
   // 清除问卷回答信息
   window.localStorage.removeItem("questionnaire_state");
-
-  $("#birthday").datepicker({
-    maxDate: 0,
-    dateFormat: "yy-mm-dd"
-  });
 
   $(".legal-provision-link").click(function(e) {
     e.stopPropagation();

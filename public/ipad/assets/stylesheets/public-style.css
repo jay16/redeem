@@ -64,3 +64,6 @@ img{width: 100%;}
 
 
 /*------------------------------------重设密码-------------------------------------------*/
+
+#ContainerPanel input[type="button"] {color: black;}
+#ContainerPanel select {color: black;}

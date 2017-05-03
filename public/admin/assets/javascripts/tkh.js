@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.5.1',
+  version: '0.5.2',
   environment: '',
   server: '',
   userGid: '',
@@ -45,7 +45,7 @@ window.TKH = {
   storeCode: '',
   oper: '',
   setting: {
-    production_hosts: ['10.254.2.9', 'localhost'],
+    production_hosts: ['10.254.2.9', 'localhost1'],
     development: {
       server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
       userGid: '1000020',
@@ -603,13 +603,12 @@ window.TKH = {
     }
 
     if (data.FMEMBIRTH) {
-      var birthday = data.FMEMBIRTH.substr(0, 4) + '-' + data.FMEMBIRTH.substr(4, 2) + '-' + data.FMEMBIRTH.substr(6, 2);
-      $('#birthday').val(birthday);
-      $("#birthday").datepicker({
-        maxDate: 0,
-        dateFormat: "yy-mm-dd",
-        setDate: birthday
-      });
+      if(data.FMEMBIRTH.indexOf('-') >= 0) {
+        $('#birthday').val(data.FMEMBIRTH);
+      } else {
+        var birthday = data.FMEMBIRTH.substr(0, 4) + '-' + data.FMEMBIRTH.substr(4, 2) + '-' + data.FMEMBIRTH.substr(6, 2);
+        $('#birthday').val(birthday);
+      }
     }
   },
   _doConsumerInfo: function(ConsumerInfo, xia) {
@@ -847,7 +846,7 @@ window.TKH = {
          </div>\
          <div style="width: 28%;">\
            <p>消费时间 / Time</p>\
-           <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
+           <input type="text" value="' + (new Date).format('yyyy.MM.dd hh:mm:ss') + '" onclick="SelectDate(this, \'yyyy.MM.dd hh:mm:ss\');" class="datetime"/>\
          </div>\
          <div style="width: 14%;">\
            <p>消费金额 / Amount</p>\

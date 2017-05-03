@@ -167,4 +167,10 @@
     display: block;
     margin: 0.2rem auto 0;
 }
-.questionnaire-subject-title { color: black; font-size: 24px; }
+.questionnaire-subject-title {
+    /*color: black; */
+    font-size: 24px;
+}
+.questionnaire-subject-title p {
+    margin: 0rem 0.2rem 0 0.5rem;
+}

@@ -1,3 +1,4 @@
+<script src="/javascripts/datetimepicker.js?timestamp=<%= timestamp %>"></script>
 <div id="main">
   <div class="title">
     <div>
@@ -117,7 +118,7 @@ $(function() {
          </div>\
          <div style="width: 28%;">\
            <p>消费时间 / Time</p>\
-           <input type="datetime-local" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" placeholder="" class="datetime"/>\
+           <input type="text" value="' + (new Date).format('yyyy-MM-ddThh:mm') + '" onclick="SelectDate(this, \'yyyy.MM.dd hh:mm:ss\');" class="datetime"/>\
          </div>\
          <div style="width: 14%;">\
            <p>消费金额 / Amount</p>\
@@ -229,14 +230,6 @@ $(function() {
         return false;
       }
 
-      var random_seconds = Math.floor(Math.random() * 60);
-      if(random_seconds < 10) {
-        random_seconds = "0" + random_seconds;
-      }
-      datetime = datetime.replace("T", " ") + ":" + random_seconds;
-      while(datetime.indexOf("-") >= 0) {
-        datetime = datetime.replace("-", ".");
-      }
       serialnums.push(serialnum);
       record = {};
       record["name"] = name;
