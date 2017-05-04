@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.5.7',
+  version: '0.5.11',
   environment: '',
   server: '',
   userGid: '',
@@ -385,7 +385,8 @@ window.TKH = {
             </ns0:DoClientCommand>\
           </ns2:Body>\
         </SOAP-ENV:Envelope>',
-        index_loading_layer = -1;
+        index_loading_layer = -1,
+        async_state = (data.async !== undefined ? data.async : false);
 
     console.log((new Date()).format('yy-MM-dd hh:mm:ss start load ') + data.command);
     console.log('api version:' + window.TKH.version);
@@ -395,7 +396,7 @@ window.TKH = {
     $.ajax({
       url: window.TKH.server + "?op=DoClientCommand",
       type: 'POST',
-      async: false,
+      async: async_state,
       dataType: 'xml',
       data: xmlString,
       timeout: 5000,
@@ -799,6 +800,9 @@ window.TKH = {
       };
     });
   },
+  hideDQM: function() {
+    $('.xuanZe').fadeOut(200);
+  },
   // 消费录入/积分录入，打开商户选择
   searchDQM: function(ctl) {
     var dpm = null,
@@ -806,8 +810,8 @@ window.TKH = {
     dpm = $(ctl).parent().find('.store-name');
     gndgid = $(ctl).parent().find('.gndgid');
     dpm.parent(".dp").addClass('suoding');
-    var dpm_val = dpm.val();
 
+    $('.xuanZe').fadeIn(200);
     window.TKH.queryMallGndWeb(1);
   },
   // 消费录入/积分录入，选择商户选择
@@ -829,6 +833,9 @@ window.TKH = {
         format: "YYYY.MM.DD hh:mm:ss",
         zIndex: 3000
     })
+  },
+  removeRecordInput: function(ctl) {
+    $(ctl).closest('.dq-wrapper').remove();
   },
   // 消费录入，添加录入框
   addRecordInput: function() {
@@ -856,7 +863,7 @@ window.TKH = {
          <div style="width: 14%;">\
            <p>消费金额 / Amount</p>\
            <input style="width:60%" type="number" placeholder="0.00" class="amount"/>\
-           <a href="javascript:void(0);" class="jian">-</a>\
+           <a href="javascript:void(0);" class="jian" onclick="window.TKH.removeRecordInput(this);">-</a>\
          </div>\
        </div>'
     );
@@ -869,9 +876,13 @@ window.TKH = {
         params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}',
         data = {
           params: params,
-          command: 'QueryMallGndWeb'
+          command: 'QueryMallGndWeb',
+          async: true
         };
         // fpageindex = 1
+    if($('.xuanZe').css("display") === 'none') {
+      $('.xuanZe').fadeIn(200);
+    }
     window.TKH.hdClientCommand(data, function(result) {
       var errMsg = $(result).find('sErrMsg').text(),
           resultstring = $(result).find('sOutParams').text(),
@@ -880,7 +891,6 @@ window.TKH = {
         if(fpageindex === 1 || fpageindex === '1') {
           $('.xuanZe .hangHu').html('');
         }
-        $('.xuanZe').fadeIn(200);
         var html = '',
             fdata = outparams["FDATA"];
         for (i = 0; i < fdata.length; i++) {

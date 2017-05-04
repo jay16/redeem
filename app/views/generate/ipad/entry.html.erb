@@ -28,7 +28,7 @@
 </div>
 <div class="xuanZe">
   <div>
-    <a href="javascript:void(0);" class="xuanZe_gb">
+    <a href="javascript:void(0);" class="xuanZe_gb" onclick="window.TKH.hideDQM();">
       <img src="/images/gb.png?timestamp=<%= timestamp %>">
     </a>
     <p>
@@ -125,7 +125,7 @@ $(function() {
          <div style="width: 14%;">\
            <p>消费金额 / Amount</p>\
            <input style="width:60%" type="number" placeholder="0.00" class="amount" value="' + record["amount"] + '" />\
-           <a href="javascript:void(0);" class="jian">-</a>\
+           <a href="javascript:void(0);" class="jian" onclick="window.TKH.removeRecordInput(this);">-</a>\
          </div>\
          </div>\
        </div>');
@@ -157,16 +157,6 @@ $(function() {
     keywords = keyword.toLowerCase().split(/\s+/);
     console.log(keywords);
     display_searched_store(keywords);
-  });
-
-  //删除新增
-  $(document).on('click', '.jian', function() {
-    $(this).closest('.dq-wrapper').remove();
-  });
-
-  //关闭选择商户
-  $('.xuanZe_gb').click(function() {
-    $('.xuanZe').fadeOut(200);
   });
 
   $(document).on('blur', '.amount', function() {

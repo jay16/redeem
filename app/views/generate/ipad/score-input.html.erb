@@ -22,13 +22,13 @@
     </div>
   </div>
   <div class="anNiu">
-    <a href="search.html" class="sy">上一页<br/>Previous</a>
+    <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("search.html");'>上一页<br/>Previous</a>
     <a href="javascript:void(0);" class="xy">提交<br/>Submit</a>
   </div>
 </div>
 <div class="xuanZe">
   <div>
-    <a href="javascript:void(0);" class="xuanZe_gb">
+    <a href="javascript:void(0);" class="xuanZe_gb" onclick="window.TKH.hideDQM();">
       <img src="/images/gb.png?timestamp=<%= timestamp %>">
     </a>
     <p>
@@ -114,16 +114,6 @@ $(function() {
     keywords = keyword.toLowerCase().split(/\s+/);
     console.log(keywords);
     display_searched_store(keywords);
-  });
-
-  //删除新增
-  $(document).on('click', '.jian', function() {
-    $(this).closest('.dq-wrapper').remove();
-  });
-
-  //关闭选择商户
-  $('.xuanZe_gb').click(function() {
-    $('.xuanZe').fadeOut(200);
   });
 
   $(document).on('blur', '.amount', function() {

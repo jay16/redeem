@@ -221,7 +221,7 @@
 }
 .hangHu{
     width: 90%;
-    height: 85%;
+    max-height: 70%;
     margin:0.8rem auto 0;
     overflow: auto;
     text-align: center;
