@@ -934,11 +934,12 @@ window.TKH = {
           return false;
         }
         for (var i = 0, len = outparams["Data"].length; i < len; i++) {
-          gift_image = 'gift.png';
-          if(['1000000', '1000001', '1000020'].indexOf(item["FGID"]) >= 0) {
-            gift_image = 'gift-' + item["FGID"] + '.jpg';
-          }
           item = outparams["Data"][i];
+          gift_image = 'gift.png';
+          if(['乐高主题套装', '乐高主题豪华套装', 'Hottoys主题抱枕'].indexOf($.trim(item["FNAME"])) >= 0) {
+            gift_image = 'gift-' + item["FNAME"] + '.jpg';
+          }
+          console.log(item["FNAME"] + ' - ' + gift_image);
           html += "<div class='xuzh_jin' style='display: none;'>"
           html += "  <input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
           html += "  <input type='hidden' class='fnum' value='" + item["FNUM"] + "'/>";
