@@ -7,7 +7,8 @@ $(function() {
     var m = new Array("Jan ", "Feb ", "Mar ", "Apr ", "May ", "Jun ", "Jul ", "Aug ", "Spt ", "Oct ", "Nov ", "Dec ");
     var mn = dt.getMonth();
     var dn = dt.getDate();
-    $('.time').html(m[mn] + "&nbsp;" + dn + '，' + dt.getFullYear());
+    $('.time').html(m[mn] + "&nbsp;" + dn + ', ' + dt.getFullYear());
+    $('.time').html((new Date()).toLocaleDateString() + "@" + window.TKH.version);
 
     //右侧功能栏隐藏显示
     $('.xs').click(function() {
@@ -37,8 +38,7 @@ $(function() {
         $('.xg').fadeOut(200);
     });
 
-    var myDate = new Date();
-    $('.info .date-version').html(myDate.toLocaleDateString() + "/" + window.TKH.version);
+    $('.info .date-version').html((new Date()).toLocaleDateString() + "@" + window.TKH.version);
 
     //显示重置密码
     $('.wj, .hf').click(function() {

@@ -118,10 +118,7 @@
 
 <script>
 $(function() {
-  // 3.2.3 查询有效的赠品促销接口
-  window.TKH.queryMallGiftPromInfo();
-
-  // 消费记录
+  // 已录入的消费记录
   var recordString = window.localStorage.getItem("records");
   if (recordString !== null && recordString.length > 0) {
     var records = JSON.parse(recordString),
@@ -147,7 +144,9 @@ $(function() {
       today_amount += parseFloat(record["amount"]);
     }
     $("#today_amount_guo").html(today_amount);
-    window.TKH.displayGiftWithAmount(today_amount);
+
+    // 3.2.3 查询有效的赠品促销接口
+    window.TKH.queryMallGiftPromInfo();
   }
 
   $('.gb').click(function() {

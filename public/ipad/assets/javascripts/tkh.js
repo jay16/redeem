@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.5.11',
+  version: '0.5.14',
   environment: '',
   server: '',
   userGid: '',
@@ -445,6 +445,7 @@ window.TKH = {
       console.log((new Date()).format('yy-MM-dd hh:mm:ss deal ') + data.command + ' done');
     });
   },
+  // 搜索手机号
   // 查询会员信息
   queryMemberInfoJSON: function() {
     var phone = $('#search').val();
@@ -463,6 +464,7 @@ window.TKH = {
     window.localStorage.removeItem('current_telphone');
 
     var data = {
+      async: true,
       command: 'QUERYMEMBERINFOJSON',
       params: '{&quot;FCARDNUM&quot;:&quot;&quot;,&quot;FMOBILEPHONE&quot;:&quot;' + phone + '&quot;, &quot;FQUERYTYPE&quot;:&quot;1&quot;,&quot;FCARNUM&quot;:&quot;&quot;}'
     };
@@ -828,7 +830,7 @@ window.TKH = {
         isinitVal: true,
         festival: false,
         ishmsVal: false,
-        minDate: '1800-12-28 23:59:59',
+        minDate: '1800.12.28 23:59:59',
         maxDate: (new Date()).format('yyyy.MM.dd hh:mm:ss'),
         format: "YYYY.MM.DD hh:mm:ss",
         zIndex: 3000
@@ -926,7 +928,8 @@ window.TKH = {
         params = '{&quot;FFILDATE&quot;:&quot;' + ffildate + '&quot;}',
         data = {
           params: params,
-          command: 'CRMQueryMallGiftPromInfo'
+          command: 'CRMQueryMallGiftPromInfo',
+          async: true
         };
     window.TKH.hdClientCommand(data, function(xmlHttpRequest) {
       var errMsg = $(xmlHttpRequest).find('sErrMsg').text(),
@@ -969,6 +972,9 @@ window.TKH = {
           html += "</div>";
         }
         $('.shangPing.jin').append(html);
+
+        var today_amount = parseInt($("#today_amount_guo").html());
+        window.TKH.displayGiftWithAmount(today_amount);
       } else {
         if (outparams["FMSG"].length) {
           layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
@@ -1118,7 +1124,8 @@ window.TKH = {
                  }',
         data = {
           params: params,
-          command: 'CRMGenMallSupplyBill'
+          command: 'CRMGenMallSupplyBill',
+          async: true
         };
     window.TKH.hdClientCommand(data, function(result) {
       var errMsg = $(result).find('sErrMsg').text(),
@@ -1236,7 +1243,8 @@ window.TKH = {
         params = '{&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,&quot;FNUM&quot;:&quot;' + fnum + '&quot;,&quot;FDATA&quot;:[' + fdata_params.join(',') + ']}',
         data = {
           params: params,
-          command: 'CRMSaveCRMQuestionnaire'
+          command: 'CRMSaveCRMQuestionnaire',
+          async: true
         };
 
     window.TKH.hdClientCommand(data, function(result) {
@@ -1339,7 +1347,8 @@ window.TKH = {
         params = '{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;,&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;,&quot;FSHOPCODE&quot;:&quot;' + show_code + '&quot;,&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;,&quot;FSCORE&quot;:&quot;' + score + '&quot;}',
         ajax_data = {
           params: params,
-          command: 'CRMCalcMallScoreExWeb'
+          command: 'CRMCalcMallScoreExWeb',
+          async: true
         };
     window.TKH.hdClientCommand(ajax_data, function(result) {
       var errMsg = $(result).find('sErrMsg').text(),
@@ -1384,7 +1393,8 @@ window.TKH = {
     var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}',
         data = {
           params: params,
-          command: 'QueryMallGndWeb'
+          command: 'QueryMallGndWeb',
+          async: true
         };
     window.TKH.hdClientCommand(data, function(result) {
       var errMsg = $(result).find('sErrMsg').text(),
@@ -1429,7 +1439,8 @@ window.TKH = {
         params = '{&quot;FFILDATE&quot;:&quot;' + ffildate + '&quot;}',
         data = {
           params: params,
-          command: 'CRMQueryMallGiftPromInfo'
+          command: 'CRMQueryMallGiftPromInfo',
+          async: true
         };
 
     window.TKH.hdClientCommand(data, function(xmlHttpRequest) {
@@ -1514,7 +1525,8 @@ window.TKH = {
         params = '{&quot;FNAME&quot;:&quot;' + fname + '&quot;}',
         data = {
           params: params,
-          command: 'CRMQueryCRMQuestionnaireMode'
+          command: 'CRMQueryCRMQuestionnaireMode',
+          async: true
         };
     window.TKH.hdClientCommand(data, function(xmlHttpRequest) {
       var errMsg = $(xmlHttpRequest).find('sErrMsg').text(),
@@ -1564,6 +1576,7 @@ window.TKH = {
       }
     });
   },
+  // 查询会员信息页面，第二个页签
   // 3.2.4 积分明细查询
   queryCardScoreDetails: function() {
     var fcardnum = window.localStorage.getItem('sFCARDNUM'),
@@ -1577,7 +1590,8 @@ window.TKH = {
     var params = "[\\]\nFACCOUNTNO=" + fcardnum + "\nFSCORESORT=-\nFSTARTDATE=" + end_date + "\nFENDTDATE=" + start_date + "\n",
         data = {
           params: params,
-          command: 'QueryCardScoreDetails'
+          command: 'QueryCardScoreDetails',
+          async: true
         };
     window.TKH.hdClientCommand(data, function(result) {
         var errMsg = $(result).find('sErrMsg').text(),
@@ -1613,6 +1627,7 @@ window.TKH = {
         }
     });
   },
+  // 查询会员信息页面，第三个页签
   // 1.查询赠品发放信息接口
   queryLAGSupplyInfo: function() {
     var clientCookie = window.localStorage.getItem('sClientCookie'),
@@ -1629,7 +1644,8 @@ window.TKH = {
       var params = '{&quot;FPHONE&quot;:&quot;' + currentQueryMemberJSON["telphone"] + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + 1 + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + 10 + '&quot;}',
           data = {
             params: params,
-            command: 'CRMQueryLAGSupplyInfo'
+            command: 'CRMQueryLAGSupplyInfo',
+            async: true
           };
 
       window.TKH.hdClientCommand(data, function(result) {
