@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.5.14',
+  version: '0.6.2',
   environment: '',
   server: '',
   userGid: '',
@@ -45,7 +45,7 @@ window.TKH = {
   storeCode: '',
   oper: '',
   setting: {
-    production_hosts: ['10.254.2.9', '180.169.127.188', 'localhost'],
+    production_hosts: ['10.254.2.9', '180.169.127.188'],
     development: {
       server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
       userGid: '1000020',
@@ -949,7 +949,7 @@ window.TKH = {
         for (var i = 0, len = outparams["Data"].length; i < len; i++) {
           item = outparams["Data"][i];
           gift_image = 'gift.png';
-          if(['乐高主题套装', '乐高主题豪华套装', 'Hottoys主题抱枕'].indexOf($.trim(item["FNAME"])) >= 0) {
+          if(['乐高精美礼品', '乐高主题豪华套装', 'Hottoys主题抱枕'].indexOf($.trim(item["FNAME"])) >= 0) {
             gift_image = 'gift-' + item["FNAME"] + '.jpg';
           }
           console.log(item["FNAME"] + ' - ' + gift_image);
