@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.3',
+  version: '0.6.4',
   environment: '',
   server: '',
   userGid: '',
@@ -48,8 +48,8 @@ window.TKH = {
     production_hosts: ['10.254.2.9', '180.169.127.188'],
     development: {
       server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
-      userGid: '1000185',
-      userPwd: 'B3E6E46E1BC2C968',
+      userGid: '1000245',
+      userPwd: '05EC54150206B033',
       storeCode: '0210',
       workStation: '172.17.104.164',
       oper: 'HDCRM[0]'
