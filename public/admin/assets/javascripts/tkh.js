@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.4',
+  version: '0.6.5',
   environment: '',
   server: '',
   userGid: '',
@@ -1339,8 +1339,16 @@ window.TKH = {
   // 3.2.18 生成HDMall消费积分单
   // display_alert: 1/0
   calcMallScoreExWeb: function(data, display_alert) {
+    var trant_time = data.datetime;
+    while(trant_time.indexOf(".") >= 0 ||
+          trant_time.indexOf(":") >= 0 ||
+          trant_time.indexOf(" ") >= 0) {
+      trant_time = trant_time.replace(".", "");
+      trant_time = trant_time.replace(":", "");
+      trant_time = trant_time.replace(" ", "");
+    }
     var card_num = data.card_number,
-        trant_time = (new Date()).format('yyyyMMddhhmmss'),
+        trant_time2 = (new Date()).format('yyyyMMddhhmmss'),
         show_code = data.show_code,
         real_amt = data.real_amt,
         score = data.score,

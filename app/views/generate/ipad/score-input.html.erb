@@ -137,6 +137,7 @@ $(function() {
         score,
         serialnum = '',
         serialnums = [],
+        datetime = '',
         is_error = 0,
         all_is_ok = 1,
         name = '',
@@ -153,6 +154,7 @@ $(function() {
       amount = $(this).find("input.amount").val();
       gndgid = $(this).find("input.gndgid").val();
       gndcode = $(this).find("input.gndcode").val();
+      datetime = $(this).find("input.datetime").val();
       is_error = 0;
 
       if(!name.length) {
@@ -194,7 +196,8 @@ $(function() {
         card_number: card_number,
         show_code: gndcode,
         real_amt: amount,
-        score: parseInt(amount)
+        score: parseInt(amount),
+        datetime: datetime
       };
       datas.push(data);
       console.log(data);
