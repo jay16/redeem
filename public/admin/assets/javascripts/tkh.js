@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.5',
+  version: '0.6.7',
   environment: '',
   server: '',
   userGid: '',
@@ -108,12 +108,37 @@ window.TKH = {
 
     return query;
   },
+  reload_with_params: function(params) {
+    var items = [];
+    for(var key in params) {
+      items.push(key + '=' + params[key]);
+    }
+    window.location.href = window.location.href.split('?')[0] + '?' + items.join('&');
+  },
   redirect_to_with_timestamp: function(pathname) {
       var timestamp = (new Date()).valueOf(),
           split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
-          pathname_with_timestamp = pathname + split_str + 'l_timestamp=' + timestamp;
+          pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
 
       window.location.href = pathname_with_timestamp;
+  },
+  avoid_page_cache: function() {
+    var params = window.TKH.params();
+    try {
+      var date = new Date(),
+          now = new Date(),
+          interval = (now - date.setTime(params.timestamp))/1000/60;
+
+      console.log('interval: ' + interval);
+      if(isNaN(interval) || interval > 30) {
+        params.timestamp = (new Date()).valueOf();
+        window.TKH.reload_with_params(params);
+      }
+    } catch(e) {
+      console.log(e);
+      params.timestamp = (new Date()).valueOf();
+      window.TKH.reload_with_params(params);
+    }
   },
   // 3.1.1 登录
   loginWithinIPad: function(toPathName) {

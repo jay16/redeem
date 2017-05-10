@@ -44,7 +44,7 @@ window.TKH = {
   redirect_to_with_timestamp: function(pathname) {
       var timestamp = (new Date()).valueOf(),
           split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
-          pathname_with_timestamp = pathname + split_str + 'l_timestamp=' + timestamp;
+          pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
 
       window.location.href = pathname_with_timestamp;
   },

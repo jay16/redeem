@@ -84,3 +84,7 @@ if(login_state && login_state.length && login_state === 'yes') {
     }
   }
 }
+
+// avoid page cache with timestamp
+window.TKH.avoid_page_cache();
+
