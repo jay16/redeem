@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.7',
+  version: '0.6.8',
   environment: '',
   server: '',
   userGid: '',
@@ -1082,7 +1082,8 @@ window.TKH = {
             card_number: fcardnum,
             show_code: fgndcode,
             real_amt: famt,
-            score: parseInt(famt)
+            score: parseInt(famt),
+            datetime: focrtime
           };
           window.TKH.calcMallScoreExWeb(score_data, 0);
         }
@@ -1365,9 +1366,10 @@ window.TKH = {
   // display_alert: 1/0
   calcMallScoreExWeb: function(data, display_alert) {
     var trant_time = data.datetime;
-    while(trant_time.indexOf(".") >= 0 ||
-          trant_time.indexOf(":") >= 0 ||
-          trant_time.indexOf(" ") >= 0) {
+    while(trant_time && trant_time.length &&
+          (trant_time.indexOf(".") >= 0 ||
+           trant_time.indexOf(":") >= 0 ||
+           trant_time.indexOf(" ") >= 0)) {
       trant_time = trant_time.replace(".", "");
       trant_time = trant_time.replace(":", "");
       trant_time = trant_time.replace(" ", "");
