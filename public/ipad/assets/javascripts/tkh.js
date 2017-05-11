@@ -1159,9 +1159,8 @@ window.TKH = {
       }
     });
     if(store_input_records.length) {
-
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
-      window.TKH.calcMallScoreExWeb(0);
+      window.TKH.calcMallScoreExWeb(0, false);
     }
     // var fgndgid = '500021',
     //     fflowno = (new Date()).valueOf(),
@@ -1437,7 +1436,7 @@ window.TKH = {
        </div>');
   },
   // 3.2.18 生成HDMall消费积分单
-  calcMallScoreExWeb: function(data_index) {
+  calcMallScoreExWeb: function(data_index, is_redirect) {
     var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
         scoreInputRecords = JSON.parse(scoreInputRecordsString),
         data = scoreInputRecords[data_index];
@@ -1471,7 +1470,7 @@ window.TKH = {
         layer.tips("『底层接口』提示：" + outparams["FMSG"], $("." + data.wrapper_class).find('.store-name'), { tips: [3, '#faab20'] });
       }
 
-      if(data_index == scoreInputRecords.length - 1) {
+      if(is_redirect && data_index == scoreInputRecords.length - 1) {
         layer.msg('恭喜您积分成功', {
           time: 0,
           btn: ['确定'],
@@ -1484,7 +1483,7 @@ window.TKH = {
           }
         });
       } else {
-        window.TKH.calcMallScoreExWeb(data_index + 1);
+        window.TKH.calcMallScoreExWeb(data_index + 1, is_redirect);
       }
     });
   },
