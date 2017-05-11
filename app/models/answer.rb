@@ -78,10 +78,10 @@ class Answer < ActiveRecord::Base
     conditions.push("field0 like '%#{params[:questionnaire_code]}%'") if params[:questionnaire_code]
     conditions.push("field1 like '%#{params[:questionnaire_name]}%'") if params[:questionnaire_name]
     conditions.push("field10 like '%#{params[:telphone]}%'") if params[:telphone]
-
     conditions.push("1 = 1") if conditions.empty?
-    puts where(conditions.join(" or ")).to_sql
-    where(conditions.join(" or ")).map(&:data_table)
+
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    where(conditions.join(" or ")).map(&respond_foramt)
   end
 
   def data_table

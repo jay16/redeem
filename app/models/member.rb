@@ -65,7 +65,8 @@ class Member < ActiveRecord::Base
   end
 
   def self.data_tables(params)
-    all.map(&:data_table)
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    all.map(&respond_foramt)
   end
 
   def data_table

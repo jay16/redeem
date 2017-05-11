@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.7',
+  version: '0.6.10',
   environment: '',
   server: '',
   userGid: '',
@@ -839,7 +839,8 @@ window.TKH = {
     dpm.parent(".dp").addClass('suoding');
 
     $('.xuanZe').fadeIn(200);
-    window.TKH.queryMallGndWeb(1);
+    // window.TKH.queryMallGndWeb(1);
+    window.TKH.queryMallGndWebV2();
   },
   // 消费录入/积分录入，选择商户选择
   selectedDQM: function(ctl) {
@@ -897,6 +898,72 @@ window.TKH = {
     window.TKH.initJEDate(datetimeId);
   },
   // 3.2.7 查询有效商铺信息
+  queryMallGndWebV2: function(fpageindex) {
+    var index_loading_layer = layer.load(0);
+    $.ajax({
+      url: "/api/v1/list/store?format=json",
+      type: 'get',
+      async: true,
+      dataType: 'json',
+      timeout: 5000,
+      contentType: "application/json; charset=UTF-8"
+    }).done(function(result) {
+      if(result.code === 200) {
+        $('.xuanZe .hangHu').html('');
+        var data = {};
+        for (i = 0, len = result.data.length; i < len; i++) {
+          data = result.data[i];
+          $('.xuanZe .hangHu').append(
+            "<div class='soudingname' data-name='" + data.name + "' onclick='window.TKH.selectedDQM(this);'>\
+                <div>\
+                  <p>" + data.name + "</p>\
+                  <p>\
+                    <b>" + data.code + "</b>\
+                  </p>\
+                </div>\
+                <input type='hidden' value='" + data.gid + "' class='gndgid'/>\
+                <input type='hidden' value='" + data.name + "' class='gndname'/>\
+                <input type='hidden' value='" + data.code + "' class='gndcode'/>\
+                <input type='hidden' value='" + data.rn + "' class='rn'/>\
+              </div> "
+            );
+        }
+      }
+    }).fail(function(xhr, textstatus, errorThrown) {
+      // XMLHttpRequest.readyState: 状态码的意思
+      // 0 － （未初始化）还没有调用send()方法
+      // 1 － （载入）已调用send()方法，正在发送请求
+      // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
+      // 3 － （交互）正在解析响应内容
+      // 4 － （完成）响应内容解析完成，可以在客户端调用了
+
+      var error_msg = '';
+      if(xhr.readyState === 0) {
+        error_msg = '请确认网络环境正常';
+      } else if(xhr.readyState === 1 || xhr.readyState === 2) {
+        error_msg = '请确认网络环境正常，请求发出前出现异常';
+      } else if(xhr.readyState === 3) {
+        error_msg = '请确认网络环境正常，解析响应内容时异常';
+      } else if(xhr.readyState === 4) {
+        error_msg = '本地回调函数处理异常';
+      } else {
+        error_msg = '未知处理异常(' + xhr.readyState + ')' + errorThrown;
+      }
+
+      layer.msg(error_msg, {
+        time: 0,
+        btnAlign: 'c',
+        btn: ['确定'],
+        yes: function(index) {
+          layer.close(index);
+        }
+      });
+    }).always(function(result, textstatus, xhr) {
+      if(index_loading_layer) {
+        layer.close(index_loading_layer);
+      }
+    });
+  },
   queryMallGndWeb: function(fpageindex) {
     var fstorecode = window.TKH.storeCode,
         fpagesize = '100',
@@ -1082,7 +1149,8 @@ window.TKH = {
             card_number: fcardnum,
             show_code: fgndcode,
             real_amt: famt,
-            score: parseInt(famt)
+            score: parseInt(famt),
+            datetime: focrtime
           };
           window.TKH.calcMallScoreExWeb(score_data, 0);
         }
@@ -1362,12 +1430,16 @@ window.TKH = {
        </div>');
   },
   // 3.2.18 生成HDMall消费积分单
-  // display_alert: 1/0
-  calcMallScoreExWeb: function(data, display_alert) {
+  calcMallScoreExWeb: function(data_index) {
+    var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
+        scoreInputRecords = JSON.parse(scoreInputRecordsString),
+        data = scoreInputRecords[data_index];
+
     var trant_time = data.datetime;
-    while(trant_time.indexOf(".") >= 0 ||
-          trant_time.indexOf(":") >= 0 ||
-          trant_time.indexOf(" ") >= 0) {
+    while(trant_time && trant_time.length &&
+          (trant_time.indexOf(".") >= 0 ||
+           trant_time.indexOf(":") >= 0 ||
+           trant_time.indexOf(" ") >= 0)) {
       trant_time = trant_time.replace(".", "");
       trant_time = trant_time.replace(":", "");
       trant_time = trant_time.replace(" ", "");
@@ -1387,29 +1459,33 @@ window.TKH = {
       var errMsg = $(result).find('sErrMsg').text(),
           resultstring = $(result).find('sOutParams').text(),
           outparams = JSON.parse(resultstring);
-      if (display_alert === 1 && (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0")) {
+      if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+      } else {
+        layer.tips("『底层接口』提示：" + outparams["FMSG"], $("." + data.wrapper_class).find('.store-name'), { tips: [3, '#faab20'] });
+      }
+
+      if(data_index == scoreInputRecords.length - 1) {
         layer.msg('恭喜您积分成功', {
           time: 0,
           btn: ['确定'],
           btnAlign: 'c',
-          yes: function(index) {
-            layer.close(index);
+          yes: function(i) {
+            layer.close(i);
+
+            window.localStorage.removeItem("scoreInputRecords");
             window.TKH.redirect_to_with_timestamp("complete.html");
           }
         });
       } else {
-        if (outparams["FMSG"].length) {
-          layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
-        }
+        window.TKH.calcMallScoreExWeb(data_index + 1);
       }
     });
   },
   // 3.2.7 查询有效商铺信息，后台同步使用该接口
-  queryStoreForSync: function() {
+  queryStoreForSync: function(fpageindex) {
     var clientCookie = window.localStorage.getItem('sClientCookie');
         fstorecode = window.TKH.storeCode,
-        fpageindex = '1',
-        fpagesize = '30';
+        fpagesize = 100;
 
     if(clientCookie === null || !clientCookie.length) {
       window.TKH.loginWithinAdmin();
@@ -1421,8 +1497,13 @@ window.TKH = {
       return false;
     };
 
-    $("#sync_state").html("开始同步店铺...");
-    window.ServerAPI.truncate_table('store');
+    if(fpageindex === 1) {
+      $("#sync_state").html("开始同步店铺...");
+      window.ServerAPI.truncate_table('store');
+    } else {
+      var already_synced_store_num = (fpageindex - 1) * fpagesize;
+      $("#sync_state").html("已同步 " + already_synced_store_num + " 家店铺，同步中...");
+    }
     var params = '{&quot;FSTORECODE&quot;:&quot;' + fstorecode + '&quot;,&quot;FPAGEINDEX&quot;:&quot;' + fpageindex + '&quot;,&quot;FPAGESIZE&quot;:&quot;' + fpagesize + '&quot;}',
         data = {
           params: params,
@@ -1438,13 +1519,21 @@ window.TKH = {
         var fdata = outparams["FDATA"],
             post_param = {};
         for (i = 0; i < fdata.length; i++) {
+          post_param = {};
           post_param["name"] = fdata[i].GNDNAME;
           post_param["gid"] = fdata[i].GNDGID;
           post_param["code"] = fdata[i].GNDCODE;
+          post_param["rn"] = fdata[i].RN;
           window.ServerAPI.save_store(post_param);
         }
 
-        $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + fdata.length + " 份店铺");
+        if(fdata.length >= fpagesize) {
+          window.TKH.queryStoreForSync(fpageindex + 1)
+        } else {
+          var synced_store_num = (fpageindex - 1) * fpagesize + fdata.length;
+          $("#sync_state").html((new Date()).format("[yyyy-MM-dd hh:mm:ss] 同步完成 ") + synced_store_num + " 份店铺");
+        }
+
       } else {
         if (outparams["FMSG"].length) {
           layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });

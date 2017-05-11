@@ -208,13 +208,12 @@ if(questionnaireState === '200') {
 
   function storeQuestion() {
       var ftitleid = $("#ftitleid").val(),
-        ftype = $("#ftype").val(),
-        fvalues = [],
-        fvalueids = [],
-        fvalueid;
+          ftype = $("#ftype").val(),
+          fvalues = [],
+          fvalueids = [],
+          fvalueid;
 
       if(ftitleid === undefined) return;
-
 
       // # field2, subject_index, 题目序号
       // # field6, answer_id, 选项ID
@@ -245,7 +244,9 @@ if(questionnaireState === '200') {
         fvalueid = $("#ques_hui").attr("fvalueid");
         if(fvalueids.indexOf(fvalueid) < 0) {
           fvalueids.push(fvalueid);
-          fvalues.push($("#ques_hui").val());
+          var fvalue = $.trim($("#ques_hui").val());
+          if(!fvalue.length) { fvalue = "-1"; }
+          fvalues.push(fvalue);
           answers.push({
             "answer": $("#ques_hui").val(),
             "answer_id": fvalueid
@@ -264,6 +265,7 @@ if(questionnaireState === '200') {
             });
           }
         });
+        if(!fvalueids.length) { fvalueids.push("-1"); }
       }
 
       var questionPostParam = window.localStorage.getItem("questionPostParam");
@@ -284,8 +286,14 @@ if(questionnaireState === '200') {
       };
 
       if(answers.length) {
-        post_param[modeldtl_item["FTITLEID"]]["answer"] = answers[0].answer;
-        post_param[modeldtl_item["FTITLEID"]]["answer_id"] = answers[0].answer_id;
+        var temp_answers = [],
+            temp_answers_ids = [];
+        for(var i = 0, len = answers.length; i < len; i ++) {
+          temp_answers.push(answers[i].answer);
+          temp_answers_ids.push(answers[i].answer_id);
+        }
+        post_param[modeldtl_item["FTITLEID"]]["answer"] = temp_answers.join(',');
+        post_param[modeldtl_item["FTITLEID"]]["answer_id"] = temp_answers_ids.join(',');
       }
       window.localStorage.setItem("questionPostParam", JSON.stringify(post_param));
 

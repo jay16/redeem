@@ -180,6 +180,8 @@ $(function() {
         amount = '',
         serialnum = '',
         serialnums = [],
+        store_and_datetime = '',
+        store_and_datetimes = [],
         gndgid = '',
         gndcode = '',
         datetime = '',
@@ -193,6 +195,8 @@ $(function() {
       gndgid = $(this).find("input.gndgid").val();
       gndcode = $(this).find("input.gndcode").val();
       datetime = $(this).find("input.datetime").val();
+      store_and_datetime = gndgid + datetime;
+      is_error = 0;
 
       if(!name.length) {
         layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
@@ -222,8 +226,14 @@ $(function() {
         is_error = 1;
         return false;
       }
+      if(store_and_datetimes.indexOf(store_and_datetime) >= 0) {
+        layer.tips('请勿重复积分', $(this).find('.store-name'), { tips: [3, '#faab20'] });
+        is_error = 1;
+        return false;
+      }
 
       serialnums.push(serialnum);
+      store_and_datetimes.push(store_and_datetime);
       record = {};
       record["name"] = name;
       record["serialnum"] = serialnum;

@@ -15,27 +15,27 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1494383598">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1494383598">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1494383598">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1494383598">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/questionnaire.css?timestamp=1494383598">
-<script src="assets/javascripts/remJs.js?timestamp=1494383598"></script>
-<script src="assets/javascripts/jquery-1.12.4.js?timestamp=1494383598"></script>
-<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1494383598"></script>
-<script src="assets/javascripts/server_api.js?timestamp=1494383598"></script>
-<script src="assets/javascripts/tkh.js?timestamp=1494383598"></script>
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/public-style.css?timestamp=1494502398">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1494502398">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1494502398">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1494502398">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/questionnaire.css?timestamp=1494502398">
+<script src="assets/javascripts/remJs.js?timestamp=1494502398"></script>
+<script src="assets/javascripts/jquery-1.12.4.js?timestamp=1494502398"></script>
+<script src="assets/javascripts/plugins/layer/layer.js?timestamp=1494502398"></script>
+<script src="assets/javascripts/server_api.js?timestamp=1494502398"></script>
+<script src="assets/javascripts/tkh.js?timestamp=1494502398"></script>
 </head>
 <body>
 <div id="jiaZai">
-  <img src="assets/images/loadbg.png?timestamp=1494383598">
+  <img src="assets/images/loadbg.png?timestamp=1494502398">
 </div>
 
 <div id="main">
   <div class="title">
     <div>
-      <img src="assets/images/dhlp2.png?timestamp=1494383598">
-      <img src="assets/images/diaoCha.png?timestamp=1494383598">
+      <img src="assets/images/dhlp2.png?timestamp=1494502398">
+      <img src="assets/images/diaoCha.png?timestamp=1494502398">
       <span class="questionnaire-title">
           问卷调查
       </span>
@@ -60,24 +60,24 @@
 <div class="gn">
   <div class="dj">
     <div>
-      <img src="assets/images/gn1.png?timestamp=1494383598" class="xs" alt="">
-      <img src="assets/images/gn2.png?timestamp=1494383598" class="yc" alt="">
+      <img src="assets/images/gn1.png?timestamp=1494502398" class="xs" alt="">
+      <img src="assets/images/gn2.png?timestamp=1494502398" class="yc" alt="">
     </div>
 
     <div style="display:none;">
-      <img src="assets/images/gn2.png?timestamp=1494383598"></div>
+      <img src="assets/images/gn2.png?timestamp=1494502398"></div>
     </div>
   <div class="nr">
     <div>礼品兑换系统</div>
     <p class="lp">
       <a href="search.html">
-        <img src="assets/images/dhlp.png?timestamp=1494383598">礼品兑换</a></p>
+        <img src="assets/images/dhlp.png?timestamp=1494502398">礼品兑换</a></p>
     <p class="mm">
-      <img src="assets/images/bi.png?timestamp=1494383598" class="bi" alt="">修改密码</p>
+      <img src="assets/images/bi.png?timestamp=1494502398" class="bi" alt="">修改密码</p>
     <p class="tuichu" onclick="window.TKH.logout();">
-      <img src="assets/images/dl2.png?timestamp=1494383598">退出登录</p>
+      <img src="assets/images/dl2.png?timestamp=1494502398">退出登录</p>
     <div class="renWu">
-      <img src="assets/images/renWu.png?timestamp=1494383598">
+      <img src="assets/images/renWu.png?timestamp=1494502398">
       <p id="userGid"></p>
       <p class="time"></p>
     </div>
@@ -86,10 +86,10 @@
 <div class="xg">
   <div>
     <a href="javascript:void(0);" class="gb">
-      <img src="assets/images/gb.png?timestamp=1494383598"></a>
+      <img src="assets/images/gb.png?timestamp=1494502398"></a>
     <div class="xg_content">
       <div class="suo">
-        <img src="assets/images/bi.png?timestamp=1494383598"></div>
+        <img src="assets/images/bi.png?timestamp=1494502398"></div>
       <div class="xg_info">
         <p class="title">修改密码</p>
         <input type="password" id="oldPassword" placeholder="旧密码" />
@@ -208,7 +208,7 @@ if(questionnaireState === '200') {
         <input type="hidden" name="ftype" id="ftype" value="' + modeldtl_item["FTYPE"] + '" />\
         <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
         <div class="kx">\
-          <img src="assets/images/diaoCha.png?timestamp=1494383598">\
+          <img src="assets/images/diaoCha.png?timestamp=1494502398">\
           <div class="question-type" style="display:inline;"></div>\
           <span class="optiondtl-num" style="display: none;">' + modeldtl_item["OPTIONDTL"].length + '</span>\
         </div>\
@@ -241,13 +241,12 @@ if(questionnaireState === '200') {
 
   function storeQuestion() {
       var ftitleid = $("#ftitleid").val(),
-        ftype = $("#ftype").val(),
-        fvalues = [],
-        fvalueids = [],
-        fvalueid;
+          ftype = $("#ftype").val(),
+          fvalues = [],
+          fvalueids = [],
+          fvalueid;
 
       if(ftitleid === undefined) return;
-
 
       // # field2, subject_index, 题目序号
       // # field6, answer_id, 选项ID
@@ -278,7 +277,9 @@ if(questionnaireState === '200') {
         fvalueid = $("#ques_hui").attr("fvalueid");
         if(fvalueids.indexOf(fvalueid) < 0) {
           fvalueids.push(fvalueid);
-          fvalues.push($("#ques_hui").val());
+          var fvalue = $.trim($("#ques_hui").val());
+          if(!fvalue.length) { fvalue = "-1"; }
+          fvalues.push(fvalue);
           answers.push({
             "answer": $("#ques_hui").val(),
             "answer_id": fvalueid
@@ -297,6 +298,7 @@ if(questionnaireState === '200') {
             });
           }
         });
+        if(!fvalueids.length) { fvalueids.push("-1"); }
       }
 
       var questionPostParam = window.localStorage.getItem("questionPostParam");
@@ -317,8 +319,14 @@ if(questionnaireState === '200') {
       };
 
       if(answers.length) {
-        post_param[modeldtl_item["FTITLEID"]]["answer"] = answers[0].answer;
-        post_param[modeldtl_item["FTITLEID"]]["answer_id"] = answers[0].answer_id;
+        var temp_answers = [],
+            temp_answers_ids = [];
+        for(var i = 0, len = answers.length; i < len; i ++) {
+          temp_answers.push(answers[i].answer);
+          temp_answers_ids.push(answers[i].answer_id);
+        }
+        post_param[modeldtl_item["FTITLEID"]]["answer"] = temp_answers.join(',');
+        post_param[modeldtl_item["FTITLEID"]]["answer_id"] = temp_answers_ids.join(',');
       }
       window.localStorage.setItem("questionPostParam", JSON.stringify(post_param));
 
@@ -341,7 +349,7 @@ if(questionnaireState === '200') {
   //     <input type="hidden" name="ftitleid" id="ftitleid" value="0" />
   //     <input type="hidden" name="ftype" id="ftype" value="1" /></div>
   //   <div class="kx">
-  //     <img src="assets/images/diaoCha.png?timestamp=1494383598">可选答案
+  //     <img src="assets/images/diaoCha.png?timestamp=1494502398">可选答案
   //     <span>8</span></div>
   //   <div class="xz">
   //     <div id="1">自驾</div>
@@ -417,7 +425,7 @@ $(function() {
 });
 </script>
 
-<script src="assets/javascripts/side.js?timestamp=1494383598"></script>
+<script src="assets/javascripts/side.js?timestamp=1494502398"></script>
 <script type="text/javascript">
   window.onload = function() {
     $('#jiaZai').hide();

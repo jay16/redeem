@@ -51,10 +51,10 @@ class Consume < ActiveRecord::Base
     conditions.push("field2 like '%#{params[:serial_number]}%'") if params[:serial_number]
     conditions.push("field4 like '%#{params[:store_code]}%'") if params[:store_code]
     conditions.push("field5 like '%#{params[:store_name]}%'") if params[:store_name]
-
     conditions.push("1 = 1") if conditions.empty?
-    # puts where(conditions.join(" or ")).to_sql
-    where(conditions.join(" or ")).map(&:data_table)
+
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    where(conditions.join(" or ")).map(&respond_foramt)
   end
 
   def data_table

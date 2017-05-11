@@ -66,10 +66,10 @@ class Gift < ActiveRecord::Base
     conditions.push("field1 like '%#{params[:theme_name]}%'") if params[:theme_name]
     conditions.push("field6 like '%#{params[:gift_name]}%'") if params[:gift_name]
     conditions.push("field4 like '%#{params[:address]}%'") if params[:address]
-
     conditions.push("1 = 1") if conditions.empty?
-    # puts where(conditions.join(" or ")).to_sql
-    where(conditions.join(" or ")).map(&:data_table)
+
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    where(conditions.join(" or ")).map(&respond_foramt)
   end
 
   def data_table

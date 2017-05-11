@@ -156,19 +156,12 @@ $(function() {
 
   //商品选中
   $(document).on('click', '.shangPing>div', function() {
-    console.log('2 = ' + this);
-    if (!$('#Exchange_id').val()) {
-      $('.shangPing>div').removeClass('xuanZhong');
-      if ($(this).hasClass('xuanZhong')) {
-        $(this).removeClass('xuanZhong');
-      }
-      else {
-        $(this).addClass('xuanZhong');
-      }
-    } else {
-      layer.msg('本次已兑换！', {
-        time: 2000 //2s后自动关闭
-      });
+    // $('.shangPing>div').removeClass('xuanZhong');
+    if ($(this).hasClass('xuanZhong')) {
+      $(this).removeClass('xuanZhong');
+    }
+    else {
+      $(this).addClass('xuanZhong');
     }
   });
 

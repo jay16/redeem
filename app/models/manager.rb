@@ -55,7 +55,8 @@ class Manager < ActiveRecord::Base
   end
 
   def self.data_tables(params)
-    where(field5: 'yes').map(&:data_table)
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    where(field5: 'yes').map(&respond_foramt)
   end
 
   # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作

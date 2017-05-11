@@ -52,9 +52,10 @@ class Signature < ActiveRecord::Base
     conditions.push("field1 like '%#{params[:telphone]}%'") if params[:telphone]
     conditions.push("field3 like '%#{params[:questionnaire_code]}%'") if params[:questionnaire_code]
     conditions.push("field4 like '%#{params[:questionnaire_name]}%'") if params[:questionnaire_name]
-
     conditions.push("1 = 1") if conditions.empty?
-    where(conditions.join(" or ")).map(&:data_table)
+
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    where(conditions.join(" or ")).map(&respond_foramt)
   end
 
   def data_table

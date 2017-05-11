@@ -83,10 +83,10 @@ class Redeem < ActiveRecord::Base
     conditions.push("field5 like '%#{params[:gift_name]}%'") if params[:gift_name]
     conditions.push("field1 like '%#{params[:member]}%'") if params[:member]
     conditions.push("field2 like '%#{params[:telphone]}%'") if params[:telphone]
-
     conditions.push("1 = 1") if conditions.empty?
-    puts where(conditions.join(" or ")).to_sql
-    where(conditions.join(" or ")).map(&:data_table)
+
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    where(conditions.join(" or ")).map(&respond_foramt)
   end
 
   def data_table

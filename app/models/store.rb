@@ -17,19 +17,21 @@ class Store < ActiveRecord::Base
   alias_attribute :gid, :field0 # 店铺GID
   alias_attribute :code, :field1 # 店铺CODE
   alias_attribute :name, :field2 # 店铺名称
+  alias_attribute :rn, :field3 # 店铺名称
 
   def self.extract_params(params)
     options = {}
     options[:field0] = params[:gid] if params[:gid]
     options[:field1] = params[:code] if params[:code]
     options[:field2] = params[:name] if params[:name]
+    options[:field3] = params[:rn] if params[:rn]
     options
   end
 
   def self.find_or_create_with_params(params)
-    unless record = find_by(field0: params[:gid])
+    # unless record = find_by(field0: params[:gid])
       record = create(extract_params(params))
-    end
+    # end
     record
   end
 
@@ -42,9 +44,10 @@ class Store < ActiveRecord::Base
     conditions.push("field0 like '%#{params[:gid]}%'") if params[:gid]
     conditions.push("field1 like '%#{params[:code]}%'") if params[:code]
     conditions.push("field2 like '%#{params[:name]}%'") if params[:name]
-
     conditions.push("1 = 1") if conditions.empty?
-    where(conditions.join(" or ")).map(&:data_table)
+
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    where(conditions.join(" or ")).map(&respond_foramt)
   end
 
   def data_table
