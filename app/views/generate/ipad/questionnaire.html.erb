@@ -146,6 +146,12 @@ if(questionnaireState === '200') {
           modeldtl_item = data_item["MODEDTL"][qindex],
           htmlString = '';
 
+      // 提交时，网络异常时，需要提交检查是否应该提交
+      if(qindex >= data_item["MODEDTL"].length){
+          window.TKH.saveCRMQuestionnaire();
+          return;
+      }
+
       if(skipType === 'next') {
         storeQuestion();
       }

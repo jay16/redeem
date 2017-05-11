@@ -129,7 +129,6 @@ window.TKH = {
           now = new Date(),
           interval = (now - date.setTime(params.timestamp))/1000/60;
 
-      console.log('interval: ' + interval);
       if(isNaN(interval) || interval > 30) {
         params.timestamp = (new Date()).valueOf();
         window.TKH.reload_with_params(params);
@@ -459,10 +458,6 @@ window.TKH = {
           layer.close(index);
         }
       });
-
-      console.log('readyState: ' + xhr.readyState + ',status: ' + xhr.status);
-      console.log('errorThrown: ');
-      console.log(errorThrown);
     }).always(function(result, textstatus, xhr) {
       if(index_loading_layer) {
         layer.close(index_loading_layer);
@@ -585,8 +580,6 @@ window.TKH = {
           dist_json.district = ldd_part;
         }
       }
-      console.log(data.FMEMADDRESS);
-      console.log(dist_json);
       $("#live_dz_distpicker").distpicker('destroy');
       $("#live_dz_distpicker").distpicker(dist_json);
     } else {
@@ -1118,14 +1111,13 @@ window.TKH = {
     $(".xf").each(function() {
       if ($(this).hasClass("checked")) {
         var fgndgid = $(this).find(".guoxiao_gndgid").val(),
-            fgndcode = $(this).find(".guoxiao_gndcode").val()
+            fgndcode = $(this).find(".guoxiao_gndcode").val(),
             storename = $(this).find(".guoxiao_store").val(),
             fflowno = $(this).find(".guoxiao_serialnum").val(),
             famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
             focrtime = $(this).find(".guoxiao_datetime").val();
             // (new Date()).format('yyyy.MM.dd hh:mm:ss');
 
-        console.log('fgndgid - ' + fgndgid);
         paies.push('{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;,&quot;FAMT&quot;:&quot;' + famt + '&quot;}');
 
         // # field0, name, 会员名称
@@ -1159,9 +1151,9 @@ window.TKH = {
       }
     });
     if(store_input_records.length) {
-
+      console.log(store_input_records);
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
-      window.TKH.calcMallScoreExWeb(0);
+      window.TKH.calcMallScoreExWeb(0, false);
     }
     // var fgndgid = '500021',
     //     fflowno = (new Date()).valueOf(),
@@ -1437,7 +1429,7 @@ window.TKH = {
        </div>');
   },
   // 3.2.18 生成HDMall消费积分单
-  calcMallScoreExWeb: function(data_index) {
+  calcMallScoreExWeb: function(data_index, is_redirect) {
     var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
         scoreInputRecords = JSON.parse(scoreInputRecordsString),
         data = scoreInputRecords[data_index];
@@ -1472,19 +1464,23 @@ window.TKH = {
       }
 
       if(data_index == scoreInputRecords.length - 1) {
-        layer.msg('恭喜您积分成功', {
-          time: 0,
-          btn: ['确定'],
-          btnAlign: 'c',
-          yes: function(i) {
-            layer.close(i);
+        if(is_redirect) {
+          layer.msg('恭喜您积分成功', {
+            time: 0,
+            btn: ['确定'],
+            btnAlign: 'c',
+            yes: function(i) {
+              layer.close(i);
 
-            window.localStorage.removeItem("scoreInputRecords");
-            window.TKH.redirect_to_with_timestamp("complete.html");
-          }
-        });
+              window.localStorage.removeItem("scoreInputRecords");
+              window.TKH.redirect_to_with_timestamp("complete.html");
+            }
+          });
+        } else {
+          window.localStorage.removeItem("scoreInputRecords");
+        }
       } else {
-        window.TKH.calcMallScoreExWeb(data_index + 1);
+        window.TKH.calcMallScoreExWeb(data_index + 1, is_redirect);
       }
     });
   },
@@ -1580,7 +1576,6 @@ window.TKH = {
         var fdata = outparams["Data"],
             post_param = {};
         for (i = 0; i < fdata.length; i++) {
-          console.log(fdata[i]);
           // {
           // "FBGNTIME":"2017.03.01",
           // "FMUNIT":"个",
@@ -1622,7 +1617,6 @@ window.TKH = {
     });
   },
   questionnaireOptionType: function(type) {
-    console.log(type);
     type = parseInt(type);
     if(type === 0) {
       return "单选题";
@@ -1745,8 +1739,6 @@ window.TKH = {
               mm2 = temp_str.match(/SCORE=(.*?)\n/),
               input_string = '';
           if(mm1) {
-            console.log(mm1[1]);
-            console.log(mm2[1]);
             if(limit_time < 5) {
               input_string = "<input disabled='disabled' type=text value='" + mm1[1] + '    ' + mm2[1] + "'>";
               $("#ScoreInfo > div:eq(1)").append(input_string);
@@ -1797,7 +1789,6 @@ window.TKH = {
               input_items.push("<input disabled='disabled' type=text value='" + focrtime + '    ' + gift["FGIFTNAME"] + ' x ' + gift["FQTY"] + "'>");
             }
           }
-          console.log(input_items);
           for(var i = 0; i < 9; i ++) {
             if(i < 5) {
               $("#ExchangeInfo > div:eq(0)").append(input_items[i]);
