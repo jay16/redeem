@@ -1112,7 +1112,8 @@ window.TKH = {
     var paies = [], gid, flowno, crttime, famt,
         post_params = {},
         post_param_consumes = [],
-        post_param_gifts = [];
+        post_param_gifts = [],
+        store_input_records = [];
     // 消费记录
     $(".xf").each(function() {
       if ($(this).hasClass("checked")) {
@@ -1150,12 +1151,18 @@ window.TKH = {
             show_code: fgndcode,
             real_amt: famt,
             score: parseInt(famt),
-            datetime: focrtime
+            datetime: focrtime,
+            wrapper_class: ''
           };
-          window.TKH.calcMallScoreExWeb(score_data, 0);
+          store_input_records.push(score_data);
         }
       }
     });
+    if(store_input_records.length) {
+
+      window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
+      window.TKH.calcMallScoreExWeb(0);
+    }
     // var fgndgid = '500021',
     //     fflowno = (new Date()).valueOf(),
     //     focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss');
