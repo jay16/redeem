@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.11',
+  version: '0.6.15',
   environment: '',
   server: '',
   userGid: '',
@@ -387,6 +387,12 @@ window.TKH = {
       }
     });
   },
+  escapeQUOTA: function(string) {
+    while(string.indexOf("&quot;") >= 0) {
+      string = string.replace("&quot;", '"');
+    }
+    console.log(string);
+  },
   // 所有操作的通用接口
   hdClientCommand: function(data, callback) {
     var clientCookie = window.localStorage.getItem('sClientCookie'),
@@ -412,10 +418,11 @@ window.TKH = {
         index_loading_layer = -1,
         async_state = (data.async !== undefined ? data.async : false);
 
-    console.log((new Date()).format('yy-MM-dd hh:mm:ss start load ') + data.command);
+    console.log((new Date()).format('yy-MM-dd hh:mm:ss load ') + data.command);
     console.log('api version:' + window.TKH.version);
     console.log('xml params:');
     console.log(xmlString);
+    console.log(window.TKH.escapeQUOTA(data.params));
     index_loading_layer = layer.load(0);
     $.ajax({
       url: window.TKH.server + "?op=DoClientCommand",
@@ -1092,6 +1099,7 @@ window.TKH = {
   },
   // 3.2.31 生成赠品发放单接口
   genMallSupplyBill: function() {
+    $("#queren").attr("disabled", "true");
     var clientCookie = window.localStorage.getItem('sClientCookie'),
         fcardnum = window.localStorage.getItem('sFCARDNUM'),
         fildate = (new Date()).format('yyyy.MM.dd hh:mm:ss'),
@@ -1345,10 +1353,6 @@ window.TKH = {
           outparams = JSON.parse(resultstring);
 
       if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-        window.localStorage.removeItem("questionnaire");
-        window.localStorage.removeItem("questionnaire_state");
-        window.localStorage.removeItem("questionResult");
-
         var questionPostParam = window.localStorage.getItem("questionPostParam");
         if(questionPostParam !== null) {
           post_param = JSON.parse(questionPostParam);
@@ -1361,7 +1365,13 @@ window.TKH = {
           yes: function(index) {
             layer.close(index);
 
-            window.TKH.redirect_to_with_timestamp("signature.html");
+            window.localStorage.removeItem("questionnaire");
+            window.localStorage.removeItem("questionnaire_state");
+            window.localStorage.removeItem("questionResult");
+            var params = window.TKH.params(),
+                pagename = (params.skip_signature === "1" ? "complete.html" : "signature.html");
+
+            window.TKH.redirect_to_with_timestamp(pagename);
           }
         });
       } else {

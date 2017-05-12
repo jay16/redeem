@@ -147,12 +147,13 @@ if(questionnaireState === '200') {
           htmlString = '';
 
       // 提交时，网络异常时，需要提交检查是否应该提交
-      if(qindex >= data_item["MODEDTL"].length){
+      if(qindex > data_item["MODEDTL"].length){
           window.TKH.saveCRMQuestionnaire();
           return;
       }
 
       if(skipType === 'next') {
+        console.log('store: ' + qindex);
         storeQuestion();
       }
       if(qindex === 0) {
@@ -162,8 +163,8 @@ if(questionnaireState === '200') {
           $(".last-option").html("上一题");
           $(".next-option").html("下一题");
 
-          if(qindex === data_item["MODEDTL"].length - 1) {
-              $(".next-option").html("下一页");
+          if(qindex >= data_item["MODEDTL"].length - 1) {
+            $(".next-option").html("提交");
           }
       }
 
@@ -177,7 +178,7 @@ if(questionnaireState === '200') {
       htmlString += '\
         <div class="wt">\
          <div class="kx questionnaire-subject-title"><p>' + modeldtl_item["FTITLE"] + '</p></div>\
-        <input type="hidden" name="fnum" id="fnum" value="' + modeldtl_item["OPTIONDTL"].length + '" />\
+        <input type="hidden" name="fnum" id="fnum" value="' + data_item["FNUM"] + '" />\
         <input type="hidden" name="ftype" id="ftype" value="' + modeldtl_item["FTYPE"] + '" />\
         <input type="hidden" name="ftitleid" id="ftitleid" value="' + modeldtl_item["FTITLEID"] + '" />\
         <div class="kx">\
@@ -220,7 +221,6 @@ if(questionnaireState === '200') {
           fvalueid;
 
       if(ftitleid === undefined) return;
-
       // # field2, subject_index, 题目序号
       // # field6, answer_id, 选项ID
       // # field7, answer, 回答内容
@@ -249,10 +249,10 @@ if(questionnaireState === '200') {
       if(ftype === "2") {
         fvalueid = $("#ques_hui").attr("fvalueid");
         if(fvalueids.indexOf(fvalueid) < 0) {
-          fvalueids.push(fvalueid);
           var fvalue = $.trim($("#ques_hui").val());
-          if(!fvalue.length) { fvalue = "-1"; }
+          fvalueid = (fvalue.length > 0 ? "0" : "-1");
           fvalues.push(fvalue);
+          fvalueids.push(fvalueid);
           answers.push({
             "answer": $("#ques_hui").val(),
             "answer_id": fvalueid
@@ -264,7 +264,6 @@ if(questionnaireState === '200') {
           if(fvalueids.indexOf(fvalueid) < 0) {
             fvalueids.push(fvalueid);
             fvalues.push($(this).html());
-
             answers.push({
               "answer": $(this).html(),
               "answer_id": fvalueid
@@ -383,8 +382,11 @@ function actionNextPage() {
   var qindex = parseInt($(".questionnaire").attr("qindex")),
       nextQIndex = parseInt($(".questionnaire").attr("qindex")) + 1;
 
-  if(qindex === 0 &&  $("#checkbox_skip").prop("checked")) {
-    window.TKH.redirect_to_with_timestamp("signature.html");
+  if(qindex === 0 && $("#checkbox_skip").prop("checked")) {
+    var params = window.TKH.params(),
+        pagename = (params.skip_signature === "1" ? "complete.html" : "signature.html");
+
+    window.TKH.redirect_to_with_timestamp(pagename);
   } else {
     $(".questionnaire").attr("qindex", nextQIndex);
     skipToQuestionWithIndex(nextQIndex, 'next');

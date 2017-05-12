@@ -149,7 +149,7 @@
     margin: 0.6rem auto 0;
     text-align: center;
 }
-.anNiu a{
+.anNiu a, .anNiu button{
     font-size: 0.34rem;
     padding: 0.2rem 1.8rem;
     margin-bottom: 1rem;

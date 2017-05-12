@@ -23,7 +23,7 @@
   </div>
   <div class="anNiu">
     <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("search.html");'>上一页<br/>Previous</a>
-    <a href="javascript:void(0);" class="xy">提交<br/>Submit</a>
+    <button class="xy" id='submitBtn'>提交<br/>Submit</button>
   </div>
 </div>
 <div class="xuanZe">
@@ -216,6 +216,7 @@ $(function() {
       console.log(data);
     });
     if (all_is_ok) {
+      $("#submitBtn").attr("disabled", "true");
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(datas));
       window.TKH.calcMallScoreExWeb(0, true);
     }
