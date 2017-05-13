@@ -7,16 +7,8 @@ module HD
     class << self
       def login(options = {})
         xml_body =<<-XML.strip_heredoc
-          <?xml version="1.0" encoding="utf-8"?>
-          <SOAP-ENV:Envelope
-            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-            xmlns:ns3="http://www.w3.org/2001/XMLSchema"
-            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
-            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService"
-            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/"
-            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <?xml version="1.0" encoding="UTF-8"?>
+          <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
             <ns2:Body>
               <ns0:LogIn>
                 <sOper xsi:type="ns3:string">#{options[:oper]}</sOper>
@@ -63,17 +55,12 @@ module HD
              &quot;FPAGESIZE&quot;:&quot;#{page_size}&quot;
           }
         JSON
+
+        #
+        #  `<?xml version="1.0" encoding="UTF-8"?>` 添加后会报错 `无效的 xml 声明`
+        #
         xml_body =<<-XML
-          <SOAP-ENV:Envelope
-            xmlns:ns3="http://www.w3.org/2001/XMLSchema"
-            xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
-            xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService"
-            xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/"
-            xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-            SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-            <SOAP-ENV:Header/>
+          <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
             <ns2:Body>
               <ns0:DoClientCommand>
                 <sClientCookie xsi:type="ns3:string">#{client_cookie}</sClientCookie>

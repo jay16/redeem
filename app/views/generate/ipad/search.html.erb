@@ -6,6 +6,7 @@
 #layui-layer1{ top:223px !important; }
 .tishibuton .cs { margin: 0.5rem !important; }
 .tishibuton .button { margin: 0.5rem !important; }
+.hidden { display: none; }
 </style>
 <div id="main">
   <div class="title">
@@ -60,7 +61,8 @@
         <div class="dz" style="display:inline;width: 45%!important">
           <p>居住地址 / Live Address</p>
 
-          <form class="form-inline">
+          <input class='hidden' type="text" name="liveaddress" id="live_dz_text" readonly />
+          <form class="form-inline" id='live_dz_distpicker_wrapper'>
             <div id="live_dz_distpicker">
               <div class="form-group">
                 <label class="sr-only" for="ldd_province">选择省</label>
@@ -80,7 +82,8 @@
         <div class="dz" style="display:inline;width: 45%!important">
           <p>工作地址 / Work Address</p>
 
-          <form class="form-inline">
+          <input class='hidden' type="text" name="workaddress" id="work_dz_text" readonly />
+          <form class="form-inline" id='work_dz_distpicker_wrapper'>
             <div id="work_dz_distpicker">
               <div class="form-group">
                 <label class="sr-only" for="wdd_province">选择省</label>

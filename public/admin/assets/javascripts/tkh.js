@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.18',
+  version: '0.6.19',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -617,6 +617,16 @@ window.TKH = {
     $('#mz').val(data.FMEMNAME);
     $('#xb').val(data.FMEMSEX);
 
+    $("#live_dz_text").val(data.FMEMADDRESS);
+    $("#live_dz_text").removeClass('hidden');
+    $("#live_dz_distpicker_wrapper").addClass('hidden');
+
+    $("#work_dz_text").val("");
+    $("#work_dz_text").removeClass('hidden');
+    $("#work_dz_distpicker_wrapper").addClass('hidden');
+
+    return false;
+
     var dist_json = {
           province: '选择省',
           city: '选择市',
@@ -752,6 +762,14 @@ window.TKH = {
     $('#xb').val('');
     // $('#work_dz').val();
     $('#birthday').val('');
+
+    $("#live_dz_text").val("");
+    $("#live_dz_text").addClass('hidden');
+    $("#live_dz_distpicker_wrapper").removeClass('hidden');
+
+    $("#work_dz_text").val("");
+    $("#work_dz_text").addClass('hidden');
+    $("#work_dz_distpicker_wrapper").removeClass('hidden');
   },
   _chuExchangeInfo: function() {
     $("#ExchangeInfo > div:eq(0)").empty();
