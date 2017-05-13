@@ -85,7 +85,7 @@ process_checker() {
 cd "${app_root_path}" || exit 1
 case "$1" in
     start)
-        RACK_ENV=production $bundle_command rake exec boom:setting
+        RACK_ENV=production $bundle_command exec rake boom:setting
 
         echo "## shell used: ${shell_used}"
         command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${unicorn_port} -E ${unicorn_env} -D"
