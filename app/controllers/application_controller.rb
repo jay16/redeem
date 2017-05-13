@@ -67,6 +67,7 @@ class ApplicationController < Sinatra::Base
 
   get '/generate/:part/:page' do
     page_titles = {
+      'admin:login' => '用户登录',
       'admin:answer-list' => '回答列表',
       'admin:consume' => '消费管理',
       'admin:exchange' => '兑换信息管理',
@@ -94,7 +95,10 @@ class ApplicationController < Sinatra::Base
     }
     page_name = params[:page].split('.')[0]
     @title = page_titles.fetch("#{params[:part]}:#{page_name}", "unknown")
-    erb :"generate/#{params[:part]}/#{params[:page]}", layout: :"generate/#{params[:part]}/layout/layout.html"
+
+    render_options = {layout: :"generate/#{params[:part]}/layout/layout.html"}
+    render_options = {} if @title == '用户登录'
+    erb :"generate/#{params[:part]}/#{params[:page]}", render_options
   end
 
   protected

@@ -36,9 +36,10 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.16',
+  version: '0.6.18',
   environment: '',
-  server: '',
+  api_server: '', // 后台管理
+  server: '', // HD server
   userGid: '',
   userPwd: '',
   workStation: '',
@@ -122,6 +123,11 @@ window.TKH = {
 
       window.location.href = pathname_with_timestamp;
   },
+  /*
+   * window.location.href?timestamp=#{timestamp}
+   *
+   * 判断 timestamp 有效期 30 分钟，否则强制刷
+   */
   avoid_page_cache: function() {
     var params = window.TKH.params();
     try {
@@ -134,10 +140,60 @@ window.TKH = {
         window.TKH.reload_with_params(params);
       }
     } catch(e) {
-      console.log(e);
       params.timestamp = (new Date()).valueOf();
       window.TKH.reload_with_params(params);
     }
+  },
+  // 登录：ipad(礼品兑换)/background(后台管理)
+  login: function(type) {
+    var username = $("#username").val(),
+        password = $("#password").val(),
+        is_remember = $("#remember").prop('checked'),
+        params = {
+          "username": username,
+          "password": password
+        };
+    if (!username.length) {
+      layer.tips('请输入用户名', '#username', { tips: [2, '#faab20'] });
+      return false;
+    }
+    if (!password.length) {
+      layer.tips('请输入密码', '#password', { tips: [2, '#faab20'] });
+      return false;
+    }
+    $.ajax({
+      cache: false,
+      url: window.TKH.api_server + "/api/v1/authen/login",
+      type: 'post',
+      async: false,
+      dataType: 'json',
+      data: params,
+      timeout: 5000,
+      success: function(xhr) {
+        if(xhr.code === 200) {
+          window.localStorage.setItem("username", username);
+          window.localStorage.setItem("password", password);
+          window.localStorage.setItem("remember", is_remember);
+          window.localStorage.setItem("logined", "yes");
+
+          if(type === 'ipad') {
+            window.TKH.loginWithinIPad('search.html');
+          } else if(type === 'background') {
+            window.TKH.redirect_to_with_timestamp('manager.html');
+          }
+        } else {
+          layer.msg(xhr.info, {
+            time: 0,
+            btn: ['确定'],
+            yes: function(index) {
+              layer.close(index);
+            }
+          });
+          $(".layui-layer-btn").css({"text-align": "center"});
+        }
+      }
+    });
+    return false;
   },
   // 3.1.1 登录
   loginWithinIPad: function(toPathName) {
@@ -151,13 +207,13 @@ window.TKH = {
         oper = window.TKH.oper,
         xmlString = '<?xml version="1.0" encoding="utf-8"?>\
       <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" \
-      xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
-      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
-      xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
-      xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
+        xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
+        xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
+        xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" \
+        xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" \
+        xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" \
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+        SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">\
         <ns2:Body>\
           <ns0:LogIn>\
             <sOper xsi:type="ns3:string">' + oper + '</sOper>\

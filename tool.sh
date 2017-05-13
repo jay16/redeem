@@ -10,10 +10,9 @@ unicorn_config_file=config/unicorn.rb
 unicorn_pid_file=tmp/pids/unicorn.pid
 
 # user bash environment for crontab job.
-# shell_used=${SHELL##*/}
-app_root_path=$(pwd)
-shell_used='bash'
-[[ $(uname -s) = Darwin ]] && shell_used='zsh'
+shell_used=${SHELL##*/}
+# default `bash` when SHELL not set
+shell_used=${shell_used:-'bash'}
 
 mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
 [[ -f ~/.${shell_used}rc ]] && source ~/.${shell_used}rc &> /dev/null
@@ -86,6 +85,8 @@ process_checker() {
 cd "${app_root_path}" || exit 1
 case "$1" in
     start)
+        RACK_ENV=production $bundle_command exec boom:setting
+
         echo "## shell used: ${shell_used}"
         command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${unicorn_port} -E ${unicorn_env} -D"
         process_start "${unicorn_pid_file}" 'unicorn' "${command_text}"

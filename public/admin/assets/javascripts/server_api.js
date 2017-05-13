@@ -1,5 +1,5 @@
 window.ServerAPI = {
-  version: '0.4.27',
+  version: '0.5.0',
   server: '',
   params: function() {
     var query = {},
@@ -20,56 +20,6 @@ window.ServerAPI = {
         pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
 
     window.location.href = pathname_with_timestamp;
-  },
-  login: function(type) {
-    var username = $("#username").val(),
-        password = $("#password").val(),
-        is_remember = $("#remember").prop('checked'),
-        params = {
-          "username": username,
-          "password": password
-        };
-    if (!username.length) {
-      layer.tips('请输入用户名', '#username', { tips: [2, '#faab20'] });
-      return false;
-    }
-    if (!password.length) {
-      layer.tips('请输入密码', '#password', { tips: [2, '#faab20'] });
-      return false;
-    }
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/authen/login",
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      data: params,
-      timeout: 5000,
-      success: function(xhr) {
-        if(xhr.code === 200) {
-          window.localStorage.setItem("username", username);
-          window.localStorage.setItem("password", password);
-          window.localStorage.setItem("remember", is_remember);
-          window.localStorage.setItem("logined", "yes");
-          if(type === 'ipad') {
-            window.TKH.loginWithinIPad('search.html');
-          }
-          if(type === 'background') {
-            window.ServerAPI.redirect_to_with_timestamp('manager.html');
-          }
-        } else {
-          layer.msg(xhr.info, {
-            time: 0,
-            btn: ['确定'],
-            yes: function(index) {
-              layer.close(index);
-            }
-          });
-          $(".layui-layer-btn").css({"text-align": "center"});
-        }
-      }
-    });
-    return false;
   },
   resetPassword() {
     var username = window.localStorage.getItem("username"),
@@ -326,7 +276,6 @@ window.ServerAPI = {
   view_signature: function(ctl) {
     alert($(ctl).data("signature"));
   },
-  // window.TKH.queryCRMQuestionnaireMode();
   ipad_selected_questionnaire: function() {
     $.ajax({
       cache: false,
@@ -348,7 +297,7 @@ window.ServerAPI = {
             btnAlign: 'c',
             yes: function(index) {
               layer.close(index);
-              window.TKH.redirect_to_with_timestamp('search.html');
+              window.ServerAPI.redirect_to_with_timestamp('search.html');
             }
           });
         }
