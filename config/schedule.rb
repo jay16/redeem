@@ -21,6 +21,6 @@
 
 job_type :command_within_app, 'cd :path && :task :output'
 
-every '*/1 * * * *' do
-  command_within_app '/bin/bash lib/scripts/crontab_jobs.sh 1:minutes >> log/crontab/jobs_1_minutes.log 2>&1'
+every :day, at: '00:00am' do
+  command_within_app '/bin/bash lib/scripts/crontab_jobs.sh 0000 >> log/crontab/jobs_0000.log 2>&1'
 end

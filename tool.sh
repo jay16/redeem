@@ -15,7 +15,7 @@ app_root_path=$(pwd)
 shell_used='bash'
 [[ $(uname -s) = Darwin ]] && shell_used='zsh'
 
-mkdir -p {db,log,tmp/{pids,rb},public} > /dev/null 2>&1
+mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
 [[ -f ~/.${shell_used}rc ]] && source ~/.${shell_used}rc &> /dev/null
 [[ -f ~/.${shell_used}_profile ]] && source ~/.${shell_used}_profile &> /dev/null
 export LANG=zh_CN.UTF-8
@@ -90,6 +90,8 @@ case "$1" in
         command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${unicorn_port} -E ${unicorn_env} -D"
         process_start "${unicorn_pid_file}" 'unicorn' "${command_text}"
         echo -e "\t# port: ${unicorn_port}, environment: ${unicorn_env}"
+
+        RACK_ENV=production $bundle_command exec whenever --update-crontab
     ;;
 
     stop)

@@ -22,37 +22,43 @@
 $(document).ready(function() {
   var oTable = $('#tableRecords').DataTable({
     //bFilter: false,
-    "columnDefs": [{
-      "title": "ID",
-      "targets": 0,
-      "orderable": true,
-      "searchable": false
-    },
+    "columnDefs": [
     {
       "title": "店铺gid",
-      "targets": 1,
+      "targets": 0,
       "orderable": true,
       "searchable": true
     },
     {
       "title": "店铺code",
-      "targets": 2,
+      "targets": 1,
       "orderable": true,
       "searchable": true
     },
     {
       "title": "店铺名",
+      "targets": 2,
+      "orderable": true,
+      "searchable": true
+    },
+    {
+      "title": "RN",
       "targets": 3,
       "orderable": true,
       "searchable": true
     },
     {
-      "title": "添加时间",
+      "title": "同步类型",
       "targets": 4,
+      "orderable": true,
+      "searchable": true
+    },
+    {
+      "title": "添加时间",
+      "targets": 5,
       "orderable": false,
       "searchable": false
-    },
-
+    }
     ],
     "stateSave": true,
     "order": [[0, "desc"]],

@@ -14,10 +14,13 @@ class Store < ActiveRecord::Base
   # field0, gid, 店铺GID
   # field1, code, 店铺CODE
   # field2, name, 店铺名称
+  # field3, rn, RN
+  # field4, sync_type, 同步类型：手工同步/定时任务
   alias_attribute :gid, :field0 # 店铺GID
   alias_attribute :code, :field1 # 店铺CODE
   alias_attribute :name, :field2 # 店铺名称
-  alias_attribute :rn, :field3 # 店铺名称
+  alias_attribute :rn, :field3 # RN
+  alias_attribute :sync_type, :field4 # RN
 
   def self.extract_params(params)
     options = {}
@@ -25,6 +28,7 @@ class Store < ActiveRecord::Base
     options[:field1] = params[:code] if params[:code]
     options[:field2] = params[:name] if params[:name]
     options[:field3] = params[:rn] if params[:rn]
+    options[:field4] = params[:sync_type] if params[:sync_type]
     options
   end
 
@@ -61,21 +65,23 @@ class Store < ActiveRecord::Base
     EOF
 
     [
-      self.id,
-      self.field0,
-      self.field1,
-      self.field2,
-      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
-      html_tags
+      self.gid,
+      self.code,
+      self.name,
+      self.rn,
+      self.sync_type,
+      self.created_at.strftime("%y-%m-%d %H:%M:%S")
     ]
   end
 
   def to_hash
     {
       id: self.id,
-      gid: self.field0,
-      code: self.field1,
-      name: self.field2,
+      gid: self.gid,
+      code: self.code,
+      name: self.name,
+      rn: self.rn,
+      sync_type: self.sync_type,
       created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end

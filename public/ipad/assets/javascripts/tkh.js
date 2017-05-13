@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.15',
+  version: '0.6.16',
   environment: '',
   server: '',
   userGid: '',
@@ -1537,6 +1537,7 @@ window.TKH = {
           post_param["gid"] = fdata[i].GNDGID;
           post_param["code"] = fdata[i].GNDCODE;
           post_param["rn"] = fdata[i].RN;
+          post_param["sync_type"] = '手工同步';
           window.ServerAPI.save_store(post_param);
         }
 

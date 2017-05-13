@@ -1,17 +1,37 @@
 default: &default
-  app_name: 'app-name'
+  app_name: 'redeem'
   redis_url: 'redis://127.0.0.1:6379/0'
   admin_nums:
-    - 'administrator'
+    - 'admin'
   website:
     title: 'title'
     subtitle: 'subtitle'
     slogan: 'todo'
-    favicon: '/images/favicon.ico'
+    favicon: '/images/favicon.png'
+    api_server: 'api_server'
     footer: ''
   unicorn:
     timeout: 30
     worker_processes: 3
+  email:
+    username: 'username'
+    password: 'password'
+  crm:
+    env: 'development'
+    development:
+      server: -
+      userGid: '-'
+      userPwd: -
+      storeCode: '-'
+      workStation: '-'
+      oper: -
+    production:
+      server: -
+      userGid: '-'
+      userPwd: -
+      storeCode: '-'
+      workStation: '-'
+      oper: -
 
 production:
   <<: *default
