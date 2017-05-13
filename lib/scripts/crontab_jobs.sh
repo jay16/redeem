@@ -23,8 +23,9 @@ case "$1" in
   00:00)
       RACK_ENV=production bundle exec rake hd:crm:sync_stores
   ;;
+
   05:minutes)
-      /bin/bash unicorn.sh app_defender >> log/crontab/app_defender.log 2>&1
+      /bin/bash tool.sh app:defender
   ;;
 
   *)
