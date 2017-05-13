@@ -6,9 +6,8 @@ unicorn_default_port=$(cat .unicorn-port)
 unicorn_port=${2:-${unicorn_default_port}}
 unicorn_env=${3:-'production'}
 unicorn_config_file=config/unicorn.rb
-
 unicorn_pid_file=tmp/pids/unicorn.pid
-
+app_root_path="$(pwd)"
 # user bash environment for crontab job.
 shell_used=${SHELL##*/}
 # default `bash` when SHELL not set
