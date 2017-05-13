@@ -1,13 +1,28 @@
 # encoding: utf-8
 require 'oga'
+require 'multi_xml'
 require 'httparty'
+
+class XMLParser < ::HTTParty::Parser
+  def xml
+    begin
+      MultiXml.parse(body)
+    rescue => e
+      puts e.message
+    end
+  end
+end
+class HTTPClient
+  include HTTParty
+  parser XMLParser
+end
 
 module HD
   class CRM
     class << self
       def login(options = {})
+        # <?xml version="1.0" encoding="UTF-8"?>
         xml_body =<<-XML.strip_heredoc
-          <?xml version="1.0" encoding="UTF-8"?>
           <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
             <ns2:Body>
               <ns0:LogIn>
@@ -27,7 +42,7 @@ module HD
           'Accept-Charset' => 'UTF-8',
           'Content-Type' => 'text/xml'
         }
-        response = ::HTTParty.post("#{options[:server]}?op=LogIn", body: xml_body, headers: header_options)
+        response = ::HTTPClient.post("#{options[:server]}?op=LogIn", body: xml_body, headers: header_options)
 
         puts xml_body
         puts format("code: %s\nmessage: %s\nbody: \n%s", response.code, response.message, response.body)
@@ -76,7 +91,7 @@ module HD
           'Accept-Charset' => 'UTF-8',
           'Content-Type' => 'text/xml'
         }
-        response = ::HTTParty.post("#{options[:server]}?op=DoClientCommand", body: xml_body, headers: header_options)
+        response = ::HTTPClient.post("#{options[:server]}?op=DoClientCommand", body: xml_body, headers: header_options)
         puts format("code: %s\nmessage: %s\nbody: \n%s", response.code, response.message, response.body)
 
 
