@@ -5,20 +5,26 @@
 #
 # Usage:
 # ./crontab_jobs.sh {0015,0300,1:hour,5:minutes}
-#
-app_root_path=$(pwd)
-shell_used='bash'
-[[ $(uname -s) = Darwin ]] && shell_used='zsh'
 
-mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
+app_root_path=$(pwd)
+
+# user bash environment for crontab job.
+# default `bash` when SHELL not set
+shell_used=${SHELL##*/}
+shell_used=${shell_used:-'bash'}
 [[ -f ~/.${shell_used}rc ]] && source ~/.${shell_used}rc &> /dev/null
 [[ -f ~/.${shell_used}_profile ]] && source ~/.${shell_used}_profile &> /dev/null
 export LANG=zh_CN.UTF-8
 
 cd "$app_root_path"
+mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
+
 case "$1" in
-  0000)
+  00:00)
       RACK_ENV=production bundle exec rake hd:crm:sync_stores
+  ;;
+  05:minutes)
+      /bin/bash unicorn.sh app_defender >> log/crontab/app_defender.log 2>&1
   ;;
 
   *)

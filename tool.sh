@@ -9,11 +9,10 @@ unicorn_config_file=config/unicorn.rb
 unicorn_pid_file=tmp/pids/unicorn.pid
 app_root_path="$(pwd)"
 # user bash environment for crontab job.
-shell_used=${SHELL##*/}
 # default `bash` when SHELL not set
+shell_used=${SHELL##*/}
 shell_used=${shell_used:-'bash'}
 
-mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
 [[ -f ~/.${shell_used}rc ]] && source ~/.${shell_used}rc &> /dev/null
 [[ -f ~/.${shell_used}_profile ]] && source ~/.${shell_used}_profile &> /dev/null
 export LANG=zh_CN.UTF-8
@@ -82,7 +81,19 @@ process_checker() {
 }
 
 cd "${app_root_path}" || exit 1
+mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
+
 case "$1" in
+    process:defender)
+        process_checker "${unicorn_pid_file}" 'unicorn'
+    ;;
+
+    app:defender)
+        echo -e $(date "+\n## app defender at %y-%m-%d %H:%M:%S\n")
+        /bin/bash "$0" process:defender
+        /bin/bash "$0" start
+    ;;
+
     start)
         RACK_ENV=production $bundle_command exec rake boom:setting
 
@@ -108,18 +119,22 @@ case "$1" in
         echo -e '\n\n#-----------command sparate line----------\n\n'
         /bin/bash "$0" start
     ;;
+
     rspec|spec)
        $bundle_command exec rspec spec/
     ;;
+
     deploy:remote|dr)
         $bundle_command install
         echo $bundle_command
         RACK_ENV=production $bundle_command exec rake remote:deploy
     ;;
+
     deploy:server|ds)
         git checkout ./
         /bin/bash "$0" git:pull
     ;;
+
     deploy:server:auto|dsa)
         /bin/bash "$0" deploy:server
         /bin/bash "$0" restart:force
@@ -129,10 +144,12 @@ case "$1" in
         git_current_branch=$(git rev-parse --abbrev-ref HEAD)
         git push origin ${git_current_branch}
     ;;
+
     git:pull)
         git_current_branch=$(git rev-parse --abbrev-ref HEAD)
         git pull origin ${git_current_branch}
     ;;
+
     git:auto)
         if [[ -z "$2" ]];
         then
@@ -143,11 +160,33 @@ case "$1" in
         git commit -a -m "$2"
          /bin/bash "$0" git:push
     ;;
+
     pages)
         bash lib/scripts/offline_pages.sh
     ;;
+
+    mysql:enter:command|mec)
+      unicorn_env=${2:-'production'}
+      RACK_ENV=${unicorn_env} bundle exec rake doctor:mysql:enter_command
+    ;;
+
+    doctor)
+      unicorn_env=${2:-'production'}
+      RACK_ENV=${unicorn_env} bundle exec rake doctor:mysql:state
+      RACK_ENV=${unicorn_env} bundle exec rake doctor:os:date
+    ;;
+
     *)
-        echo "Usage: $SCRIPTNAME {config|start|stop|start_redis|stop_redis|restart|deploy}" >&2
+        echo "warning: unkown params - $@"
+        echo
+        echo "Usage: "
+        echo "   $0 start,stop,restart,restart:force"
+        echo "   $0 git:{pull|push}"
+        echo "   $0 deploy:server|ds"
+        echo "   $0 deploy:server:auto|dsa"
+        echo "   $0 mysql:enter:command|mec"
+        echo "   $0 doctor"
+        echo "   $0 app:defender"
         exit 2
     ;;
 esac
