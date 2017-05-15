@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.19',
+  version: '0.6.20',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -614,6 +614,15 @@ window.TKH = {
     return false;
   },
   _do: function(data) {
+    if (data.FMEMBIRTH) {
+      if(data.FMEMBIRTH.indexOf('-') >= 0) {
+        $('#birthday').val(data.FMEMBIRTH);
+      } else {
+        var birthday = data.FMEMBIRTH.substr(0, 4) + '-' + data.FMEMBIRTH.substr(4, 2) + '-' + data.FMEMBIRTH.substr(6, 2);
+        $('#birthday').val(birthday);
+      }
+    }
+
     $('#mz').val(data.FMEMNAME);
     $('#xb').val(data.FMEMSEX);
 
@@ -687,15 +696,6 @@ window.TKH = {
         city: ldd_city,
         district: ldd_distinct
       });
-    }
-
-    if (data.FMEMBIRTH) {
-      if(data.FMEMBIRTH.indexOf('-') >= 0) {
-        $('#birthday').val(data.FMEMBIRTH);
-      } else {
-        var birthday = data.FMEMBIRTH.substr(0, 4) + '-' + data.FMEMBIRTH.substr(4, 2) + '-' + data.FMEMBIRTH.substr(6, 2);
-        $('#birthday').val(birthday);
-      }
     }
   },
   _doConsumerInfo: function(ConsumerInfo, xia) {
