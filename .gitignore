@@ -1,4 +1,12 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+# 注意:
+#
+# 文件添加至本地文件，而依然被跟踪,可使用下面代码，把该文件从cached中删除。
+# git rm --cached un_wanted_be_tracked_file_name
+
+.app-port
 .unicorn-port
+.app-user
 *.rdb
 /tmp/
 /log

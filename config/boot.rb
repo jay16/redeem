@@ -66,12 +66,12 @@ recursion_require('app/models', /\.rb$/, root_path)
 recursion_require('app/helpers', /_helper\.rb$/, root_path)
 recursion_require('app/controllers', /_controller\.rb$/, root_path, [/^application_/])
 
-ENV['CACHE'] = 'redis' # file, redis, default as realtime
-ENV['APP_NAME'] ||= Setting.app_name
-ENV['CACHE_NAMESPACE'] ||= Setting.app_name
-ENV['REDIS_URL'] ||= Setting.redis_url
-ENV['REDIS_PID_PATH'] ||= %(#{root_path}/tmp/pids/redis.pid)
+ENV['CACHE']            = 'redis' # file, redis, default as realtime
+ENV['APP_NAME']         ||= Setting.app_name
+ENV['CACHE_NAMESPACE']  ||= Setting.app_name
+ENV['REDIS_URL']        ||= Setting.redis_url
+ENV['REDIS_PID_PATH']   ||= %(#{root_path}/tmp/pids/redis.pid)
 ENV['UNICORN_PID_PATH'] ||= %(#{root_path}/tmp/pids/unicorn.pid)
 ENV['SIDEKIQ_PID_PATH'] ||= %(#{root_path}/tmp/pids/sidekiq.pid)
-ENV['API_SERVER'] = Setting.website.api_server
-ENV['STARTUP']    = Time.now.to_s
+ENV['API_SERVER']       = Setting.website.api_server
+ENV['STARTUP']          = Time.now.to_s

@@ -1,13 +1,39 @@
 #!/usr/bin/env bash
+#
+# Description: script jobs around unicorn/redis/sidekiq/mysql
+# Author: jay@16/02/03
+#
+# Usage:
+# ./tool.sh {config|start|stop|start_redis|stop_redis|restart|deploy|update_assets|import_data|copy_data}
+#
+exit_when_miss_dependency() {
+    local depended_file="$1"
+    if [[ ! -f "${depended_file}" ]]; then
+        echo "EXIT: miss dependency - `${depended_file}`"
+        exit 1
+    fi
+}
+exit_when_miss_dependency '.app-user'
+exit_when_miss_dependency '.app-port'
 
-bundle_command=$(rbenv which bundle)
-gem_command=$(rbenv which gem)
-unicorn_default_port=$(cat .unicorn-port)
-unicorn_port=${2:-${unicorn_default_port}}
-unicorn_env=${3:-'production'}
+#
+# tool kit logic
+#
+
+app_default_port=$(cat .app-port)
+app_port=${2:-${app_default_port}}
+app_env=${3:-'production'}
+app_user=$(cat .app-user)
+
+if [[ "$(whoami)" != "${app_user}" ]]; then
+    echo "EXIT: expect \`${app_user}\` to run app, but \`$(whoami)\`!"
+    exit 1
+fi
+
 unicorn_config_file=config/unicorn.rb
 unicorn_pid_file=tmp/pids/unicorn.pid
 app_root_path="$(pwd)"
+
 # user bash environment for crontab job.
 # default `bash` when SHELL not set
 shell_used=${SHELL##*/}
@@ -16,6 +42,9 @@ shell_used=${shell_used:-'bash'}
 [[ -f ~/.${shell_used}rc ]] && source ~/.${shell_used}rc &> /dev/null
 [[ -f ~/.${shell_used}_profile ]] && source ~/.${shell_used}_profile &> /dev/null
 export LANG=zh_CN.UTF-8
+
+bundle_command=$(rbenv which bundle)
+gem_command=$(rbenv which gem)
 
 process_start() {
     local pid_file="$1"
@@ -98,9 +127,9 @@ case "$1" in
         RACK_ENV=production $bundle_command exec rake boom:setting
 
         echo "## shell used: ${shell_used}"
-        command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${unicorn_port} -E ${unicorn_env} -D"
+        command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${app_port} -E ${app_env} -D"
         process_start "${unicorn_pid_file}" 'unicorn' "${command_text}"
-        echo -e "\t# port: ${unicorn_port}, environment: ${unicorn_env}"
+        echo -e "\t# port: ${app_port}, environment: ${app_env}"
 
         RACK_ENV=production $bundle_command exec whenever --update-crontab
     ;;
@@ -118,6 +147,10 @@ case "$1" in
         /bin/sleep 1
         echo -e '\n\n#-----------command sparate line----------\n\n'
         /bin/bash "$0" start
+    ;;
+
+    crontab:update)
+        $bundle_command exec whenever --update-crontab
     ;;
 
     rspec|spec)
@@ -166,27 +199,39 @@ case "$1" in
     ;;
 
     mysql:enter:command|mec)
-      unicorn_env=${2:-'production'}
-      RACK_ENV=${unicorn_env} bundle exec rake doctor:mysql:enter_command
+        app_env=${2:-'production'}
+        RACK_ENV=${app_env} bundle exec rake doctor:mysql:enter_command
     ;;
 
     doctor)
-      unicorn_env=${2:-'production'}
-      RACK_ENV=${unicorn_env} bundle exec rake doctor:mysql:state
-      RACK_ENV=${unicorn_env} bundle exec rake doctor:os:date
+        app_env=${2:-'production'}
+        RACK_ENV=${app_env} bundle exec rake doctor:mysql:state
+        RACK_ENV=${app_env} bundle exec rake doctor:os:date
+    ;;
+
+    app:user)
+        echo $(whoami) > .app-user
+        cat .app-user
+    ;;
+
+    rc:local:root|rlr)
+        echo "/bin/bash lib/scripts/rc.local@root.sh"
+    ;;
+
+    match:params|mp)
+        $bundle_command exec ruby lib/scripts/match_toolsh_params.rb
     ;;
 
     *)
         echo "warning: unkown params - $@"
         echo
-        echo "Usage: "
-        echo "   $0 start,stop,restart,restart:force"
-        echo "   $0 git:{pull|push}"
-        echo "   $0 deploy:server|ds"
-        echo "   $0 deploy:server:auto|dsa"
-        echo "   $0 mysql:enter:command|mec"
-        echo "   $0 doctor"
-        echo "   $0 app:defender"
+        echo "Usage:"
+        echo "   $0 start ${app_port} ${app_env}"
+        echo
+        echo "params list: "
+
+        /bin/bash "$0" match:params
+
         exit 2
     ;;
 esac
