@@ -90,7 +90,6 @@ case "$1" in
         fi
         /bin/bash "$0" git:pull
         /bin/bash "$0" crontab:update
-        /bin/bash "$0" config
     ;;
     deploy:server:auto|dsa)
         /bin/bash "$0" deploy:server
