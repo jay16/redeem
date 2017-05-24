@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.20',
+  version: '0.6.21',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -1235,7 +1235,7 @@ window.TKH = {
     if(store_input_records.length) {
       console.log(store_input_records);
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
-      window.TKH.calcMallScoreExWeb(0, false);
+      window.TKH.calcMallScoreExWeb(0, false, false);
     }
     // var fgndgid = '500021',
     //     fflowno = (new Date()).valueOf(),
@@ -1513,7 +1513,7 @@ window.TKH = {
        </div>');
   },
   // 3.2.18 生成HDMall消费积分单
-  calcMallScoreExWeb: function(data_index, is_redirect) {
+  calcMallScoreExWeb: function(data_index, is_async, is_redirect) {
     var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
         scoreInputRecords = JSON.parse(scoreInputRecordsString),
         data = scoreInputRecords[data_index];
@@ -1536,7 +1536,7 @@ window.TKH = {
         ajax_data = {
           params: params,
           command: 'CRMCalcMallScoreExWeb',
-          async: true
+          async: is_async
         };
     window.TKH.hdClientCommand(ajax_data, function(result) {
       var errMsg = $(result).find('sErrMsg').text(),
@@ -1564,7 +1564,7 @@ window.TKH = {
           window.localStorage.removeItem("scoreInputRecords");
         }
       } else {
-        window.TKH.calcMallScoreExWeb(data_index + 1, is_redirect);
+        window.TKH.calcMallScoreExWeb(data_index + 1, is_async, is_redirect);
       }
     });
   },

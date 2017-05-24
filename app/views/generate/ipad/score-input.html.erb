@@ -218,7 +218,7 @@ $(function() {
     if (all_is_ok) {
       $("#submitBtn").attr("disabled", "true");
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(datas));
-      window.TKH.calcMallScoreExWeb(0, true);
+      window.TKH.calcMallScoreExWeb(0, true, true);
     }
   });
 });
