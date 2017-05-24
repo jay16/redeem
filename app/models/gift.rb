@@ -22,6 +22,7 @@ class Gift < ActiveRecord::Base
   # field8, min_amount, 起始金额
   # field9, price, 赠品单价
   # field9, gift_gid, GID
+  # field12, delete_state, 是否被删除
   alias_attribute :theme_code, :field0 # 主题单号
   alias_attribute :theme_name, :field1 # 主题名称
   alias_attribute :begin_date, :field2 # 开始时间
@@ -69,7 +70,7 @@ class Gift < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where(conditions.join(" or ")).map(&respond_foramt)
+    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
   end
 
   def data_table

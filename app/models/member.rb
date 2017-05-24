@@ -23,7 +23,7 @@ class Member < ActiveRecord::Base
   # field8, id_number, 身份证号
   # field9, qq, qq 号
   # field10, landline, 座机
-
+  # field12, delete_state, 是否被删除
   alias_attribute :name, :field0 # 会员名
   alias_attribute :telphone, :field1 # 电话
   alias_attribute :card_number, :field2 # 会员卡号
@@ -66,7 +66,7 @@ class Member < ActiveRecord::Base
 
   def self.data_tables(params)
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    all.map(&respond_foramt)
+    where("field12 is null").map(&respond_foramt)
   end
 
   def data_table

@@ -25,6 +25,7 @@ class Manager < ActiveRecord::Base
   # field2, email, 邮箱
   # field3, telphone, 手机号
   # field4, area, 区域
+  # field12, delete_state, 是否被删除
   alias_attribute :name, :field0 # 名称
   alias_attribute :password, :field1 # 密码
   alias_attribute :email, :field2 # 邮箱
@@ -56,7 +57,7 @@ class Manager < ActiveRecord::Base
 
   def self.data_tables(params)
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where(field5: 'yes').map(&respond_foramt)
+    where("field5 = 'yes' and field12 is null").map(&respond_foramt)
   end
 
   # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作

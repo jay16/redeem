@@ -17,6 +17,7 @@ class Signature < ActiveRecord::Base
   # field3, questionnaire_code, 问卷编号
   # field4, questionnaire_name, 问卷名称
   # field5, encode_type, 签字加密类型
+  # field12, delete_state, 是否被删除
   # text, signature, 签字
   alias_attribute :member, :field0 # 会员名称
   alias_attribute :telphone, :field1 # 会员手机号
@@ -55,7 +56,7 @@ class Signature < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where(conditions.join(" or ")).map(&respond_foramt)
+    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
   end
 
   def data_table

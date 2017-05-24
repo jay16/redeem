@@ -13,6 +13,7 @@ class WConfig < ActiveRecord::Base
   # 字段，别名，意思
   # field0, keyname, 键名
   # field1, description, 描述
+  # field12, delete_state, 是否被删除
   # text1, content, 键值
   alias_attribute :keyname, :field0 # 键名
   alias_attribute :description, :field1 # 描述

@@ -73,7 +73,7 @@ module API
     # delete /api/v1/delete/:model/:id
     post '/delete/:model/:id' do
       if record = class_get(params[:model]).find_by(id: params[:id])
-        record.destroy
+        record.update_attributes(field12: 'delete')
       end
 
       respond_with_json({status: 1, message: "删除成功"}, 200)

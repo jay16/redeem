@@ -23,6 +23,7 @@ class Answer < ActiveRecord::Base
   # field9, member, 会员名称
   # field10, telphone, 电话号码
   # field11, other_state, 是否其他回答
+  # field12, delete_state, 是否被删除
   # text1, answers, 回答列表
   alias_attribute :questionnaire_code, :field0 # 问卷单号(单据号)
   alias_attribute :questionnaire_name, :field1 # 问卷名称
@@ -36,6 +37,7 @@ class Answer < ActiveRecord::Base
   alias_attribute :member, :field9 # 会员名称
   alias_attribute :telphone, :field10 # 电话号码
   alias_attribute :other_state, :field11 # 是否其他回答
+  alias_attribute :delete_state, :field12 # 是否其他回答
   alias_attribute :answers, :text1 # 是否其他回答
 
   def self.extract_params(params)
@@ -81,7 +83,7 @@ class Answer < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where(conditions.join(" or ")).map(&respond_foramt)
+    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
   end
 
   def data_table

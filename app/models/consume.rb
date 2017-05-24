@@ -17,6 +17,7 @@ class Consume < ActiveRecord::Base
   # field3, amount, 消费金额
   # field4, store_code, 商铺代号
   # field5, store_name, 商铺名称
+  # field12, delete_state, 是否被删除
   alias_attribute :name, :field0 # 会员名称
   alias_attribute :card_number, :field1 # 会员卡号
   alias_attribute :serial_number, :field2 # 流水号
@@ -54,7 +55,7 @@ class Consume < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where(conditions.join(" or ")).map(&respond_foramt)
+    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
   end
 
   def data_table

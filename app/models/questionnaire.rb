@@ -18,6 +18,7 @@ class Questionnaire < ActiveRecord::Base
   # field3, subject_id, 题目ID
   # field4, subject, 题目内容
   # field5, subject_type, 题目类型
+  # field12, delete_state, 是否被删除
   # text1, options, 问题选项
   # text2, questionnaire_content, 整个问卷原内容
   alias_attribute :questionnaire_code, :field0 # 问卷单号(单据号)
@@ -64,7 +65,7 @@ class Questionnaire < ActiveRecord::Base
 
   def self.data_tables(params)
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    all.map(&respond_foramt)
+    where("field12 is null").map(&respond_foramt)
   end
 
   def data_table

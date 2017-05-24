@@ -68,7 +68,7 @@ $(document).ready(function() {
         if ($(this).attr('title') == '删除') type = BootstrapDialog.TYPE_DANGER;
 
         BootstrapDialog.show({
-          title: $(this).attr('title') + '管理员管理',
+          title: $(this).attr('title') + '管理员',
           message: $('<div></div>').load(url),
           type: type,
         });

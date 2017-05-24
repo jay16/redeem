@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
   # field2, email, 邮箱
   # field3, telphone, 手机号
   # field4, area, 区域
+  # field12, delete_state, 是否被删除
   # text1, send_email_satus, 忘记密码
   alias_attribute :name, :field0 # 名称
   alias_attribute :password, :field1 # 密码
@@ -62,7 +63,7 @@ class User < ActiveRecord::Base
 
   def self.data_tables(params)
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where(field5: 'no').map(&respond_foramt)
+    where("field5 = 'no' and field12 is null").map(&respond_foramt)
   end
 
   def data_table

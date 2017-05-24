@@ -16,6 +16,7 @@ class Store < ActiveRecord::Base
   # field2, name, 店铺名称
   # field3, rn, RN
   # field4, sync_type, 同步类型：手工同步/定时任务
+  # field12, delete_state, 是否被删除
   alias_attribute :gid, :field0 # 店铺GID
   alias_attribute :code, :field1 # 店铺CODE
   alias_attribute :name, :field2 # 店铺名称
@@ -51,7 +52,7 @@ class Store < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where(conditions.join(" or ")).map(&respond_foramt)
+    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
   end
 
   def data_table

@@ -22,6 +22,7 @@ class Redeem < ActiveRecord::Base
   # field8, store_name, 门店名称
   # field9, serial_number, 流水号
   # field10, redeem_state, 兑换状态
+  # field12, delete_state, 是否被删除
   # text1, consumes, 消费列表
   # text2, gifts, 礼品信息
   #
@@ -86,7 +87,7 @@ class Redeem < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where(conditions.join(" or ")).map(&respond_foramt)
+    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
   end
 
   def data_table
