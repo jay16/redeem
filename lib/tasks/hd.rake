@@ -8,7 +8,7 @@ require 'active_support/core_ext/hash'
 namespace :hd do
   namespace :crm do
     def local_api_server
-      unicorn_port = File.read(File.join(ENV['APP_ROOT_PATH'], '.unicorn-port')).strip
+      unicorn_port = File.read(File.join(ENV['APP_ROOT_PATH'], '.app-port')).strip
       "http://0.0.0.0:#{unicorn_port}"
     end
 
