@@ -11,10 +11,13 @@ namespace :doctor do
       end
     end
 
-    task enter_command: :environment do
+    task commands: :environment do
       config_hash = ActiveRecord::Base.connection_config
 
-      puts "mysql -h#{config_hash[:host]} -u#{config_hash[:username]} -p#{config_hash[:password]} #{config_hash[:database]}"
+      puts "enter:\nmysql -h#{config_hash[:host]} -u#{config_hash[:username]} -p#{config_hash[:password]} #{config_hash[:database]}"
+      puts "export:\nmysqldump -h#{config_hash[:host]} -u#{config_hash[:username]} -p#{config_hash[:password]} #{config_hash[:database]} > #{config_hash[:database]}-#{Time.now.strftime('%y%m%d%H%M%S')}.sql"
+      puts "import:\nmysql -h#{config_hash[:host]} -u#{config_hash[:username]} -p#{config_hash[:password]} #{config_hash[:database]} < your.sql"
+      puts "copydb:\nmysqldump -h#{config_hash[:host]} -u#{config_hash[:username]} -p#{config_hash[:password]} --add-drop-table #{config_hash[:database]} | mysql -h#{config_hash[:host]} -u#{config_hash[:username]} -p#{config_hash[:password]} to_database_name"
     end
 
     task sql_mode: :environment do
