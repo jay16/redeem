@@ -3,7 +3,7 @@
 :javascript
   window.CRUD = {
     submit: "更新",
-    action: "#{ENV['API_SERVER']}/api/v1/update/user/#{@record.id}",
+    action: "/api/v1/update/user/#{@record.id}",
   }
 
 = haml :"template/javascripts/create_or_update"

@@ -1,4 +1,4 @@
-%form#ajaxform.text-center{"accept-charset" => "utf-8", :action => "#{ENV['API_SERVER']}/api/v1/delete/member/#{@record.id}", :autocomplete => "off", :method => "POST"}
+%form#ajaxform.text-center{"accept-charset" => "utf-8", :action => "/api/v1/delete/member/#{@record.id}", :autocomplete => "off", :method => "POST"}
   %h3
     %i.fa.fa-exclamation-circle.fa-fw>
     确定删除

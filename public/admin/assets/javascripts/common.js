@@ -24,6 +24,10 @@ if(login_state && login_state.length && login_state === 'yes') {
   if(expiredIn === null || (new Date()).valueOf() >= parseInt(expiredIn)) {
     window.TKH.loginWithinIPad(current_path);
   }
+
+
+  var username = window.localStorage.getItem("username");
+  $(".current-username").html(username);
 } else {
   if(current_path !== 'login.html') {
     window.location.href = 'login.html';

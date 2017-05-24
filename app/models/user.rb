@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_with_params(params)
-    unless record = find_by(field2: params[:email])
+    unless record = find_by(field2: params[:email], field12: nil)
       record = create(extract_params(params))
     end
     record
@@ -68,10 +68,10 @@ class User < ActiveRecord::Base
 
   def data_table
     html_tags = <<-EOF
-      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
+      <a href="/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
         <i class="fa fa-pencil-square-o"></i>
       </a>
-      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+      <a href="/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
         <i class="fa fa-trash"></i>
       </a>
     EOF
@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
 
     def authen(params)
       authen_hash = {}
-      if record = find_by(field0: params[:username])
+      if record = find_by(field0: params[:username], field12: nil)
         puts "#{record.password};#{record.field1},#{params[:password]}"
         if record.password == params[:password]
           authen_hash[:code] = 200

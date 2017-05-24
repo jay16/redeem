@@ -57,10 +57,10 @@ class Store < ActiveRecord::Base
 
   def data_table
     html_tags = <<-EOF
-      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
+      <a href="/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
         <i class="fa fa-pencil-square-o"></i>
       </a>
-      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+      <a href="/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
         <i class="fa fa-trash"></i>
       </a>
     EOF

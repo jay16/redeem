@@ -52,7 +52,7 @@ class Gift < ActiveRecord::Base
   end
 
   def self.find_or_create_with_params(params)
-    unless record = find_by(field5: params[:gift_code])
+    unless record = find_by(field5: params[:gift_code], field12: nil)
       record = create(extract_params(params))
     end
     record

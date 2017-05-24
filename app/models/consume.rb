@@ -60,7 +60,7 @@ class Consume < ActiveRecord::Base
 
   def data_table
     html_tags = <<-EOF
-      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+      <a href="/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
         <i class="fa fa-trash"></i>
       </a>
     EOF

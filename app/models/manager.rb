@@ -45,7 +45,7 @@ class Manager < ActiveRecord::Base
   end
 
   def self.find_or_create_with_params(params)
-    unless record = find_by(field2: params[:email])
+    unless record = find_by(field2: params[:email], field12: nil)
       record = create(extract_params(params))
     end
     record
@@ -63,7 +63,7 @@ class Manager < ActiveRecord::Base
   # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作
   def data_table
     html_tags = <<-EOF
-      <a href="#{ENV['API_SERVER']}/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
+      <a href="/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
         <i class="fa fa-pencil-square-o"></i>
       </a>
     EOF

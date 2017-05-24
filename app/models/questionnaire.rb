@@ -70,7 +70,7 @@ class Questionnaire < ActiveRecord::Base
 
   def data_table
     html_tags = <<-EOF
-      <a href="#{ENV['API_SERVER']}/api/v1/item/#{self.class_name}/#{self.id}" class="btn btn-primary btn-xs iframe" title="查看题目信息">
+      <a href="/api/v1/item/#{self.class_name}/#{self.id}" class="btn btn-primary btn-xs iframe" title="查看题目信息">
         查看题目信息
       </a>
       <a href="answer-list.html?questionnaire_id=#{self.id}" class="btn btn-primary btn-xs" title="查看回答信息">
