@@ -155,6 +155,23 @@ window.ServerAPI = {
       }
     });
   },
+  save_consume: function(data) {
+    console.log('-------->save_consume<----------');
+    console.log(data);
+    console.log('--------<save_consume>----------');
+    $.ajax({
+      cache: false,
+      url: window.ServerAPI.server + "/api/v1/consume",
+      type: 'post',
+      async: false,
+      dataType: 'json',
+      data: data,
+      timeout: 5000,
+      success: function(xhr) {
+        console.log(xhr);
+      }
+    });
+  },
   save_gift: function(data) {
     console.log('-------->save_gift<----------');
     console.log(data);

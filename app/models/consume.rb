@@ -24,6 +24,7 @@ class Consume < ActiveRecord::Base
   alias_attribute :amount, :field3 # 消费金额
   alias_attribute :store_code, :field4 # 商铺代号
   alias_attribute :store_name, :field5 # 商铺名称
+  alias_attribute :data_source, :field6 # 数据来源：消费积分/礼品兑换
 
   def self.extract_params(params)
     options = {}
@@ -33,6 +34,7 @@ class Consume < ActiveRecord::Base
     options[:field3] = params[:amount] if params[:amount]
     options[:field4] = params[:store_code] if params[:store_code]
     options[:field5] = params[:store_name] if params[:store_name]
+    options[:field6] = params[:data_source] if params[:data_source]
     options
   end
 
@@ -71,8 +73,8 @@ class Consume < ActiveRecord::Base
       self.amount,
       self.store_code,
       self.store_name,
-      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
-      html_tags
+      self.data_source,
+      self.created_at.strftime("%y-%m-%d %H:%M:%S")
     ]
   end
 
@@ -85,6 +87,7 @@ class Consume < ActiveRecord::Base
       amount: self.field3,
       store_code: self.field4,
       store_name: self.field5,
+      data_source: self.field6,
       created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end

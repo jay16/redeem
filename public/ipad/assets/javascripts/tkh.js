@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.21',
+  version: '0.6.23',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -1171,7 +1171,10 @@ window.TKH = {
       });
     }
   },
-  // 3.2.31 生成赠品发放单接口
+  /*
+   * 礼品兑换
+   * 3.2.31 生成赠品发放单接口
+   */
   genMallSupplyBill: function() {
     $("#queren").attr("disabled", "true");
     var clientCookie = window.localStorage.getItem('sClientCookie'),
@@ -1220,22 +1223,23 @@ window.TKH = {
         });
 
         if(fcardnum !== null && fcardnum !== '-') {
-          var score_data = {
+          store_input_records.push({
             card_number: fcardnum,
-            show_code: fgndcode,
+            store_code: fgndcode,
+            store_name: storename,
+            serial_num: fflowno,
             real_amt: famt,
             score: parseInt(famt),
             datetime: focrtime,
             wrapper_class: ''
-          };
-          store_input_records.push(score_data);
+          });
         }
       }
     });
     if(store_input_records.length) {
       console.log(store_input_records);
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
-      window.TKH.calcMallScoreExWeb(0, false, false);
+      window.TKH.calcMallScoreExWeb(0, false, false, '礼品兑换');
     }
     // var fgndgid = '500021',
     //     fflowno = (new Date()).valueOf(),
@@ -1512,11 +1516,19 @@ window.TKH = {
          </div>\
        </div>');
   },
-  // 3.2.18 生成HDMall消费积分单
-  calcMallScoreExWeb: function(data_index, is_async, is_redirect) {
+  /*
+   * 消费积分
+   * 3.2.18 生成HDMall消费积分单
+   */
+  calcMallScoreExWeb: function(data_index, is_async, is_redirect, data_source) {
     var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
         scoreInputRecords = JSON.parse(scoreInputRecordsString),
-        data = scoreInputRecords[data_index];
+        data = scoreInputRecords[data_index],
+        currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = {};
+    if(currentQueryMember && currentQueryMember.length) {
+      currentQueryMemberJSON = JSON.parse(currentQueryMember);
+    }
 
     var trant_time = data.datetime;
     while(trant_time && trant_time.length &&
@@ -1529,10 +1541,12 @@ window.TKH = {
     }
     var card_num = data.card_number,
         trant_time2 = (new Date()).format('yyyyMMddhhmmss'),
-        show_code = data.show_code,
+        store_code = data.store_code,
+        store_name = data.store_name,
+        serial_num = data.serial_num,
         real_amt = data.real_amt,
         score = data.score,
-        params = '{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;,&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;,&quot;FSHOPCODE&quot;:&quot;' + show_code + '&quot;,&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;,&quot;FSCORE&quot;:&quot;' + score + '&quot;}',
+        params = '{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;,&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;,&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;,&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;,&quot;FSCORE&quot;:&quot;' + score + '&quot;}',
         ajax_data = {
           params: params,
           command: 'CRMCalcMallScoreExWeb',
@@ -1546,6 +1560,16 @@ window.TKH = {
       } else {
         layer.tips("『底层接口』提示：" + outparams["FMSG"], $("." + data.wrapper_class).find('.store-name'), { tips: [3, '#faab20'] });
       }
+
+      var post_param              = {};
+      post_param["name"]          = currentQueryMemberJSON["name"];
+      post_param["card_number"]   = currentQueryMemberJSON["card_number"];
+      post_param["serial_number"] = serial_num;
+      post_param["amount"]        = real_amt;
+      post_param["store_code"]    = store_code;
+      post_param["store_name"]    = store_name;
+      post_param["data_source"]   = data_source;
+      window.ServerAPI.save_consume(post_param);
 
       if(data_index == scoreInputRecords.length - 1) {
         if(is_redirect) {
@@ -1564,7 +1588,7 @@ window.TKH = {
           window.localStorage.removeItem("scoreInputRecords");
         }
       } else {
-        window.TKH.calcMallScoreExWeb(data_index + 1, is_async, is_redirect);
+        window.TKH.calcMallScoreExWeb(data_index + 1, is_async, is_redirect, data_source);
       }
     });
   },

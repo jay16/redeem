@@ -35,6 +35,7 @@ module API
     # post /api/v1/:model
     post '/:model' do
       record = class_get(params[:model]).find_or_create_with_params(params)
+      puts params.inspect
 
       result_hash = {}
       if record && record.valid?

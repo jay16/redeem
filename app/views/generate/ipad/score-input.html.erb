@@ -135,16 +135,17 @@ $(function() {
         store_code = '',
         amount,
         score,
-        serialnum = '',
-        serialnums = [],
+        serial_num = '',
+        serial_nums = [],
         store_and_datetime = '',
         store_and_datetimes = [],
         datetime = '',
         is_error = 0,
         all_is_ok = 1,
-        name = '',
+        store_name = '',
         amount = '',
         gndgid = '',
+        gndcode = '',
         record = {},
         records = [],
         data = null,
@@ -152,8 +153,8 @@ $(function() {
         card_number = window.localStorage.getItem('sFCARDNUM'),
         wrapper_class;
     $(".dq-wrapper").each(function() {
-      name = $(this).find("input.store-name").val();
-      serialnum = $(this).find("input.serial-num").val();
+      store_name = $(this).find("input.store-name").val();
+      serial_num = $(this).find("input.serial-num").val();
       amount = $(this).find("input.amount").val();
       gndgid = $(this).find("input.gndgid").val();
       gndcode = $(this).find("input.gndcode").val();
@@ -162,21 +163,21 @@ $(function() {
       wrapper_class = $(this).attr("class").replace("dq-wrapper ", "");
       is_error = 0;
 
-      if(!name.length) {
+      if(!store_name.length) {
         layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
         is_error = 1;
         all_is_ok = 0;
         return false;
       }
 
-      if(!serialnum.length) {
+      if(!serial_num.length) {
         layer.tips('流水号不能为空', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
         is_error = 1;
         all_is_ok = 0;
         return false;
       }
 
-      if(serialnum.length > 30) {
+      if(serial_num.length > 30) {
         layer.tips('请输入正确的流水号', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
         is_error = 1;
         all_is_ok = 0;
@@ -189,7 +190,7 @@ $(function() {
         all_is_ok = 0;
         return false;
       }
-      if(serialnums.indexOf(serialnum) >= 0) {
+      if(serial_nums.indexOf(serial_num) >= 0) {
         layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
         is_error = 1;
         all_is_ok = 0;
@@ -202,11 +203,13 @@ $(function() {
         return false;
       }
 
-      serialnums.push(serialnum);
+      serial_nums.push(serial_num);
       store_and_datetimes.push(store_and_datetime);
       data = {
         card_number: card_number,
-        show_code: gndcode,
+        serial_num: serial_num,
+        store_name: store_name,
+        store_code: gndcode,
         real_amt: amount,
         score: parseInt(amount),
         datetime: datetime,
@@ -218,7 +221,7 @@ $(function() {
     if (all_is_ok) {
       $("#submitBtn").attr("disabled", "true");
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(datas));
-      window.TKH.calcMallScoreExWeb(0, true, true);
+      window.TKH.calcMallScoreExWeb(0, true, true, '消费积分');
     }
   });
 });
