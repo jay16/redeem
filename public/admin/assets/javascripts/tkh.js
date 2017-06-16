@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.23',
+  version: '0.6.26',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -1181,7 +1181,8 @@ window.TKH = {
         fcardnum = window.localStorage.getItem('sFCARDNUM'),
         fildate = (new Date()).format('yyyy.MM.dd hh:mm:ss'),
         currentQueryMember = window.localStorage.getItem('current_telphone'),
-        currentQueryMemberJSON = {};
+        currentQueryMemberJSON = {},
+        questionnaire_remark = $("#questionnaire_remark").val();
 
     if(currentQueryMember && currentQueryMember.length) {
       currentQueryMemberJSON = JSON.parse(currentQueryMember);
@@ -1202,8 +1203,12 @@ window.TKH = {
             famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
             focrtime = $(this).find(".guoxiao_datetime").val();
             // (new Date()).format('yyyy.MM.dd hh:mm:ss');
-
-        paies.push('{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;,&quot;FAMT&quot;:&quot;' + famt + '&quot;}');
+        paies.push('{' +
+                      '&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;' +
+                      ',&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;' +
+                      ',&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;' +
+                      ',&quot;FAMT&quot;:&quot;' + famt + '&quot;' +
+                  '}');
 
         // # field0, name, 会员名称
         // # field1, card_number, 会员卡号
@@ -1251,7 +1256,11 @@ window.TKH = {
     $(".xuzh_jin").each(function() {
       if ($(this).hasClass("xuanZhong")) {
         gift_id = $(this).find(".gift_id").val();
-        gifts.push('{&quot;FLAGGID&quot;:&quot;' + gift_id + '&quot;,&quot;FAMOUNT&quot;:&quot;' + amount + '&quot;}');
+        gifts.push('{' +
+                      '&quot;FLAGGID&quot;:&quot;' + gift_id + '&quot;' +
+                      ',&quot;FAMOUNT&quot;:&quot;' + amount + '&quot;' +
+                      ',&quot;FMEMO&quot;:&quot;' + questionnaire_remark + '&quot;' +
+                    '}');
 
         // # field0, theme_code, 主题单号
         // # field1, theme_name, 主题名称
@@ -1287,8 +1296,7 @@ window.TKH = {
         fmember = currentQueryMemberJSON["name"],
         fmobilephone = currentQueryMemberJSON["telphone"],
         fcardid = fcardnum,
-        femail = currentQueryMemberJSON["email"],
-        questionnaire_remark = $("#questionnaire_remark").val();
+        femail = currentQueryMemberJSON["email"];
     var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
                    &quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,\
                    &quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,\
@@ -1298,7 +1306,7 @@ window.TKH = {
                    &quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,\
                    &quot;FSUPPLYPAY&quot;:[' + paies.join(",") + '],\
                    &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + '],\
-                   &quot;FCARDID&quot;:&quot;' + questionnaire_remark + '&quot;\
+                   &quot;FCARDID&quot;:&quot;&quot;\
                  }',
         data = {
           params: params,
@@ -1546,7 +1554,17 @@ window.TKH = {
         serial_num = data.serial_num,
         real_amt = data.real_amt,
         score = data.score,
-        params = '{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;,&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;,&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;,&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;,&quot;FSCORE&quot;:&quot;' + score + '&quot;}',
+        fvoucher_type = '01',
+        params = '{' +
+                    '&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;' +
+                    ',&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
+                    ',&quot;FVOUCHERNUM&quot;:&quot;' + serial_num + '&quot;' +
+                    ',&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;' +
+                    ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
+                    ',&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;' +
+                    ',&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;' +
+                    ',&quot;FSCORE&quot;:&quot;' + score + '&quot;' +
+                  '}',
         ajax_data = {
           params: params,
           command: 'CRMCalcMallScoreExWeb',
