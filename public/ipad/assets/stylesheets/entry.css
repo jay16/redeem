@@ -97,7 +97,7 @@
     margin-bottom: 0.5rem;
 }
 .content_2 input{
-    width: 95%;
+    width: 100%;
     background-color: #505050;
     height: 0.8rem;
     color: #ddd;
@@ -110,7 +110,7 @@
 }
 
 .dp input{
-    width: 80%;
+    width: 100%;
 }
 .search{
     float: right;

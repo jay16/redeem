@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.26',
+  version: '0.6.27',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -947,10 +947,10 @@ window.TKH = {
       '<div class="dq-wrapper dq-wrapper-' + dqCount + '">\
          <div class="dp"> \
             <p>店铺名称 / Merchant</p>\
-            <input type="text" disabled="disabled" placeholder="店铺名称" class="store-name"/>\
+            <input type="text" readonly="readonly" placeholder="店铺名称" class="store-name" onclick="window.TKH.searchDQM(this);"/>\
             <input type="hidden" class="gndgid"/>\
             <input type="hidden" class="gndcode"/>\
-            <a href="javascript:void(0);" onClick="window.TKH.searchDQM(this);"  class="search">\
+            <a style="display: none;" href="javascript:void(0);" onclick="window.TKH.searchDQM(this);"  class="search">\
               <img src="assets/images/search.png"/>\
             </a>\
          </div>\
