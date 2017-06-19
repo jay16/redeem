@@ -112,7 +112,7 @@ $(function() {
            <input type="text" placeholder="店铺名称" class="store-name" value="' + record["name"] + '" />\
            <input type="hidden" class="gndgid" value="' + record["gndgid"] + '" />\
             <input type="hidden" class="gndcode" value="' + record["gndcode"] + '" />\
-          <a href="javascript:void(0);" onClick="window.TKH.searchDQM(this);" class="search"><img src="/images/search.png?timestamp=1492782987"/></a>\
+          <a  style="display: none;" href="javascript:void(0);" onClick="window.TKH.searchDQM(this);" class="search"><img src="/images/search.png?timestamp=1492782987"/></a>\
          </div>\
          <div>\
            <p>流水号 / Serial Number</p>\
@@ -187,7 +187,8 @@ $(function() {
         datetime = '',
         record = {},
         records = [],
-        is_error = 0;
+        is_error = 0,
+        serial_num_with_store_code;
     $(".dq-wrapper").each(function() {
       name = $(this).find("input.store-name").val();
       serialnum = $(this).find("input.serial-num").val();
@@ -221,7 +222,8 @@ $(function() {
         is_error = 1;
         return false;
       }
-      if(serialnums.indexOf(serialnum) >= 0) {
+      serial_num_with_store_code = gndcode + serialnum;
+      if(serialnums.indexOf(serial_num_with_store_code) >= 0) {
         layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
         is_error = 1;
         return false;
@@ -232,7 +234,7 @@ $(function() {
         return false;
       }
 
-      serialnums.push(serialnum);
+      serialnums.push(serial_num_with_store_code);
       store_and_datetimes.push(store_and_datetime);
       record = {};
       record["name"] = name;

@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.27',
+  version: '0.6.28',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -542,6 +542,14 @@ window.TKH = {
       layer.msg('请输入正确的手机号码', { time: 2000 });
       return false;
     }
+
+    /* fixed(170619):
+     *
+     *  查询未注册的手机号，不勾选会员章程，会对『保存』按钮进行样式及文字调整
+     *  重新查询时，应恢复『保存』按钮的样式及文字
+     */
+    $("#checkbox_legal").prop("checked", true);
+    $(".btn-save").removeClass("xy").addClass("bc").html("保存<br>Save");
 
     window.localStorage.removeItem('sFCARDNUM');
     window.localStorage.removeItem('current_telphone');
