@@ -151,7 +151,8 @@ $(function() {
         data = null,
         datas = [],
         card_number = window.localStorage.getItem('sFCARDNUM'),
-        wrapper_class;
+        wrapper_class,
+        serial_num_with_store_code;
     $(".dq-wrapper").each(function() {
       store_name = $(this).find("input.store-name").val();
       serial_num = $(this).find("input.serial-num").val();
@@ -190,7 +191,8 @@ $(function() {
         all_is_ok = 0;
         return false;
       }
-      if(serial_nums.indexOf(serial_num) >= 0) {
+      serial_num_with_store_code = gndcode + serial_num;
+      if(serial_nums.indexOf(serial_num_with_store_code) >= 0) {
         layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
         is_error = 1;
         all_is_ok = 0;
@@ -203,7 +205,7 @@ $(function() {
         return false;
       }
 
-      serial_nums.push(serial_num);
+      serial_nums.push(serial_num_with_store_code);
       store_and_datetimes.push(store_and_datetime);
       data = {
         card_number: card_number,

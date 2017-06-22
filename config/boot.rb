@@ -65,6 +65,7 @@ Time.zone = 'Beijing'
 recursion_require('app/models', /\.rb$/, root_path)
 recursion_require('app/helpers', /_helper\.rb$/, root_path)
 recursion_require('app/controllers', /_controller\.rb$/, root_path, [/^application_/])
+recursion_require('app/workers', /_worker\.rb$/, root_path)
 
 ENV['CACHE']            = 'redis' # file, redis, default as realtime
 ENV['APP_NAME']         ||= Setting.app_name

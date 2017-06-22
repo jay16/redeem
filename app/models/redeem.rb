@@ -36,9 +36,12 @@ class Redeem < ActiveRecord::Base
   alias_attribute :store_id, :field7 # 门店ID
   alias_attribute :store_name, :field8 # 门店名称
   alias_attribute :serial_number, :field9 # 流水号
-  alias_attribute :redeem_state, :field10 # 兑换状态
+  alias_attribute :remark, :field10 # 备注
   alias_attribute :consumes, :text1 # 消费列表
   alias_attribute :gifts, :text2 # 礼品信息
+  alias_attribute :post_command, :field11 # 接口命令
+  alias_attribute :post_params, :text3 # 接口对接
+  alias_attribute :post_response, :text4 # 接口响应
 
   def self.extract_params(params)
     options = {}
@@ -52,9 +55,12 @@ class Redeem < ActiveRecord::Base
     options[:field7] = params[:store_id] if params[:store_id]
     options[:field8] = params[:store_name] if params[:store_name]
     options[:field9] = params[:serial_number] if params[:serial_number]
-    options[:field10] = params[:redeem_state] if params[:redeem_state]
+    options[:field10] = params[:remark] if params[:remark]
     options[:text1] = params[:consumes] if params[:consumes]
     options[:text2] = params[:gifts] if params[:gifts]
+    options[:field11] = params[:post_command] if params[:post_command]
+    options[:text3] = params[:post_params] if params[:post_params]
+    options[:text4] = params[:post_response] if params[:post_response]
     options
   end
 
@@ -71,7 +77,9 @@ class Redeem < ActiveRecord::Base
 
     params[:consumes] = params[:consumes].to_json
     params[:gifts] = params[:gifts].to_json if params[:gifts]
-    record = create(extract_params(params))
+    if record = create(extract_params(params))
+      ::CallbackWorker.perform_async({model: record.class.to_s, id: record.id}.to_json)
+    end
     record
   end
 

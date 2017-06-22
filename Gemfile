@@ -39,6 +39,8 @@ gem 'oga', '~>2.10'
 gem 'httparty', '~>0.13.7'
 gem 'whenever', '~>0.9.7'
 
+gem 'sidekiq', '~>4.0.2'
+
 # return unless `uname -s`.strip.eql?('Darwin')
 
 group :test do

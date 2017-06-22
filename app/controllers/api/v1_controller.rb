@@ -28,25 +28,43 @@ module API
       respond_with_json(result_hash, result_hash[:code])
     end
 
+    post '/consumes' do
+      response_hash = {errors: [], code: 201}
+      (params[:data] || {}).each_pair do |k, v|
+        begin
+          Consume.find_or_create_with_params(v);
+        rescue => e
+          response_hash[:errors] << e.message
+          response_hash[:code] << 500
+        end
+      end
+
+      response_hash[:message] = response_hash[:errors].empty? ? "创建成功" : response_hash[:errors].uniq.join(",")
+      respond_with_json(response_hash, response_hash[:code])
+    end
+
     #
     # CRUD
     #
     # create
     # post /api/v1/:model
     post '/:model' do
-      record = class_get(params[:model]).find_or_create_with_params(params)
-      puts params.inspect
-
-      result_hash = {}
-      if record && record.valid?
-        result_hash[:message] = "创建成功（#{record.id}）"
-        result_hash[:status] = 1
-      else
-        result_hash[:message] = "创建失败"
-        result_hash[:status] = 0
+      begin
+        record = class_get(params[:model]).find_or_create_with_params(params)
+        response_hash = {}
+      rescue => e
+        response_hash[:message] = e.message
       end
 
-      respond_with_json(result_hash, 201)
+      if record && record.valid?
+        response_hash[:message] = "创建成功（#{record.id}）"
+        response_hash[:code] = 201
+      else
+        response_hash[:message] ||= "创建失败"
+        response_hash[:code] = 500
+      end
+
+      respond_with_json(response_hash, response_hash[:code])
     end
 
     # view

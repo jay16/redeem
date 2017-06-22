@@ -28,6 +28,7 @@ fi
 
 unicorn_config_file=config/unicorn.rb
 unicorn_pid_file=tmp/pids/unicorn.pid
+sidekiq_pid_file=tmp/pids/sidekiq.pid
 app_root_path="$(pwd)"
 
 # user bash environment for crontab job.
@@ -48,16 +49,17 @@ mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
 case "$1" in
     process:defender)
         process_checker "${unicorn_pid_file}" 'unicorn'
+        process_checker "${sidekiq_pid_file}" 'sidekiq'
     ;;
     app:defender)
-        echo -e $(date "+\n## app defender at %y-%m-%d %H:%M:%S\n")
+        echo -e $(date "+## app defender at %y-%m-%d %H:%M:%S\n")
         /bin/bash "$0" process:defender
         /bin/bash "$0" start
     ;;
     start)
-        RACK_ENV=production $bundle_command exec rake boom:setting
-
         echo "## shell used: ${shell_used}"
+        RACK_ENV=production $bundle_command exec rake boom:setting
+        /bin/bash "$0" sidekiq:start
         command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${app_port} -E ${app_env} -D"
         process_start "${unicorn_pid_file}" 'unicorn' "${command_text}"
         echo -e "\t# port: ${app_port}, environment: ${app_env}"
@@ -72,9 +74,23 @@ case "$1" in
     ;;
     restart:force)
         /bin/bash "$0" stop
+        /bin/bash "$0" sidekiq:stop
         /bin/sleep 1
         echo -e '\n\n#-----------command sparate line----------\n\n'
         /bin/bash "$0" start
+    ;;
+    sidekiq:start)
+        command_text="${bundle_command} exec sidekiq -r ./config/boot.rb -C ./config/sidekiq.yaml -e ${app_env} -d"
+        process_start "${sidekiq_pid_file}" 'sidekiq' "${command_text}"
+    ;;
+    sidekiq:stop)
+        process_stop "${sidekiq_pid_file}" 'sidekiq'
+    ;;
+    sidekiq:restart)
+        /bin/bash "$0" sidekiq:stop
+        /bin/sleep 1
+        echo -e '\n\n#-----------command sparate line----------\n\n'
+        /bin/bash "$0" sidekiq:start
     ;;
     crontab:update)
         $bundle_command exec whenever --update-crontab

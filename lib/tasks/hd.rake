@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'json'
 require 'httparty'
-require 'lib/utils/hd.rb'
+require 'lib/utils/hd'
 require 'active_support'
 require 'active_support/core_ext/hash'
 

@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.27',
+  version: '0.7.1',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -365,7 +365,6 @@ window.TKH = {
       // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
       // 3 － （交互）正在解析响应内容
       // 4 － （完成）响应内容解析完成，可以在客户端调用了
-
       var error_msg = '';
       if(xhr.readyState === 0) {
         error_msg = '请确认网络环境正常';
@@ -543,6 +542,14 @@ window.TKH = {
       return false;
     }
 
+    /* fixed(170619):
+     *
+     *  查询未注册的手机号，不勾选会员章程，会对『保存』按钮进行样式及文字调整
+     *  重新查询时，应恢复『保存』按钮的样式及文字
+     */
+    $("#checkbox_legal").prop("checked", true);
+    $(".btn-save").removeClass("xy").addClass("bc").html("保存<br>Save");
+
     window.localStorage.removeItem('sFCARDNUM');
     window.localStorage.removeItem('current_telphone');
 
@@ -719,7 +726,7 @@ window.TKH = {
       // "FILDATE": "2014.05.23 09:36:53",  流水产生时间
       // "RN": "2",  行号
       // "STORECODE": "0001",  门店代码
-      // " CARDTYPE ": "201", 卡类型
+      // "CARDTYPE ": "201", 卡类型
       // "NOTE": “收银机号:180,流水号201405230004”,  备注
       // "SCORE": "6" 本次发生积分,
       // “BRAND”:”ONLY” 品牌
@@ -727,9 +734,6 @@ window.TKH = {
         html += '<div class="xf"><p>消费日期 : 消费金额 - 店铺名称 / Date : Amount - Merchant name</p>';
         html += '<p>' + ConsumerInfo[a].FILDATE + ':CNY ' + ConsumerInfo[a].REALAMT + ' - ' + ConsumerInfo[a].NOTE + '</p></div>';
       }
-      //if(ConsumerInfo.length==10){
-      // html +='<div class="xf gengduo"><p></p><p class="ConsumerInfo" style="text-align: center"><input type="hidden" value="'+ye+'">加载更多</p></div>';
-      //}
       $("#ConsumerInfo").append(html);
     } else {
       window.TKH._chuConsumerInf()
@@ -809,7 +813,6 @@ window.TKH = {
         }
       }
       window.localStorage.setItem('current_telphone', JSON.stringify(params));
-      // window.TKH.genMallSupplyBill();
       layer.open({
         type:1,
         area:"450px",
@@ -907,7 +910,7 @@ window.TKH = {
   // 消费录入/积分录入，打开商户选择
   searchDQM: function(ctl) {
     var dpm = null,
-      gndgid = null;
+        gndgid = null;
     dpm = $(ctl).parent().find('.store-name');
     gndgid = $(ctl).parent().find('.gndgid');
     dpm.parent(".dp").addClass('suoding');
@@ -972,6 +975,7 @@ window.TKH = {
     window.TKH.initJEDate(datetimeId);
   },
   // 3.2.7 查询有效商铺信息
+  // 从 iPad 后台获取数据
   queryMallGndWebV2: function(fpageindex) {
     var index_loading_layer = layer.load(0);
     $.ajax({
@@ -1010,7 +1014,6 @@ window.TKH = {
       // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
       // 3 － （交互）正在解析响应内容
       // 4 － （完成）响应内容解析完成，可以在客户端调用了
-
       var error_msg = '';
       if(xhr.readyState === 0) {
         error_msg = '请确认网络环境正常';
@@ -1038,6 +1041,8 @@ window.TKH = {
       }
     });
   },
+  // deprecated
+  // 3.2.7 查询有效商铺信息
   queryMallGndWeb: function(fpageindex) {
     var fstorecode = window.TKH.storeCode,
         fpagesize = '100',
@@ -1166,13 +1171,12 @@ window.TKH = {
     });
 
     if(temp_gift_num > 0 && ok_gift_num == 0) {
-      layer.msg('消费金额暂无合适礼品可兑换！', {
-        time: 3000 //2s后自动关闭
-      });
+      layer.msg('消费金额暂无合适礼品可兑换！', { time: 3000 });
     }
   },
+
   /*
-   * 礼品兑换
+   * 礼品兑换(与 iPad 接口交互)
    * 3.2.31 生成赠品发放单接口
    */
   genMallSupplyBill: function() {
@@ -1188,7 +1192,7 @@ window.TKH = {
       currentQueryMemberJSON = JSON.parse(currentQueryMember);
     }
 
-    var paies = [], gid, flowno, crttime, famt,
+    var consume_items = [], gid, flowno, crttime, famt,
         post_params = {},
         post_param_consumes = [],
         post_param_gifts = [],
@@ -1202,22 +1206,150 @@ window.TKH = {
             fflowno = $(this).find(".guoxiao_serialnum").val(),
             famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
             focrtime = $(this).find(".guoxiao_datetime").val();
-            // (new Date()).format('yyyy.MM.dd hh:mm:ss');
-        paies.push('{' +
+        consume_items.push('{' +
+            '&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;' +
+            ',&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;' +
+            ',&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;' +
+            ',&quot;FAMT&quot;:&quot;' + famt + '&quot;' +
+        '}');
+
+        var trant_time = focrtime,
+            fvoucher_type = '01',
+            score_params = '';
+        while(trant_time && trant_time.length &&
+              (trant_time.indexOf(".") >= 0 ||
+               trant_time.indexOf(":") >= 0 ||
+               trant_time.indexOf(" ") >= 0)) {
+          trant_time = trant_time.replace(".", "");
+          trant_time = trant_time.replace(":", "");
+          trant_time = trant_time.replace(" ", "");
+        }
+        score_params = '{' +
+          '&quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;' +
+          ',&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
+          ',&quot;FVOUCHERNUM&quot;:&quot;' + fflowno + '&quot;' +
+          ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
+          ',&quot;FSHOPCODE&quot;:&quot;' + fgndcode + '&quot;' +
+          ',&quot;FREALAMT&quot;:&quot;' + famt + '&quot;' +
+          ',&quot;FSCORE&quot;:&quot;' + parseInt(famt) + '&quot;' +
+        '}';
+        post_param_consumes.push({
+          name: currentQueryMemberJSON["name"],
+          card_number: fcardnum,
+          serial_number: fflowno,
+          amount: famt,
+          store_code: fgndcode,
+          store_name: storename,
+          data_source: '礼品兑换',
+          post_command: 'CRMCalcMallScoreExWeb',
+          post_params: score_params
+        });
+      }
+    });
+
+    // 礼品
+    var gifts = [], gift_id, amount = 1;
+    $(".xuzh_jin").each(function() {
+      if ($(this).hasClass("xuanZhong")) {
+        gift_id = $(this).find(".gift_id").val();
+        gifts.push('{' +
+          '&quot;FLAGGID&quot;:&quot;' + gift_id + '&quot;' +
+          ',&quot;FAMOUNT&quot;:&quot;' + amount + '&quot;' +
+          ',&quot;FMEMO&quot;:&quot;' + questionnaire_remark + '&quot;' +
+        '}');
+
+        post_param_gifts.push({
+          "gift_code": $(this).find(".gift_code").val(),
+          "gift_name": $(this).find(".gift_name").val(),
+          "address": $(this).find(".address").val(),
+          "begin_date": $(this).find(".begin_date").val(),
+          "end_date": $(this).find(".end_date").val(),
+          "price": $(this).find(".price").val(),
+          "theme_name": $(this).find(".theme_name").val(),
+          "count": $(this).find(".count").val(),
+          "min_amount": $(this).find(".min_amount").val(),
+          "count": $(this).find(".count").val(),
+          "address": $(this).find(".address").val()
+        });
+      }
+    });
+    var fnum = $(".shangPing .xuanZhong .fnum").val();
+        ftotal = $("#today_amount_guo").html(),
+        fmember = currentQueryMemberJSON["name"],
+        fmobilephone = currentQueryMemberJSON["telphone"],
+        fcardid = fcardnum,
+        femail = currentQueryMemberJSON["email"],
+        params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
+                   &quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,\
+                   &quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,\
+                   &quot;FEMAIL&quot;:&quot;' + femail + '&quot;,\
+                   &quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,\
+                   &quot;FNUM&quot;:&quot;' + fnum + '&quot;,\
+                   &quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,\
+                   &quot;FSUPPLYPAY&quot;:[' + consume_items.join(",") + '],\
+                   &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + '],\
+                   &quot;FCARDID&quot;:&quot;&quot;\
+                 }';
+
+      var post_redeem_params = {
+        member: currentQueryMemberJSON["name"],
+        card_number: fcardnum,
+        telphone: currentQueryMemberJSON["telphone"],
+        amount: ftotal,
+        gift_name: $(".xuanZhong").find(".gift_name").val(),
+        gift_id: $(".xuanZhong").find(".gift_code").val(),
+        consumes: post_param_consumes,
+        gifts: post_param_gifts,
+        redeem_state: "兑换成功",
+        remark: questionnaire_remark,
+        post_command: 'CRMGenMallSupplyBill',
+        post_params: params
+      };
+      window.ServerAPI.save_consumes({data: post_param_consumes}, function() {
+        window.ServerAPI.save_redeem(post_redeem_params, function() {
+          window.localStorage.removeItem("records");
+          window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
+        });
+      });
+  },
+  /*
+   * deprecated
+   * 礼品兑换(直接与 CRM 接口交互)
+   * 3.2.31 生成赠品发放单接口
+   */
+  genMallSupplyBill2: function() {
+    $("#queren").attr("disabled", "true");
+    var clientCookie = window.localStorage.getItem('sClientCookie'),
+        fcardnum = window.localStorage.getItem('sFCARDNUM'),
+        fildate = (new Date()).format('yyyy.MM.dd hh:mm:ss'),
+        currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = {},
+        questionnaire_remark = $("#questionnaire_remark").val();
+
+    if(currentQueryMember && currentQueryMember.length) {
+      currentQueryMemberJSON = JSON.parse(currentQueryMember);
+    }
+
+    var consume_items = [], gid, flowno, crttime, famt,
+        post_params = {},
+        post_param_consumes = [],
+        post_param_gifts = [],
+        store_input_records = [];
+    // 消费记录
+    $(".xf").each(function() {
+      if ($(this).hasClass("checked")) {
+        var fgndgid = $(this).find(".guoxiao_gndgid").val(),
+            fgndcode = $(this).find(".guoxiao_gndcode").val(),
+            storename = $(this).find(".guoxiao_store").val(),
+            fflowno = $(this).find(".guoxiao_serialnum").val(),
+            famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
+            focrtime = $(this).find(".guoxiao_datetime").val();
+        consume_items.push('{' +
                       '&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;' +
                       ',&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;' +
                       ',&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;' +
                       ',&quot;FAMT&quot;:&quot;' + famt + '&quot;' +
                   '}');
-
-        // # field0, name, 会员名称
-        // # field1, card_number, 会员卡号
-        // # field2, serial_number, 流水号
-        // # field3, amount, 消费金额
-        // # field4, store_code, 商铺代号
-        // # field5, store_name, 商铺名称
-        //
-        // name":"asdfasdf","sex":"男","birthday":"","address":"asdfsadfsdf","telphone":"13569897852","card_number":"80000567"}
         post_param_consumes.push({
           "name": currentQueryMemberJSON["name"],
           "card_number": fcardnum,
@@ -1242,14 +1374,9 @@ window.TKH = {
       }
     });
     if(store_input_records.length) {
-      console.log(store_input_records);
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
       window.TKH.calcMallScoreExWeb(0, false, false, '礼品兑换');
     }
-    // var fgndgid = '500021',
-    //     fflowno = (new Date()).valueOf(),
-    //     focrtime = (new Date()).format('yyyy.MM.dd hh:mm:ss');
-    // var fsupplypay_params = '{&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;,&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;,&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;}';
 
     // 礼品
     var gifts = [], gift_id, amount = 1;
@@ -1262,16 +1389,6 @@ window.TKH = {
                       ',&quot;FMEMO&quot;:&quot;' + questionnaire_remark + '&quot;' +
                     '}');
 
-        // # field0, theme_code, 主题单号
-        // # field1, theme_name, 主题名称
-        // # field2, begin_date, 开始时间
-        // # field3, end_date, 结束时间
-        // # field4, address, 促销地点
-        // # field5, gift_code, 赠品代码
-        // # field6, gift_name, 赠品名称
-        // # field7, count, 赠品数量
-        // # field8, min_amount, 起始金额
-        // # field9, price, 赠品单价
         post_param_gifts.push({
           "gift_code": $(this).find(".gift_code").val(),
           "gift_name": $(this).find(".gift_name").val(),
@@ -1287,24 +1404,20 @@ window.TKH = {
         });
       }
     });
-    // var flaggid = '500000',
-    //     famount = parseInt(Math.random() * 10 + 1);
-    // var fsupplydtl_params = '{&quot;FLAGGID&quot;:&quot;' + flaggid + '&quot;,&quot;FAMOUNT&quot;:&quot;' + famount + '&quot;}';
-
     var fnum = $(".shangPing .xuanZhong .fnum").val();
         ftotal = $("#today_amount_guo").html(),
         fmember = currentQueryMemberJSON["name"],
         fmobilephone = currentQueryMemberJSON["telphone"],
         fcardid = fcardnum,
-        femail = currentQueryMemberJSON["email"];
-    var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
+        femail = currentQueryMemberJSON["email"],
+        params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
                    &quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,\
                    &quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,\
                    &quot;FEMAIL&quot;:&quot;' + femail + '&quot;,\
                    &quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,\
                    &quot;FNUM&quot;:&quot;' + fnum + '&quot;,\
                    &quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,\
-                   &quot;FSUPPLYPAY&quot;:[' + paies.join(",") + '],\
+                   &quot;FSUPPLYPAY&quot;:[' + consume_items.join(",") + '],\
                    &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + '],\
                    &quot;FCARDID&quot;:&quot;&quot;\
                  }',

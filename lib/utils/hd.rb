@@ -1,7 +1,10 @@
 # encoding: utf-8
 require 'oga'
+require 'json'
 require 'multi_xml'
 require 'httparty'
+require 'active_support'
+require 'active_support/core_ext/string'
 
 class XMLParser < ::HTTParty::Parser
   def xml
@@ -44,11 +47,7 @@ module HD
         }
         response = ::HTTPClient.post("#{options[:server]}?op=LogIn", body: xml_body, headers: header_options)
 
-        puts xml_body
-        puts format("code: %s\nmessage: %s\nbody: \n%s", response.code, response.message, response.body)
-
-        response_return = ''
-        response_cookie = ''
+        response_return, response_cookie = '', ''
         if response.code == 200
           document = ::Oga.parse_xml(response.body)
           document.xpath("Envelope/Body/LogInResponse").each do |res|
@@ -60,7 +59,8 @@ module HD
         [response_return, response_cookie]
       end
 
-      def stores(client_cookie, page_index, options)
+      def store_list(options = {})
+        page_index = 1
         page_size = '100'
         post_command = 'QueryMallGndWeb'
         xml_params =<<-JSON
@@ -71,10 +71,15 @@ module HD
           }
         JSON
 
+        do_command(post_command, xml_params, options)
+      end
+
+      def do_command(post_command, xml_params, options = {}, return_type = 'xml_data')
+        client_cookie = HD::CRM.read_client_cookie(options)
         #
         #  `<?xml version="1.0" encoding="UTF-8"?>` 添加后会报错 `无效的 xml 声明`
         #
-        xml_body =<<-XML
+        xml_body = <<-XML
           <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="urn:HDCRMWebServiceIntf-IHDCRMWebService" xmlns:ns1="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns3="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
             <ns2:Body>
               <ns0:DoClientCommand>
@@ -85,21 +90,33 @@ module HD
             </ns2:Body>
           </SOAP-ENV:Envelope>
         XML
-
         header_options = {
           'Accept' => 'text/xml',
           'Accept-Charset' => 'UTF-8',
           'Content-Type' => 'text/xml'
         }
-        response = ::HTTPClient.post("#{options[:server]}?op=DoClientCommand", body: xml_body, headers: header_options)
-        puts format("code: %s\nmessage: %s\nbody: \n%s", response.code, response.message, response.body)
+        callback_url = "#{options[:server]}?op=DoClientCommand"
+        response = ::HTTPClient.post(callback_url, body: xml_body, headers: header_options)
 
+        if return_type == 'xml_data'
+          parse_callback_response_xml(response.body)
+        else
+          {
+            callback_url: callback_url,
+            method: 'post',
+            headers: header_options,
+            params: xml_body,
+            response: {code: response.code, message: response.message, body: response.body}
+          }
+        end
+      end
 
-        response_return = '1'
-        response_error = ''
-        response_params = ''
-        response_stores = []
-        document = Oga.parse_xml(response.body)
+      protected
+
+      def parse_callback_response_xml(xml_body)
+        response_return, response_error = '1', ''
+        response_params, response_data = '', []
+        document = Oga.parse_xml(xml_body)
         document.xpath("Envelope/Body/DoClientCommandResponse").each do |res|
           response_return = res.at_xpath('return').text
           response_error = res.at_xpath('sErrMsg').text
@@ -109,14 +126,51 @@ module HD
         if response_return == '0' && response_error.empty?
           response_hash = JSON.parse(response_params)
           if response_hash['FRESULT'].to_i == 0
-            response_stores += response_hash['FDATA']
+            response_data += response_hash['FDATA']
           else
             response_error = response_hash['FMSG']
           end
         end
+        [response_return, response_error, response_data]
+      end
 
-        [response_return, response_error, response_stores]
+      def parse_json(json_string)
+        ::JSON.parse(json_string)
+      rescue
+        json_string
+      end
+
+      def client_cookie_path
+        File.join(ENV['APP_ROOT_PATH'] || Dir.pwd, "tmp/hd_client_cookie.txt")
+      end
+
+      def refresh_client_cookie(options = {})
+        response_return, response_cookie = HD::CRM.login(options)
+        File.open(client_cookie_path, "w+:utf-8") do |file|
+          file.puts("#{Time.now.to_i},#{Time.now.to_i + 1*60*60},#{response_cookie}")
+        end
+        response_cookie
+      end
+
+      def read_client_cookie(options = {})
+        client_cookie = nil
+        if File.exist?(client_cookie_path)
+          created_at, expired_at, client_cookie = File.read(client_cookie_path).split(',').map(&:strip)
+          client_cookie = nil if Time.now.to_i > expired_at.to_i
+        end
+        client_cookie = HD::CRM.refresh_client_cookie(options) unless client_cookie
+        client_cookie
       end
     end
   end
 end
+
+# options = {
+#   server: 'http://180.169.127.188:7071/HDCRMWebService.dll/soap/IHDCRMWebService',
+#   userGid: '1000245',
+#   userPwd: '05EC54150206B033',
+#   storeCode: '0210',
+#   workStation: '172.17.104.164',
+#   oper: 'HDCRM[0]'
+# }
+# puts HD::CRM.store_list(options)

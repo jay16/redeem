@@ -25,6 +25,9 @@ class Consume < ActiveRecord::Base
   alias_attribute :store_code, :field4 # 商铺代号
   alias_attribute :store_name, :field5 # 商铺名称
   alias_attribute :data_source, :field6 # 数据来源：消费积分/礼品兑换
+  alias_attribute :post_command, :field7 # 接口命令
+  alias_attribute :post_params, :text1 # 接口对接
+  alias_attribute :post_response, :text2 # 接口响应
 
   def self.extract_params(params)
     options = {}
@@ -35,13 +38,16 @@ class Consume < ActiveRecord::Base
     options[:field4] = params[:store_code] if params[:store_code]
     options[:field5] = params[:store_name] if params[:store_name]
     options[:field6] = params[:data_source] if params[:data_source]
+    options[:field7] = params[:post_command] if params[:post_command]
+    options[:text1]  = params[:post_params] if params[:post_params]
+    options[:text2]  = params[:post_response] if params[:post_response]
     options
   end
 
   def self.find_or_create_with_params(params)
-    # unless record = find_by(serial_number: params[:serial_number])
-      record = create(extract_params(params))
-    # end
+    if record = create(extract_params(params))
+      ::CallbackWorker.perform_async({model: record.class.to_s, id: record.id}.to_json)
+    end
     record
   end
 
