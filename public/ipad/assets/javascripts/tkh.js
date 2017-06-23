@@ -550,6 +550,7 @@ window.TKH = {
      */
     $("#checkbox_legal").prop("checked", true);
     $(".btn-save").removeClass("xy").addClass("bc").html("保存<br>Save");
+    $('#birthday').mobiscroll('setDate', (new Date(1970, 0, 1, 0, 0, 0, 0)), false);
 
     window.localStorage.removeItem('sFCARDNUM');
     window.localStorage.removeItem('current_telphone');
@@ -1476,6 +1477,20 @@ window.TKH = {
     });
   },
   signatureDone: function() {
+    var signatureData = $("#signature").jSignature("getData", "base30")[1];
+
+    if(signatureData.length == 0) {
+      layer.msg('请您签字~', {
+        time: 0,
+        btn: ['好的'],
+        btnAlign: 'c',
+        yes: function(index) {
+          layer.close(index);
+        }
+      });
+      return false;
+    }
+
     layer.msg('确认签字无误？', {
       time: 0,
       btn: ['确定', '取消'],

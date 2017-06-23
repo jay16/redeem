@@ -1,5 +1,14 @@
 #encoding: utf-8
 namespace :doctor do
+  namespace :data do
+    task signature: :environment do
+      Signature.where(text1: 'image/jsignature;base30,').each do |record|
+        record.update_attributes(text1: 'image/jsignature;base30,gC_3R')
+        puts "update Signature##{record.id} text1"
+      end
+    end
+  end
+
   namespace :mysql do
     task state: :environment do
       begin

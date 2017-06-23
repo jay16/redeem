@@ -22,6 +22,7 @@ mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
 case "$1" in
   00:00)
       RACK_ENV=production bundle exec rake hd:crm:sync_stores
+      RACK_ENV=production bundle exec rake doctor:data:signature
   ;;
 
   05:minutes)
