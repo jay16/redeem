@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.7.1',
+  version: '0.7.2',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -549,6 +549,7 @@ window.TKH = {
      */
     $("#checkbox_legal").prop("checked", true);
     $(".btn-save").removeClass("xy").addClass("bc").html("保存<br>Save");
+    $('#birthday').mobiscroll('setDate', (new Date(1970, 0, 1, 0, 0, 0, 0)), false);
 
     window.localStorage.removeItem('sFCARDNUM');
     window.localStorage.removeItem('current_telphone');
@@ -1238,6 +1239,7 @@ window.TKH = {
           card_number: fcardnum,
           serial_number: fflowno,
           amount: famt,
+          trant_time: focrtime,
           store_code: fgndcode,
           store_name: storename,
           data_source: '礼品兑换',
@@ -1311,155 +1313,6 @@ window.TKH = {
           window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
         });
       });
-  },
-  /*
-   * deprecated
-   * 礼品兑换(直接与 CRM 接口交互)
-   * 3.2.31 生成赠品发放单接口
-   */
-  genMallSupplyBill2: function() {
-    $("#queren").attr("disabled", "true");
-    var clientCookie = window.localStorage.getItem('sClientCookie'),
-        fcardnum = window.localStorage.getItem('sFCARDNUM'),
-        fildate = (new Date()).format('yyyy.MM.dd hh:mm:ss'),
-        currentQueryMember = window.localStorage.getItem('current_telphone'),
-        currentQueryMemberJSON = {},
-        questionnaire_remark = $("#questionnaire_remark").val();
-
-    if(currentQueryMember && currentQueryMember.length) {
-      currentQueryMemberJSON = JSON.parse(currentQueryMember);
-    }
-
-    var consume_items = [], gid, flowno, crttime, famt,
-        post_params = {},
-        post_param_consumes = [],
-        post_param_gifts = [],
-        store_input_records = [];
-    // 消费记录
-    $(".xf").each(function() {
-      if ($(this).hasClass("checked")) {
-        var fgndgid = $(this).find(".guoxiao_gndgid").val(),
-            fgndcode = $(this).find(".guoxiao_gndcode").val(),
-            storename = $(this).find(".guoxiao_store").val(),
-            fflowno = $(this).find(".guoxiao_serialnum").val(),
-            famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
-            focrtime = $(this).find(".guoxiao_datetime").val();
-        consume_items.push('{' +
-                      '&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;' +
-                      ',&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;' +
-                      ',&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;' +
-                      ',&quot;FAMT&quot;:&quot;' + famt + '&quot;' +
-                  '}');
-        post_param_consumes.push({
-          "name": currentQueryMemberJSON["name"],
-          "card_number": fcardnum,
-          "serial_number": fflowno,
-          "amount": famt,
-          "store_code": fgndcode,
-          "store_name": storename
-        });
-
-        if(fcardnum !== null && fcardnum !== '-') {
-          store_input_records.push({
-            card_number: fcardnum,
-            store_code: fgndcode,
-            store_name: storename,
-            serial_num: fflowno,
-            real_amt: famt,
-            score: parseInt(famt),
-            datetime: focrtime,
-            wrapper_class: ''
-          });
-        }
-      }
-    });
-    if(store_input_records.length) {
-      window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
-      window.TKH.calcMallScoreExWeb(0, false, false, '礼品兑换');
-    }
-
-    // 礼品
-    var gifts = [], gift_id, amount = 1;
-    $(".xuzh_jin").each(function() {
-      if ($(this).hasClass("xuanZhong")) {
-        gift_id = $(this).find(".gift_id").val();
-        gifts.push('{' +
-                      '&quot;FLAGGID&quot;:&quot;' + gift_id + '&quot;' +
-                      ',&quot;FAMOUNT&quot;:&quot;' + amount + '&quot;' +
-                      ',&quot;FMEMO&quot;:&quot;' + questionnaire_remark + '&quot;' +
-                    '}');
-
-        post_param_gifts.push({
-          "gift_code": $(this).find(".gift_code").val(),
-          "gift_name": $(this).find(".gift_name").val(),
-          "address": $(this).find(".address").val(),
-          "begin_date": $(this).find(".begin_date").val(),
-          "end_date": $(this).find(".end_date").val(),
-          "price": $(this).find(".price").val(),
-          "theme_name": $(this).find(".theme_name").val(),
-          "count": $(this).find(".count").val(),
-          "min_amount": $(this).find(".min_amount").val(),
-          "count": $(this).find(".count").val(),
-          "address": $(this).find(".address").val()
-        });
-      }
-    });
-    var fnum = $(".shangPing .xuanZhong .fnum").val();
-        ftotal = $("#today_amount_guo").html(),
-        fmember = currentQueryMemberJSON["name"],
-        fmobilephone = currentQueryMemberJSON["telphone"],
-        fcardid = fcardnum,
-        femail = currentQueryMemberJSON["email"],
-        params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
-                   &quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,\
-                   &quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,\
-                   &quot;FEMAIL&quot;:&quot;' + femail + '&quot;,\
-                   &quot;FCARDNUM&quot;:&quot;' + fcardnum + '&quot;,\
-                   &quot;FNUM&quot;:&quot;' + fnum + '&quot;,\
-                   &quot;FTOTAL&quot;:&quot;' + ftotal + '&quot;,\
-                   &quot;FSUPPLYPAY&quot;:[' + consume_items.join(",") + '],\
-                   &quot;FSUPPLYDTL&quot;:[' + gifts.join(",") + '],\
-                   &quot;FCARDID&quot;:&quot;&quot;\
-                 }',
-        data = {
-          params: params,
-          command: 'CRMGenMallSupplyBill',
-          async: true
-        };
-    window.TKH.hdClientCommand(data, function(result) {
-      var errMsg = $(result).find('sErrMsg').text(),
-          resultstring = $(result).find('sOutParams').text(),
-          outparams = JSON.parse(resultstring);
-
-      if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-        // # field3, amount, 兑换金额
-        // # field4, redeem_state, 兑换状态
-        // # field5, gift_name, 礼品名称
-        // # field6, gift_id, 礼品ID
-        // # field7, store_id, 门店ID
-        // # field8, store_name, 门店名称
-        // # field9, serial_number, 流水号
-        // # text1, consumers, 消费列表
-        // # text2, gifts, 礼品信息
-        post_param = {
-          "member": currentQueryMemberJSON["name"],
-          "card_number": fcardnum,
-          "telphone": currentQueryMemberJSON["telphone"],
-          "amount": ftotal,
-          "gift_name": $(".xuanZhong").find(".gift_name").val(),
-          "gift_id": $(".xuanZhong").find(".gift_code").val(),
-          "consumes": post_param_consumes,
-          "gifts": post_param_gifts,
-          "redeem_state": "兑换成功"
-        };
-        window.ServerAPI.save_redeem(post_param);
-
-        window.localStorage.removeItem("records");
-        window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
-      } else {
-        layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
-      }
-    });
   },
   // 3.2.32 查询调查问卷模板信息
   queryCRMQuestionnaireMode: function() {
@@ -1581,6 +1434,20 @@ window.TKH = {
     });
   },
   signatureDone: function() {
+    var signatureData = $("#signature").jSignature("getData", "base30")[1];
+
+    if(signatureData.length == 0) {
+      layer.msg('请您签字~', {
+        time: 0,
+        btn: ['好的'],
+        btnAlign: 'c',
+        yes: function(index) {
+          layer.close(index);
+        }
+      });
+      return false;
+    }
+
     layer.msg('确认签字无误？', {
       time: 0,
       btn: ['确定', '取消'],
@@ -1641,7 +1508,7 @@ window.TKH = {
    * 消费积分
    * 3.2.18 生成HDMall消费积分单
    */
-  calcMallScoreExWeb: function(data_index, is_async, is_redirect, data_source) {
+  calcMallScoreExWeb: function(datas) {
     var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
         scoreInputRecords = JSON.parse(scoreInputRecordsString),
         data = scoreInputRecords[data_index],
@@ -1649,6 +1516,23 @@ window.TKH = {
         currentQueryMemberJSON = {};
     if(currentQueryMember && currentQueryMember.length) {
       currentQueryMemberJSON = JSON.parse(currentQueryMember);
+    }
+
+    var post_param_consumes = [],
+        data;
+    for(var i = 0, len = datas.length; i < len; i ++) {
+      data = datas[i];
+      post_param_consumes.push({
+        name: currentQueryMemberJSON["name"],
+        card_number: fcardnum,
+        serial_number: fflowno,
+        amount: famt,
+        store_code: fgndcode,
+        store_name: storename,
+        data_source: '礼品兑换',
+        post_command: 'CRMGenMallSupplyBill',
+        post_params: score_params
+      });
     }
 
     var trant_time = data.datetime;

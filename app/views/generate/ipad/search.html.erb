@@ -232,6 +232,7 @@ $(function() {
       maxDate: (new Date())
   };
   $("#birthday").mobiscroll(opt).date(opt);;
+  $('#birthday').mobiscroll('setDate', (new Date(1970, 0, 1, 0, 0, 0, 0)), false);
 
   $("#checkbox_legal").change(function() {
       if(this.checked) {

@@ -106,7 +106,7 @@ module HD
             method: 'post',
             headers: header_options,
             params: xml_body,
-            response: {code: response.code, message: response.message, body: response.body}
+            response: {code: response.code, message: response.message, body: response.body.force_encoding("UTF-8")}
           }
         end
       end

@@ -1,5 +1,5 @@
 window.ServerAPI = {
-  version: '0.5.0',
+  version: '0.5.2',
   server: '',
   params: function() {
     var query = {},
@@ -127,168 +127,55 @@ window.ServerAPI = {
       }
     });
   },
-  members: function() {
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/members",
-      type: 'get',
-      async: false,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
-  },
-  save_member: function(data) {
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/member",
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
-  },
-  save_consume: function(data) {
-    console.log('-------->save_consume<----------');
+  http_action: function(http_method, api_path, data, message, callback) {
+    console.time(message)
+    console.log('-------->' + message + '<----------');
+    console.log("params:");
     console.log(data);
-    console.log('--------<save_consume>----------');
     $.ajax({
       cache: false,
-      url: window.ServerAPI.server + "/api/v1/consume",
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
-  },
-  save_gift: function(data) {
-    console.log('-------->save_gift<----------');
-    console.log(data);
-    console.log('--------<save_gift>----------');
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/gift",
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
-  },
-  save_store: function(data) {
-    console.log('-------->save_store<----------');
-    console.log(data);
-    console.log('--------<save_store>----------');
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/store",
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
-  },
-  save_questionnaire: function(data) {
-    console.log('-------->save_questionnaire<----------');
-    console.log(data);
-    console.log('--------<save_questionnaire>----------');
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/questionnaire",
-      type: 'post',
+      url: window.ServerAPI.server + api_path,
+      type: http_method,
       async: true,
       dataType: 'json',
       data: data,
       timeout: 5000,
       success: function(xhr) {
         console.log(xhr);
+        console.timeEnd(message);
+        callback();
       }
     });
   },
-  save_redeem: function(data) {
-    console.log('-------->save_redeem<----------');
-    console.log(data);
-    console.log('--------<save_redeem>----------');
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/redeem",
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
+  save_member: function(data) {
+    window.ServerAPI.http_action('post', "/api/v1/member", data, 'save member', function(){});
+  },
+  save_consume: function(data, callback) {
+    window.ServerAPI.http_action('post', "/api/v1/consume", data, 'save consume', callback);
+  },
+  save_consumes: function(data, callback) {
+    window.ServerAPI.http_action('post', "/api/v1/consumes", data, 'save consumes', callback);
+  },
+  save_gift: function(data) {
+    window.ServerAPI.http_action('post', "/api/v1/gift", data, 'save gift', function(){});
+  },
+  save_store: function(data) {
+    window.ServerAPI.http_action('post', "/api/v1/store", data, 'save store', function(){});
+  },
+  save_questionnaire: function(data) {
+    window.ServerAPI.http_action('post', "/api/v1/questionnaire", data, 'save questionnaire', function(){});
+  },
+  save_redeem: function(data, callback) {
+    window.ServerAPI.http_action('post', "/api/v1/redeem", data, 'save redeem', callback);
   },
   save_answer: function(data) {
-    console.log('-------->save_answer<----------');
-    console.log(data);
-    console.log('--------<save_answer>----------');
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/answer",
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
+    window.ServerAPI.http_action('post', "/api/v1/answer", data, 'save answer', function(){});
   },
   save_signature: function(data) {
-    console.log('-------->save_signature<----------');
-    console.log(data);
-    console.log('--------<save_signature>----------');
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/signature",
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
+    window.ServerAPI.http_action('post', "/api/v1/signature", data, 'save signature', function(){});
   },
   truncate_table: function(table_name) {
-    console.log('-------->truncate_table<----------');
-    console.log(table_name);
-    console.log('--------<truncate_table>----------');
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/truncate/" + table_name,
-      type: 'post',
-      async: false,
-      dataType: 'json',
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-      }
-    });
+    window.ServerAPI.http_action('post', "/api/v1/truncate/" + table_name, {}, 'truncate table' + table_name, function(){});
   },
   view_signature: function(ctl) {
     alert($(ctl).data("signature"));

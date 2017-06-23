@@ -131,6 +131,13 @@ $(function() {
       is_error = 1;
       return false;
     }
+
+    var currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = {};
+    if(currentQueryMember && currentQueryMember.length) {
+      currentQueryMemberJSON = JSON.parse(currentQueryMember);
+    }
+
     var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/,
         store_code = '',
         amount,
@@ -207,23 +214,58 @@ $(function() {
 
       serial_nums.push(serial_num_with_store_code);
       store_and_datetimes.push(store_and_datetime);
+
+      var trant_time = datetime;
+      while(trant_time && trant_time.length &&
+            (trant_time.indexOf(".") >= 0 ||
+             trant_time.indexOf(":") >= 0 ||
+             trant_time.indexOf(" ") >= 0)) {
+        trant_time = trant_time.replace(".", "");
+        trant_time = trant_time.replace(":", "");
+        trant_time = trant_time.replace(" ", "");
+      }
+
+      var fvoucher_type = '01',
+          params = '{' +
+                  '&quot;FCARDNUM&quot;:&quot;' + card_number + '&quot;' +
+                  ',&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
+                  ',&quot;FVOUCHERNUM&quot;:&quot;' + serial_num + '&quot;' +
+                  ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
+                  ',&quot;FSHOPCODE&quot;:&quot;' + gndcode + '&quot;' +
+                  ',&quot;FREALAMT&quot;:&quot;' + amount + '&quot;' +
+                  ',&quot;FSCORE&quot;:&quot;' + parseInt(amount) + '&quot;' +
+                '}';
+
       data = {
+        name: currentQueryMemberJSON["name"],
         card_number: card_number,
-        serial_num: serial_num,
+        serial_number: serial_num,
         store_name: store_name,
         store_code: gndcode,
-        real_amt: amount,
-        score: parseInt(amount),
-        datetime: datetime,
-        wrapper_class: wrapper_class
+        amount: amount,
+        trant_time: datetime,
+        data_source: '消费积分',
+        post_command: 'CRMCalcMallScoreExWeb',
+        post_params: params
       };
+
       datas.push(data);
-      console.log(data);
     });
     if (all_is_ok) {
       $("#submitBtn").attr("disabled", "true");
-      window.localStorage.setItem("scoreInputRecords", JSON.stringify(datas));
-      window.TKH.calcMallScoreExWeb(0, true, true, '消费积分');
+      window.ServerAPI.save_consumes({data: datas}, function() {
+        layer.msg('恭喜您积分成功', {
+            time: 0,
+            btn: ['确定'],
+            btnAlign: 'c',
+            yes: function(i) {
+              layer.close(i);
+
+              window.localStorage.removeItem("scoreInputRecords");
+              window.TKH.redirect_to_with_timestamp("complete.html");
+            }
+          });
+      });
     }
   });
 });

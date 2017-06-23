@@ -25,7 +25,8 @@ class Consume < ActiveRecord::Base
   alias_attribute :store_code, :field4 # 商铺代号
   alias_attribute :store_name, :field5 # 商铺名称
   alias_attribute :data_source, :field6 # 数据来源：消费积分/礼品兑换
-  alias_attribute :post_command, :field7 # 接口命令
+  alias_attribute :trant_time, :field7 # 消费时间
+  alias_attribute :post_command, :field8 # 接口命令
   alias_attribute :post_params, :text1 # 接口对接
   alias_attribute :post_response, :text2 # 接口响应
 
@@ -38,7 +39,8 @@ class Consume < ActiveRecord::Base
     options[:field4] = params[:store_code] if params[:store_code]
     options[:field5] = params[:store_name] if params[:store_name]
     options[:field6] = params[:data_source] if params[:data_source]
-    options[:field7] = params[:post_command] if params[:post_command]
+    options[:field7] = params[:trant_time] if params[:trant_time]
+    options[:field8] = params[:post_command] if params[:post_command]
     options[:text1]  = params[:post_params] if params[:post_params]
     options[:text2]  = params[:post_response] if params[:post_response]
     options
