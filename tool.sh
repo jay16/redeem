@@ -92,6 +92,7 @@ case "$1" in
     ;;
     restart:force)
         /bin/bash "$0" stop
+        /bin/bash "$0" redis:stop
         /bin/bash "$0" sidekiq:stop
         /bin/sleep 1
         echo -e '\n\n#-----------command sparate line----------\n\n'

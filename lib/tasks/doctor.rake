@@ -1,5 +1,10 @@
 #encoding: utf-8
 require 'json'
+require 'timeout'
+require 'lib/utils/hd'
+require 'active_support'
+require 'active_support/core_ext/hash'
+require 'active_support/core_ext/string'
 namespace :doctor do
   namespace :data do
     task signature: :environment do
@@ -9,12 +14,14 @@ namespace :doctor do
       end
     end
 
+    include HD::CallbackWorker
     task callback: :environment do
+      crm_hash = ::JSON.parse(::Setting.crm.to_json)
       Consume.where("text1 is not null and text2 is null").each do |record|
-        CallbackWorker.perform_async({model: record.class.to_s, id: record.id}.to_json)
+        hd_callback_worker({model: record.class.to_s, id: record.id}, crm_hash)
       end
       Redeem.where("text3 is not null and text4 is null").each do |record|
-        CallbackWorker.perform_async({model: record.class.to_s, id: record.id}.to_json)
+        hd_callback_worker({model: record.class.to_s, id: record.id}, crm_hash)
       end
     end
   end
