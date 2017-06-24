@@ -3,6 +3,10 @@ module API
   class V1Controller < API::ApplicationController
     set :views, ENV['VIEW_PATH']
 
+    before do
+      params[:page], params[:page_size] = (params[:page] || 0).to_i, (params[:page_size] || 15).to_i if request.request_method.downcase == 'get'
+    end
+
     get '/echo' do
       params.to_inspect
     end
@@ -141,7 +145,11 @@ module API
       respond_with_json(result_hash, 200)
     end
 
-    post '/ipad/setting' do
+    get '/items/:model' do
+      klass = class_get(params[:model])
+      items = klass.offset(params[:page]*params[:page_size]).limit(params[:page_size]).order(id: :desc).map(&:to_hash)
+
+      respond_with_paginate(klass, items, params)
     end
   end
 end

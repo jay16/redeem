@@ -55,9 +55,6 @@ class ApplicationController < Sinatra::Base
   get '/view/:model/:action/:id' do
     klass = class_get(params[:model])
 
-    puts params
-    puts klass
-    puts klass.where(id: params[:id]).to_sql
     unless @record = klass.find_by(id: params[:id])
       @record = klass.new
     end
