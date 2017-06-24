@@ -13,16 +13,14 @@ describe API::V1Controller do
         area: %w(东 南 西 北).sample + '区'
       }
 
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(201)
+      expect(last_response.status).to eq(201)
     end
 
     it 'get /api/v1/list/user' do
       get '/api/v1/list/user'
 
       expect(last_response).to be_ok
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(200)
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -40,16 +38,14 @@ describe API::V1Controller do
         id_number: (happy_number.shuffle + happy_number).join,
       }
 
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(201)
+      expect(last_response.status).to eq(201)
     end
 
     it 'get /api/v1/list/member' do
       get '/api/v1/list/member'
 
       expect(last_response).to be_ok
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(200)
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -62,16 +58,14 @@ describe API::V1Controller do
         name: SecureRandom.hex(6)
       }
 
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(201)
+      expect(last_response.status).to eq(201)
     end
 
     it 'get /api/v1/list/store' do
       get '/api/v1/list/store'
 
       expect(last_response).to be_ok
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(200)
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -92,16 +86,14 @@ describe API::V1Controller do
         price: rand(1000)
       }
 
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(201)
+      expect(last_response.status).to eq(201)
     end
 
     it 'get /api/v1/list/gift' do
       get '/api/v1/list/gift'
 
       expect(last_response).to be_ok
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(200)
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -115,19 +107,17 @@ describe API::V1Controller do
         serial_number: Time.now.to_i,
         amount: rand(10000),
         store_code: rand(100000000),
-        store_name: "门店#{rand(100000)}",
+        store_name: "门店#{rand(100000)}"
       }
 
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(201)
+      expect(last_response.status).to eq(201)
     end
 
     it 'get /api/v1/list/consume' do
       get '/api/v1/list/consume'
 
       expect(last_response).to be_ok
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(200)
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -147,16 +137,14 @@ describe API::V1Controller do
         card_number: Time.now.to_i
       }
 
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(201)
+      expect(last_response.status).to eq(201)
     end
 
     it 'get /api/v1/list/questionnaire' do
       get '/api/v1/list/questionnaire'
 
       expect(last_response).to be_ok
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(200)
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -176,16 +164,28 @@ describe API::V1Controller do
         store_name: "门店#{rand(1000)}"
       }
 
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(201)
+      expect(last_response.status).to eq(201)
     end
 
     it 'get /api/v1/list/redeem_state' do
       get '/api/v1/list/redeem'
 
       expect(last_response).to be_ok
-      response_hash = json_parse(last_response.body)
-      expect(response_hash[:code]).to eq(200)
+      expect(last_response.status).to eq(200)
+    end
+
+    it 'get /api/v1/items/consume' do
+      get '/api/v1/items/consume'
+
+      expect(last_response).to be_ok
+      expect(last_response.status).to eql(200)
+    end
+
+    it 'get /api/v1/items/redeem' do
+      get '/api/v1/items/redeem'
+
+      expect(last_response).to be_ok
+      expect(last_response.status).to eql(200)
     end
   end
 end

@@ -96,6 +96,10 @@ class Consume < ActiveRecord::Base
       store_code: self.field4,
       store_name: self.field5,
       data_source: self.field6,
+      trant_time: self.field7,
+      post_command: self.field8,
+      post_params: self.text1,
+      post_backtrace: self.text2,
       created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end

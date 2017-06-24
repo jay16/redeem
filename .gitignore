@@ -10,6 +10,8 @@
 *.rdb
 /tmp/
 /log
+db/backup
+db/backup.sh
 *.y[a]ml
 Gemfile.lock
 /config/redis.conf

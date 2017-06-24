@@ -59,8 +59,7 @@ module HD
         [response_return, response_cookie]
       end
 
-      def store_list(options = {})
-        page_index = 1
+      def store_list(page_index = 1, options = {})
         page_size = '100'
         post_command = 'QueryMallGndWeb'
         xml_params =<<-JSON
@@ -111,6 +110,26 @@ module HD
         end
       end
 
+      def read_client_cookie(options = {})
+        client_cookie = nil
+        if File.exist?(client_cookie_path)
+          created_at, expired_at, client_cookie = File.read(client_cookie_path).split(',').map(&:strip)
+          client_cookie = nil if Time.now.to_i > expired_at.to_i
+        end
+        client_cookie = HD::CRM.refresh_client_cookie(options) unless client_cookie
+        client_cookie
+      end
+
+      def report_client_cookie
+        client_cookie = nil
+        if File.exist?(client_cookie_path)
+          created_at, expired_at, client_cookie = File.read(client_cookie_path).split(',').map(&:strip)
+          puts format("created_at: %s", Time.at(created_at.to_i))
+          puts format("expired_at: %s", Time.at(expired_at.to_i))
+        end
+        puts (client_cookie ? "client cookie is fresh now" : "should refresh client cookie")
+      end
+
       protected
 
       def parse_callback_response_xml(xml_body)
@@ -151,16 +170,6 @@ module HD
         end
         response_cookie
       end
-
-      def read_client_cookie(options = {})
-        client_cookie = nil
-        if File.exist?(client_cookie_path)
-          created_at, expired_at, client_cookie = File.read(client_cookie_path).split(',').map(&:strip)
-          client_cookie = nil if Time.now.to_i > expired_at.to_i
-        end
-        client_cookie = HD::CRM.refresh_client_cookie(options) unless client_cookie
-        client_cookie
-      end
     end
   end
 end
@@ -173,4 +182,4 @@ end
 #   workStation: '172.17.104.164',
 #   oper: 'HDCRM[0]'
 # }
-# puts HD::CRM.store_list(options)
+# puts HD::CRM.store_list(1, options)

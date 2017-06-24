@@ -33,20 +33,29 @@ namespace :hd do
       end
     end
 
-    task sync_stores: :environment do
+    def crm_env_hash
       crm_hash = JSON.parse(Setting.crm.to_json)
       env_hash = crm_hash.fetch(crm_hash["env"])
       env_hash.deep_symbolize_keys!
+      env_hash
+    end
 
+    task refresh_client_cookie: :environment do
+      HD::CRM.read_client_cookie(crm_env_hash)
+      HD::CRM.report_client_cookie
+    end
+
+    task sync_stores: :environment do
+      env_hash = crm_env_hash
       response_return, response_cookie = HD::CRM.login(env_hash)
       if response_return == 'true' && response_cookie.length > 0
         stores = []
         page_index = 1
-        response_return, response_error, response_stores = HD::CRM.stores(response_cookie, page_index, env_hash)
+        response_return, response_error, response_stores = HD::CRM.store_list(page_index, env_hash)
         stores += response_stores
         page_index += 1
         while response_return == '0' && response_stores.length > 0
-          response_return, response_error, response_stores = HD::CRM.stores(response_cookie, page_index, env_hash)
+          response_return, response_error, response_stores = HD::CRM.store_list(page_index, env_hash)
           stores += response_stores
           page_index += 1
         end

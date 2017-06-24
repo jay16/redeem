@@ -29,6 +29,7 @@ fi
 unicorn_config_file=config/unicorn.rb
 unicorn_pid_file=tmp/pids/unicorn.pid
 sidekiq_pid_file=tmp/pids/sidekiq.pid
+redis_pid_file=tmp/pids/redis.pid
 app_root_path="$(pwd)"
 
 # user bash environment for crontab job.
@@ -47,11 +48,26 @@ cd "${app_root_path}" || exit 1
 mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
 
 case "$1" in
-    process:defender)
-        process_checker "${unicorn_pid_file}" 'unicorn'
-        process_checker "${sidekiq_pid_file}" 'sidekiq'
+    config)
+        if [[ ! -f db/backup.sh ]]; then
+            RACK_ENV=${app_env} $bundle_command exec rake g:script:backup:mysql_and_redis
+            echo -e "\tgenerate db/backup.sh $([[ $? -eq 0 ]] && echo 'successfully' || echo 'failed')"
+        fi
+        if [[ ! -f log/backup.sh ]]; then
+            RACK_ENV=${app_env} $bundle_command exec rake g:script:backup:log
+            echo -e "\tgenerate log/backup.sh $([[ $? -eq 0 ]] && echo 'successfully' || echo 'failed')"
+        fi
+        if [[ ! -f config/redis.conf ]]; then
+            RACK_ENV=${app_env} $bundle_command exec rake redis:generate_config
+            echo -e "\tgenerate config/redis.conf $([[ $? -eq 0 ]] && echo 'successfully' || echo 'failed')"
+        fi
     ;;
-    app:defender)
+    process:defender)
+        process_checker "${redis_pid_file}" 'redis'
+        process_checker "${sidekiq_pid_file}" 'sidekiq'
+        process_checker "${unicorn_pid_file}" 'unicorn'
+    ;;
+    app:defender|ad)
         echo -e $(date "+## app defender at %y-%m-%d %H:%M:%S\n")
         /bin/bash "$0" process:defender
         /bin/bash "$0" start
@@ -59,6 +75,8 @@ case "$1" in
     start)
         echo "## shell used: ${shell_used}"
         RACK_ENV=production $bundle_command exec rake boom:setting
+        /bin/bash "$0" config
+        /bin/bash "$0" redis:start
         /bin/bash "$0" sidekiq:start
         command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${app_port} -E ${app_env} -D"
         process_start "${unicorn_pid_file}" 'unicorn' "${command_text}"
@@ -91,6 +109,18 @@ case "$1" in
         /bin/sleep 1
         echo -e '\n\n#-----------command sparate line----------\n\n'
         /bin/bash "$0" sidekiq:start
+    ;;
+    redis:start)
+        process_start "${redis_pid_file}" 'redis' 'redis-server ./config/redis.conf'
+    ;;
+    redis:stop)
+        process_stop "${redis_pid_file}" 'redis'
+    ;;
+    redis:restart)
+        /bin/bash "$0" redis:stop
+        /bin/sleep 1
+        echo -e '\n\n#-----------command sparate line----------\n\n'
+        /bin/bash "$0" redis:start
     ;;
     crontab:update)
         $bundle_command exec whenever --update-crontab

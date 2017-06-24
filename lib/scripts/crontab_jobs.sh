@@ -23,10 +23,13 @@ case "$1" in
   00:00)
       RACK_ENV=production bundle exec rake hd:crm:sync_stores
       RACK_ENV=production bundle exec rake doctor:data:signature
+      /bin/bash db/backup.sh >> log/db_backup.log 2>&1
+      /bin/bash log/backup.sh >> log/log_backup.log 2>&1
   ;;
 
   05:minutes)
       /bin/bash tool.sh app:defender
+      RACK_ENV=production bundle exec rake hd:crm:refresh_client_cookie
   ;;
 
   *)

@@ -135,6 +135,12 @@ class Redeem < ActiveRecord::Base
       store_id: self.field7,
       store_name: self.field8,
       serial_number: self.field9,
+      remark: self.field10,
+      consumes: self.text1,
+      gifts: self.text2,
+      post_command: self.field11,
+      post_params: self.text3,
+      post_backtrace: self.text4,
       created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end
