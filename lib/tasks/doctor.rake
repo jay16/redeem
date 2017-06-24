@@ -1,10 +1,20 @@
 #encoding: utf-8
+require 'json'
 namespace :doctor do
   namespace :data do
     task signature: :environment do
       Signature.where(text1: 'image/jsignature;base30,').each do |record|
         record.update_attributes(text1: 'image/jsignature;base30,gC_3R')
         puts "update Signature##{record.id} text1"
+      end
+    end
+
+    task callback: :environment do
+      Consume.where("text1 is not null and text2 is null").each do |record|
+        CallbackWorker.perform_async({model: record.class.to_s, id: record.id}.to_json)
+      end
+      Redeem.where("text3 is not null and text4 is null").each do |record|
+        CallbackWorker.perform_async({model: record.class.to_s, id: record.id}.to_json)
       end
     end
   end

@@ -30,6 +30,7 @@ case "$1" in
   05:minutes)
       /bin/bash tool.sh app:defender
       RACK_ENV=production bundle exec rake hd:crm:refresh_client_cookie
+      RACK_ENV=production bundle exec rake doctor:data:callback
   ;;
 
   *)
