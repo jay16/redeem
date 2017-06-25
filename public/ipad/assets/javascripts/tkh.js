@@ -1735,7 +1735,6 @@ window.TKH = {
       window.ServerAPI.save_consume(post_param, function(){});
 
       if(data_index == scoreInputRecords.length - 1) {
-        window.localStorage.removeItem("scoreInputRecords");
         window.TKH.checkRedeemStoreSubmited();
       } else {
         window.TKH.calcMallScoreExWeb2(data_index + 1);
@@ -1825,7 +1824,6 @@ window.TKH = {
         record["datetime"] = datetime;
         records.push(record);
 
-
         store_input_records.push({
           card_number: fcardnum,
           store_code: gndcode,
@@ -1867,6 +1865,7 @@ window.TKH = {
     $(".submit-btn").html(is_all_ok ? "下一页<br/>Next" : "提交<br/>Submit");
 
     if(is_all_ok) {
+      window.localStorage.removeItem("scoreInputRecords");
       $(".submit-btn").css("display", "block");
       $(".skip-btn").css("display", "none");
     } else {
