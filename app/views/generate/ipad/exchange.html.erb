@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="anNiu">
-    <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("entry.html");'>上一页
+    <a style="display:none;" href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("entry.html");'>上一页
       <br/>Previous</a>
     <a href="javascript:void(0);" class="duiHuan">
       <img src="/images/duiHuan.png?timestamp=<%= timestamp %>">兑换
@@ -130,7 +130,7 @@ $(function() {
       $(".content_2").append('\
         <div class="xf checked xf-wrapper-' + i + '" data-class="xf-wrapper-' + i + '">\
           <p>消费金额 - 店铺名称 - 礼品 / Amount - Merchant - Redeemable</p>\
-          <p>\
+          <p class="store-name">\
             <img src="/images/dui.png?timestamp=<%= timestamp %>" class="guoxiao" alt="">\
             CNY ' + record["amount"] + ' - ' + record["name"] + '\
             <input type="hidden" class="guoxiao_id xiaochu" value="' + record["gndgid"] + '">\
@@ -148,6 +148,9 @@ $(function() {
     // 3.2.3 查询有效的赠品促销接口
     window.TKH.queryMallGiftPromInfo();
   }
+
+  // 显示所有消费项的积分状态
+  window.TKH.scoreBeforeRedeem();
 
   $('.gb').click(function() {
     $('.xg').fadeOut(200);

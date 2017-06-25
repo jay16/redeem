@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.29',
+  version: '0.6.32',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -81,6 +81,17 @@ window.TKH = {
     window.TKH.workStation = setting.workStation;
     window.TKH.storeCode = setting.storeCode;
     window.TKH.oper = setting.oper;
+  },
+  currentENV: function() {
+    console.log({
+      environment: window.TKH.environment,
+      server: window.TKH.server,
+      userGid: window.TKH.userGid,
+      userPwd: window.TKH.userPwd,
+      workStation: window.TKH.workStation,
+      storeCode: window.TKH.storeCode,
+      oper: window.TKH.oper
+    })
   },
   version_info: function() {
     console.log({
@@ -1180,6 +1191,40 @@ window.TKH = {
       });
     }
   },
+  scoreBeforeRedeem: function() {
+    var fcardnum = window.localStorage.getItem('sFCARDNUM'),
+        store_input_records = [];
+    // 消费记录
+    $(".xf").each(function() {
+      if ($(this).hasClass("checked")) {
+        var fgndgid = $(this).find(".guoxiao_gndgid").val(),
+            fgndcode = $(this).find(".guoxiao_gndcode").val(),
+            storename = $(this).find(".guoxiao_store").val(),
+            fflowno = $(this).find(".guoxiao_serialnum").val(),
+            famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
+            focrtime = $(this).find(".guoxiao_datetime").val();
+            wrapper_class = $(this).data("class");
+
+        if(fcardnum !== null && fcardnum !== '-') {
+          store_input_records.push({
+            card_number: fcardnum,
+            store_code: fgndcode,
+            store_name: storename,
+            serial_num: fflowno,
+            real_amt: famt,
+            score: parseInt(famt),
+            datetime: focrtime,
+            wrapper_class: wrapper_class
+          });
+        }
+      }
+    });
+    if(store_input_records.length) {
+      console.log(store_input_records);
+      window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
+      window.TKH.calcMallScoreExWeb(0, true, false, '礼品兑换');
+    }
+  },
   /*
    * 礼品兑换
    * 3.2.31 生成赠品发放单接口
@@ -1255,7 +1300,7 @@ window.TKH = {
     if(store_input_records.length) {
       console.log(store_input_records);
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
-      window.TKH.calcMallScoreExWeb(0, false, false, '礼品兑换');
+      // window.TKH.calcMallScoreExWeb(0, false, false, '礼品兑换');
     }
     // var fgndgid = '500021',
     //     fflowno = (new Date()).valueOf(),
