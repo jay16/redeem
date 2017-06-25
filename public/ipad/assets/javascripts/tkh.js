@@ -957,14 +957,23 @@ window.TKH = {
     })
   },
   removeRecordInput: function(ctl) {
-    $(ctl).closest('.dq-wrapper').remove();
+    var $wrapper_class = $(ctl).closest('.dq-wrapper');
+    // 关闭历史提示框
+    $wrapper_class.find("input").each(function() {
+      var li = $(this).data("layerindex"),
+          li_number = parseInt(li);
+
+      if(!isNaN(li_number)) { layer.close(li_number); }
+    });
+
+    $wrapper_class.remove();
   },
   // 消费录入，添加录入框
   addRecordInput: function() {
     var dqCount = $(".content_2 .dq-wrapper").length + 1,
         datetimeId = "datetime_" + dqCount;
     $('.content_2').append(
-      '<div class="dq-wrapper dq-wrapper-' + dqCount + '">\
+      '<div class="dq-wrapper dq-wrapper-' + dqCount + '" data-class="dq-wrapper-' + dqCount + '" data-submited="no" data-layerindex="0">\
          <div class="dp"> \
             <p>店铺名称 / Merchant</p>\
             <input type="text" readonly="readonly" placeholder="店铺名称" class="store-name" onclick="window.TKH.searchDQM(this);"/>\
@@ -1189,40 +1198,6 @@ window.TKH = {
       layer.msg('消费金额暂无合适礼品可兑换！', {
         time: 3000 //2s后自动关闭
       });
-    }
-  },
-  scoreBeforeRedeem: function() {
-    var fcardnum = window.localStorage.getItem('sFCARDNUM'),
-        store_input_records = [];
-    // 消费记录
-    $(".xf").each(function() {
-      if ($(this).hasClass("checked")) {
-        var fgndgid = $(this).find(".guoxiao_gndgid").val(),
-            fgndcode = $(this).find(".guoxiao_gndcode").val(),
-            storename = $(this).find(".guoxiao_store").val(),
-            fflowno = $(this).find(".guoxiao_serialnum").val(),
-            famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
-            focrtime = $(this).find(".guoxiao_datetime").val();
-            wrapper_class = $(this).data("class");
-
-        if(fcardnum !== null && fcardnum !== '-') {
-          store_input_records.push({
-            card_number: fcardnum,
-            store_code: fgndcode,
-            store_name: storename,
-            serial_num: fflowno,
-            real_amt: famt,
-            score: parseInt(famt),
-            datetime: focrtime,
-            wrapper_class: wrapper_class
-          });
-        }
-      }
-    });
-    if(store_input_records.length) {
-      console.log(store_input_records);
-      window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
-      window.TKH.calcMallScoreExWeb(0, true, false, '礼品兑换');
     }
   },
   /*
@@ -1595,7 +1570,7 @@ window.TKH = {
        </div>');
   },
   /*
-   * 消费积分
+   * 消费积分(单独积分页面）
    * 3.2.18 生成HDMall消费积分单
    */
   calcMallScoreExWeb: function(data_index, is_async, is_redirect, data_source) {
@@ -1674,6 +1649,109 @@ window.TKH = {
         window.TKH.calcMallScoreExWeb(data_index + 1, is_async, is_redirect, data_source);
       }
     });
+  },
+  /*
+   * 消费积分(礼品兑换页面）
+   * 3.2.18 生成HDMall消费积分单
+   */
+  calcMallScoreExWeb2: function(data_index) {
+    var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
+        scoreInputRecords = JSON.parse(scoreInputRecordsString),
+        data = scoreInputRecords[data_index],
+        currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = {};
+    if(currentQueryMember && currentQueryMember.length) {
+      currentQueryMemberJSON = JSON.parse(currentQueryMember);
+    }
+
+    var trant_time = data.datetime;
+    while(trant_time && trant_time.length &&
+          (trant_time.indexOf(".") >= 0 ||
+           trant_time.indexOf(":") >= 0 ||
+           trant_time.indexOf(" ") >= 0)) {
+      trant_time = trant_time.replace(".", "");
+      trant_time = trant_time.replace(":", "");
+      trant_time = trant_time.replace(" ", "");
+    }
+    var card_num = data.card_number,
+        trant_time2 = (new Date()).format('yyyyMMddhhmmss'),
+        store_code = data.store_code,
+        store_name = data.store_name,
+        serial_num = data.serial_num,
+        real_amt = data.real_amt,
+        score = data.score,
+        fvoucher_type = '01',
+        params = '{' +
+                    '&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;' +
+                    ',&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
+                    ',&quot;FVOUCHERNUM&quot;:&quot;' + serial_num + '&quot;' +
+                    ',&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;' +
+                    ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
+                    ',&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;' +
+                    ',&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;' +
+                    ',&quot;FSCORE&quot;:&quot;' + score + '&quot;' +
+                  '}',
+        ajax_data = {
+          params: params,
+          command: 'CRMCalcMallScoreExWeb',
+          async: true
+        };
+    window.TKH.hdClientCommand(ajax_data, function(result) {
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring),
+          $wrapper_class = $("." + data.wrapper_class);
+
+
+      console.log("wrapper_class: " + data.wrapper_class);
+      var $store_name = $wrapper_class.find('.store-name'),
+          layer_index;
+
+      layer.close(parseInt($wrapper_class.data("layerindex")));
+      if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        layer_index = layer.tips("恭喜您积分成功", $store_name, { tips: [1, '#5FB878'], time: 0, tipsMore: true});
+        $wrapper_class.data("submited", "yes");
+      } else {
+        layer_index = layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});
+        $wrapper_class.data("submited", "error");
+      }
+      // 关闭历史提示框
+      $wrapper_class.find("input").each(function() {
+        var li = $(this).data("layerindex"),
+            li_number = parseInt(li);
+
+        if(!isNaN(li_number)) { layer.close(li_number); }
+      });
+      $store_name.data("layerindex", layer_index);
+
+      var post_param              = {};
+      post_param["name"]          = currentQueryMemberJSON["name"];
+      post_param["card_number"]   = currentQueryMemberJSON["card_number"];
+      post_param["serial_number"] = serial_num;
+      post_param["amount"]        = real_amt;
+      post_param["store_code"]    = store_code;
+      post_param["store_name"]    = store_name;
+      post_param["data_source"]   = "礼品兑换";
+      window.ServerAPI.save_consume(post_param, function(){});
+
+      if(data_index == scoreInputRecords.length - 1) {
+        window.localStorage.removeItem("scoreInputRecords");
+        window.TKH.checkRedeemStoreSubmited();
+      } else {
+        window.TKH.calcMallScoreExWeb2(data_index + 1);
+      }
+    });
+  },
+  checkRedeemStoreSubmited: function() {
+    var is_all_ok = true;
+    $(".dq-wrapper").each(function() {
+      // 跳过已经提交成功的消费项
+      if($(this).data("submited") !== "yes") {
+        is_all_ok = false
+      }
+    });
+    $(".submit-btn").removeAttr("disabled");
+    $(".submit-btn").html(is_all_ok ? "下一页<br/>Next" : "提交<br/>Submit");
   },
   // 3.2.7 查询有效商铺信息，后台同步使用该接口
   queryStoreForSync: function(fpageindex) {
