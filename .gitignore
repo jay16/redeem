@@ -8,6 +8,7 @@
 .unicorn-port
 .app-user
 *.rdb
+db/
 /tmp/
 /log
 *.y[a]ml

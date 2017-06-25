@@ -17,8 +17,8 @@ class Redeem < ActiveRecord::Base
   # field3, amount, 兑换金额
   # field4, redeem_state, 兑换状态
   # field5, gift_name, 礼品名称
-  # field6, gift_id, 礼品ID
-  # field7, store_id, 门店ID
+  # field6, gift_code, 礼品ID
+  # field7, store_code, 门店ID
   # field8, store_name, 门店名称
   # field9, serial_number, 流水号
   # field10, redeem_state, 兑换状态
@@ -122,10 +122,6 @@ class Redeem < ActiveRecord::Base
       telphone: self.field2,
       amount: self.field3,
       redeem_state: self.field4,
-      gift_name: self.field5,
-      gift_id: self.field6,
-      store_id: self.field7,
-      store_name: self.field8,
       serial_number: self.field9,
       created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }

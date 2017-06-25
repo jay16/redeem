@@ -36,7 +36,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.28',
+  version: '0.6.29',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -1201,7 +1201,8 @@ window.TKH = {
         post_params = {},
         post_param_consumes = [],
         post_param_gifts = [],
-        store_input_records = [];
+        store_input_records = [],
+        wrapper_class;
     // 消费记录
     $(".xf").each(function() {
       if ($(this).hasClass("checked")) {
@@ -1211,6 +1212,7 @@ window.TKH = {
             fflowno = $(this).find(".guoxiao_serialnum").val(),
             famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
             focrtime = $(this).find(".guoxiao_datetime").val();
+            wrapper_class = $(this).data("class");
             // (new Date()).format('yyyy.MM.dd hh:mm:ss');
         paies.push('{' +
                       '&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;' +
@@ -1245,7 +1247,7 @@ window.TKH = {
             real_amt: famt,
             score: parseInt(famt),
             datetime: focrtime,
-            wrapper_class: ''
+            wrapper_class: wrapper_class
           });
         }
       }
@@ -1343,12 +1345,12 @@ window.TKH = {
           "telphone": currentQueryMemberJSON["telphone"],
           "amount": ftotal,
           "gift_name": $(".xuanZhong").find(".gift_name").val(),
-          "gift_id": $(".xuanZhong").find(".gift_code").val(),
+          "gift_code": $(".xuanZhong").find(".gift_code").val(),
           "consumes": post_param_consumes,
           "gifts": post_param_gifts,
           "redeem_state": "兑换成功"
         };
-        window.ServerAPI.save_redeem(post_param);
+        window.ServerAPI.save_redeem(post_param, function(){});
 
         window.localStorage.removeItem("records");
         window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
@@ -1552,6 +1554,9 @@ window.TKH = {
    * 3.2.18 生成HDMall消费积分单
    */
   calcMallScoreExWeb: function(data_index, is_async, is_redirect, data_source) {
+    $("#submitBtn").css("display", "none");
+    $("#nextPage").css("display", "none");
+
     var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
         scoreInputRecords = JSON.parse(scoreInputRecordsString),
         data = scoreInputRecords[data_index],
@@ -1597,9 +1602,13 @@ window.TKH = {
       var errMsg = $(result).find('sErrMsg').text(),
           resultstring = $(result).find('sOutParams').text(),
           outparams = JSON.parse(resultstring);
+
+      console.log(data.wrapper_class);
+      var $store_name = $("." + data.wrapper_class).find('.store-name');
       if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        layer.tips("恭喜您积分成功", $store_name, { tips: [1, '#5FB878'], time: 0, tipsMore: true});
       } else {
-        layer.tips("『底层接口』提示：" + outparams["FMSG"], $("." + data.wrapper_class).find('.store-name'), { tips: [3, '#faab20'] });
+        layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});
       }
 
       var post_param              = {};
@@ -1610,24 +1619,12 @@ window.TKH = {
       post_param["store_code"]    = store_code;
       post_param["store_name"]    = store_name;
       post_param["data_source"]   = data_source;
-      window.ServerAPI.save_consume(post_param);
+      window.ServerAPI.save_consume(post_param, function(){});
 
       if(data_index == scoreInputRecords.length - 1) {
-        if(is_redirect) {
-          layer.msg('恭喜您积分成功', {
-            time: 0,
-            btn: ['确定'],
-            btnAlign: 'c',
-            yes: function(i) {
-              layer.close(i);
 
-              window.localStorage.removeItem("scoreInputRecords");
-              window.TKH.redirect_to_with_timestamp("complete.html");
-            }
-          });
-        } else {
-          window.localStorage.removeItem("scoreInputRecords");
-        }
+        $("#nextPage").css("display", "block");
+        window.localStorage.removeItem("scoreInputRecords");
       } else {
         window.TKH.calcMallScoreExWeb(data_index + 1, is_async, is_redirect, data_source);
       }
