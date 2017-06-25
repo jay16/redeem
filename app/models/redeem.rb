@@ -17,8 +17,8 @@ class Redeem < ActiveRecord::Base
   # field3, amount, 兑换金额
   # field4, redeem_state, 兑换状态
   # field5, gift_name, 礼品名称
-  # field6, gift_id, 礼品ID
-  # field7, store_id, 门店ID
+  # field6, gift_code, 礼品ID
+  # field7, store_code, 门店ID
   # field8, store_name, 门店名称
   # field9, serial_number, 流水号
   # field10, redeem_state, 兑换状态
@@ -32,8 +32,8 @@ class Redeem < ActiveRecord::Base
   alias_attribute :amount, :field3 # 兑换金额
   alias_attribute :redeem_state, :field4 # 兑换状态
   alias_attribute :gift_name, :field5 # 礼品名称
-  alias_attribute :gift_id, :field6 # 礼品ID
-  alias_attribute :store_id, :field7 # 门店ID
+  alias_attribute :gift_code, :field6 # 礼品ID
+  alias_attribute :store_code, :field7 # 门店ID
   alias_attribute :store_name, :field8 # 门店名称
   alias_attribute :serial_number, :field9 # 流水号
   alias_attribute :remark, :field10 # 备注
@@ -51,8 +51,8 @@ class Redeem < ActiveRecord::Base
     options[:field3] = params[:amount] if params[:amount]
     options[:field4] = params[:redeem_state] if params[:redeem_state]
     options[:field5] = params[:gift_name] if params[:gift_name]
-    options[:field6] = params[:gift_id] if params[:gift_id]
-    options[:field7] = params[:store_id] if params[:store_id]
+    options[:field6] = params[:gift_code] if params[:gift_code]
+    options[:field7] = params[:store_code] if params[:store_code]
     options[:field8] = params[:store_name] if params[:store_name]
     options[:field9] = params[:serial_number] if params[:serial_number]
     options[:field10] = params[:remark] if params[:remark]
@@ -130,11 +130,6 @@ class Redeem < ActiveRecord::Base
       telphone: self.field2,
       amount: self.field3,
       redeem_state: self.field4,
-      gift_name: self.field5,
-      gift_id: self.field6,
-      store_id: self.field7,
-      store_name: self.field8,
-      serial_number: self.field9,
       remark: self.field10,
       consumes: self.text1,
       gifts: self.text2,

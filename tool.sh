@@ -78,7 +78,7 @@ case "$1" in
         /bin/bash "$0" config
         /bin/bash "$0" redis:start
         /bin/bash "$0" sidekiq:start
-        command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${app_port} -E ${app_env} -D"
+        command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${app_port} -E ${app_env} -D -d"
         process_start "${unicorn_pid_file}" 'unicorn' "${command_text}"
         echo -e "\t# port: ${app_port}, environment: ${app_env}"
 

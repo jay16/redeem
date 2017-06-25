@@ -10,7 +10,7 @@ pid_file = "#{app_path}/tmp/pids/unicorn.pid"
 old_pid = "#{pid_file}.oldbin"
 
 # Nuke workers after 30 seconds instead of 60 seconds (the default)
-timeout(Setting.unicorn.timeout || 30)
+timeout(Setting.unicorn.timeout || 60)
 
 worker_processes(Setting.unicorn.worker_processes || 5) # increase or decrease
 

@@ -1299,7 +1299,7 @@ window.TKH = {
         telphone: currentQueryMemberJSON["telphone"],
         amount: ftotal,
         gift_name: $(".xuanZhong").find(".gift_name").val(),
-        gift_id: $(".xuanZhong").find(".gift_code").val(),
+        gift_code: $(".xuanZhong").find(".gift_code").val(),
         consumes: post_param_consumes,
         gifts: post_param_gifts,
         redeem_state: "兑换成功",
