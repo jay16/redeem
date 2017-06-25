@@ -1742,6 +1742,118 @@ window.TKH = {
       }
     });
   },
+  refreshRedeemScoreInput: function() {
+    var fcardnum = window.localStorage.getItem('sFCARDNUM');
+    var name = '',
+        amount = '',
+        serialnum = '',
+        serialnums = [],
+        store_and_datetime = '',
+        store_and_datetimes = [],
+        gndgid = '',
+        gndcode = '',
+        datetime = '',
+        record = {},
+        records = [],
+        is_error = 0,
+        serial_num_with_store_code,
+        wrapper_class,
+        store_input_records = [],
+        layer_index;
+    $(".dq-wrapper").each(function() {
+      // 跳过已经提交成功的消费项
+      if($(this).data("submited") !== "yes") {
+        name = $(this).find("input.store-name").val();
+        serialnum = $(this).find("input.serial-num").val();
+        amount = $(this).find("input.amount").val();
+        gndgid = $(this).find("input.gndgid").val();
+        gndcode = $(this).find("input.gndcode").val();
+        datetime = $(this).find("input.datetime").val();
+        store_and_datetime = gndgid + datetime;
+        is_error = 0,
+        wrapper_class = $(this).data("class");
+
+        if(!name.length) {
+          layer_index = layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.store-name').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+
+        if(!serialnum.length) {
+          layer_index = layer.tips('流水号不能为空', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.serial-num').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+
+        if(!amount.length) {
+          layer_index = layer.tips('请正确填写金额', $(this).find('.amount'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.amount').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+
+        if(serialnum.length > 30) {
+          layer_index = layer.tips('请输入正确的流水号', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.serial-num').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+        serial_num_with_store_code = gndcode + serialnum;
+        if(serialnums.indexOf(serial_num_with_store_code) >= 0) {
+          layer_index = layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.serial-num').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+        if(store_and_datetimes.indexOf(store_and_datetime) >= 0) {
+          layer_index = layer.tips('请勿重复积分', $(this).find('.store-name'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.serial-num').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+
+        serialnums.push(serial_num_with_store_code);
+        store_and_datetimes.push(store_and_datetime);
+        record = {};
+        record["name"] = name;
+        record["serialnum"] = serialnum;
+        record["amount"] = amount;
+        record["gndgid"] = gndgid;
+        record["gndcode"] = gndcode;
+        record["datetime"] = datetime;
+        records.push(record);
+
+
+        store_input_records.push({
+          card_number: fcardnum,
+          store_code: gndcode,
+          store_name: name,
+          serial_num: serialnum,
+          real_amt: amount,
+          score: parseInt(amount),
+          datetime: datetime,
+          wrapper_class: wrapper_class
+        });
+      }
+    });
+
+    if(is_error) { return false; }
+
+    window.localStorage.setItem("records", JSON.stringify(records));
+    window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
+  },
+  skipStoreToReddem: function() {
+    window.TKH.refreshRedeemScoreInput();
+    window.TKH.redirect_to_with_timestamp('exchange.html');
+  },
+  backToUpdateScoreInput: function() {
+    $(".layui-layer-close").click();
+
+    window.TKH.refreshRedeemScoreInput();
+    window.TKH.calcMallScoreExWeb2(0);
+  },
   checkRedeemStoreSubmited: function() {
     var is_all_ok = true;
     $(".dq-wrapper").each(function() {
@@ -1750,8 +1862,17 @@ window.TKH = {
         is_all_ok = false
       }
     });
+
     $(".submit-btn").removeAttr("disabled");
     $(".submit-btn").html(is_all_ok ? "下一页<br/>Next" : "提交<br/>Submit");
+
+    if(is_all_ok) {
+      $(".submit-btn").css("display", "block");
+      $(".skip-btn").css("display", "none");
+    } else {
+      $(".submit-btn").css("display", "none");
+      $(".skip-btn").css("display", "block");
+    }
   },
   // 3.2.7 查询有效商铺信息，后台同步使用该接口
   queryStoreForSync: function(fpageindex) {

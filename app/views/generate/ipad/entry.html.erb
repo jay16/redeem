@@ -24,6 +24,7 @@
   <div class="anNiu">
     <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("search.html");'>上一页<br/>Previous</a>
     <a href="javascript:void(0);" class="xy submit-btn">提交<br/>Submit</a>
+    <a style="display: none;" href="javascript:void(0);" class="xy skip-btn">提交<br/>Submit</a>
   </div>
 </div>
 <div class="xuanZe">
@@ -83,6 +84,19 @@
         <input type="password" id="rePassword" placeholder="再次输入新密码" />
         <a onclick='window.ServerAPI.resetPassword();' href="javascript:void(0);" class="cs mima">确认修改密码</a></div>
     </div>
+  </div>
+</div>
+<style>
+.tishibuton .cs { margin: 0.5rem !important; }
+.tishibuton .button { margin: 0.5rem !important; }
+</style>
+<div class="tishibuton-area" style="display:none;">
+  <div style="min-height:120px; text-align:center; font-size:16px; line-height:30px; background: #333; color:lightgray;padding-top:20px;">
+    <p class="">是否确认提交此次录入信息</p>
+    <div style="margin: 0 auto;margin-top:20px;">
+    <a href="javascript:void(0);" onclick="window.TKH.skipStoreToReddem();" class="button score-input" style='margin-right:20px'>是</a>
+    <a style="margin-right:20px"  href="javascript:void(0);" onclick='window.TKH.backToUpdateScoreInput();' class="button">否</a>
+  </div>
   </div>
 </div>
 
@@ -162,8 +176,16 @@ $(function() {
     display_searched_store(keywords);
   });
 
+  $(".skip-btn").on("click", function() {
+      layer.open({
+        type:1,
+        title: "温馨提示",
+        area:"450px",
+        content:$('.tishibuton-area')
+      });
+  });
   //下一页
-  $('.xy').on('click', function() {
+  $('.submit-btn').on('click', function() {
     if(!$("input.store-name").length) {
       layer.msg('你今日还没有消费记录，请填写消费记录！', {time: 2000});
       is_error = 1;
