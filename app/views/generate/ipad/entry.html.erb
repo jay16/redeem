@@ -324,7 +324,6 @@ $(function() {
     if(fcardnum !== null && fcardnum !== '-') {
       $(".submit-btn").attr("disabled", "disabled");
       window.TKH.calcMallScoreExWeb2(0);
-
     // 非会员不积分
     } else {
       window.TKH.redirect_to_with_timestamp('exchange.html');

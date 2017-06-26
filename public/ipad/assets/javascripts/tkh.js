@@ -1780,9 +1780,9 @@ window.TKH = {
        *         - submited === yes: 跳过已经提交成功的消费项
        */
       if(!allow_all && $(this).data("submited") === "yes") {
-        return false;
-      }
-
+        // return false;
+        // skip
+      } else {
         name = $(this).find("input.store-name").val();
         serialnum = $(this).find("input.serial-num").val();
         amount = $(this).find("input.amount").val();
@@ -1855,7 +1855,7 @@ window.TKH = {
           datetime: datetime,
           wrapper_class: wrapper_class
         });
-      // }
+      }
     });
 
     if(is_error) { return false; }
