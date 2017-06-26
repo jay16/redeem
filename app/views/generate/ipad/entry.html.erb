@@ -232,6 +232,7 @@ $(function() {
 
     // 全部积分提交成功，则跳转页面
     if(is_all_ok) {
+      window.TKH.refreshRedeemScoreInput(true);
       window.TKH.redirect_to_with_timestamp('exchange.html');
       return false;
     }
