@@ -21,18 +21,28 @@ Date.prototype.format = function(format) {
 }
 
 window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,errorObj) {
-   console.log('--------------------');
-   console.log("错误信息：" , errorMessage);
-   console.log("出错文件：" , scriptURI);
-   console.log("出错行号：" , lineNumber);
-   console.log("出错列号：" , columnNumber);
-   console.log("错误详情：" , errorObj);
-   console.log(errorObj);
-   console.log(typeof(errorObj));
-   console.log('--------------------');
+    console.log('--------------------');
+    console.log("错误信息：" , errorMessage);
+    console.log("出错文件：" , scriptURI);
+    console.log("出错行号：" , lineNumber);
+    console.log("出错列号：" , columnNumber);
+    console.log("错误详情：" , errorObj);
+    console.log(errorObj);
+    console.log(typeof(errorObj));
+    console.log('--------------------');
 
-   if(layer) { layer.closeAll(); }
-   alert("错误详情: \n" + errorObj);
+    if(layer) { layer.closeAll(); }
+    // alert("错误详情: \n" + errorObj);
+    layer.msg('操作有误，请修改或重新提交该流程。', {
+      time: 0,
+      btn: ['确定'],
+      btnAlign: 'c',
+      yes: function(index) {
+        layer.close(index);
+
+        window.location.reload();
+      }
+    });
 }
 
 window.TKH = {
