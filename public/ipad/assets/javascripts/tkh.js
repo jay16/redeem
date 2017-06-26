@@ -1741,7 +1741,7 @@ window.TKH = {
       }
     });
   },
-  refreshRedeemScoreInput: function() {
+  refreshRedeemScoreInput: function(allow_all) {
     var fcardnum = window.localStorage.getItem('sFCARDNUM');
     var name = '',
         amount = '',
@@ -1760,8 +1760,17 @@ window.TKH = {
         store_input_records = [],
         layer_index;
     $(".dq-wrapper").each(function() {
-      // 跳过已经提交成功的消费项
-      if($(this).data("submited") !== "yes") {
+      /*
+       *
+       * allow_all:
+       *     - true: 记录所有消费项
+       *     - false:
+       *         - submited === yes: 跳过已经提交成功的消费项
+       */
+      if(!allow_all && $(this).data("submited") === "yes") {
+        return false;
+      }
+
         name = $(this).find("input.store-name").val();
         serialnum = $(this).find("input.serial-num").val();
         amount = $(this).find("input.amount").val();
@@ -1834,7 +1843,7 @@ window.TKH = {
           datetime: datetime,
           wrapper_class: wrapper_class
         });
-      }
+      // }
     });
 
     if(is_error) { return false; }
@@ -1843,13 +1852,13 @@ window.TKH = {
     window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
   },
   skipStoreToReddem: function() {
-    window.TKH.refreshRedeemScoreInput();
+    window.TKH.refreshRedeemScoreInput(true);
     window.TKH.redirect_to_with_timestamp('exchange.html');
   },
   backToUpdateScoreInput: function() {
     $(".layui-layer-close").click();
 
-    window.TKH.refreshRedeemScoreInput();
+    window.TKH.refreshRedeemScoreInput(false);
     window.TKH.calcMallScoreExWeb2(0);
   },
   checkRedeemStoreSubmited: function() {
