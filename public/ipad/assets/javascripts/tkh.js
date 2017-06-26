@@ -994,7 +994,7 @@ window.TKH = {
          <div style="width: 14%;">\
            <p>消费金额 / Amount</p>\
            <input style="width:60%" type="number" placeholder="0.00" class="amount"/>\
-           <a href="javascript:void(0);" class="jian" onclick="window.TKH.removeRecordInput(this);">-</a>\
+           <button href="javascript:void(0);" class="jian" onclick="window.TKH.removeRecordInput(this);">-</button>\
          </div>\
        </div>'
     );
@@ -1702,7 +1702,6 @@ window.TKH = {
           outparams = JSON.parse(resultstring),
           $wrapper_class = $("." + data.wrapper_class);
 
-
       console.log("wrapper_class: " + data.wrapper_class);
       var $store_name = $wrapper_class.find('.store-name'),
           layer_index;
@@ -1711,6 +1710,9 @@ window.TKH = {
       if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
         layer_index = layer.tips("恭喜您积分成功", $store_name, { tips: [1, '#5FB878'], time: 0, tipsMore: true});
         $wrapper_class.data("submited", "yes");
+        $wrapper_class.find("input, button").each(function(){
+          $(this).attr('disabled', 'disabled');
+        })
       } else {
         layer_index = layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});
         $wrapper_class.data("submited", "error");
