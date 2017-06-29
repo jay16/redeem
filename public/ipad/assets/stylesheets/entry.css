@@ -90,10 +90,10 @@
     margin-top: 0.2rem;
     position: relative;
 }
-.content_2 > div > div{
+.dq-control {
     float: left;
-    width: 25%;
-    padding: 0 1%;
+    width: 22%;
+    padding: 0 0.5%;
     margin-bottom: 0.5rem;
 }
 .content_2 input{
@@ -149,7 +149,7 @@
     margin: 0.6rem auto 0;
     text-align: center;
 }
-.anNiu a{
+.anNiu a, .anNiu button{
     font-size: 0.34rem;
     padding: 0.2rem 1.8rem;
     margin-bottom: 1rem;

@@ -22,8 +22,9 @@
     </div>
   </div>
   <div class="anNiu">
-    <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("search.html");'>上一页<br/>Previous</a>
-    <button class="xy" id='submitBtn'>提交<br/>Submit</button>
+    <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_telphone("search.html");'>上一页<br/>Previous</a>
+    <a href="javascript:void(0);" class="xy submit-btn">提交<br/>Submit</a>
+    <a style="display: none;" href="javascript:void(0);" class="xy skip-btn">提交<br/>Submit</a>
     <button class="xy" id='nextPage' style="display:none;" onclick='window.TKH.redirect_to_with_timestamp("complete.html");'>下一步<br/>Next</button>
   </div>
 </div>
@@ -86,6 +87,20 @@
   </div>
 </div>
 
+<style>
+.tishibuton .cs { margin: 0.5rem !important; }
+.tishibuton .button { margin: 0.5rem !important; }
+</style>
+<div class="tishibuton-area" style="display:none;">
+  <div style="min-height:120px; text-align:center; font-size:16px; line-height:30px; background: #333; color:lightgray;padding-top:20px;">
+    <p class="">是否确认提交此次录入信息</p>
+    <div style="margin: 0 auto;margin-top:20px;">
+    <a style="margin-right:20px"  href="javascript:void(0);" onclick='window.TKH.backToUpdateScoreInput("消费积分");' class="button">否（返回修改或重新提交积分）</a>
+    <a href="javascript:void(0);" onclick="window.TKH.skipStoreToReddem();" class="button score-input" style='margin-right:20px'>是（跳转到完成界面）</a>
+  </div>
+  </div>
+</div>
+
 <script>
 $(function() {
   // 初始一个，积分输入框
@@ -117,16 +132,8 @@ $(function() {
     display_searched_store(keywords);
   });
 
-  $(document).on('blur', '.amount', function() {
-    var val = $(this).val();
-    var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
-    if (!reg.test(val)) {
-      layer.msg('请正确填写金额！', { time: 2000 });
-    }
-  });
-
   //下一页
-  $('.xy').on('click', function() {
+  $('.submit-btn').on('click', function() {
     if(!$("input.store-name").length) {
       layer.msg('你今日还没有消费记录，请填写消费记录！', {time: 2000});
       is_error = 1;
@@ -153,7 +160,36 @@ $(function() {
         datas = [],
         card_number = window.localStorage.getItem('sFCARDNUM'),
         wrapper_class,
-        serial_num_with_store_code;
+        serial_num_with_store_code,
+        layer_index;
+
+    var is_all_ok = true;
+    // 已提交成功的消费项
+    $(".dq-wrapper").each(function() {
+      if($(this).data("submited") === "yes") {
+        name = $(this).find("input.store-name").val();
+        serialnum = $(this).find("input.serial-num").val();
+        amount = $(this).find("input.amount").val();
+        gndgid = $(this).find("input.gndgid").val();
+        gndcode = $(this).find("input.gndcode").val();
+        datetime = $(this).find("input.datetime").val();
+
+        serial_num_with_store_code = gndcode + serialnum;
+        serial_nums.push(serial_num_with_store_code);
+        store_and_datetime = gndgid + datetime;
+        store_and_datetimes.push(store_and_datetime);
+      } else {
+        is_all_ok = false;
+      }
+    });
+
+    // 全部积分提交成功，则跳转页面
+    if(is_all_ok) {
+      window.TKH.refreshRedeemScoreInput(true);
+      window.TKH.redirect_to_with_timestamp('complete.html');
+      return false;
+    }
+
     $(".dq-wrapper").each(function() {
       store_name = $(this).find("input.store-name").val();
       serial_num = $(this).find("input.serial-num").val();
@@ -219,13 +255,22 @@ $(function() {
         wrapper_class: wrapper_class
       };
       datas.push(data);
-      console.log(data);
     });
+
     if (all_is_ok) {
-      $("#submitBtn").attr("disabled", "true");
+      $(".submit-btn").attr("disabled", "disabled");
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(datas));
-      window.TKH.calcMallScoreExWeb(0, true, true, '消费积分');
+      window.TKH.calcMallScoreExWeb2(0, '消费积分');
     }
+  });
+
+  $(".skip-btn").on("click", function() {
+      layer.open({
+        type:1,
+        title: "温馨提示",
+        area:"500px",
+        content:$('.tishibuton-area')
+      });
   });
 });
 </script>

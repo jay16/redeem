@@ -329,5 +329,12 @@ $(function() {
   var cookie = window.localStorage.getItem('sClientCookie'),
       userGid = window.localStorage.getItem('userGid');
   $("userGid").html(userGid);
+
+  var temp_telphone = window.localStorage.getItem("temp_telphone")
+  if(temp_telphone !== null && temp_telphone !== 'undefined') {
+    $("#search").val(temp_telphone);
+    $("#btn_search").click();
+    window.localStorage.removeItem("temp_telphone")
+  }
 })
 </script>

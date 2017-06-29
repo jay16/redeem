@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="anNiu">
-    <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_timestamp("search.html");'>上一页<br/>Previous</a>
+    <a href="javascript:void(0);" class="sy" onclick='window.TKH.redirect_to_with_telphone("search.html");'>上一页<br/>Previous</a>
     <a href="javascript:void(0);" class="xy submit-btn">提交<br/>Submit</a>
     <a style="display: none;" href="javascript:void(0);" class="xy skip-btn">提交<br/>Submit</a>
   </div>
@@ -94,7 +94,7 @@
   <div style="min-height:120px; text-align:center; font-size:16px; line-height:30px; background: #333; color:lightgray;padding-top:20px;">
     <p class="">是否确认提交此次录入信息</p>
     <div style="margin: 0 auto;margin-top:20px;">
-    <a style="margin-right:20px"  href="javascript:void(0);" onclick='window.TKH.backToUpdateScoreInput();' class="button">否（返回录入界面）</a>
+    <a style="margin-right:20px"  href="javascript:void(0);" onclick='window.TKH.backToUpdateScoreInput("礼品兑换");' class="button">否（返回修改或重新提交积分）</a>
     <a href="javascript:void(0);" onclick="window.TKH.skipStoreToReddem();" class="button score-input" style='margin-right:20px'>是（跳转到兑换界面）</a>
   </div>
   </div>
@@ -115,8 +115,7 @@ $(function() {
     dqCount = 0,
     datetimeId = '';
 
-    if(records.length > 0) {
-
+    if(false && records.length > 0) {
       $('.content_2 .dq-wrapper').remove();
       for (var i = 0, len = records.length; i < len; i++) {
         dqCount = $(".content_2 .dq-wrapper").length + 1;
@@ -124,24 +123,29 @@ $(function() {
         datetimeId = "datetime_" + dqCount;
         $('.content_2').append(
           '<div class="dq-wrapper dq-wrapper-' + dqCount + '" data-class="dq-wrapper-' + dqCount + '" data-submited="no" data-layerindex="0">\
-             <div class="dp"> \
-               <p>店铺名称 / Merchant</p>\
-               <input type="text" placeholder="店铺名称" class="store-name" value="' + record["name"] + '" />\
-               <input type="hidden" class="gndgid" value="' + record["gndgid"] + '" />\
-                <input type="hidden" class="gndcode" value="' + record["gndcode"] + '" />\
-              <a  style="display: none;" href="javascript:void(0);" onClick="window.TKH.searchDQM(this);" class="search"><img src="/images/search.png?timestamp=1492782987"/></a>\
+             <div class="dq-control dp"> \
+                <p>店铺名称 / Merchant</p>\
+                <input type="text" readonly="readonly" placeholder="店铺名称" class="store-name" onclick="window.TKH.searchDQM(this);"/>\
+                <input type="hidden" class="gndgid"/>\
+                <input type="hidden" class="gndcode"/>\
+                <a style="display: none;" href="javascript:void(0);" onclick="window.TKH.searchDQM(this);"  class="search">\
+                  <img src="assets/images/search.png"/>\
+                </a>\
              </div>\
-             <div>\
+             <div class="dq-control">\
                <p>流水号 / Serial Number</p>\
-               <input type="text" placeholder="流水号" class="serial-num" value="' + record["serialnum"] + '"/>\
+               <input type="text" placeholder="流水号" class="serial-num" value=""/>\
              </div>\
-             <div style="width: 28%;">\
+             <div class="dq-control">\
                <p>消费时间 / Time</p>\
-               <input type="text" id="' + datetimeId + '" value="' + record["datetime"] + '" class="datetime" readonly />\
+               <input type="text" id="' + datetimeId + '" value="' + (new Date).format('yyyy.MM.dd hh:mm:ss') + '" class="datetime" readonly />\
              </div>\
-             <div style="width: 14%;">\
+             <div class="dq-control">\
                <p>消费金额 / Amount</p>\
-               <input style="width:60%" type="number" placeholder="0.00" class="amount" value="' + record["amount"] + '" />\
+               <input style="width:100%" type="number" placeholder="0.00" class="amount"/>\
+             </div>\
+             <div class="dq-remove">\
+               <p>&nbsp;</p>\
                <button href="javascript:void(0);" class="jian" onclick="window.TKH.removeRecordInput(this);">-</button>\
              </div>\
            </div>');
@@ -180,7 +184,7 @@ $(function() {
       layer.open({
         type:1,
         title: "温馨提示",
-        area:"450px",
+        area:"500px",
         content:$('.tishibuton-area')
       });
   });
@@ -195,8 +199,8 @@ $(function() {
     var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/,
         name = '',
         amount = '',
-        serialnum = '',
-        serialnums = [],
+        serial_num = '',
+        serial_nums = [],
         store_and_datetime = '',
         store_and_datetimes = [],
         gndgid = '',
@@ -215,14 +219,14 @@ $(function() {
     $(".dq-wrapper").each(function() {
       if($(this).data("submited") === "yes") {
         name = $(this).find("input.store-name").val();
-        serialnum = $(this).find("input.serial-num").val();
+        serial_num = $(this).find("input.serial-num").val();
         amount = $(this).find("input.amount").val();
         gndgid = $(this).find("input.gndgid").val();
         gndcode = $(this).find("input.gndcode").val();
         datetime = $(this).find("input.datetime").val();
 
-        serial_num_with_store_code = gndcode + serialnum;
-        serialnums.push(serial_num_with_store_code);
+        serial_num_with_store_code = gndcode + serial_num;
+        serial_nums.push(serial_num_with_store_code);
         store_and_datetime = gndgid + datetime;
         store_and_datetimes.push(store_and_datetime);
       } else {
@@ -240,8 +244,8 @@ $(function() {
     $(".dq-wrapper").each(function() {
       // 跳过已经提交成功的消费项
       if($(this).data("submited") !== "yes") {
-        name = $(this).find("input.store-name").val();
-        serialnum = $(this).find("input.serial-num").val();
+        store_name = $(this).find("input.store-name").val();
+        serial_num = $(this).find("input.serial-num").val();
         amount = $(this).find("input.amount").val();
         gndgid = $(this).find("input.gndgid").val();
         gndcode = $(this).find("input.gndcode").val();
@@ -250,14 +254,14 @@ $(function() {
         is_error = 0,
         wrapper_class = $(this).data("class");
 
-        if(!name.length) {
+        if(!store_name.length) {
           layer_index = layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'], time: 0 });
           $(this).find('.store-name').data("layerindex", layer_index);
           is_error = 1;
           return false;
         }
 
-        if(!serialnum.length) {
+        if(!serial_num.length) {
           layer_index = layer.tips('流水号不能为空', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
           $(this).find('.serial-num').data("layerindex", layer_index);
           is_error = 1;
@@ -271,14 +275,14 @@ $(function() {
           return false;
         }
 
-        if(serialnum.length > 30) {
+        if(serial_num.length > 30) {
           layer_index = layer.tips('请输入正确的流水号', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
           $(this).find('.serial-num').data("layerindex", layer_index);
           is_error = 1;
           return false;
         }
-        serial_num_with_store_code = gndcode + serialnum;
-        if(serialnums.indexOf(serial_num_with_store_code) >= 0) {
+        serial_num_with_store_code = gndcode + serial_num;
+        if(serial_nums.indexOf(serial_num_with_store_code) >= 0) {
           layer_index = layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
           $(this).find('.serial-num').data("layerindex", layer_index);
           is_error = 1;
@@ -291,23 +295,22 @@ $(function() {
           return false;
         }
 
-        serialnums.push(serial_num_with_store_code);
+        serial_nums.push(serial_num_with_store_code);
         store_and_datetimes.push(store_and_datetime);
         record = {};
-        record["name"] = name;
-        record["serialnum"] = serialnum;
+        record["name"] = store_name;
+        record["serial_num"] = serial_num;
         record["amount"] = amount;
         record["gndgid"] = gndgid;
         record["gndcode"] = gndcode;
         record["datetime"] = datetime;
         records.push(record);
 
-
         store_input_records.push({
           card_number: fcardnum,
           store_code: gndcode,
-          store_name: name,
-          serial_num: serialnum,
+          store_name: store_name,
+          serial_num: serial_num,
           real_amt: amount,
           score: parseInt(amount),
           datetime: datetime,
@@ -323,7 +326,7 @@ $(function() {
     // 提交消费积分
     if(fcardnum !== null && fcardnum !== '-') {
       $(".submit-btn").attr("disabled", "disabled");
-      window.TKH.calcMallScoreExWeb2(0);
+      window.TKH.calcMallScoreExWeb2(0, '礼品兑换');
     // 非会员不积分
     } else {
       window.TKH.redirect_to_with_timestamp('exchange.html');

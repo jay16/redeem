@@ -138,11 +138,25 @@ window.TKH = {
     window.location.href = window.location.href.split('?')[0] + '?' + items.join('&');
   },
   redirect_to_with_timestamp: function(pathname) {
-      var timestamp = (new Date()).valueOf(),
-          split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
-          pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
+    var timestamp = (new Date()).valueOf(),
+        split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
+        pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
 
-      window.location.href = pathname_with_timestamp;
+    window.location.href = pathname_with_timestamp;
+  },
+  redirect_to_with_telphone: function(pathname) {
+    var timestamp = (new Date()).valueOf(),
+        split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
+        pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
+
+    var currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = {};
+
+    if(currentQueryMember && currentQueryMember.length) {
+      currentQueryMemberJSON = JSON.parse(currentQueryMember);
+    }
+    window.localStorage.setItem("temp_telphone", currentQueryMemberJSON['telphone']);
+    window.location.href = pathname_with_timestamp;
   },
   /*
    * window.location.href?timestamp=#{timestamp}
@@ -984,7 +998,7 @@ window.TKH = {
         datetimeId = "datetime_" + dqCount;
     $('.content_2').append(
       '<div class="dq-wrapper dq-wrapper-' + dqCount + '" data-class="dq-wrapper-' + dqCount + '" data-submited="no" data-layerindex="0">\
-         <div class="dp"> \
+         <div class="dq-control dp"> \
             <p>店铺名称 / Merchant</p>\
             <input type="text" readonly="readonly" placeholder="店铺名称" class="store-name" onclick="window.TKH.searchDQM(this);"/>\
             <input type="hidden" class="gndgid"/>\
@@ -993,17 +1007,20 @@ window.TKH = {
               <img src="assets/images/search.png"/>\
             </a>\
          </div>\
-         <div>\
+         <div class="dq-control">\
            <p>流水号 / Serial Number</p>\
            <input type="text" placeholder="流水号" class="serial-num" value=""/>\
          </div>\
-         <div style="width: 28%;">\
+         <div class="dq-control">\
            <p>消费时间 / Time</p>\
            <input type="text" id="' + datetimeId + '" value="' + (new Date).format('yyyy.MM.dd hh:mm:ss') + '" class="datetime" readonly />\
          </div>\
-         <div style="width: 14%;">\
+         <div class="dq-control">\
            <p>消费金额 / Amount</p>\
-           <input style="width:60%" type="number" placeholder="0.00" class="amount"/>\
+           <input style="width:100%" type="number" placeholder="0.00" class="amount"/>\
+         </div>\
+         <div class="dq-remove">\
+           <p>&nbsp;</p>\
            <button href="javascript:void(0);" class="jian" onclick="window.TKH.removeRecordInput(this);">-</button>\
          </div>\
        </div>'
@@ -1664,7 +1681,7 @@ window.TKH = {
    * 消费积分(礼品兑换页面）
    * 3.2.18 生成HDMall消费积分单
    */
-  calcMallScoreExWeb2: function(data_index) {
+  calcMallScoreExWeb2: function(data_index, data_source) {
     var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
         scoreInputRecords = JSON.parse(scoreInputRecordsString),
         data = scoreInputRecords[data_index],
@@ -1743,13 +1760,13 @@ window.TKH = {
       post_param["amount"]        = real_amt;
       post_param["store_code"]    = store_code;
       post_param["store_name"]    = store_name;
-      post_param["data_source"]   = "礼品兑换";
+      post_param["data_source"]   = data_source;
       window.ServerAPI.save_consume(post_param, function(){});
 
       if(data_index == scoreInputRecords.length - 1) {
         window.TKH.checkRedeemStoreSubmited();
       } else {
-        window.TKH.calcMallScoreExWeb2(data_index + 1);
+        window.TKH.calcMallScoreExWeb2(data_index + 1, data_source);
       }
     });
   },
@@ -1867,11 +1884,11 @@ window.TKH = {
     window.TKH.refreshRedeemScoreInput(true);
     window.TKH.redirect_to_with_timestamp('exchange.html');
   },
-  backToUpdateScoreInput: function() {
+  backToUpdateScoreInput: function(data_source) {
     $(".layui-layer-close").click();
 
     window.TKH.refreshRedeemScoreInput(false);
-    window.TKH.calcMallScoreExWeb2(0);
+    window.TKH.calcMallScoreExWeb2(0, data_source);
   },
   checkRedeemStoreSubmited: function() {
     var is_all_ok = true;

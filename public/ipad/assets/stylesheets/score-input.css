@@ -7,7 +7,7 @@
     display: none;
 }
 @media only screen and (min-width: 1366px){
-#main { background-size: 100% 100%;}
+  #main { background-size: 100% 100%;}
 }
 
 
@@ -90,10 +90,10 @@
     margin-top: 0.2rem;
     position: relative;
 }
-.content_2 > div > div{
+.dq-control {
     float: left;
-    width: 25%;
-    padding: 0 1%;
+    width: 22%;
+    padding: 0 0.5%;
     margin-bottom: 0.5rem;
 }
 .content_2 input{
@@ -228,7 +228,7 @@
 }
 .hangHu>div{
     display: inline-block;
-    width: 48.7%;
+    width: 23%; /*48.7%;*/
     height: 3.4rem;
     max-width: 199px;
     position: relative;
