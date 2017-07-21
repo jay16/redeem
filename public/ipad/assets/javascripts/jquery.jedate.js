@@ -202,11 +202,11 @@ window.console && (console = console || {log : function(){return;}});
 			jet.minDate = opts.minDate || config.minDate;
 			jet.maxDate = opts.maxDate || config.maxDate;
 			$("body").append(createDiv);
-			that.setHtml(opts);    
-		}   
+			that.setHtml(opts);
+		}
 	};
 	//方位辨别
-	jedfn.orien = function(obj, self, pos) {  
+	jedfn.orien = function(obj, self, pos) {
 		var tops, leris, ortop, orleri, rect = jet.fixed ? self[0].getBoundingClientRect() : obj[0].getBoundingClientRect();
 		if(jet.fixed) {
             //根据目标元素计算弹层位置
@@ -428,7 +428,7 @@ window.console && (console = console || {log : function(){return;}});
 	jedfn.setStrhms = function(opts) {
 		var that = this, boxCell = $(jet.boxCell);
 		var parseFormat = jet.format, hmsArr = [], hmsliCls = boxCell.find(".jedatehms li"),
-			proptextCls = boxCell.find(".jedatepropcon .jedateproptext"), 
+			proptextCls = boxCell.find(".jedatepropcon .jedateproptext"),
 			propconCls = boxCell.find(".jedatepropcon .jedatehmscon");
 		var parsehms = function(str) {
 			var ymdstr = str.match(ymdMacth).join("-"), timeArr = ymdstr == "YYYY-MM-DD-hh-mm" ? str.split(" ") : ymdstr,
@@ -452,7 +452,7 @@ window.console && (console = console || {log : function(){return;}});
 			inputCls.eq(i).attr("maxlength",2).attr("numval",len-1).attr("item",i);
 			for (var h = 0; h < len; h++) {
 				h = jet.digit(h);
-				if (jet.isBool(opts.hmsLimit)) { 
+				if (jet.isBool(opts.hmsLimit)) {
                     hmsCls = parmathm && i == 2 ? minhms[i] == h ? "disabled action" :"disabled" :textem == h ? "action" :"";
                     if(parmathm && i == 2){
                         var readCls = hmsliCls.eq(2);
@@ -477,8 +477,8 @@ window.console && (console = console || {log : function(){return;}});
 	//仅年月情况下的点击
 	jedfn.onlyYMevents = function(tmsArr, opts) {
 		var that = this, boxCell = $(jet.boxCell);
-		var ymVal, ymPre = boxCell.find(".jedateym .ymprev"), 
-			ymNext = boxCell.find(".jedateym .ymnext"), 
+		var ymVal, ymPre = boxCell.find(".jedateym .ymprev"),
+			ymNext = boxCell.find(".jedateym .ymnext"),
 			ony = parseInt(tmsArr[0]), onm = parseFloat(tmsArr[1]);
 		$.each([ ymPre, ymNext ], function(i, cls) {
 			cls.on("click", function(ev) {
@@ -689,7 +689,7 @@ window.console && (console = console || {log : function(){return;}});
 				//计算当前时分秒的位置
 				$.each([ "hours", "minutes", "seconds" ], function(i, hms) {
 					var hmsCls = boxCell.find(".jedateprop" + hms), achmsCls = boxCell.find(".jedateprop"+hms+" .action");
-					hmsCls[0].scrollTop = achmsCls[0].offsetTop - screlTopNum; 
+					hmsCls[0].scrollTop = achmsCls[0].offsetTop - screlTopNum;
 					var onhmsPCls = boxCell.find(".jedateprop" + hms + " p");
 					onhmsPCls.on("click", function() {
 						var _this = $(this);
@@ -699,7 +699,9 @@ window.console && (console = console || {log : function(){return;}});
 						});
 						_this.addClass("action");
 						boxCell.find(".jedatebot .jedatehms input").eq(i).val(jet.digit(_this.text()));
-						if (!ishhmmss) jet.isShow(boxCell.find(".jedateprophms"), false);
+						if (hms === "seconds") {
+							if (!ishhmmss) jet.isShow(boxCell.find(".jedateprophms"), false);
+						}
 					});
 				});
 			};
