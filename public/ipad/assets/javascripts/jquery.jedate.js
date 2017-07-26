@@ -515,8 +515,10 @@ window.console && (console = console || {log : function(){return;}});
 			var aty = parseInt(_that.attr("year")), atm = parseFloat(_that.attr("month")), atd = parseFloat(_that.attr("day")),
 				getDateVal = jet.parse([ aty, atm, atd ], [ liTms[0], liTms[1], liTms[2] ], jet.format);
 			jet.isValHtml(elemCell) ? elemCell.val(getDateVal) :elemCell.text(getDateVal);
-			that.dateClose();
-			opts.festival && $("#jedatetipscon").remove();
+			// that.dateClose();
+			// opts.festival && $("#jedatetipscon").remove();
+			$(".jedaul li").removeClass('action');
+			_that.addClass('action')
 			if ($.isFunction(opts.choosefun) || opts.choosefun != null) opts.choosefun && opts.choosefun(elemCell,getDateVal);
 		});
 
