@@ -1880,9 +1880,13 @@ window.TKH = {
     window.localStorage.setItem("records", JSON.stringify(records));
     window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
   },
-  skipStoreToReddem: function() {
+  skipStoreToExchange: function() {
     window.TKH.refreshRedeemScoreInput(true);
     window.TKH.redirect_to_with_timestamp('exchange.html');
+  },
+  skipStoreToDone: function() {
+    window.TKH.refreshRedeemScoreInput(true);
+    window.TKH.redirect_to_with_timestamp('complete.html');
   },
   backToUpdateScoreInput: function(data_source) {
     $(".layui-layer-close").click();
