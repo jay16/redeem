@@ -1884,9 +1884,9 @@ window.TKH = {
     window.TKH.refreshRedeemScoreInput(true);
     window.TKH.redirect_to_with_timestamp('exchange.html');
   },
-  skipStoreToDone: function() {
+  skipStoreToScoreComplete: function() {
     window.TKH.refreshRedeemScoreInput(true);
-    window.TKH.redirect_to_with_timestamp('complete.html');
+    window.TKH.redirect_to_with_timestamp('score-complete.html');
   },
   backToUpdateScoreInput: function(data_source) {
     $(".layui-layer-close").click();

@@ -1,0 +1,108 @@
+#main {
+    background:url('../images/bg-blur.jpg');
+    filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
+    -webkit-animation: fadeIn .6s backwards;
+    display: none;
+}
+@media only screen and (min-width: 1366px){
+  #main { background-size: 100% 100%;}
+}
+
+.title img{width: 0.5rem;margin-top: -0.1rem;}
+.title{
+    color: #ddd;
+    font-size: 0.6rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.content{
+    width: 90%;
+    margin: 0.6rem auto 0;
+}
+.content_1{overflow: hidden;}
+.content_1>div{
+    float: left;
+    width: auto;
+    color: #777;
+    background-color: #505050;
+    font-size: 0.4rem;
+    text-align: center;
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+}
+.content_1>div:nth-child(2){margin: 0 0.5%;}
+.content_1 .act{
+    color: #fdc82f;
+    background-color: #303030;
+}
+.act img{
+    width: auto;
+    height: 0.4rem;
+    margin: -0.1rem 0.2rem 0 0;
+}
+.content_1 p{
+    line-height: 1rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.kx{
+    text-align: left;
+    background-color: rgba(0,0,0,0.5);
+    width: 90%;
+    margin: 0.5rem auto;
+    padding: 0.3rem 0;
+    font-size: 0.5rem;
+    color: #ddd;
+}
+.kx img{
+    width: 0.5rem;
+    margin: -0.11rem 0.2rem 0 0.5rem;
+}
+.kx span{
+    float: right;
+    width: 1rem;
+    line-height: 0.7rem;
+    text-align: center;
+    background-color: #000;
+    font-size: 0.4rem;
+    color: #ddd;
+    border-radius: 100px;
+    margin-right: 0.5rem;
+}
+
+.xin{
+    text-align: center;
+}
+.xin a{
+    text-align: center;
+    font-size: 16px;
+    color: #ddd;
+    padding: 0.2rem 1.6rem;
+    background-color: #438dcb;
+    display: inline-block;
+    margin: 0.5rem 1rem 0 0;
+    border-radius: 5px;
+}
+.xin a:active{ background-color: #4aa2e7;}
+
+.jp,.ewm{
+    margin: 0.5rem auto;
+    width: 90%;
+    /*background-color: #fff;*/
+    text-align: center;
+    padding: 0.4rem 0;
+}
+.jp img,.ewm img{
+    height: 60%;
+    width: auto;
+}
+
+.ewm{
+    margin: 0 auto;
+    padding: 0.4rem 0;
+}

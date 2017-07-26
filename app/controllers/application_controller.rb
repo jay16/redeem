@@ -82,6 +82,7 @@ class ApplicationController < Sinatra::Base
       'admin:signature' => '签名管理',
       'ipad:login' => '登录',
       'ipad:complete' => '兑换完成',
+      'ipad:score-complete' => '积分完成',
       'ipad:entry' => '消费录入',
       'ipad:score-input' => '消费积分',
       'ipad:exchange' => '选择礼物',
