@@ -1171,8 +1171,20 @@ window.TKH = {
         for (var i = 0, len = outparams["Data"].length; i < len; i++) {
           item = outparams["Data"][i];
           gift_image = 'gift.png';
-          if(['乐高精美礼品', '乐高主题豪华套装', 'Hottoys主题抱枕'].indexOf($.trim(item["FNAME"])) >= 0) {
-            gift_image = 'gift-' + item["FNAME"] + '.jpg';
+          /*
+           * FCODE: 0001, FGID: 1000022 FNAME: 乐高精美礼品 FNUM: 02101707090001
+           * FCODE: 0002, FGID: 1000023 FNAME: Hottoys主题抱枕 FNUM: 02101707090001
+           * FCODE: 0003, FGID: 1000024 FNAME: 乐高主题豪华套装 FNUM: 02101707090001
+           * FCODE: 0005, FGID: 1000040 FNAME: 日置名媛5888元体验券 FNUM: 02101707090001
+           * FCODE: 0006, FGID: 1000060 FNAME: FUN享嗲礼 消费满2000礼券 FNUM: 02101708010001
+           * FCODE: 0007, FGID: 1000061 FNAME: FUN享嗲礼 消费满5000礼券 FNUM: 02101708010001
+           * FCODE: 0008, FGID: 1000062 FNAME: FUN享嗲礼 消费满8000礼券 FNUM: 02101708010001
+           *
+           * 
+           * FCODE: 0004, FGID: 1000025 FNAME: 抽奖 FNUM: 02101707090001
+           */
+          if(['0001','0002','0003','0006','0007','0008'].indexOf($.trim(item["FCODE"])) >= 0) {
+            gift_image = 'gift-' + item["FCODE"] + '.png';
           }
           console.log(item["FNAME"] + ' - ' + gift_image);
           html += "<div class='xuzh_jin' style='display: none;'>"
