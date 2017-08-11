@@ -191,70 +191,72 @@ $(function() {
     }
 
     $(".dq-wrapper").each(function() {
-      store_name = $(this).find("input.store-name").val();
-      serial_num = $(this).find("input.serial-num").val();
-      amount = $(this).find("input.amount").val();
-      gndgid = $(this).find("input.gndgid").val();
-      gndcode = $(this).find("input.gndcode").val();
-      datetime = $(this).find("input.datetime").val();
-      store_and_datetime = gndgid + datetime;
-      wrapper_class = $(this).attr("class").replace("dq-wrapper ", "");
-      is_error = 0;
+      if($(this).data("submited") === "no") {
+        store_name = $(this).find("input.store-name").val();
+        serial_num = $(this).find("input.serial-num").val();
+        amount = $(this).find("input.amount").val();
+        gndgid = $(this).find("input.gndgid").val();
+        gndcode = $(this).find("input.gndcode").val();
+        datetime = $(this).find("input.datetime").val();
+        store_and_datetime = gndgid + datetime;
+        wrapper_class = $(this).attr("class").replace("dq-wrapper ", "");
+        is_error = 0;
 
-      if(!store_name.length) {
-        layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
-        is_error = 1;
-        all_is_ok = 0;
-        return false;
-      }
+        if(!store_name.length) {
+          layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'] });
+          is_error = 1;
+          all_is_ok = 0;
+          return false;
+        }
 
-      if(!serial_num.length) {
-        layer.tips('流水号不能为空', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
-        is_error = 1;
-        all_is_ok = 0;
-        return false;
-      }
+        if(!serial_num.length) {
+          layer.tips('流水号不能为空', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
+          is_error = 1;
+          all_is_ok = 0;
+          return false;
+        }
 
-      if(serial_num.length > 30) {
-        layer.tips('请输入正确的流水号', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
-        is_error = 1;
-        all_is_ok = 0;
-        return false;
-      }
+        if(serial_num.length > 30) {
+          layer.tips('请输入正确的流水号', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
+          is_error = 1;
+          all_is_ok = 0;
+          return false;
+        }
 
-      if(!amount.length) {
-        layer.tips('请正确填写金额', $(this).find('.amount'), { tips: [3, '#faab20'] });
-        is_error = 1;
-        all_is_ok = 0;
-        return false;
-      }
-      serial_num_with_store_code = gndcode + serial_num;
-      if(serial_nums.indexOf(serial_num_with_store_code) >= 0) {
-        layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
-        is_error = 1;
-        all_is_ok = 0;
-        return false;
-      }
-      if(store_and_datetimes.indexOf(store_and_datetime) >= 0) {
-        layer.tips('请勿重复积分', $(this).find('.store-name'), { tips: [3, '#faab20'] });
-        is_error = 1;
-        all_is_ok = 0;
-        return false;
-      }
+        if(!amount.length) {
+          layer.tips('请正确填写金额', $(this).find('.amount'), { tips: [3, '#faab20'] });
+          is_error = 1;
+          all_is_ok = 0;
+          return false;
+        }
+        serial_num_with_store_code = gndcode + serial_num;
+        if(serial_nums.indexOf(serial_num_with_store_code) >= 0) {
+          layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'] });
+          is_error = 1;
+          all_is_ok = 0;
+          return false;
+        }
+        if(store_and_datetimes.indexOf(store_and_datetime) >= 0) {
+          layer.tips('请勿重复积分', $(this).find('.store-name'), { tips: [3, '#faab20'] });
+          is_error = 1;
+          all_is_ok = 0;
+          return false;
+        }
 
-      serial_nums.push(serial_num_with_store_code);
-      store_and_datetimes.push(store_and_datetime);
-      data = {
-        card_number: card_number,
-        serial_num: serial_num,
-        store_name: store_name,
-        store_code: gndcode,
-        real_amt: amount,
-        score: parseInt(amount),
-        datetime: datetime,
-        wrapper_class: wrapper_class
-      };
-      datas.push(data);
+        serial_nums.push(serial_num_with_store_code);
+        store_and_datetimes.push(store_and_datetime);
+        data = {
+          card_number: card_number,
+          serial_num: serial_num,
+          store_name: store_name,
+          store_code: gndcode,
+          real_amt: amount,
+          score: parseInt(amount),
+          datetime: datetime,
+          wrapper_class: wrapper_class
+        };
+        datas.push(data);
+      }
     });
 
     if (all_is_ok) {
