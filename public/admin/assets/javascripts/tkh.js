@@ -21,22 +21,32 @@ Date.prototype.format = function(format) {
 }
 
 window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,errorObj) {
-   console.log('--------------------');
-   console.log("错误信息：" , errorMessage);
-   console.log("出错文件：" , scriptURI);
-   console.log("出错行号：" , lineNumber);
-   console.log("出错列号：" , columnNumber);
-   console.log("错误详情：" , errorObj);
-   console.log(errorObj);
-   console.log(typeof(errorObj));
-   console.log('--------------------');
+    console.log('--------------------');
+    console.log("错误信息：" , errorMessage);
+    console.log("出错文件：" , scriptURI);
+    console.log("出错行号：" , lineNumber);
+    console.log("出错列号：" , columnNumber);
+    console.log("错误详情：" , errorObj);
+    console.log(errorObj);
+    console.log(typeof(errorObj));
+    console.log('--------------------');
 
-   if(layer) { layer.closeAll(); }
-   alert("错误详情: \n" + errorObj);
+    if(layer) { layer.closeAll(); }
+    // alert("错误详情: \n" + errorObj);
+    layer.msg('操作有误，请修改或重新提交该流程。', {
+      time: 0,
+      btn: ['确定'],
+      btnAlign: 'c',
+      yes: function(index) {
+        layer.close(index);
+
+        window.location.reload();
+      }
+    });
 }
 
 window.TKH = {
-  version: '0.6.32',
+  version: '0.6.33',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -128,11 +138,25 @@ window.TKH = {
     window.location.href = window.location.href.split('?')[0] + '?' + items.join('&');
   },
   redirect_to_with_timestamp: function(pathname) {
-      var timestamp = (new Date()).valueOf(),
-          split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
-          pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
+    var timestamp = (new Date()).valueOf(),
+        split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
+        pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
 
-      window.location.href = pathname_with_timestamp;
+    window.location.href = pathname_with_timestamp;
+  },
+  redirect_to_with_telphone: function(pathname) {
+    var timestamp = (new Date()).valueOf(),
+        split_str = pathname.indexOf('?') >= 0 ? '&' : '?';
+        pathname_with_timestamp = pathname + split_str + 'timestamp=' + timestamp;
+
+    var currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = {};
+
+    if(currentQueryMember && currentQueryMember.length) {
+      currentQueryMemberJSON = JSON.parse(currentQueryMember);
+    }
+    window.localStorage.setItem("temp_telphone", currentQueryMemberJSON['telphone']);
+    window.location.href = pathname_with_timestamp;
   },
   /*
    * window.location.href?timestamp=#{timestamp}
@@ -957,15 +981,24 @@ window.TKH = {
     })
   },
   removeRecordInput: function(ctl) {
-    $(ctl).closest('.dq-wrapper').remove();
+    var $wrapper_class = $(ctl).closest('.dq-wrapper');
+    // 关闭历史提示框
+    $wrapper_class.find("input").each(function() {
+      var li = $(this).data("layerindex"),
+          li_number = parseInt(li);
+
+      if(!isNaN(li_number)) { layer.close(li_number); }
+    });
+
+    $wrapper_class.remove();
   },
   // 消费录入，添加录入框
   addRecordInput: function() {
     var dqCount = $(".content_2 .dq-wrapper").length + 1,
         datetimeId = "datetime_" + dqCount;
     $('.content_2').append(
-      '<div class="dq-wrapper dq-wrapper-' + dqCount + '">\
-         <div class="dp"> \
+      '<div class="dq-wrapper dq-wrapper-' + dqCount + '" data-class="dq-wrapper-' + dqCount + '" data-submited="no" data-layerindex="0">\
+         <div class="dq-control dp"> \
             <p>店铺名称 / Merchant</p>\
             <input type="text" readonly="readonly" placeholder="店铺名称" class="store-name" onclick="window.TKH.searchDQM(this);"/>\
             <input type="hidden" class="gndgid"/>\
@@ -974,18 +1007,21 @@ window.TKH = {
               <img src="assets/images/search.png"/>\
             </a>\
          </div>\
-         <div>\
+         <div class="dq-control">\
            <p>流水号 / Serial Number</p>\
            <input type="text" placeholder="流水号" class="serial-num" value=""/>\
          </div>\
-         <div style="width: 28%;">\
+         <div class="dq-control">\
            <p>消费时间 / Time</p>\
            <input type="text" id="' + datetimeId + '" value="' + (new Date).format('yyyy.MM.dd hh:mm:ss') + '" class="datetime" readonly />\
          </div>\
-         <div style="width: 14%;">\
+         <div class="dq-control">\
            <p>消费金额 / Amount</p>\
-           <input style="width:60%" type="number" placeholder="0.00" class="amount"/>\
-           <a href="javascript:void(0);" class="jian" onclick="window.TKH.removeRecordInput(this);">-</a>\
+           <input style="width:100%" type="number" placeholder="0.00" class="amount"/>\
+         </div>\
+         <div class="dq-remove">\
+           <p>&nbsp;</p>\
+           <button href="javascript:void(0);" class="jian" onclick="window.TKH.removeRecordInput(this);">-</button>\
          </div>\
        </div>'
     );
@@ -1191,40 +1227,6 @@ window.TKH = {
       });
     }
   },
-  scoreBeforeRedeem: function() {
-    var fcardnum = window.localStorage.getItem('sFCARDNUM'),
-        store_input_records = [];
-    // 消费记录
-    $(".xf").each(function() {
-      if ($(this).hasClass("checked")) {
-        var fgndgid = $(this).find(".guoxiao_gndgid").val(),
-            fgndcode = $(this).find(".guoxiao_gndcode").val(),
-            storename = $(this).find(".guoxiao_store").val(),
-            fflowno = $(this).find(".guoxiao_serialnum").val(),
-            famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
-            focrtime = $(this).find(".guoxiao_datetime").val();
-            wrapper_class = $(this).data("class");
-
-        if(fcardnum !== null && fcardnum !== '-') {
-          store_input_records.push({
-            card_number: fcardnum,
-            store_code: fgndcode,
-            store_name: storename,
-            serial_num: fflowno,
-            real_amt: famt,
-            score: parseInt(famt),
-            datetime: focrtime,
-            wrapper_class: wrapper_class
-          });
-        }
-      }
-    });
-    if(store_input_records.length) {
-      console.log(store_input_records);
-      window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
-      window.TKH.calcMallScoreExWeb(0, true, false, '礼品兑换');
-    }
-  },
   /*
    * 礼品兑换
    * 3.2.31 生成赠品发放单接口
@@ -1400,7 +1402,17 @@ window.TKH = {
         window.localStorage.removeItem("records");
         window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
       } else {
-        layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
+        layer.msg("礼品兑换失败：" + outparams["FMSG"], {
+          time: 0,
+          btn: ['确定'],
+          btnAlign: 'c',
+          yes: function(index) {
+            layer.close(index);
+
+            window.localStorage.removeItem("records");
+            window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
+          }
+        });
       }
     });
   },
@@ -1595,7 +1607,7 @@ window.TKH = {
        </div>');
   },
   /*
-   * 消费积分
+   * 消费积分(单独积分页面）
    * 3.2.18 生成HDMall消费积分单
    */
   calcMallScoreExWeb: function(data_index, is_async, is_redirect, data_source) {
@@ -1674,6 +1686,244 @@ window.TKH = {
         window.TKH.calcMallScoreExWeb(data_index + 1, is_async, is_redirect, data_source);
       }
     });
+  },
+  /*
+   * 消费积分(礼品兑换页面）
+   * 3.2.18 生成HDMall消费积分单
+   */
+  calcMallScoreExWeb2: function(data_index, data_source) {
+    var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
+        scoreInputRecords = JSON.parse(scoreInputRecordsString),
+        data = scoreInputRecords[data_index],
+        currentQueryMember = window.localStorage.getItem('current_telphone'),
+        currentQueryMemberJSON = {};
+    if(currentQueryMember && currentQueryMember.length) {
+      currentQueryMemberJSON = JSON.parse(currentQueryMember);
+    }
+
+    var trant_time = data.datetime;
+    while(trant_time && trant_time.length &&
+          (trant_time.indexOf(".") >= 0 ||
+           trant_time.indexOf(":") >= 0 ||
+           trant_time.indexOf(" ") >= 0)) {
+      trant_time = trant_time.replace(".", "");
+      trant_time = trant_time.replace(":", "");
+      trant_time = trant_time.replace(" ", "");
+    }
+    var card_num = data.card_number,
+        trant_time2 = (new Date()).format('yyyyMMddhhmmss'),
+        store_code = data.store_code,
+        store_name = data.store_name,
+        serial_num = data.serial_num,
+        real_amt = data.real_amt,
+        score = data.score,
+        fvoucher_type = '01',
+        params = '{' +
+                    '&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;' +
+                    ',&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
+                    ',&quot;FVOUCHERNUM&quot;:&quot;' + serial_num + '&quot;' +
+                    ',&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;' +
+                    ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
+                    ',&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;' +
+                    ',&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;' +
+                    ',&quot;FSCORE&quot;:&quot;' + score + '&quot;' +
+                  '}',
+        ajax_data = {
+          params: params,
+          command: 'CRMCalcMallScoreExWeb',
+          async: true
+        };
+    window.TKH.hdClientCommand(ajax_data, function(result) {
+      var errMsg = $(result).find('sErrMsg').text(),
+          resultstring = $(result).find('sOutParams').text(),
+          outparams = JSON.parse(resultstring),
+          $wrapper_class = $("." + data.wrapper_class);
+
+      console.log("wrapper_class: " + data.wrapper_class);
+      var $store_name = $wrapper_class.find('.store-name'),
+          layer_index;
+
+      layer.close(parseInt($wrapper_class.data("layerindex")));
+      if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+        layer_index = layer.tips("恭喜您积分成功", $store_name, { tips: [1, '#5FB878'], time: 0, tipsMore: true});
+        $wrapper_class.data("submited", "yes");
+        $wrapper_class.find("input, button").each(function(){
+          $(this).attr('disabled', 'disabled');
+        })
+      } else {
+        layer_index = layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});
+        $wrapper_class.data("submited", "error");
+      }
+      // 关闭历史提示框
+      $wrapper_class.find("input").each(function() {
+        var li = $(this).data("layerindex"),
+            li_number = parseInt(li);
+
+        if(!isNaN(li_number)) { layer.close(li_number); }
+      });
+      $store_name.data("layerindex", layer_index);
+
+      var post_param              = {};
+      post_param["name"]          = currentQueryMemberJSON["name"];
+      post_param["card_number"]   = currentQueryMemberJSON["card_number"];
+      post_param["serial_number"] = serial_num;
+      post_param["amount"]        = real_amt;
+      post_param["store_code"]    = store_code;
+      post_param["store_name"]    = store_name;
+      post_param["data_source"]   = data_source;
+      window.ServerAPI.save_consume(post_param, function(){});
+
+      if(data_index == scoreInputRecords.length - 1) {
+        window.TKH.checkRedeemStoreSubmited();
+      } else {
+        window.TKH.calcMallScoreExWeb2(data_index + 1, data_source);
+      }
+    });
+  },
+  refreshRedeemScoreInput: function(allow_all) {
+    var fcardnum = window.localStorage.getItem('sFCARDNUM');
+    var name = '',
+        amount = '',
+        serialnum = '',
+        serialnums = [],
+        store_and_datetime = '',
+        store_and_datetimes = [],
+        gndgid = '',
+        gndcode = '',
+        datetime = '',
+        record = {},
+        records = [],
+        is_error = 0,
+        serial_num_with_store_code,
+        wrapper_class,
+        store_input_records = [],
+        layer_index;
+    $(".dq-wrapper").each(function() {
+      /*
+       *
+       * allow_all:
+       *     - true: 记录所有消费项
+       *     - false:
+       *         - submited === yes: 跳过已经提交成功的消费项
+       */
+      if(!allow_all && $(this).data("submited") === "yes") {
+        // return false;
+        // skip
+      } else {
+        name = $(this).find("input.store-name").val();
+        serialnum = $(this).find("input.serial-num").val();
+        amount = $(this).find("input.amount").val();
+        gndgid = $(this).find("input.gndgid").val();
+        gndcode = $(this).find("input.gndcode").val();
+        datetime = $(this).find("input.datetime").val();
+        store_and_datetime = gndgid + datetime;
+        is_error = 0,
+        wrapper_class = $(this).data("class");
+
+        if(!name.length) {
+          layer_index = layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.store-name').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+
+        if(!serialnum.length) {
+          layer_index = layer.tips('流水号不能为空', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.serial-num').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+
+        if(!amount.length) {
+          layer_index = layer.tips('请正确填写金额', $(this).find('.amount'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.amount').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+
+        if(serialnum.length > 30) {
+          layer_index = layer.tips('请输入正确的流水号', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.serial-num').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+        serial_num_with_store_code = gndcode + serialnum;
+        if(serialnums.indexOf(serial_num_with_store_code) >= 0) {
+          layer_index = layer.tips('流水号重复', $(this).find('.serial-num'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.serial-num').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+        if(store_and_datetimes.indexOf(store_and_datetime) >= 0) {
+          layer_index = layer.tips('请勿重复积分', $(this).find('.store-name'), { tips: [3, '#faab20'], time: 0 });
+          $(this).find('.serial-num').data("layerindex", layer_index);
+          is_error = 1;
+          return false;
+        }
+
+        serialnums.push(serial_num_with_store_code);
+        store_and_datetimes.push(store_and_datetime);
+        record = {};
+        record["name"] = name;
+        record["serialnum"] = serialnum;
+        record["amount"] = amount;
+        record["gndgid"] = gndgid;
+        record["gndcode"] = gndcode;
+        record["datetime"] = datetime;
+        records.push(record);
+
+        store_input_records.push({
+          card_number: fcardnum,
+          store_code: gndcode,
+          store_name: name,
+          serial_num: serialnum,
+          real_amt: amount,
+          score: parseInt(amount),
+          datetime: datetime,
+          wrapper_class: wrapper_class
+        });
+      }
+    });
+
+    if(is_error) { return false; }
+
+    window.localStorage.setItem("records", JSON.stringify(records));
+    window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
+  },
+  skipStoreToExchange: function() {
+    window.TKH.refreshRedeemScoreInput(true);
+    window.TKH.redirect_to_with_timestamp('exchange.html');
+  },
+  skipStoreToScoreComplete: function() {
+    window.TKH.refreshRedeemScoreInput(true);
+    window.TKH.redirect_to_with_timestamp('score-complete.html');
+  },
+  backToUpdateScoreInput: function(data_source) {
+    $(".layui-layer-close").click();
+
+    window.TKH.refreshRedeemScoreInput(false);
+    window.TKH.calcMallScoreExWeb2(0, data_source);
+  },
+  checkRedeemStoreSubmited: function() {
+    var is_all_ok = true;
+    $(".dq-wrapper").each(function() {
+      // 跳过已经提交成功的消费项
+      if($(this).data("submited") !== "yes") {
+        is_all_ok = false
+      }
+    });
+
+    $(".submit-btn").removeAttr("disabled");
+    $(".submit-btn").html(is_all_ok ? "下一页<br/>Next" : "提交<br/>Submit");
+
+    if(is_all_ok) {
+      window.localStorage.removeItem("scoreInputRecords");
+      $(".submit-btn").css("display", "block");
+      $(".skip-btn").css("display", "none");
+    } else {
+      $(".submit-btn").css("display", "none");
+      $(".skip-btn").css("display", "block");
+    }
   },
   // 3.2.7 查询有效商铺信息，后台同步使用该接口
   queryStoreForSync: function(fpageindex) {

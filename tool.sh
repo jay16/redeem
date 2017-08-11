@@ -117,6 +117,28 @@ case "$1" in
     pages)
         bash lib/scripts/offline_pages.sh
     ;;
+    page:admin)
+        if [[ -z "$2" ]]; then
+            echo "Error: please input admin page name"
+            exit
+        fi
+        page="$2"
+        curl "http://localhost:4567/generate/admin/$page" > public/admin/$page
+        sed -i '' s#/javascripts/#assets/javascripts/#g public/admin/$page
+        sed -i '' s#/stylesheets/#assets/stylesheets/#g public/admin/$page
+        sed -i '' s#/images/#assets/images/#g public/admin/$page
+    ;;
+    page:ipad)
+        if [[ -z "$2" ]]; then
+            echo "Error: please input ipad page name"
+            exit
+        fi
+        page="$2"
+        curl "http://localhost:4567/generate/ipad/$page" > public/ipad/$page
+        sed -i '' s#/javascripts/#assets/javascripts/#g public/ipad/$page
+        sed -i '' s#/stylesheets/#assets/stylesheets/#g public/ipad/$page
+        sed -i '' s#/images/#assets/images/#g public/ipad/$page
+    ;;
     mysql:commands|mc)
       app_env=${2:-'production'}
       RACK_ENV=${app_env} bundle exec rake doctor:mysql:commands

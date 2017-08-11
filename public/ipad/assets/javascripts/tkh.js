@@ -46,7 +46,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 }
 
 window.TKH = {
-  version: '0.6.32',
+  version: '0.6.33',
   environment: '',
   api_server: '', // 后台管理
   server: '', // HD server
@@ -1402,7 +1402,17 @@ window.TKH = {
         window.localStorage.removeItem("records");
         window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
       } else {
-        layer.msg("『底层接口』提示：" + outparams["FMSG"], { time: 2000 });
+        layer.msg("礼品兑换失败：" + outparams["FMSG"], {
+          time: 0,
+          btn: ['确定'],
+          btnAlign: 'c',
+          yes: function(index) {
+            layer.close(index);
+
+            window.localStorage.removeItem("records");
+            window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
+          }
+        });
       }
     });
   },
