@@ -950,7 +950,9 @@ window.TKH = {
   },
   // 消费录入/积分录入，打开商户选择
   searchDQM: function(ctl) {
-    $(".search-store").val('');
+    var dpm = $(ctl).parent().find('.store-name');
+    dpm.parent(".dp").addClass('suoding');
+    $(".search-store").val("");
     $('.xuanZe').fadeIn(200);
     // window.TKH.queryMallGndWeb(1);
     window.TKH.queryMallGndWebV2();
