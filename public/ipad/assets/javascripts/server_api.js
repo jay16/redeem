@@ -147,39 +147,50 @@ window.ServerAPI = {
       }
     });
   },
+  // 创建会员(单条)
   save_member: function(data) {
     window.ServerAPI.http_action('post', "/api/v1/member", data, 'save member', function(){});
   },
+  // 创建消费记录(单条)
   save_consume: function(data, callback) {
     window.ServerAPI.http_action('post', "/api/v1/consume", data, 'save consume', callback);
   },
+  // 创建消费记录（批量）
   save_consumes: function(data, callback) {
     window.ServerAPI.http_action('post', "/api/v1/consumes", data, 'save consumes', callback);
   },
+  // 创建礼品（同步时使用）
   save_gift: function(data) {
     window.ServerAPI.http_action('post', "/api/v1/gift", data, 'save gift', function(){});
   },
+  // 创建门店（同步时使用）
   save_store: function(data) {
     window.ServerAPI.http_action('post', "/api/v1/store", data, 'save store', function(){});
   },
+  // 创建问卷(单条)
   save_questionnaire: function(data) {
     window.ServerAPI.http_action('post', "/api/v1/questionnaire", data, 'save questionnaire', function(){});
   },
+  // 创建兑换(单条)
   save_redeem: function(data, callback) {
     window.ServerAPI.http_action('post', "/api/v1/redeem", data, 'save redeem', callback);
   },
+  // 创建回答(单条)
   save_answer: function(data) {
     window.ServerAPI.http_action('post', "/api/v1/answer", data, 'save answer', function(){});
   },
+  // 创建签名(单条)
   save_signature: function(data) {
     window.ServerAPI.http_action('post', "/api/v1/signature", data, 'save signature', function(){});
   },
+  // 清空指定表
   truncate_table: function(table_name) {
     window.ServerAPI.http_action('post', "/api/v1/truncate/" + table_name, {}, 'truncate table' + table_name, function(){});
   },
   view_signature: function(ctl) {
     alert($(ctl).data("signature"));
   },
+  // 获取后台配置选择的问卷，前端使用
   ipad_selected_questionnaire: function() {
     $.ajax({
       cache: false,

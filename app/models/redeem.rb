@@ -39,6 +39,7 @@ class Redeem < ActiveRecord::Base
   alias_attribute :redeem_state, :field10 # 兑换状态
   alias_attribute :consumes, :text1 # 消费列表
   alias_attribute :gifts, :text2 # 礼品信息
+  alias_attribute :images, :text3 # 图片名称，多张以逗号分隔
 
   def self.extract_params(params)
     options = {}
@@ -55,6 +56,7 @@ class Redeem < ActiveRecord::Base
     options[:field10] = params[:redeem_state] if params[:redeem_state]
     options[:text1] = params[:consumes] if params[:consumes]
     options[:text2] = params[:gifts] if params[:gifts]
+    options[:text3] = params[:images] if params[:images]
     options
   end
 
@@ -92,12 +94,17 @@ class Redeem < ActiveRecord::Base
   end
 
   def data_table
+    # html_tags = <<-EOF
+    #   <a disabled="disabled" href="/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
+    #     <i class="fa fa-pencil-square-o"></i>
+    #   </a>
+    #   <a disabled="disabled" href="/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+    #     <i class="fa fa-trash"></i>
+    #   </a>
+    # EOF
     html_tags = <<-EOF
-      <a disabled="disabled" href="/view/#{self.class_name}/edit/#{self.id}" class="btn btn-primary btn-xs iframe" title="编辑">
-        <i class="fa fa-pencil-square-o"></i>
-      </a>
-      <a disabled="disabled" href="/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
-        <i class="fa fa-trash"></i>
+      <a href="javascript:void(0);" data-images="#{self.images}" class="btn btn-primary btn-xs iframe" title="查看图片">
+        查看图片
       </a>
     EOF
 
@@ -110,7 +117,8 @@ class Redeem < ActiveRecord::Base
       self.gift_name,
       self.member,
       self.telphone,
-      self.created_at.strftime("%y-%m-%d %H:%M:%S")
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
+      html_tags
     ]
   end
 
@@ -123,6 +131,7 @@ class Redeem < ActiveRecord::Base
       amount: self.field3,
       redeem_state: self.field4,
       serial_number: self.field9,
+      images: self.text3,
       created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end

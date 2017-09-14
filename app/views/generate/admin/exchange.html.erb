@@ -25,6 +25,8 @@
     </div>
   </div>
 </section>
+<div id="imageWrapper">
+</div>
 <script type="text/javascript">
 $(document).ready(function() {
   var oTable = $('#tableRecords').DataTable({
@@ -91,6 +93,12 @@ $(document).ready(function() {
       "targets": 8,
       "orderable": false,
       "searchable": false
+    },
+    {
+      "title": "查看图片",
+      "targets": 9,
+      "orderable": false,
+      "searchable": false
     }
     ],
     "stateSave": true,
@@ -131,17 +139,28 @@ $(document).ready(function() {
     },
     "drawCallback": function(settings) {
       $("#tableRecords_filter").hide();
-      $(".iframe").off('click').on('click',
-      function(event) {
+      $(".iframe").off('click').on('click', function(event) {
         event.preventDefault();
-        var url = $(this).attr('href');
-        var type = BootstrapDialog.TYPE_PRIMARY;
-        if ($(this).attr('title') == '编辑') type = BootstrapDialog.TYPE_PRIMARY;
-        if ($(this).attr('title') == '删除') type = BootstrapDialog.TYPE_DANGER;
-        BootstrapDialog.show({
-          title: $(this).attr('title') + '兑换记录',
-          message: $('<div></div>').load(url),
-          type: type,
+
+        $("#imageWrapper").css({"display": "block"});
+        $("#imageWrapper").html("<div id='imageList'></div>")
+        var $imageList = $("#imageList");
+        var imageName = "无图片";
+        $imageList.html("<p style='text-align:center;'>" + imageName + "</p>");
+
+        if($(event.target) && $(event.target).data("images")) {
+          imageName = $(event.target).data("images");
+          $imageList.html("<img style='max-width:100%;max-height:100%;' src='/images/tkh/" + imageName + "' />");
+        }
+
+        layer.open({
+          type: 1,
+          title: "查看图片",
+          area: ["400px", "300px"],
+          content: $imageList,
+          cancel: function() {
+            $("#imageWrapper").css({"display": "none"});
+          }
         });
       });
     }

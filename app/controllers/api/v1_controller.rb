@@ -151,5 +151,34 @@ module API
 
       respond_with_paginate(klass, items, params)
     end
+
+    #
+    # images
+    #
+    post '/upload/images' do
+      api_authen_params([:module_name])
+
+      images = read_upload_images(params)
+      respond_with_json({message: "上传成功", data: images}, 201)
+    end
+
+    protected
+
+    def read_upload_images(params)
+      image_folder = app_root_join("public/images/#{params[:module_name] || 'tkh'}")
+      FileUtils.mkdir_p(image_folder) unless File.exist?(image_folder)
+      params.keys.find_all { |k| k.match(/^image/) }.map do |image_key|
+        form_data = params[image_key] || {}
+        if form_data && (temp_file = form_data[:tempfile]) && (file_name = form_data[:filename])
+          image_file_path = File.join(image_folder, "#{SecureRandom.uuid}.png")
+          begin
+            File.open(image_file_path, "w:utf-8") { |file| file.puts(temp_file.read.force_encoding("UTF-8")) }
+          rescue => e
+            puts "#{__FILE__}:#{__LINE__} #{e.message}"
+          end
+          File.basename(image_file_path)
+        end
+      end.compact
+    end
   end
 end

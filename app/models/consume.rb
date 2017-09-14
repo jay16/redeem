@@ -25,6 +25,7 @@ class Consume < ActiveRecord::Base
   alias_attribute :store_code, :field4 # 商铺代号
   alias_attribute :store_name, :field5 # 商铺名称
   alias_attribute :data_source, :field6 # 数据来源：消费积分/礼品兑换
+  alias_attribute :images, :text1 # 消费清单的图片，多张以逗号分隔
 
   def self.extract_params(params)
     options = {}
@@ -35,6 +36,7 @@ class Consume < ActiveRecord::Base
     options[:field4] = params[:store_code] if params[:store_code]
     options[:field5] = params[:store_name] if params[:store_name]
     options[:field6] = params[:data_source] if params[:data_source]
+    options[:text1]  = params[:images] if params[:images]
     options
   end
 
@@ -62,10 +64,13 @@ class Consume < ActiveRecord::Base
 
   def data_table
     html_tags = <<-EOF
-      <a href="/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
-        <i class="fa fa-trash"></i>
+      <a href="javascript:void(0);" data-images="#{self.images}" class="btn btn-primary btn-xs iframe" title="查看图片">
+        查看图片
       </a>
     EOF
+    # <a href="/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+    #   <i class="fa fa-trash"></i>
+    # </a>
     [
       self.id,
       self.name,
@@ -74,7 +79,8 @@ class Consume < ActiveRecord::Base
       self.store_code,
       self.store_name,
       self.data_source,
-      self.created_at.strftime("%y-%m-%d %H:%M:%S")
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
+      html_tags
     ]
   end
 
@@ -88,6 +94,7 @@ class Consume < ActiveRecord::Base
       store_code: self.field4,
       store_name: self.field5,
       data_source: self.field6,
+      images: self.text1,
       created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }
   end

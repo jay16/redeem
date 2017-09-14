@@ -9,6 +9,10 @@ module API
 
     protected
 
+    def api_authen_params(keys)
+      halt_with_json({message: "参数不足：请提供 #{keys.join(' ,')}"}, 401) if keys.any? { |key| !params.has_key?(key) }
+    end
+
     def respond_with_paginate(klass, data_list, params)
       total_count = klass.count
 

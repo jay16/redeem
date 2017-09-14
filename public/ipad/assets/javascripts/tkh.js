@@ -1404,7 +1404,8 @@ window.TKH = {
           "gift_code": $(".xuanZhong").find(".gift_code").val(),
           "consumes": post_param_consumes,
           "gifts": post_param_gifts,
-          "redeem_state": "兑换成功"
+          "redeem_state": "兑换成功",
+          "images": "972d1c63-9ebb-46c2-b5f0-7d0e8050e397.png"
         };
         window.ServerAPI.save_redeem(post_param, function(){});
 
@@ -1685,6 +1686,7 @@ window.TKH = {
       post_param["store_code"]    = store_code;
       post_param["store_name"]    = store_name;
       post_param["data_source"]   = data_source;
+      post_param["images"]        = "668ca8f0-23d6-4010-878b-42a0dc0ac668.png";
       window.ServerAPI.save_consume(post_param, function(){});
 
       if(data_index == scoreInputRecords.length - 1) {
@@ -1780,6 +1782,7 @@ window.TKH = {
       post_param["store_code"]    = store_code;
       post_param["store_name"]    = store_name;
       post_param["data_source"]   = data_source;
+      post_param["images"]        = "972d1c63-9ebb-46c2-b5f0-7d0e8050e397.png"
       window.ServerAPI.save_consume(post_param, function(){});
 
       if(data_index == scoreInputRecords.length - 1) {
