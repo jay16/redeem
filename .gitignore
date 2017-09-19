@@ -13,6 +13,7 @@ db/
 /log
 *.y[a]ml
 Gemfile.lock
+public/images
 /config/redis.conf
 public/images
 # Used by dotenv library to load environment variables.
