@@ -65,11 +65,11 @@ class Redeem < ActiveRecord::Base
     # 1. 消费积分创建消费项
     # 2. 礼品兑换前，先积分消费项
     #
-    # unless params[:consumes].empty?
-    #   params[:consumes].each_pair do |k, v|
-    #     ::Consume.find_or_create_with_params(v);
-    #   end
-    # end
+    unless params[:consumes].empty?
+      params[:consumes].each_pair do |k, v|
+        ::Consume.find_or_create_with_params(v);
+      end
+    end
 
     params[:consumes] = params[:consumes].to_json
     params[:gifts] = params[:gifts].to_json if params[:gifts]
