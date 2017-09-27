@@ -1,3 +1,184 @@
+//    用于压缩图片的canvas
+function saveimgstore()
+{
+    var imgarr=[],arr_imgurl=[];
+    $(".input_imgid").each(function(i){
+        imgarr.push($(this).val());
+    })
+    $(".imgdataurl").each(function(){
+        arr_imgurl.push($(this).val());
+    })
+    var imgdata={
+        imgid:imgarr,
+        imgurl:arr_imgurl
+    }
+    window.localStorage.setItem("storageImg", JSON.stringify(imgdata));
+}
+var canvas = document.createElement("canvas");
+var ctx = canvas.getContext('2d');
+//    瓦片canvas
+var tCanvas = document.createElement("canvas");
+var tctx = tCanvas.getContext("2d");
+var maxsize = 1024 * 1024;
+
+var picServer = '';
+var imgpostarr=[];
+/**
+ * 获取blob对象的兼容性写法
+ * @param buffer
+ * @param format
+ * @returns {*}
+ */
+/*function imgcallback(img,type,nowId) {
+    var data = compress(img, type);
+    upload(data, type,nowId);
+    img = null;
+}*/
+function upload(basestr, type,nowId) {
+    var text = window.atob(basestr.split(",")[1]);
+    var buffer = new Uint8Array(text.length);
+    var pecent = 0, loop = null;
+    for (var i = 0; i < text.length; i++) {
+        buffer[i] = text.charCodeAt(i);
+    }
+    var blob = getBlob([buffer], type);
+    var formdata = getFormData();
+    formdata.append('image0', blob);
+    formdata.append('module_name', 'tkh');
+    $.ajax({
+        url: picServer + "/api/v1/upload/images",
+        data: formdata,
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        type: 'POST',
+        beforeSend: function () {
+            //  $("#imgbtn" + listid).css("display", "none");
+        },
+        success: function (data) {
+            window.TKH.finishChoice(data.data,nowId);
+        },
+        error: function () {
+            // $("#imgbtn" + listid).css("display", "inline-block");
+        }
+    })
+}
+function getBlob(buffer, format) {
+    try {
+        return new Blob(buffer, { type: format });
+    } catch (e) {
+        var bb = new (window.BlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder);
+        buffer.forEach(function (buf) {
+            bb.append(buf);
+        });
+        return bb.getBlob(format);
+    }
+}
+/**
+ * 获取formdata
+ */
+function getFormData() {
+    var isNeedShim = ~navigator.userAgent.indexOf('Android')
+        && ~navigator.vendor.indexOf('Google')
+        && !~navigator.userAgent.indexOf('Chrome')
+        && navigator.userAgent.match(/AppleWebKit\/(\d+)/).pop() <= 534;
+    return isNeedShim ? new FormDataShim() : new FormData()
+}
+/**
+ * formdata 补丁, 给不支持formdata上传blob的android机打补丁
+ * @constructor
+ */
+function FormDataShim() {
+    var o = this,
+        parts = [],
+        boundary = Array(21).join('-') + (+new Date() * (1e16 * Math.random())).toString(36),
+        oldSend = XMLHttpRequest.prototype.send;
+    this.append = function (name, value, filename) {
+        parts.push('--' + boundary + '\r\nContent-Disposition: form-data; name="' + name + '"');
+        if (value instanceof Blob) {
+            parts.push('; filename="' + (filename || 'blob') + '"\r\nContent-Type: ' + value.type + '\r\n\r\n');
+            parts.push(value);
+        }
+        else {
+            parts.push('\r\n\r\n' + value);
+        }
+        parts.push('\r\n');
+    };
+    // Override XHR send()
+    XMLHttpRequest.prototype.send = function (val) {
+        var fr,
+            data,
+            oXHR = this;
+        if (val === o) {
+            // Append the final boundary string
+            parts.push('--' + boundary + '--\r\n');
+            // Create the blob
+            data = getBlob(parts);
+            // Set up and read the blob into an array to be sent
+            fr = new FileReader();
+            fr.onload = function () {
+                oldSend.call(oXHR, fr.result);
+            };
+            fr.onerror = function (err) {
+                throw err;
+            };
+            fr.readAsArrayBuffer(data);
+            // Set the multipart content type and boudary
+            this.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+            XMLHttpRequest.prototype.send = oldSend;
+        }
+        else {
+            oldSend.call(this, val);
+        }
+    };
+}
+function compress(img,type) {
+    var initSize = img.src.length;
+    var width = img.width;
+    var height = img.height;
+    //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
+    var ratio;
+    if ((ratio = width * height / 4000000) > 1) {
+        ratio = Math.sqrt(ratio);
+        width /= ratio;
+        height /= ratio;
+    } else {
+        ratio = 1;
+    }
+    canvas.width = width;
+    canvas.height = height;
+    //        铺底色
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //如果图片像素大于100万则使用瓦片绘制
+    var count;
+    if ((count = width * height / 1000000) > 1) {
+        count = ~~(Math.sqrt(count) + 1); //计算要分成多少块瓦片
+        //            计算每块瓦片的宽和高
+        var nw = ~~(width / count);
+        var nh = ~~(height / count);
+        tCanvas.width = nw;
+        tCanvas.height = nh;
+        for (var i = 0; i < count; i++) {
+            for (var j = 0; j < count; j++) {
+                tctx.drawImage(img, i * nw * ratio, j * nh * ratio, nw * ratio, nh * ratio, 0, 0, nw, nh);
+                ctx.drawImage(tCanvas, i * nw, j * nh, nw, nh);
+            }
+        }
+    } else {
+        ctx.drawImage(img, 0, 0, width, height);
+    }
+    //进行最小压缩
+    var ndata = canvas.toDataURL(type, 0.1);
+    console.log('压缩前：' + initSize);
+    console.log('压缩后：' + ndata.length);
+    console.log('压缩率：' + ~~(100 * (initSize - ndata.length) / initSize) + "%");
+    tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
+    return ndata;
+}
+/*===图片上传相关函数 end===*/
+
 Date.prototype.format = function(format) {
   var date = {
     "M+": this.getMonth() + 1,
@@ -854,10 +1035,10 @@ window.TKH = {
       }
       window.localStorage.setItem('current_telphone', JSON.stringify(params));
       // window.TKH.genMallSupplyBill();
-      layer.open({
+     layer.open({
         type:1,
         area:"450px",
-        content:$('.tishibuton-area')
+          content:$('.tishibuton-area')
       });
       return false;
     }
@@ -884,6 +1065,16 @@ window.TKH = {
       layer.msg('请输入用户名', { time: 2000 });
       return false;
     }
+    /*==updatecynthia0926 start 性别和生日必填===*/
+      if (fmbrsex.length == 0) {
+          layer.msg('请选择性别', { time: 2000 });
+          return false;
+      }
+      if (fmbrbirth.length == 0) {
+          layer.msg('请选择生日', { time: 2000 });
+          return false;
+      }
+      /*==updatecynthia0926 start 性别和生日必填===*/
     if(fmbrbirth.length === 10) {
       ymd_date = new Date(Date.parse(fmbrbirth.replace("-", "/")));
       if(ymd_date > (new Date())) {
@@ -1028,11 +1219,11 @@ window.TKH = {
   queryMallGndWebV2: function(fpageindex) {
     var index_loading_layer = layer.load(0);
     $.ajax({
-      url: "/api/v1/list/store?format=json",
+      url: window.TKH.api_server+"/api/v1/list/store?format=json",
       type: 'get',
       async: true,
       dataType: 'json',
-      timeout: 5000,
+      timeout: 5000,/*===服务器===*/
       contentType: "application/json; charset=UTF-8"
     }).done(function(result) {
       if(result.code === 200) {
@@ -1293,13 +1484,14 @@ window.TKH = {
           "store_code": fgndcode,
           "store_name": storename
         });
-
+   /*===updatecynthia0925 start===*/
         if(fcardnum !== null && fcardnum !== '-') {
           store_input_records.push({
             card_number: fcardnum,
             store_code: fgndcode,
             store_name: storename,
             serial_num: fflowno,
+              gndgid:fgndgid,
             real_amt: famt,
             score: parseInt(famt),
             datetime: focrtime,
@@ -1380,6 +1572,27 @@ window.TKH = {
           command: 'CRMGenMallSupplyBill',
           async: true
         };
+
+      /*===cynthia赠品发放单号绑定附件 start====*/
+      var paramAttachid=JSON.parse(window.localStorage.getItem("storageImg"))["imgid"];
+      for(var key in paramAttachid)
+      {   var img_params='{' +
+          '&quot;FMODULE&quot;:&quot;891&quot;' +
+          ',&quot;FBILLNUM&quot;:&quot;' +fnum + '&quot;' +
+          ',&quot;FATTACHID&quot;:&quot;' + paramAttachid[key] + '&quot;' +
+          '}';
+          var img_data={
+              params: img_params,
+              command: 'CRMBandMediaAttach',
+              async: true
+          }
+          window.TKH.hdClientCommand(img_data, function(result) {
+              var errMsg = $(result).find('sErrMsg').text(),
+                  resultstring = $(result).find('sOutParams').text(),
+                  outparams = JSON.parse(resultstring);
+          })
+      }
+      /*===cynthia赠品发放单号绑定附件 end====*/
     window.TKH.hdClientCommand(data, function(result) {
       var errMsg = $(result).find('sErrMsg').text(),
           resultstring = $(result).find('sOutParams').text(),
@@ -1405,10 +1618,9 @@ window.TKH = {
           "consumes": post_param_consumes,
           "gifts": post_param_gifts,
           "redeem_state": "兑换成功",
-          "images": "972d1c63-9ebb-46c2-b5f0-7d0e8050e397.png"
+            "images":JSON.parse(window.localStorage.getItem("storageImg"))["imgurl"].join(",")
         };
         window.ServerAPI.save_redeem(post_param, function(){});
-
         window.localStorage.removeItem("records");
         window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
       } else {
@@ -1533,7 +1745,8 @@ window.TKH = {
             window.localStorage.removeItem("questionnaire_state");
             window.localStorage.removeItem("questionResult");
             var params = window.TKH.params(),
-                pagename = (params.skip_signature === "1" ? "complete.html" : "signature.html");
+                /*==updatecynthia0926 start==*/
+                pagename = (params.skip_signature === "1" ? "survey-complete.html" : "signature.html");
 
             window.TKH.redirect_to_with_timestamp(pagename);
           }
@@ -1702,96 +1915,305 @@ window.TKH = {
    * 消费积分(礼品兑换页面）
    * 3.2.18 生成HDMall消费积分单
    */
-  calcMallScoreExWeb2: function(data_index, data_source) {
-    var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
-        scoreInputRecords = JSON.parse(scoreInputRecordsString),
-        data = scoreInputRecords[data_index],
-        currentQueryMember = window.localStorage.getItem('current_telphone'),
-        currentQueryMemberJSON = {};
-    if(currentQueryMember && currentQueryMember.length) {
-      currentQueryMemberJSON = JSON.parse(currentQueryMember);
-    }
+    calcMallScoreExWeb2: function(data_index, data_source) {
+        /*===updatecynthia0926==*/
+        var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
+            scoreInputRecords = JSON.parse(scoreInputRecordsString),
+            data = scoreInputRecords,
+            //data = scoreInputRecords[data_index],
+            currentQueryMember = window.localStorage.getItem('current_telphone'),
+            currentQueryMemberJSON = {};
+        if(currentQueryMember && currentQueryMember.length) {
+            currentQueryMemberJSON = JSON.parse(currentQueryMember);
+        }
+        var fdata=[],iscalc=false,isrepeat=0,consumer_Arr=new Array();
+        for(var key in data)
+        {
+            var trant_time = data[key].datetime;
+            while(trant_time && trant_time.length &&
+            (trant_time.indexOf(".") >= 0 ||
+                trant_time.indexOf(":") >= 0 ||
+                trant_time.indexOf(" ") >= 0)) {
+                trant_time = trant_time.replace(".", "");
+                trant_time = trant_time.replace(":", "");
+                trant_time = trant_time.replace(" ", "");
+            }
+            var trant_time2 = (new Date()).format('yyyyMMddhhmmss'),
+                store_code = data[key].store_code,
+                store_name = data[key].store_name,
+                serial_num = data[key].serial_num,
+                real_amt = data[key].real_amt,
+                score = data[key].score,
+                fvoucher_type = '01';
+            /*===updatecynthia0926 重复积分判断 start===*/
+            var data_params = '{' +
+                '&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
+                ',&quot;FVOUCHERNUM&quot;:&quot;' + serial_num + '&quot;' +
+                ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
+                ',&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;' +
+                '}',
+                ajax_data = {
+                    params: data_params,
+                    command: 'CRMCheckMallScoreExWeb',
+                    async: false
+                };
+            var   params_list= '{' +
+                '&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
+                ',&quot;FVOUCHERNUM&quot;:&quot;' + serial_num + '&quot;' +
+                ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
+                ',&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;' +
+                ',&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;' +
+                ',&quot;FSCORE&quot;:&quot;' + score + '&quot;' +
+                '}';
+            window.TKH.hdClientCommand(ajax_data, function(result) {
+                var errMsg = $(result).find('sErrMsg').text(),
+                    resultstring = $(result).find('sOutParams').text(),
+                    outparams = JSON.parse(resultstring);
+                if(outparams['FSTAT']=="1" || outparams['FSTAT']==1)
+                {
+                var  $wrapper_class = $("." + data[key].wrapper_class),$store_name = $wrapper_class.find('.store-name');
+                   //updatecynthia0927 start layer_index = layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:5000, tipsMore: true });
+                    layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:0, tipsMore: true });
+                  // updatecynthia0927 end $wrapper_class .find('.serial-num').data("layerindex", layer_index);
+                    is_error = 1;
+                    isrepeat=1;
+                    return false;
+                }
+                else
+                {
+                    fdata.push(params_list);
+                    /*===updatecynthia0927 start===*/
+                    var object = new Object();
+                    //consumer_Arr[key].push( {"serial_num":serial_num});
+                   // consumer_Arr[key].push( {"real_amt":real_amt});
+                   // consumer_Arr[key].push({"store_code":store_code});
+                   // consumer_Arr[key].push({"store_name":store_name});
+                    object.serial_num=serial_num;
+                    object.real_amt=real_amt;
+                    object.store_code=store_code;
+                    object.store_name=store_name;
+                    consumer_Arr.push(object);
+                   /*===updatecynthia0927 end===*/
+                }
+            })
+            /*===updatecynthia0926 重复积分判断 end===*/
+        }
+        var card_num = data[0].card_number,
+            params='{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;'+
+                ',&quot;FDATA&quot;:['+fdata+ ']}',
+            ajax_data = {
+                params: params,
+                command: 'CRMCalcMallScoreExWeb2',
+                async: false
+            };
+        window.TKH.hdClientCommand(ajax_data, function(result) {
+            var errMsg = $(result).find('sErrMsg').text(),
+                resultstring = $(result).find('sOutParams').text(),
+                outparams = JSON.parse(resultstring),
+                $wrapper_class = $("." + data[0].wrapper_class);
+            console.log("wrapper_class: " + data[0].wrapper_class);
+            var $store_name = $wrapper_class.find('.store-name'),
+                layer_index;
+            layer.close(parseInt($wrapper_class.data("layerindex")));
+            if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+               // layer_index = layer.tips("本次积分已成功，本次积分"+outparams["FSCORE"]+"分", $store_name, { tips: [1, '#5FB878'], time: 0, tipsMore: true});
+                layer_index =layer.alert("本次积分已成功，本次积分"+outparams["FSCORE"]+"分", {time:5000});
 
-    var trant_time = data.datetime;
-    while(trant_time && trant_time.length &&
-          (trant_time.indexOf(".") >= 0 ||
-           trant_time.indexOf(":") >= 0 ||
-           trant_time.indexOf(" ") >= 0)) {
-      trant_time = trant_time.replace(".", "");
-      trant_time = trant_time.replace(":", "");
-      trant_time = trant_time.replace(" ", "");
-    }
-    var card_num = data.card_number,
-        trant_time2 = (new Date()).format('yyyyMMddhhmmss'),
-        store_code = data.store_code,
-        store_name = data.store_name,
-        serial_num = data.serial_num,
-        real_amt = data.real_amt,
-        score = data.score,
-        fvoucher_type = '01',
-        params = '{' +
-                    '&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;' +
-                    ',&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
-                    ',&quot;FVOUCHERNUM&quot;:&quot;' + serial_num + '&quot;' +
-                    ',&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;' +
-                    ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
-                    ',&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;' +
-                    ',&quot;FREALAMT&quot;:&quot;' + real_amt + '&quot;' +
-                    ',&quot;FSCORE&quot;:&quot;' + score + '&quot;' +
-                  '}',
-        ajax_data = {
-          params: params,
-          command: 'CRMCalcMallScoreExWeb',
-          async: true
-        };
-    window.TKH.hdClientCommand(ajax_data, function(result) {
-      var errMsg = $(result).find('sErrMsg').text(),
-          resultstring = $(result).find('sOutParams').text(),
-          outparams = JSON.parse(resultstring),
-          $wrapper_class = $("." + data.wrapper_class);
+                //$wrapper_class.data("submited", "yes");
+                $(".dq-wrapper").data("submited", "yes");
+                /*==pdatecynthia0927 已积分成功的不允许删除和内容不允许修改===*/
+                $(".dq-wrapper").find("button").attr('disabled', 'disabled');
+                $(".dq-wrapper").find("input").attr('disabled', 'disabled');
+                $(".dq-wrapper").find("input").removeAttr("onclick");
+                /*===cynthia积分单和附件绑定 start====*/
+                $(".input_imgid").each(function(i){
+                    var img_params='{' +
+                        '&quot;FMODULE&quot;:&quot;3833&quot;' +
+                        ',&quot;FBILLNUM&quot;:&quot;' + outparams["FBILLNUM"] + '&quot;' +
+                        ',&quot;FATTACHID&quot;:&quot;' + $(this).val() + '&quot;' +
+                        '}';
+                    var img_data={
+                        params: img_params,
+                        command: 'CRMBandMediaAttach',
+                        async: true
+                    }
+                    window.TKH.hdClientCommand(img_data, function(result) {
+                        var errMsg = $(result).find('sErrMsg').text(),
+                            resultstring = $(result).find('sOutParams').text(),
+                            outparams = JSON.parse(resultstring);
+                        // console.log(outparams);
+                    })
+                })
+                /*===cynthia积分单和附件绑定 end====*/
 
-      console.log("wrapper_class: " + data.wrapper_class);
-      var $store_name = $wrapper_class.find('.store-name'),
-          layer_index;
+            } else {
+                if(isrepeat==0 && outparams["FMSG"]!="消费记录不能为空")
+                {layer_index = layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});}
+                $wrapper_class.data("submited", "error");
+            }
+            // 关闭历史提示框
+            $wrapper_class.find("input").each(function() {
+                var li = $(this).data("layerindex"),
+                    li_number = parseInt(li);
 
-      layer.close(parseInt($wrapper_class.data("layerindex")));
-      if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-        layer_index = layer.tips("恭喜您积分成功", $store_name, { tips: [1, '#5FB878'], time: 0, tipsMore: true});
-        $wrapper_class.data("submited", "yes");
-        $wrapper_class.find("input, button").each(function(){
-          $(this).attr('disabled', 'disabled');
+                if(!isNaN(li_number)) { layer.close(li_number); }
+            });
+            $store_name.data("layerindex", layer_index);
+            var img_source=[];
+            $(".imgdataurl").each(function(i){
+                img_source.push($(this).val());
+            })
+            var post_param              = {};
+            /*===updatecynthia0927 start===*/
+            for(i=0;i<consumer_Arr.length;i++)
+            {
+            post_param["name"]          = currentQueryMemberJSON["name"];
+            post_param["card_number"]   = currentQueryMemberJSON["card_number"];
+            post_param["serial_number"] = consumer_Arr[i]["serial_num"];
+            post_param["amount"]        = consumer_Arr[i]["real_amt"];
+            post_param["store_code"]    = consumer_Arr[i]["store_code"];
+            post_param["store_name"]    = consumer_Arr[i]["store_name"];
+            post_param["data_source"]   = data_source;
+            post_param["images"]   = img_source.join(",");
+            window.ServerAPI.save_consume(post_param, function(){});
+            }
+            /*====cynthia 生成HDMall消费积分单（多笔消费） start===*/
+            window.TKH.checkRedeemStoreSubmited();
+            /*if(data_index == scoreInputRecords.length - 1) {
+              window.TKH.checkRedeemStoreSubmited();
+            } else {
+              window.TKH.calcMallScoreExWeb2(data_index + 1, data_source);
+            }*/
+            /*====cynthia 生成HDMall消费积分单（多笔消费） end===*/
+        });
+    },
+    /*
+  * 消费积分(礼品兑换页面）
+  * 2017.09.18 cynthia 拍照上传小票
+  */
+
+    uploadImg: function(){
+        $("#files").click();
+        //  uploadFile("#file");
+    },
+    uploadFile: function(obj) {
+        if (obj.files.length > 0) {
+            //var file = obj.files[0];
+            if (obj.files.length > 5 || $(".imgitem").length + obj.files.length > 5) {
+                alert("最多只能上传5张图片");
+                return;
+            }
+            //判断类型是不是图片
+            for (var i = 0; i < obj.files.length; i++) {
+                var file = obj.files[i];
+                if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                var reader = new FileReader();
+                var size = file.size / 1024 > 1024 ? (~~(10 * file.size / 1024 / 1024)) / 10 + "MB" : ~~(file.size / 1024) + "KB";
+                reader.readAsDataURL(file);
+                reader.onload = function(e) {
+                    var resultimg = this.result;
+                    /*===压缩图片 ===*/
+                    var hdimg=resultimg;
+                    if (resultimg.length > maxsize) {
+                        var imgnew = new Image();
+                        imgnew.src = resultimg;
+                        hdimg=compress(imgnew, file.type);
+                    }
+                    /*===压缩图片 end ===*/
+                    /*===调图片接口 start===*/
+                    var  params = '{' +
+                        '&quot;FATTACHNAME&quot;:&quot;' + file.name + '&quot;' +
+                        ',&quot;FATTACH&quot;:&quot;' + hdimg + '&quot;' +
+                        '}',
+                        ajax_data = {
+                            params: params,
+                            command: 'CRMMediaService',
+                            async: true
+                        };
+                    window.TKH.hdClientCommand(ajax_data, function(result) {
+                        var errMsg = $(result).find('sErrMsg').text(),
+                            resultstring = $(result).find('sOutParams').text();
+                        outparams = JSON.parse(resultstring);
+                        if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
+                            $("#piclist").append("<input type='hidden' class='input_imgid' value='" + outparams["FATTACHID"] + "'>");
+                            var nowId = outparams["FATTACHID"];
+                            /*===显示图片接口 start===*/
+                            var img = new Image();
+                            img.src = resultimg;
+                            //如果图片大小小于100kb，则直接上传
+                            if (resultimg.length <= maxsize) {
+                                img = null;
+                                upload(resultimg, file.type,nowId);
+                                return;
+                            }
+                            //      图片加载完毕之后进行压缩，然后上传
+                            if (img.complete) {
+                                imgcallback();
+                            } else {
+                                img.onload = imgcallback;
+                            }
+                            function imgcallback() {
+                                var data = compress(img, file.type);
+                                upload(data, file.type, nowId);
+                                img = null;
+                            }
+                            /*===显示图片接口 end===*/
+                        }
+                        else {
+                            layer_index = layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});
+                            $wrapper_class.data("submited", "error");
+                        }
+                    })
+                    /*===调图片接口 end===*/
+                }
+            }
+
+        }
+    },
+    finishChoice:function(data,nowId) {
+        for(var i = 0, len = data.length; i < len; i ++) {
+            var nowDate = (new Date()).getTime();
+            var str = "<div class='boarditem_c_i imgitem' id='picbox" + nowDate + "'>";
+            str += "<img id='img" + nowDate + "' src='"+picServer + '/images/tkh/' + data[i]+"' onclick='window.TKH.showLarge()' code='" + data[i] + "'/>";
+            str += "<span class='absolute ico loadingico' id='loading" + nowDate + "' style='top:40%;text-align:center;left:0;right:0;'></span>";
+            str += "</div>";
+            $("#piclist").prepend($(str));
+            var str = "<span class='closeico' onclick='window.TKH.delPic($(this))' data='" + nowId + "'></span>";
+            $("#picbox" + nowDate).prepend(str);
+            $("#piclist").append('<input type="hidden" class="imgdataurl" value="'+data[i]+'">');
+        }
+        //数量等于5个，隐藏上传按钮
+        if($(".imgitem").length==5)
+        {$(".boarditem_c_add").hide();}
+    },
+    delPic:function(obj){
+        $(".input_imgid").each(function(i){
+            if($(".input_imgid").eq(i).val()==obj.attr("data"))
+            {$(".input_imgid").eq(i).remove();}
         })
-      } else {
-        layer_index = layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});
-        $wrapper_class.data("submited", "error");
-      }
-      // 关闭历史提示框
-      $wrapper_class.find("input").each(function() {
-        var li = $(this).data("layerindex"),
-            li_number = parseInt(li);
-
-        if(!isNaN(li_number)) { layer.close(li_number); }
-      });
-      $store_name.data("layerindex", layer_index);
-
-      var post_param              = {};
-      post_param["name"]          = currentQueryMemberJSON["name"];
-      post_param["card_number"]   = currentQueryMemberJSON["card_number"];
-      post_param["serial_number"] = serial_num;
-      post_param["amount"]        = real_amt;
-      post_param["store_code"]    = store_code;
-      post_param["store_name"]    = store_name;
-      post_param["data_source"]   = data_source;
-      post_param["images"]        = "972d1c63-9ebb-46c2-b5f0-7d0e8050e397.png"
-      window.ServerAPI.save_consume(post_param, function(){});
-
-      if(data_index == scoreInputRecords.length - 1) {
-        window.TKH.checkRedeemStoreSubmited();
-      } else {
-        window.TKH.calcMallScoreExWeb2(data_index + 1, data_source);
-      }
-    });
-  },
+        $(".imgdataurl").each(function(i){
+            if($(".imgdataurl").eq(i).val()==obj.next("img").attr("code"))
+            {$(".imgdataurl").eq(i).remove();}
+        })
+        obj.parents(".boarditem_c_i").remove();
+        if($(".imgitem").length<5)
+        {
+            $(".boarditem_c_add").show();
+        }
+    },
+    showLarge:function() {
+        if(event.target.getAttribute("src")!="") {
+            $("#largePic").attr("src", event.target.getAttribute("src"));
+            $(".largebox").show();
+        }
+        $(".imgclose").click(function(){
+            $(".largebox").hide();
+        })
+    },
+    /*
+    * 消费积分(礼品兑换页面）
+    * 2017.09.18 cynthia 拍照上传小票 end
+    */
   refreshRedeemScoreInput: function(allow_all) {
     var fcardnum = window.localStorage.getItem('sFCARDNUM');
     var name = '',
@@ -1866,13 +2288,12 @@ window.TKH = {
           is_error = 1;
           return false;
         }
-        if(store_and_datetimes.indexOf(store_and_datetime) >= 0) {
+     /* updatecynthia if(store_and_datetimes.indexOf(store_and_datetime) >= 0) {
           layer_index = layer.tips('请勿重复积分', $(this).find('.store-name'), { tips: [3, '#faab20'], time: 0 });
           $(this).find('.serial-num').data("layerindex", layer_index);
           is_error = 1;
           return false;
-        }
-
+        }*/
         serialnums.push(serial_num_with_store_code);
         store_and_datetimes.push(store_and_datetime);
         record = {};
@@ -1883,10 +2304,11 @@ window.TKH = {
         record["gndcode"] = gndcode;
         record["datetime"] = datetime;
         records.push(record);
-
+        /*==updatecynthia0926 start===*/
         store_input_records.push({
           card_number: fcardnum,
           store_code: gndcode,
+            gndgid:gndgid,
           store_name: name,
           serial_num: serialnum,
           real_amt: amount,
@@ -1894,11 +2316,11 @@ window.TKH = {
           datetime: datetime,
           wrapper_class: wrapper_class
         });
+          /*==updatecynthia0926 end===*/
       }
     });
 
     if(is_error) { return false; }
-
     window.localStorage.setItem("records", JSON.stringify(records));
     window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
   },
@@ -1929,7 +2351,7 @@ window.TKH = {
     $(".submit-btn").html(is_all_ok ? "下一页<br/>Next" : "提交<br/>Submit");
 
     if(is_all_ok) {
-      window.localStorage.removeItem("scoreInputRecords");
+      //window.localStorage.removeItem("scoreInputRecords");
       $(".submit-btn").css("display", "block");
       $(".skip-btn").css("display", "none");
     } else {
@@ -2260,3 +2682,19 @@ window.TKH = {
 }
 window.TKH.initialized();
 window.TKH.version_info();
+//阻止缩放
+window.onload=function () {
+    document.addEventListener('touchstart',function (event) {
+        if(event.touches.length>1){
+            event.preventDefault();
+        }
+    })
+    var lastTouchEnd=0;
+    document.addEventListener('touchend',function (event) {
+        var now=(new Date()).getTime();
+        if(now-lastTouchEnd<=300){
+            event.preventDefault();
+        }
+        lastTouchEnd=now;
+    },false)
+}
