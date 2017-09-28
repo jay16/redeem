@@ -1620,9 +1620,15 @@ window.TKH = {
           "redeem_state": "兑换成功",
             "images":JSON.parse(window.localStorage.getItem("storageImg"))["imgurl"].join(",")
         };
-        window.ServerAPI.save_redeem(post_param, function(){});
-        window.localStorage.removeItem("records");
-        window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
+        console.log("post_param"+post_param);
+        window.setTimeout('',1000);
+        window.ServerAPI.save_redeem(post_param, function(){
+            window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
+            window.localStorage.removeItem("records");
+        });
+          console.log("post_param"+post_param);
+
+        //window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
       } else {
         layer.msg("礼品兑换失败：" + outparams["FMSG"], {
           time: 0,
@@ -2683,6 +2689,7 @@ window.TKH = {
 window.TKH.initialized();
 window.TKH.version_info();
 //阻止缩放
+/*
 window.onload=function () {
     document.addEventListener('touchstart',function (event) {
         if(event.touches.length>1){
@@ -2698,3 +2705,4 @@ window.onload=function () {
         lastTouchEnd=now;
     },false)
 }
+*/
