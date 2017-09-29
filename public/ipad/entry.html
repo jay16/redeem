@@ -19,7 +19,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/animate.min.css?timestamp=1502468894">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/side.css?timestamp=1502468894">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/tc.css?timestamp=1502468894">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/entry.css?timestamp=1502468894">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/entry.css?timestamp=15024368894">
 <script src="assets/javascripts/remJs.js?timestamp=1502468894"></script>
 <script src="assets/javascripts/jquery-1.12.4.js?timestamp=1502468894"></script>
 <script src="assets/javascripts/plugins/layer/layer.js?timestamp=1502468894"></script>
@@ -174,7 +174,7 @@ $(function() {
             $(".dq-wrapper").eq(key).find("input.gndgid").val(item["gndgid"]);
             $(".dq-wrapper").eq(key).find("input.datetime").val(item["datetime"]);
         }
-        if(paramUrl.length>=5)
+        if(paramUrl.length>=10)
         {$(".boarditem_c_add").hide();}
         for(var key in paramUrl)
         {
@@ -329,7 +329,13 @@ $(function() {
       window.TKH.redirect_to_with_timestamp('exchange.html');
       return false;
     }
-
+      if($(".input_imgid").size()==0)
+      {
+          layer.tips('请上传图片', $('.picbox'), { tips: [1, '#faab20'] });
+          is_error = 1;
+          all_is_ok = 0;
+          return false;
+      }
     $(".dq-wrapper").each(function() {
       // 跳过已经提交成功的消费项
       if($(this).data("submited") !== "yes") {

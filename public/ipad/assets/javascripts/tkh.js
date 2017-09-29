@@ -1177,8 +1177,14 @@ window.TKH = {
 
       if(!isNaN(li_number)) { layer.close(li_number); }
     });
-
+ var idx=$(ctl).parents(".dq-wrapper").index();
+     $(".layui-layer-tips").eq(idx-1).remove();
+     if($(".dq-wrapper").length==0)
+         {
+             isrepeat=0;
+         }
     $wrapper_class.remove();
+
   },
   // 消费录入，添加录入框
   addRecordInput: function() {
@@ -1214,6 +1220,7 @@ window.TKH = {
        </div>'
     );
     window.TKH.initJEDate(datetimeId);
+
   },
   // 3.2.7 查询有效商铺信息
   queryMallGndWebV2: function(fpageindex) {
@@ -1982,7 +1989,8 @@ window.TKH = {
                 var  $wrapper_class = $("." + data[key].wrapper_class),$store_name = $wrapper_class.find('.store-name');
                    //updatecynthia0927 start layer_index = layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:5000, tipsMore: true });
                     layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:0, tipsMore: true });
-                  // updatecynthia0927 end $wrapper_class .find('.serial-num').data("layerindex", layer_index);
+                   // $wrapper_class .find('.serial-num').data("layerindex", layer_index);
+                  // updatecynthia0927 end
                     is_error = 1;
                     isrepeat=1;
                     return false;
@@ -2006,7 +2014,8 @@ window.TKH = {
             })
             /*===updatecynthia0926 重复积分判断 end===*/
         }
-        var card_num = data[0].card_number,
+        if(data.length>0)
+       { var card_num = data[0].card_number,
             params='{&quot;FCARDNUM&quot;:&quot;' + card_num + '&quot;'+
                 ',&quot;FDATA&quot;:['+fdata+ ']}',
             ajax_data = {
@@ -2014,6 +2023,9 @@ window.TKH = {
                 command: 'CRMCalcMallScoreExWeb2',
                 async: false
             };
+       }
+       else
+           {return false;}
         window.TKH.hdClientCommand(ajax_data, function(result) {
             var errMsg = $(result).find('sErrMsg').text(),
                 resultstring = $(result).find('sOutParams').text(),
@@ -2107,8 +2119,8 @@ window.TKH = {
     uploadFile: function(obj) {
         if (obj.files.length > 0) {
             //var file = obj.files[0];
-            if (obj.files.length > 5 || $(".imgitem").length + obj.files.length > 5) {
-                alert("最多只能上传5张图片");
+            if (obj.files.length > 10 || $(".imgitem").length + obj.files.length > 10) {
+                alert("最多只能上传10张图片");
                 return;
             }
             //判断类型是不是图片
@@ -2190,8 +2202,8 @@ window.TKH = {
             $("#picbox" + nowDate).prepend(str);
             $("#piclist").append('<input type="hidden" class="imgdataurl" value="'+data[i]+'">');
         }
-        //数量等于5个，隐藏上传按钮
-        if($(".imgitem").length==5)
+        //数量等于10个，隐藏上传按钮
+        if($(".imgitem").length==10)
         {$(".boarditem_c_add").hide();}
     },
     delPic:function(obj){
@@ -2204,7 +2216,7 @@ window.TKH = {
             {$(".imgdataurl").eq(i).remove();}
         })
         obj.parents(".boarditem_c_i").remove();
-        if($(".imgitem").length<5)
+        if($(".imgitem").length<10)
         {
             $(".boarditem_c_add").show();
         }
@@ -2261,7 +2273,6 @@ window.TKH = {
         store_and_datetime = gndgid + datetime;
         is_error = 0,
         wrapper_class = $(this).data("class");
-
         if(!name.length) {
           layer_index = layer.tips('店铺名称不能为空', $(this).find('.store-name'), { tips: [3, '#faab20'], time: 0 });
           $(this).find('.store-name').data("layerindex", layer_index);
@@ -2592,9 +2603,8 @@ window.TKH = {
         end_date;
 
     now.setTime(now.valueOf() - 30 * 24 * 60 * 60 * 1000);
-    end_date = now.format('yyyy.MM.dd hh:mm:ss');
-
-    var params = "[\\]\nFACCOUNTNO=" + fcardnum + "\nFSCORESORT=-\nFSTARTDATE=" + end_date + "\nFENDTDATE=" + start_date + "\n",
+    //end_date = now.format('yyyy.MM.dd hh:mm:ss');
+    var params = "[\\]\nFACCOUNTNO=" + fcardnum + "\nFSCORESORT=-\nFSTARTDATE=" + "2017.05.04 05:11:11" + "\nFENDTDATE=" + start_date + "\n",
         data = {
           params: params,
           command: 'QueryCardScoreDetails',

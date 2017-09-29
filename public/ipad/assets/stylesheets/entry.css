@@ -148,6 +148,7 @@
     width: 90%;
     margin: 0.6rem auto 0;
     text-align: center;
+    clear:both;
 }
 .anNiu a, .anNiu button{
     font-size: 0.34rem;
@@ -252,7 +253,7 @@
     background: url('../images/ico/icon-photo.png') left center no-repeat;padding-left:0.8rem;
     background-size:0.5rem auto;height:0.8rem; margin-top:15px;line-height:0.8rem;}
 .picbox .boarditem_c_i{height:1.5rem;width:18%;margin-right:1%;float:left;text-align:center;background:#fff;border-radius:10px;position:relative;line-height:1.25rem;
-    vertical-align: middle;}
+    vertical-align: middle;margin-bottom:10px;}
 .picbox #uploadPic{line-height:1.25rem;vertical-align:middle;color:#fff;width:100%;display:block;height:100%;}
 .picbox #piclist{height:1.5rem;}
 .picbox .boarditem_c_add{background:#ccc url('../images/ico/icon-addimg.png') no-repeat center 45%;
