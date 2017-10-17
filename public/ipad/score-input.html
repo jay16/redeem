@@ -253,7 +253,7 @@ $(function() {
 
     // 全部积分提交成功，则跳转页面
     if(is_all_ok) {
-      window.TKH.refreshRedeemScoreInput(true);
+    //window.TKH.refreshRedeemScoreInput(true);
         layer.open({
             type:1,
             title: "信息",
@@ -343,6 +343,7 @@ $(function() {
 
     if (all_is_ok) {
       $(".submit-btn").attr("disabled", "disabled");
+      /*===1016 start===*/
       window.localStorage.setItem("scoreInputRecords", JSON.stringify(datas));
         /*===cynthia 0913保存图片到缓存 start===*/
         saveimgstore();

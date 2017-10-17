@@ -160,7 +160,8 @@ $(function() {
         var paramAttachid = storageImg["imgid"];
         var paramUrl=storageImg["imgurl"];
     }
-    if (params["from"] === 'score-input.html' && scoreInputRecords != null && scoreInputRecords.length && storageImg!=null  && storageImg!="") {
+    /*===1016 start===*/
+    if (params["from"] === 'score-input.html' && scoreInputRecords.length && scoreInputRecords.length) {
         var scoreJSON=JSON.parse(scoreInputRecords);
         var score_size=JSON.parse(scoreInputRecords).length;
         for (var key in scoreJSON) {

@@ -2340,8 +2340,12 @@ window.TKH = {
     });
 
     if(is_error) { return false; }
-    window.localStorage.setItem("records", JSON.stringify(records));
-    window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
+      /*===1016 start===*/
+      if(records.length) {
+          window.localStorage.setItem("records", JSON.stringify(records));
+      }
+      if(store_input_records.length)
+      {window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));}
   },
   skipStoreToExchange: function() {
     window.TKH.refreshRedeemScoreInput(true);
