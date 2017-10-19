@@ -25,6 +25,8 @@ class Consume < ActiveRecord::Base
   alias_attribute :store_code, :field4 # 商铺代号
   alias_attribute :store_name, :field5 # 商铺名称
   alias_attribute :data_source, :field6 # 数据来源：消费积分/礼品兑换
+  alias_attribute :fbillnum, :field7 # 积分单号
+  alias_attribute :fscore, :field8 # 积分分值
   alias_attribute :images, :text1 # 消费清单的图片，多张以逗号分隔
 
   def self.extract_params(params)
@@ -36,6 +38,8 @@ class Consume < ActiveRecord::Base
     options[:field4] = params[:store_code] if params[:store_code]
     options[:field5] = params[:store_name] if params[:store_name]
     options[:field6] = params[:data_source] if params[:data_source]
+    options[:field7] = params[:fbillnum] if params[:fbillnum]
+    options[:field8] = params[:fscore] if params[:fscore]
     options[:text1]  = params[:images] if params[:images]
     options
   end
@@ -47,6 +51,14 @@ class Consume < ActiveRecord::Base
     record
   end
 
+  def self.create_records(options)
+    (options[:data] || []).map do |params|
+      if record = create(extract_params(params))
+        record
+      end
+    end.flatten
+  end
+
   def update_with_params(params)
     self.update_columns(self.class.extract_params(params))
   end
@@ -56,6 +68,7 @@ class Consume < ActiveRecord::Base
     conditions.push("field2 like '%#{params[:serial_number]}%'") if params[:serial_number]
     conditions.push("field4 like '%#{params[:store_code]}%'") if params[:store_code]
     conditions.push("field5 like '%#{params[:store_name]}%'") if params[:store_name]
+    conditions.push("field6 like '%#{params[:fbillnum]}%'") if params[:fbillnum]
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
@@ -79,8 +92,9 @@ class Consume < ActiveRecord::Base
       self.store_code,
       self.store_name,
       self.data_source,
-      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
-      html_tags
+      self.fbillnum,
+      self.fscore,
+      self.created_at.strftime("%y-%m-%d %H:%M:%S")
     ]
   end
 
@@ -94,6 +108,8 @@ class Consume < ActiveRecord::Base
       store_code: self.field4,
       store_name: self.field5,
       data_source: self.field6,
+      fbillnum: self.field7,
+      fscore: self.field8,
       images: self.text1,
       created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
     }

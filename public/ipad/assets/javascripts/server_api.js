@@ -180,8 +180,8 @@ window.ServerAPI = {
     window.ServerAPI.http_action('post', "/api/v1/answer", data, 'save answer', function(){});
   },
   // 创建签名(单条)
-  save_signature: function(data) {
-    window.ServerAPI.http_action('post', "/api/v1/signature", data, 'save signature', function(){});
+  save_signature: function(data, callback) {
+    window.ServerAPI.http_action('post', "/api/v1/signature", data, 'save signature', callback);
   },
   // 清空指定表
   truncate_table: function(table_name) {

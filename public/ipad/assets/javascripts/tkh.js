@@ -1623,10 +1623,10 @@ window.TKH = {
         console.log("post_param"+post_param);
         window.setTimeout('',1000);
         window.ServerAPI.save_redeem(post_param, function(){
-            window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
             window.localStorage.removeItem("records");
+            window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
         });
-          console.log("post_param"+post_param);
+        console.log("post_param"+post_param);
 
         //window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
       } else {
@@ -1797,11 +1797,12 @@ window.TKH = {
               "encoded_type": "base30",
               "signature": $("#signature").jSignature("getData", "base30").join(',')
             };
-        window.ServerAPI.save_signature(post_params);
 
-        layer.msg('页面跳转...', { icon: 16 ,shade: 0.01 ,time: 1000 });
-
-        window.TKH.redirect_to_with_timestamp('complete.html');
+        window.setTimeout('',1000);
+        window.ServerAPI.save_signature(post_params, function() {
+          layer.msg('页面跳转...', { icon: 16 ,shade: 0.01 ,time: 1000 });
+          window.TKH.redirect_to_with_timestamp('complete.html');
+        });
       }
     });
   },

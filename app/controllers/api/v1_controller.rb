@@ -11,6 +11,36 @@ module API
       params.to_inspect
     end
 
+    # update member
+    # post /api/v1/update/member/:telphone
+    post '/update/member/:telphone' do
+      if record = Member.find_by(Member.extract_params(params))
+        puts record.inspect
+        record.update_with_params(params)
+      else
+        puts "未查询到用户 telphone=#{params[:telphone]}"
+      end
+
+      respond_with_json({status: 1, message: "更新成功"}, 200)
+    end
+
+    # create consumes at once
+    # post /api/v1/consumes
+    post '/consumes' do
+      records = Consume.create_records(params)
+
+      result_hash = {}
+      unless records.empty?
+        result_hash[:message] = "创建#{records.size}笔记录成功"
+        result_hash[:status] = 1
+      else
+        result_hash[:message] = "创建失败"
+        result_hash[:status] = 0
+      end
+
+      respond_with_json(result_hash, 201)
+    end
+
     #
     # authentication
     #
