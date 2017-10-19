@@ -72,10 +72,43 @@ class Consume < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
+    where("(" + conditions.join(" or ") + ") and field7 is null and field12 is null").map(&respond_foramt)
+  end
+
+  def self.data_tables_with_scoreinput(params)
+    conditions = []
+    conditions.push("field2 like '%#{params[:serial_number]}%'") if params[:serial_number]
+    conditions.push("field4 like '%#{params[:store_code]}%'") if params[:store_code]
+    conditions.push("field5 like '%#{params[:store_name]}%'") if params[:store_name]
+    conditions.push("field6 like '%#{params[:fbillnum]}%'") if params[:fbillnum]
+    conditions.push("1 = 1") if conditions.empty?
+
+    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+    where("(" + conditions.join(" or ") + ") and field7 is not null and field12 is null").map(&respond_foramt)
   end
 
   def data_table
+    html_tags = <<-EOF
+      <a href="javascript:void(0);" data-images="#{self.images}" class="btn btn-primary btn-xs iframe" title="查看图片">
+        查看图片
+      </a>
+    EOF
+    # <a href="/view/#{self.class_name}/delete/#{self.id}" class="btn btn-danger btn-xs iframe" title="删除">
+    #   <i class="fa fa-trash"></i>
+    # </a>
+    [
+      self.id,
+      self.name,
+      self.serial_number,
+      self.amount,
+      self.store_code,
+      self.store_name,
+      self.data_source,
+      self.created_at.strftime("%y-%m-%d %H:%M:%S")
+    ]
+  end
+
+  def data_table_with_scoreinput
     html_tags = <<-EOF
       <a href="javascript:void(0);" data-images="#{self.images}" class="btn btn-primary btn-xs iframe" title="查看图片">
         查看图片

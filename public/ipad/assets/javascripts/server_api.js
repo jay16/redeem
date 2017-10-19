@@ -140,6 +140,7 @@ window.ServerAPI = {
       data: data,
       timeout: 5000,
       success: function(xhr) {
+        debugger
         console.log(xhr);
         console.timeEnd(message);
         if(typeof(callback) === 'function')
@@ -150,6 +151,10 @@ window.ServerAPI = {
   // 创建会员(单条)
   save_member: function(data) {
     window.ServerAPI.http_action('post', "/api/v1/member", data, 'save member', function(){});
+  },
+  // 更新会员(单条)
+  update_member: function(data) {
+    window.ServerAPI.http_action('post', "/api/v1/member/" + data.card_number, data, 'save member', function(){});
   },
   // 创建消费记录(单条)
   save_consume: function(data, callback) {

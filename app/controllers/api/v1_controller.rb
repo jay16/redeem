@@ -13,12 +13,14 @@ module API
 
     # update member
     # post /api/v1/update/member/:telphone
-    post '/update/member/:telphone' do
-      if record = Member.find_by(Member.extract_params(params))
+    post '/member/:card_number' do
+      options = Member.extract_params({card_number: params[:card_number]})
+      puts options
+      if record = Member.find_by(options)
         puts record.inspect
         record.update_with_params(params)
       else
-        puts "未查询到用户 telphone=#{params[:telphone]}"
+        puts "未查询到用户 card_number=#{params[:card_number]}"
       end
 
       respond_with_json({status: 1, message: "更新成功"}, 200)
