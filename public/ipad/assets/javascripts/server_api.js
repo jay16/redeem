@@ -134,133 +134,135 @@ window.ServerAPI = {
     $.ajax({
       cache: false,
       url: window.ServerAPI.server + api_path,
-      type: http_method,
-      async: true,
-      dataType: 'json',
-      data: data,
-      timeout: 5000,
-      success: function(xhr) {
-        debugger
-        console.log(xhr);
-        console.timeEnd(message);
-        if(typeof(callback) === 'function')
-        callback();
-      }
-    });
-  },
-  // 创建会员(单条)
-  save_member: function(data) {
-    window.ServerAPI.http_action('post', "/api/v1/member", data, 'save member', function(){});
-  },
-  // 更新会员(单条)
-  update_member: function(data) {
-    window.ServerAPI.http_action('post', "/api/v1/member/" + data.card_number, data, 'save member', function(){});
-  },
-  // 创建消费记录(单条)
-  save_consume: function(data, callback) {
-    window.ServerAPI.http_action('post', "/api/v1/consume", data, 'save consume', callback);
-  },
-  // 创建消费记录（批量）
-  save_consumes: function(data, callback) {
-    window.ServerAPI.http_action('post', "/api/v1/consumes", data, 'save consumes', callback);
-  },
-  // 创建礼品（同步时使用）
-  save_gift: function(data) {
-    window.ServerAPI.http_action('post', "/api/v1/gift", data, 'save gift', function(){});
-  },
-  // 创建门店（同步时使用）
-  save_store: function(data) {
-    window.ServerAPI.http_action('post', "/api/v1/store", data, 'save store', function(){});
-  },
-  // 创建问卷(单条)
-  save_questionnaire: function(data) {
-    window.ServerAPI.http_action('post', "/api/v1/questionnaire", data, 'save questionnaire', function(){});
-  },
-  // 创建兑换(单条)
-  save_redeem: function(data, callback) {
-    window.ServerAPI.http_action('post', "/api/v1/redeem", data, 'save redeem', callback);
-  },
-  // 创建回答(单条)
-  save_answer: function(data) {
-    window.ServerAPI.http_action('post', "/api/v1/answer", data, 'save answer', function(){});
-  },
-  // 创建签名(单条)
-  save_signature: function(data, callback) {
-    window.ServerAPI.http_action('post', "/api/v1/signature", data, 'save signature', callback);
-  },
-  // 清空指定表
-  truncate_table: function(table_name) {
-    window.ServerAPI.http_action('post', "/api/v1/truncate/" + table_name, {}, 'truncate table' + table_name, function(){});
-  },
-  view_signature: function(ctl) {
-    alert($(ctl).data("signature"));
-  },
-  // 获取后台配置选择的问卷，前端使用
-  ipad_selected_questionnaire: function() {
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/ipad/questionnaire",
-      type: 'get',
-      async: false,
-      dataType: 'json',
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-        window.localStorage.setItem("questionnaire_state", xhr.code);
-        if(xhr.code === 200) {
-          window.localStorage.setItem("questionnaire", xhr.data);
-        } else {
-          layer.msg(xhr.info + "，\n返回『客户信息』页面", {
-            time: 0,
-            btn: ['确定'],
-            btnAlign: 'c',
-            yes: function(index) {
-              layer.close(index);
-              window.ServerAPI.redirect_to_with_timestamp('search.html');
-            }
-          });
-        }
-      },
-      error: function(xhr) {
-      }
-    });
-  },
-  generate_questionnaire_options: function() {
-    $.ajax({
-      cache: false,
-      url: window.ServerAPI.server + "/api/v1/ipad/setting",
-      type: 'get',
-      async: true,
-      dataType: 'json',
-      timeout: 5000,
-      success: function(xhr) {
-        console.log(xhr);
-        if(xhr.code === 200) {
-          var $select = $("select[name=questionnaire_code]"),
-              item,
-              option;
-          $select.children("option").remove();
-          $select.append("<option value='404'>请选择问卷</option>");
-          for(var i = 0, len = xhr.data.length; i < len; i ++) {
-            item = xhr.data[i];
-            option = "<option value='" + item[0] + "'";
-            if(xhr.selected === item[0]) {
-              option += " selected='selected' ";
-            }
-            option += " >" + item[1] + "</option>";
-            $select.append(option);
-          }
-        } else {
-          alert(xhr.info);
-        }
-      },
-      error: function(xhr) {
-        console.log(xhr);
+/*url: "http://123.56.91.131:4567/" + api_path,*/
+type: http_method,
+async: true,
+dataType: 'json',
+data: data,
+timeout: 5000,
+success: function(xhr) {
+  console.log(xhr);
+  console.timeEnd(message);
+  if(typeof(callback) === 'function')
+  callback();
+}
+});
+},
+// 创建会员(单条)
+save_member: function(data) {
+window.ServerAPI.http_action('post', "/api/v1/member", data, 'save member', function(){});
+},
+// 更新会员(单条)
+update_member: function(data) {
+  window.ServerAPI.http_action('post', "/api/v1/member/" + data.card_number, data, 'save member', function(){});
+},
+// 创建消费记录(单条)
+save_consume: function(data, callback) {
+window.ServerAPI.http_action('post', "/api/v1/consume", data, 'save consume', callback);
+},
+// 创建消费记录（批量）
+save_consumes: function(data, callback) {
+window.ServerAPI.http_action('post', "/api/v1/consumes", data, 'save consumes', callback);
+},
+// 创建礼品（同步时使用）
+save_gift: function(data) {
+window.ServerAPI.http_action('post', "/api/v1/gift", data, 'save gift', function(){});
+},
+// 创建门店（同步时使用）
+save_store: function(data) {
+window.ServerAPI.http_action('post', "/api/v1/store", data, 'save store', function(){});
+},
+// 创建问卷(单条)
+save_questionnaire: function(data) {
+window.ServerAPI.http_action('post', "/api/v1/questionnaire", data, 'save questionnaire', function(){});
+},
+// 创建兑换(单条)
+save_redeem: function(data, callback) {
+window.ServerAPI.http_action('post', "/api/v1/redeem", data, 'save redeem', callback);
+},
+// 创建回答(单条)
+save_answer: function(data) {
+window.ServerAPI.http_action('post', "/api/v1/answer", data, 'save answer', function(){});
+},
+// 创建签名(单条)
+save_signature: function(data, callback) {
+window.ServerAPI.http_action('post', "/api/v1/signature", data, 'save signature', callback);
+},
+// 清空指定表
+truncate_table: function(table_name) {
+window.ServerAPI.http_action('post', "/api/v1/truncate/" + table_name, {}, 'truncate table' + table_name, function(){});
+},
+view_signature: function(ctl) {
+alert($(ctl).data("signature"));
+},
+// 获取后台配置选择的问卷，前端使用
+ipad_selected_questionnaire: function() {
+$.ajax({
+cache: false,
+url: window.ServerAPI.server + "/api/v1/ipad/questionnaire",
+type: 'get',
+async: false,
+dataType: 'json',
+timeout: 5000,
+success: function(xhr) {
+  console.log(xhr);
+  window.localStorage.setItem("questionnaire_state", xhr.code);
+  if(xhr.code === 200) {
+    window.localStorage.setItem("questionnaire", xhr.data);
+  } else {
+    layer.msg(xhr.info + "，\n返回『客户信息』页面", {
+      time: 0,
+      btn: ['确定'],
+      btnAlign: 'c',
+      yes: function(index) {
+        layer.close(index);
+        window.ServerAPI.redirect_to_with_timestamp('search.html');
       }
     });
   }
+},
+error: function(xhr) {
+}
+});
+},
+generate_questionnaire_options: function() {
+$.ajax({
+cache: false,
+url: window.ServerAPI.server + "/api/v1/ipad/setting",
+type: 'get',
+async: true,
+dataType: 'json',
+timeout: 5000,
+success: function(xhr) {
+  console.log(xhr);
+  if(xhr.code === 200) {
+    var $select = $("select[name=questionnaire_code]"),
+        item,
+        option;
+    $select.children("option").remove();
+    $select.append("<option value='404'>请选择问卷</option>");
+    for(var i = 0, len = xhr.data.length; i < len; i ++) {
+      item = xhr.data[i];
+      option = "<option value='" + item[0] + "'";
+      if(xhr.selected === item[0]) {
+        option += " selected='selected' ";
+      }
+      option += " >" + item[1] + "</option>";
+      $select.append(option);
+    }
+  } else {
+    alert(xhr.info);
+  }
+},
+error: function(xhr) {
+  console.log(xhr);
+}
+});
+}
 }
 
 if(window.location.protocol === 'file:') {
-  window.ServerAPI.server = 'http://localhost:4567';
+window.ServerAPI.server = 'http://localhost:4567';
+//window.ServerAPI.server = 'http://123.56.91.131:4567/';
 }
+

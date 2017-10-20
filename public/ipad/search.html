@@ -75,7 +75,7 @@
         <p>History</p>
       </div>
     </div>
-    <div class="content_2">
+    <div class="content_2 content_register">
       <div data-id='1' style="display: block;">
         <div style="width: 90%;display:block;">
           <p>姓名 / Full name</p>
@@ -94,7 +94,7 @@
         <div class="dz" style="display:inline;width: 45%!important">
           <p>居住地址 / Live Address</p>
 
-          <input class='hidden' type="text" name="liveaddress" id="live_dz_text" readonly />
+          <input class='hidden' type="text" name="liveaddress" id="live_dz_text"  />
           <form class="form-inline" id='live_dz_distpicker_wrapper'>
             <div id="live_dz_distpicker">
               <div class="form-group">
@@ -238,6 +238,7 @@
   </div>
 </div>
 <script>
+var ischange=false;
 $(function() {
   // 清除已查询用户信息
   window.localStorage.removeItem("sFCARDNUM");
@@ -326,6 +327,9 @@ $(function() {
       }
   })
 
+    $(".content_register input").bind("change",function(){
+        ischange=true;
+    })
   //下一页
   $('.xy').on('click',function(e) {
     e.stopPropagation();
@@ -352,11 +356,24 @@ $(function() {
       if(card_number && !isNaN(card_number)) {
         $(".tishibuton-area .score-input").css({"display": "inline"});
       }
-      layer.open({
-        type:1,
-        area:"450px",
-        content:$('.tishibuton-area')
-      });
+      $("input,select").bind("change",function(){
+
+      })
+      /*===保存会员信息start===*/
+     if(ischange)
+     {window.TKH.udatemember();}
+     else
+     {
+         layer.open({
+             type:1,
+             area:"450px",
+             content:$('.tishibuton-area')
+         });
+     }
+
+      /*===保存会员信息end===*/
+
+
   });
 
   var cookie = window.localStorage.getItem('sClientCookie'),

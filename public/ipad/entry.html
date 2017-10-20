@@ -196,8 +196,8 @@ $(function() {
 
     /*===读取信息 end===*/
   // 若已录入消费记录，此处还原
-  // 场景：录入后，从兑奖页面返回时
-  var recordString = window.localStorage.getItem("records");
+  // 场景：录入后，从兑奖页面返回时-可以去掉 start
+/*  var recordString = window.localStorage.getItem("records");
   if (recordString !== null && recordString.length > 0) {
     var records = JSON.parse(recordString),
     record = {},
@@ -242,8 +242,8 @@ $(function() {
         window.TKH.initJEDate(datetimeId);
       }
     }
-  }
-
+  }*/
+//可以去掉 end
   // 搜索
   function display_searched_store(keywords) {
     var store_name = "",
