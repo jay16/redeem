@@ -20,8 +20,10 @@ var ctx = canvas.getContext('2d');
 var tCanvas = document.createElement("canvas");
 var tctx = tCanvas.getContext("2d");
 var maxsize = 1024 * 1024;
-
+/*服务器*/
 var picServer = '';
+/*本地服务器
+var picServer = 'http://123.56.91.131:4567/';*/
 var imgpostarr=[];
 /**
  * 获取blob对象的兼容性写法
@@ -229,8 +231,13 @@ window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,error
 window.TKH = {
   version: '0.6.33',
   environment: '',
+    /*服务器 start*/
   api_server: '', // 后台管理
-  server: '', // HD server
+  server: '', // HD server*!/
+   /*===本地服务器 修改 start===*/
+  /*api_server: 'http://123.56.91.131:4567/', // 后台管理
+  server: 'http://123.56.91.131:4567/',*/
+  /*===本地服务器  修改 end===*/
   userGid: '',
   userPwd: '',
   workStation: '',
@@ -1136,6 +1143,73 @@ window.TKH = {
       };
     });
   },
+    // udatemember更新会员资料 start
+    udatemember: function() {
+        var fmbrmobilephone = $('#search').val(),
+            $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+        if (!($phe.test(fmbrmobilephone))) {
+            layer.msg('请输入正确的手机号码', { time: 2000 });
+            return false;
+        }
+        var fmbrname = $.trim($('#mz').val()),
+            fmbrsex = $.trim($('#xb option:selected').val()),
+            fmbrbirth = $.trim($('#birthday').val()),
+            ldd_province = $("#ldd_province").val(),
+            ldd_city = $("#ldd_city").val(),
+            ldd_district = $("#ldd_district").val(),
+            FACCOUNTNO=window.localStorage.getItem('sFCARDNUM');
+        faddress = $.trim($('#live_dz_text').val());
+        if (fmbrname.length == 0) {
+            layer.msg('请输入用户名', { time: 2000 });
+            return false;
+        }
+        /*==updatecynthia0926 start 性别和生日必填===*/
+        if (fmbrsex.length == 0) {
+            layer.msg('请选择性别', { time: 2000 });
+            return false;
+        }
+        if (fmbrbirth.length == 0) {
+            layer.msg('请选择生日', { time: 2000 });
+            return false;
+        }
+        /*==updatecynthia0926 start 性别和生日必填===*/
+        if(fmbrbirth.length === 10) {
+            ymd_date = new Date(Date.parse(fmbrbirth.replace("-", "/")));
+            if(ymd_date > (new Date())) {
+                layer.msg('请入合理出生日期', { time: 2000 });
+                return false;
+            }
+        }
+        var fcardid = window.TKH.storeCode,
+        params = "[\\]\nFACCOUNTNO=" + FACCOUNTNO + "\nFNAME=" + fmbrname + "\nFSEX=" + fmbrsex+ "\nFBIRTH=" + fmbrbirth+ "\nFMOBILEPHONE=" + fmbrmobilephone+ "\nFADDRESS=" + faddress+ "\n"
+            data = {
+                params: params,
+                command: 'UPDATEMBRINFO'
+            };
+
+        window.TKH.hdClientCommand(data, function(result) {
+            var errMsg = $(result).find('sErrMsg').text(),
+                resultstring = $(result).find('sOutParams').text().split("\\");
+            layer.closeAll();
+            if (resultstring[1].match("Result=0")=="Result=0") {
+                layer.msg("会员资料修改成功" , { time: 2000 });
+                var post_params = {
+                    "name": fmbrname,
+                    "sex": fmbrsex,
+                    "birthday": fmbrbirth,
+                    "address": faddress,
+                    "telphone": fmbrmobilephone,
+                    "card_number":FACCOUNTNO
+                };
+                window.ServerAPI.update_member(post_params);
+                layer.open({
+                    type:1,
+                    area:"450px",
+                    content:$('.tishibuton-area')
+                });
+            }
+        });
+    },// udatemember更新会员资料 end
   hideDQM: function() {
     $('.xuanZe').fadeOut(200);
   },
@@ -1230,8 +1304,8 @@ window.TKH = {
       type: 'get',
       async: true,
       dataType: 'json',
-      timeout: 5000,/*===服务器===*/
-      contentType: "application/json; charset=UTF-8"
+      timeout: 5000,/*===服务器要加contentType===*/
+      /*contentType: "application/json; charset=UTF-8"*/
     }).done(function(result) {
       if(result.code === 200) {
         $('.xuanZe .hangHu').html('');
@@ -1563,6 +1637,10 @@ window.TKH = {
         fmobilephone = currentQueryMemberJSON["telphone"],
         fcardid = fcardnum,
         femail = currentQueryMemberJSON["email"];
+        /*==cynthia1017判断email没有就传空===*/
+        if(!femail || typeof(femail)=="undefined" || femail=="undefined" || femail==null)
+        {femail="";}
+      /*==1017判断email没有就传空===*/
     var params = '{&quot;FMEMBER&quot;:&quot;' + fmember + '&quot;,\
                    &quot;FMOBILEPHONE&quot;:&quot;' + fmobilephone + '&quot;,\
                    &quot;FCARDID&quot;:&quot;' + fcardid + '&quot;,\
@@ -1846,9 +1924,9 @@ window.TKH = {
   },
   /*
    * 消费积分(单独积分页面）
-   * 3.2.18 生成HDMall消费积分单
+   * 3.2.18 生成HDMall消费积分单 calcMallScoreExWeb这个函数可以去掉
    */
-  calcMallScoreExWeb: function(data_index, is_async, is_redirect, data_source) {
+/*  calcMallScoreExWeb: function(data_index, is_async, is_redirect, data_source) {
     $("#submitBtn").css("display", "none");
     $("#nextPage").css("display", "none");
 
@@ -1925,7 +2003,57 @@ window.TKH = {
         window.TKH.calcMallScoreExWeb(data_index + 1, is_async, is_redirect, data_source);
       }
     });
-  },
+  },*/
+    /*===判断是否重复积分输入框自动判断 start===*/
+    isrepeatscore:function(data){
+        var trant_time = data[0].datetime;
+        while(trant_time && trant_time.length &&
+        (trant_time.indexOf(".") >= 0 ||
+            trant_time.indexOf(":") >= 0 ||
+            trant_time.indexOf(" ") >= 0)) {
+            trant_time = trant_time.replace(".", "");
+            trant_time = trant_time.replace(":", "");
+            trant_time = trant_time.replace(" ", "");
+        }
+        var store_code = data[0].store_code,
+            store_name = data[0].store_name,
+            serial_num = data[0].serial_num,
+            fvoucher_type = '01',layer_index;
+        var data_params = '{' +
+            '&quot;FVOUCHERTYPE&quot;:&quot;' + fvoucher_type + '&quot;' +
+            ',&quot;FVOUCHERNUM&quot;:&quot;' + serial_num + '&quot;' +
+            ',&quot;FTRANTIME&quot;:&quot;' + trant_time + '&quot;' +
+            ',&quot;FSHOPCODE&quot;:&quot;' + store_code + '&quot;' +
+            '}',
+            ajax_data = {
+                params: data_params,
+                command: 'CRMCheckMallScoreExWeb',
+                async: false
+            };
+        window.TKH.hdClientCommand(ajax_data, function(result) {
+                var errMsg = $(result).find('sErrMsg').text(),
+                    resultstring = $(result).find('sOutParams').text(),
+                    outparams = JSON.parse(resultstring);
+            var  $wrapper_class = $("." + data[0].wrapper_class),$store_name = $wrapper_class.find('.store-name');
+                if(outparams['FSTAT']=="1" || outparams['FSTAT']==1)
+                {layer.close(parseInt($wrapper_class.data("layerindex")));
+                 layer.close(parseInt($wrapper_class.find(".dq-control").eq(0).data("layerindex")));
+                    //updatecynthia0927 start layer_index = layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:5000, tipsMore: true });
+                   layer_index=layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:0, tipsMore: true });
+                    $wrapper_class.data("layerindex", layer_index);
+                    // updatecynthia0927 end
+                    is_error = 1;
+                    isrepeat=1;
+                    return false;
+                }
+                else
+                {
+                    layer.close(parseInt($wrapper_class.data("layerindex")));
+                    layer.close(parseInt($wrapper_class.find(".dq-control").eq(0).data("layerindex")));
+                }
+       })
+    },
+    /*===判断是否重复积分输入框自动判断 end===*/
   /*
    * 消费积分(礼品兑换页面）
    * 3.2.18 生成HDMall消费积分单
@@ -1988,8 +2116,8 @@ window.TKH = {
                 {
                 var  $wrapper_class = $("." + data[key].wrapper_class),$store_name = $wrapper_class.find('.store-name');
                    //updatecynthia0927 start layer_index = layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:5000, tipsMore: true });
-                    layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:0, tipsMore: true });
-                   // $wrapper_class .find('.serial-num').data("layerindex", layer_index);
+                    var layer_index=layer.tips(outparams['FMSG'], $store_name, { tips: [1, '#faab20'], time:0, tipsMore: true });
+                  $wrapper_class.find(".dq-control").eq(0).data("layerindex", layer_index);
                   // updatecynthia0927 end
                     is_error = 1;
                     isrepeat=1;
@@ -2036,10 +2164,7 @@ window.TKH = {
                 layer_index;
             layer.close(parseInt($wrapper_class.data("layerindex")));
             if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-               // layer_index = layer.tips("本次积分已成功，本次积分"+outparams["FSCORE"]+"分", $store_name, { tips: [1, '#5FB878'], time: 0, tipsMore: true});
                 layer_index =layer.alert("本次积分已成功，本次积分"+outparams["FSCORE"]+"分", {time:5000});
-
-                //$wrapper_class.data("submited", "yes");
                 $(".dq-wrapper").data("submited", "yes");
                 /*==pdatecynthia0927 已积分成功的不允许删除和内容不允许修改===*/
                 $(".dq-wrapper").find("button").attr('disabled', 'disabled');
@@ -2061,7 +2186,6 @@ window.TKH = {
                         var errMsg = $(result).find('sErrMsg').text(),
                             resultstring = $(result).find('sOutParams').text(),
                             outparams = JSON.parse(resultstring);
-                        // console.log(outparams);
                     })
                 })
                 /*===cynthia积分单和附件绑定 end====*/
@@ -2095,15 +2219,12 @@ window.TKH = {
             post_param["store_name"]    = consumer_Arr[i]["store_name"];
             post_param["data_source"]   = data_source;
             post_param["images"]   = img_source.join(",");
+            post_param["fbillnum"] = outparams["FBILLNUM"];
+            post_param["fscore"] =outparams["FSCORE"];
             window.ServerAPI.save_consume(post_param, function(){});
             }
             /*====cynthia 生成HDMall消费积分单（多笔消费） start===*/
             window.TKH.checkRedeemStoreSubmited();
-            /*if(data_index == scoreInputRecords.length - 1) {
-              window.TKH.checkRedeemStoreSubmited();
-            } else {
-              window.TKH.calcMallScoreExWeb2(data_index + 1, data_source);
-            }*/
             /*====cynthia 生成HDMall消费积分单（多笔消费） end===*/
         });
     },
@@ -2348,7 +2469,7 @@ window.TKH = {
       {window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));}
   },
   skipStoreToExchange: function() {
-    window.TKH.refreshRedeemScoreInput(true);
+    window.TKH.c(true);
     window.TKH.redirect_to_with_timestamp('exchange.html');
   },
   skipStoreToScoreComplete: function() {
@@ -2369,7 +2490,6 @@ window.TKH = {
         is_all_ok = false
       }
     });
-
     $(".submit-btn").removeAttr("disabled");
     $(".submit-btn").html(is_all_ok ? "下一页<br/>Next" : "提交<br/>Submit");
 

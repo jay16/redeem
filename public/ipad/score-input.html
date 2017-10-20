@@ -160,20 +160,50 @@
 
 <script>
     function checktip(){
-        $(".dq-wrapper").on("change","input",function(){
+        /*===1017重复积分判断 start===*/
+        $(".dq-wrapper").on("change",".store-name,.serial-num,.datetime",function(){
+            var store_name='',serial_num='',gndcode='',datetime, data = null,datas = [],wrapper_class;
+            var obj=$(this).parents(".dq-wrapper");
+            wrapper_class=obj.attr("class").replace("dq-wrapper ", "");
+            store_name = obj.find("input.store-name").val();
+            serial_num = obj.find("input.serial-num").val();
+            gndcode = obj.find("input.gndcode").val();
+            datetime =obj.find("input.datetime").val();
+            if(store_name!="" && serial_num!="" && gndcode!="" && datetime!="")
+            {
+                data = {
+                    serial_num: serial_num,
+                    store_name: store_name,
+                    store_code: gndcode,
+                    datetime: datetime,
+                    wrapper_class: wrapper_class
+                };
+                /*===updatecynthia0926 start===*/
+                datas.push(data);
+                window.TKH.isrepeatscore(datas);
+            }
+        })
+        /*===重复积分判断 end===*/
+        $(".dq-wrapper").on("click",".jian",function() {
+            var idx=$(this).parents(".dq-wrapper").data("layerindex");
+            var idx2=$(this).parents(".dq-wrapper").find(".dq-control").eq(0).data("layerindex");
+            layer.close(idx);
+            layer.close(idx2);
+        })
+       /* $(".dq-wrapper").on("change","input",function(){
             var idx=$(this).parents(".dq-wrapper").index();
             $(".layui-layer-tips").eq(idx-1).remove();
         })
         $(".dq-wrapper").on("click",".store-name",function(){
             var idx=$(this).parents(".dq-wrapper").index();
             $(".layui-layer-tips").eq(idx-1).remove();
-        })
+        })*/
     }
 $(function() {
 
   // 初始一个，积分输入框
   window.TKH.addRecordInput();
-    checktip();
+  checktip();
   // 搜索
   function display_searched_store(keywords) {
     var store_name = "",
@@ -344,7 +374,7 @@ $(function() {
     if (all_is_ok) {
       $(".submit-btn").attr("disabled", "disabled");
       /*===1016 start===*/
-      window.localStorage.setItem("scoreInputRecords", JSON.stringify(datas));
+        window.localStorage.setItem("scoreInputRecords", JSON.stringify(datas));
         /*===cynthia 0913保存图片到缓存 start===*/
         saveimgstore();
         /*===cynthia 0913保存图片到缓存 end===*/
@@ -360,6 +390,7 @@ $(function() {
         content:$('#tishiarea1')
       });
   });
+
 });
 </script>
 
