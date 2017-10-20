@@ -2,11 +2,12 @@ var url = window.location,
     paths = window.location.pathname.split('/'),
     current_path = paths[paths.length-1],
     login_state = window.localStorage.getItem("logined"),
-    layer_index = layer.load(1);
+    layer_index = layer.load(1),
+    timestamp = (new Date()).valueOf();
 
 if(login_state && login_state.length && login_state === 'yes') {
   if(current_path === 'login.html') {
-    window.location.href = 'index.html';
+    window.location.href = 'index.html?timestamp=' + timestamp;
   } else {
     var href_path = '';
     $('ul.sidebar-menu a').each(function() {
@@ -30,7 +31,7 @@ if(login_state && login_state.length && login_state === 'yes') {
   $(".current-username").html(username);
 } else {
   if(current_path !== 'login.html') {
-    window.location.href = 'login.html';
+    window.location.href = 'login.html?timestamp=' + timestamp;
   } else {
     var username = window.localStorage.getItem("username"),
         password = window.localStorage.getItem("password"),
@@ -49,6 +50,3 @@ if(login_state && login_state.length && login_state === 'yes') {
 }
 
 layer.close(layer_index);
-
-
-

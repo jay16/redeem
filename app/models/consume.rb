@@ -104,6 +104,7 @@ class Consume < ActiveRecord::Base
       self.store_code,
       self.store_name,
       self.data_source,
+      html_tags,
       self.created_at.strftime("%y-%m-%d %H:%M:%S")
     ]
   end
