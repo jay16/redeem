@@ -72,7 +72,7 @@ class Consume < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where("(" + conditions.join(" or ") + ") and field7 is null and field12 is null").map(&respond_foramt)
+    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
   end
 
   def self.data_tables_with_scoreinput(params)
