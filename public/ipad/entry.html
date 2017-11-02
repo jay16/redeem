@@ -161,7 +161,7 @@ $(function() {
         var paramUrl=storageImg["imgurl"];
     }
     /*===1016 start===*/
-    if (params["from"] === 'score-input.html' && scoreInputRecords.length && scoreInputRecords.length) {
+    if (/*params["from"] === 'score-input.html' && */scoreInputRecords ) {
         var scoreJSON=JSON.parse(scoreInputRecords);
         var score_size=JSON.parse(scoreInputRecords).length;
         for (var key in scoreJSON) {

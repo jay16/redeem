@@ -1452,7 +1452,7 @@ window.TKH = {
            *
            * FCODE: 0004, FGID: 1000025 FNAME: 抽奖 FNUM: 02101707090001
            */
-          if(['0001','0002','0003','0006','0007','0008','0009','0010'].indexOf($.trim(item["FCODE"])) >= 0) {
+          if(['0001','0002','0003','0006','0007','0008','0009','0010','0011','0012'].indexOf($.trim(item["FCODE"])) >= 0) {
             gift_image = 'gift-' + item["FCODE"] + '.png';
           }
           console.log(item["FNAME"] + ' - ' + gift_image);

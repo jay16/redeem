@@ -249,7 +249,8 @@ $(function() {
   window.localStorage.removeItem("questionnaire");
   // 清除问卷回答信息
   window.localStorage.removeItem("questionnaire_state");
-
+  //清除录入的积分消息
+    window.localStorage.removeItem("scoreInputRecords")
   // 地址控件
   $('#live_dz_distpicker,#work_dz_distpicker').distpicker({autoSelect: false});
   // 日期控件
