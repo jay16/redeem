@@ -67,3 +67,7 @@ img{width: 100%;}
 
 #ContainerPanel input[type="button"] {color: black;}
 #ContainerPanel select {color: black;}
+.showtips{background-color:rgb(250, 171, 32);position:absolute;left:0px;top:0px;min-width:12px;border-radius:2px;padding:0px 10px;font-size:12px;
+box-shadow:1px 1px 3px rgba(0,0,0,.2);color:#fff;line-height:28px;}
+.showtips .tipsg{position:absolute;width:0px;height:0px;border-width:8px;border-color:transparent;border-style:dashed;border-right-style:solid;bottom:-7px;
+    border-right-color:rgb(250, 171, 32);left:0px;}
