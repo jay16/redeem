@@ -1,11 +1,13 @@
 //    用于压缩图片的canvas
+var txterror,scorescc;
 function getpark(obj,i){
-    //var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiJoZCIsImlhdCI6MTUxMDA0MzQ1NCwiZXhwIjo0NjYzNjQzNDU0fQ.dpdcrYjGXBiZGpiuS53NziIoB0-x5yk_CNJOxjVgpkI";
+    //测试地址var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiJoZCIsImlhdCI6MTUxMDA0MzQ1NCwiZXhwIjo0NjYzNjQzNDU0fQ.dpdcrYjGXBiZGpiuS53NziIoB0-x5yk_CNJOxjVgpkI";
     var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiIxIiwiaWF0IjoxNTEwMjk4NDA5LCJleHAiOjQ2NjM4OTg0MDl9.oNfxRgu7xIIR-NHA5nZu_4kbi2DdLBCL7vNzxvhMUB0";
     console.log("park    "+obj);
+
     $.ajax({
-       // url: "http://taikoohuitest.smartac.co/api/taikoohui.customer/req_send_park_hdcrm_coupon",
-        url: "http://hkritaikoohui.smartac.co/api/taikoohui.customer/req_send_park_hdcrm_coupon",
+        //测试地址 url: "http://taikoohuitest.smartac.co/api/taikoohui.customer/req_send_park_hdcrm_coupon_list",
+        url: "http://hkritaikoohui.smartac.co/api/taikoohui.customer/req_send_park_hdcrm_coupon_list",
         data: obj,
         cache: false,
         dataType: "json",
@@ -14,13 +16,22 @@ function getpark(obj,i){
      /*   beforeSend:function(xhr){
             xhr.setRequestHeader('authorization', 'token '+tokenchar);
         },*/
+
         success: function (data) {
-           $(".dq-wrapper").eq(i).append('<div class="showtips">'+data.errmsg+'<i class="tipsg"></i></div>');
+          // $(".dq-wrapper").eq(i).append('<div class="showtips">'+data.errmsg+'<i class="tipsg"></i></div>');
+            txterror=data.errmsg;
+          if(i==5)
+            {txterror=scorescc+"<br>"+txterror;
+            }
+            showtip();
         },
         error: function () {
             $(".dq-wrapper").eq(i).append('<div class="showtips">请稍后再试<i class="tipsg"></i></div>');
         }
     })
+}
+function showtip(){
+    var layer_index2=layer.alert("停车券兑换结果："+txterror, {time:10000});
 }
 function saveimgstore()
 {
@@ -42,7 +53,7 @@ var ctx = canvas.getContext('2d');
 //    瓦片canvas
 var tCanvas = document.createElement("canvas");
 var tctx = tCanvas.getContext("2d");
-var maxsize = 1024 * 1024;
+var maxsize = 400 * 1024;
 /*服务器*/
 var picServer = '';
 /*本地服务器
@@ -1701,6 +1712,7 @@ window.TKH = {
       }
       /*===cynthia赠品发放单号绑定附件 end====*/
     window.TKH.hdClientCommand(data, function(result) {
+        var parkobj=[];
       var errMsg = $(result).find('sErrMsg').text(),
           resultstring = $(result).find('sOutParams').text(),
           outparams = JSON.parse(resultstring);
@@ -1732,20 +1744,31 @@ window.TKH = {
         /*====兑换停车券 start====*/
           var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
               sdata = JSON.parse(scoreInputRecordsString);
-          for (var key in sdata)
-          {var parkobj='{' +
+          for (var key in sdata) {
+              var trant_time = sdata[key]["datetime"];
+              while (trant_time && trant_time.length &&
+              (trant_time.indexOf(".") >= 0 ||
+                  trant_time.indexOf(":") >= 0 ||
+                  trant_time.indexOf(" ") >= 0)) {
+                  trant_time = trant_time.replace(".", "");
+                  trant_time = trant_time.replace(":", "");
+                  trant_time = trant_time.replace(" ", "");
+              }
+              var parklist='{' +
               '"FCARDNUM":"' + sdata[key]["card_number"] + '"' +
-              ',"FTRANTIME":"' + sdata[key]["datetime"] + '"' +
+              ',"FTRANTIME":"' +trant_time+ '"' +
               ',"FSHOPCODE":"' + sdata[key]["store_code"] + '"' +
               ',"FVOUCHERNUM":"' + sdata[key]["serial_num"] + '"' +
               ',"FREALAMT":"' + sdata[key]["real_amt"] + '"' +
               '}';
-          getpark(parkobj,key);
+              parkobj.push(parklist);
           }
+          var  paramsobj='{"detail_list":[' + parkobj+']}';
+          getpark(paramsobj,0);
         /*====兑换停车券 end====*/
         window.ServerAPI.save_redeem(post_param, function(){
             window.localStorage.removeItem("records");
-            window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
+            window.setTimeout('window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html")',2000);
         });
         console.log("post_param"+post_param);
         //window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
@@ -2094,7 +2117,7 @@ window.TKH = {
    * 3.2.18 生成HDMall消费积分单
    */
     calcMallScoreExWeb2: function(data_index, data_source) {
-        var parkobj;
+        var parkobj=[];
         /*===updatecynthia0926==*/
         var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
             scoreInputRecords = JSON.parse(scoreInputRecordsString),
@@ -2196,7 +2219,8 @@ window.TKH = {
                 layer_index;
             layer.close(parseInt($wrapper_class.data("layerindex")));
             if(outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-                layer_index =layer.alert("本次积分已成功，本次积分"+outparams["FSCORE"]+"分", {time:5000});
+              //  layer_index =layer.alert("本次积分已成功，本次积分"+outparams["FSCORE"]+"分", {time:5000});
+                scorescc="本次积分已成功，本次积分"+outparams["FSCORE"]+"分";
                 $(".dq-wrapper").data("submited", "yes");
                 /*==pdatecynthia0927 已积分成功的不允许删除和内容不允许修改===*/
                 $(".dq-wrapper").find("button").attr('disabled', 'disabled');
@@ -2231,7 +2255,6 @@ window.TKH = {
             $wrapper_class.find("input").each(function() {
                 var li = $(this).data("layerindex"),
                     li_number = parseInt(li);
-
                 if(!isNaN(li_number)) { layer.close(li_number); }
             });
             $store_name.data("layerindex", layer_index);
@@ -2254,17 +2277,19 @@ window.TKH = {
             post_param["fbillnum"] = outparams["FBILLNUM"];
             post_param["fscore"] =outparams["FSCORE"];
                 /*===调用停车券 start===*/
-             var parkobj='{' +
+                var   parklist= '{' +
                     '"FCARDNUM":"' + currentQueryMemberJSON["card_number"] + '"' +
                     ',"FTRANTIME":"' + consumer_Arr[i]["FTRANTIME"] + '"' +
                     ',"FSHOPCODE":"' + consumer_Arr[i]["store_code"] + '"' +
                     ',"FVOUCHERNUM":"' + consumer_Arr[i]["serial_num"] + '"' +
                     ',"FREALAMT":"' + consumer_Arr[i]["real_amt"] + '"' +
                     '}';
-             getpark(parkobj,i);
                 /*===调用停车券 end===*/
+             parkobj.push(parklist);
             window.ServerAPI.save_consume(post_param, function(){});
             }
+           var  paramsobj='{"detail_list":[' + parkobj+']}';
+            getpark(paramsobj,5);
             /*====cynthia 生成HDMall消费积分单（多笔消费） start===*/
             window.TKH.checkRedeemStoreSubmited();
             /*====cynthia 生成HDMall消费积分单（多笔消费） end===*/
@@ -2343,8 +2368,8 @@ window.TKH = {
                             /*===显示图片接口 end===*/
                         }
                         else {
-                            layer_index = layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});
-                            $wrapper_class.data("submited", "error");
+                           // layer_index = layer.tips("提示：" + outparams["FMSG"], $store_name, { tips: [1, '#faab20'], time: 0,  tipsMore: true});
+                            var layer_index=layer.alert("提示：图片上传失败"+outparams["FMSG"]+"请重新上传图片", {time:5000});
                         }
                     })
                     /*===调图片接口 end===*/
