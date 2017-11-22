@@ -2790,38 +2790,27 @@ window.TKH = {
   queryCardScoreDetails: function() {
     var fcardnum = window.localStorage.getItem('sFCARDNUM'),
         now = new Date(),
-        start_date = now.format('yyyy.MM.dd hh:mm:ss'),
+        start_date = now.format('yyyy.MM.dd'),
         end_date;
 
     now.setTime(now.valueOf() - 30 * 24 * 60 * 60 * 1000);
-    //end_date = now.format('yyyy.MM.dd hh:mm:ss');
-    var params = "[\\]\nFACCOUNTNO=" + fcardnum + "\nFSCORESORT=-\nFSTARTDATE=" + "2017.05.04 05:11:11" + "\nFENDTDATE=" + start_date + "\n",
+   /* var params = "[\\]\nFACCOUNTNO=" + fcardnum + "\nFSCORESORT=-\nFSTARTDATE=" + "2017.05.04 05:11:11" + "\nFENDTDATE=" + start_date + "\n",*/
+    var params = '{"FCARDNUM":"'+fcardnum+'","FBEGINDATE":"2017.05.04","FENDDATE":"'+start_date+'","FPAGEINDEX":"0","FPAGESIZE":"100"}',
         data = {
           params: params,
-          command: 'QueryCardScoreDetails',
+          command: 'QueryScoreHstJSON2',
           async: true
         };
     window.TKH.hdClientCommand(data, function(result) {
-        var errMsg = $(result).find('sErrMsg').text(),
-            resultstring = $(result).find('sOutParams').text();
-        // [\]
-        // FRESULT=0
-        // FMSG=
-        // FCOUNT=1
-
-        // [FSCOREDETAIL1]
-        // LSTUPDTIME=2017.04.27 10:54:04
-        // SCORESORT=-
-        // SCORE=24624600
-        // NUM=02100000006295170427105404
-        var temp_array = resultstring.split('FSCOREDETAIL'),
+  /*      var resultstring = result.FDATA;
+        var temp_array = resultstring,
             temp_str,
             limit_time = 0;
         $("#ScoreInfo > div:eq(1)").html('');
         for(var len = temp_array.length, i = len - 1; i >= 0; i --) {
           temp_str = temp_array[i];
-          var mm1 = temp_str.match(/LSTUPDTIME=(.*?)\n/),
-              mm2 = temp_str.match(/SCORE=(.*?)\n/),
+          var mm1 = temp_str["TRANDATE"],
+              mm2 = temp_str["SCORE"],
               input_string = '';
           if(mm1) {
             if(limit_time < 5) {
@@ -2830,7 +2819,21 @@ window.TKH = {
             }
             limit_time += 1;
           }
-        }
+        }*/
+var resultstring = $(result).find('sOutParams').text(),data=JSON.parse(resultstring)["FDATA"], limit_time = 0;
+        $("#ScoreInfo > div:eq(1)").html('');
+        $.each(data,function(index,item){
+            var mm1 = item.TRANDATE,
+                mm2 = item.SCORE,
+                input_string = '';
+            if(mm1) {
+                if(limit_time < 5) {
+                    input_string = "<input disabled='disabled' type=text value='" + mm1 + '    ' + mm2 + "'>";
+                    $("#ScoreInfo > div:eq(1)").append(input_string);
+                }
+                limit_time += 1;
+            }
+        })
     });
   },
   // 查询会员信息页面，第三个页签
