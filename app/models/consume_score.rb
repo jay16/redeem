@@ -10,13 +10,6 @@ class ConsumeScore < ActiveRecord::Base
     @class_name || self.class.to_s.downcase
   end
 
-  # 字段，别名，意思
-  # field0, name, 会员名称
-  # field1, card_number, 会员卡号
-  # field2, serial_number, 流水号
-  # field3, amount, 消费金额
-  # field4, store_code, 商铺代号
-  # field5, store_name, 商铺名称
   # field12, delete_state, 是否被删除
   alias_attribute :name, :field0 # 会员名称
   alias_attribute :card_number, :field1 # 会员卡号
@@ -27,6 +20,7 @@ class ConsumeScore < ActiveRecord::Base
   alias_attribute :data_source, :field6 # 数据来源：消费积分/礼品兑换
   alias_attribute :fbillnum, :field7 # 积分单号
   alias_attribute :fscore, :field8 # 积分分值
+  alias_attribute :telphone, :field9 # 会员手机号
   alias_attribute :images, :text1 # 消费清单的图片，多张以逗号分隔
 
   def self.extract_params(params)
@@ -40,6 +34,7 @@ class ConsumeScore < ActiveRecord::Base
     options[:field6] = params[:data_source] if params[:data_source]
     options[:field7] = params[:fbillnum] if params[:fbillnum]
     options[:field8] = params[:fscore] if params[:fscore]
+    options[:field9] = params[:telphone] if params[:telphone]
     options[:text1]  = params[:images] if params[:images]
     options
   end
@@ -65,8 +60,9 @@ class ConsumeScore < ActiveRecord::Base
 
   def self.data_tables(params)
     conditions = []
-    conditions.push("field7 like '%#{params[:fbillnum]}%'") if params[:fbillnum]
-    conditions.push("field0 like '%#{params[:name]}%'") if params[:name]
+    conditions.push("field1 like '%#{params[:card_number]}%'") if params[:card_number]
+    conditions.push("field2 like '%#{params[:serial_number]}%'") if params[:serial_number]
+    conditions.push("field9 like '%#{params[:telphone]}%'") if params[:telphone]
     conditions.push("1 = 1") if conditions.empty?
 
     if params[:format] == 'json'

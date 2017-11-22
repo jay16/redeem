@@ -7,14 +7,22 @@
 # ./tool.sh {config|start|stop|start_redis|stop_redis|restart|deploy|update_assets|import_data|copy_data}
 #
 
+app_root_path="$(pwd)"
+export LANG=zh_CN.UTF-8
+while read filepath
+do
+    test -f "${filepath}" && source "${filepath}"
+done < .env-files
 source lib/scripts/toolsh_common_functions.sh
-
-exit_when_miss_dependency '.app-user'
-exit_when_miss_dependency '.app-port'
+cd ${app_root_path}
 
 #
 # tool kit logic
 #
+
+exit_when_miss_dependency '.app-user' 'echo $(whoami) > .app-user'
+exit_when_miss_dependency '.app-port' 'echo 4567 > .app-port'
+exit_when_miss_dependency '.env-files' "echo ${HOME}/.${SHELL##*/}_profile >> .env-files"
 
 app_default_port=$(cat .app-port)
 app_port=${2:-${app_default_port}}
@@ -28,16 +36,6 @@ fi
 
 unicorn_config_file=config/unicorn.rb
 unicorn_pid_file=tmp/pids/unicorn.pid
-app_root_path="$(pwd)"
-
-# user bash environment for crontab job.
-# default `bash` when SHELL not set
-shell_used=${SHELL##*/}
-shell_used=${shell_used:-'bash'}
-
-[[ -f ~/.${shell_used}rc ]] && source ~/.${shell_used}rc &> /dev/null
-[[ -f ~/.${shell_used}_profile ]] && source ~/.${shell_used}_profile &> /dev/null
-export LANG=zh_CN.UTF-8
 
 bundle_command=$(rbenv which bundle)
 gem_command=$(rbenv which gem)
@@ -46,13 +44,38 @@ cd "${app_root_path}" || exit 1
 mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
 
 case "$1" in
+    commands:version)
+        echo $(date)
+        echo "-----------------------"
+        while read filepath
+        do
+            test -f "${filepath}" && echo "YES ${filepath}" || echo "NO ${filepath}"
+        done < .env-files
+        echo "-----------------------"
+        rbenv --version
+        ruby --version
+        git --version
+        echo "-----------------------"
+        which ls
+        which rm
+        which cp
+        which date
+        which mkdir
+        which bash
+        which sleep
+        which cat
+        which echo 
+        which crontab
+        echo "-----------------------"
+    ;;
     process:defender)
         process_checker "${unicorn_pid_file}" 'unicorn'
     ;;
     app:defender)
-        echo -e $(date "+\n## app defender at %y-%m-%d %H:%M:%S\n")
-        /bin/bash "$0" process:defender
-        /bin/bash "$0" start
+        echo -e $(date "+## app defender at %y-%m-%d %H:%M:%S\n")
+        bash "$0" commands:version
+        bash "$0" process:defender
+        bash "$0" start
     ;;
     start)
         RACK_ENV=production $bundle_command exec rake boom:setting
@@ -68,13 +91,13 @@ case "$1" in
         process_stop "${unicorn_pid_file}" 'unicorn'
     ;;
     restart)
-        /bin/cat "${unicorn_pid_file}" | xargs -I pid kill -USR2 pid
+        cat "${unicorn_pid_file}" | xargs -I pid kill -USR2 pid
     ;;
     restart:force)
-        /bin/bash "$0" stop
-        /bin/sleep 1
+        bash "$0" stop
+        sleep 1
         echo -e '\n\n#-----------command sparate line----------\n\n'
-        /bin/bash "$0" start
+        bash "$0" start
     ;;
     crontab:update)
         $bundle_command exec whenever --update-crontab
@@ -88,14 +111,14 @@ case "$1" in
             echo "WARNING: please git push local modified!"
             exit 1
         fi
-        /bin/bash "$0" git:pull
-        /bin/bash "$0" crontab:update
+        bash "$0" git:pull
+        bash "$0" crontab:update
     ;;
     deploy:server:auto|dsa)
-        /bin/bash "$0" deploy:server
+        bash "$0" deploy:server
         [[ $? -gt 0 ]] && exit 1
 
-        /bin/bash "$0" restart:force
+        bash "$0" restart:force
     ;;
     git:push)
         git_current_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -112,7 +135,7 @@ case "$1" in
         fi
         git add .
         git commit -a -m "$2"
-         /bin/bash "$0" git:push
+         bash "$0" git:push
     ;;
     pages)
         bash lib/scripts/offline_pages.sh
@@ -163,7 +186,7 @@ case "$1" in
         echo
         echo "params list: "
 
-        /bin/bash "$0" match:params
+        bash "$0" match:params
         exit 2
     ;;
 esac

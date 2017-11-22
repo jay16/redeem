@@ -6,6 +6,9 @@ namespace :doctor do
         record.update_attributes(text1: 'image/jsignature;base30,gC_3R')
         puts "update Signature##{record.id} text1"
       end
+
+      sql_string = "update sys_model_2 as sm2 inner join sys_model_1 as sm1 on sm1.field2 = sm2.field1 set sm2.field9 = sm1.field1;"
+      ActiveRecord::Base.connection.execute(sql_string)
     end
   end
 

@@ -25,6 +25,6 @@ every :day, at: '00:00am' do
   command_within_app '/bin/bash lib/scripts/crontab_jobs.sh 00:00 >> log/crontab/jobs_00_00.log 2>&1'
 end
 
-every '*/5 * * * *' do
-  command_within_app '/bin/bash lib/scripts/crontab_jobs.sh 05:minutes >> log/crontab/jobs_05_minutes.log 2>&1'
+every '*/1 * * * *' do
+  command_within_app '/bin/bash lib/scripts/crontab_jobs.sh 01:minutes >> log/crontab/jobs_01_minutes.log 2>&1'
 end
