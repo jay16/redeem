@@ -90,7 +90,17 @@ class Redeem < ActiveRecord::Base
     conditions.push("1 = 1") if conditions.empty?
 
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where("(" + conditions.join(" or ") + ") and field12 is null").map(&respond_foramt)
+    records = where("(" + conditions.join(" or ") + ") and field12 is null").order(id: :desc)
+      
+    total_count = records.count
+    page_records = records.offset(params[:start]).limit(params[:length])
+    
+    {
+      draw: params[:draw] || 'nil',
+      recordsTotal: total_count,
+      recordsFiltered: total_count,
+      data: page_records.map(&respond_foramt)
+    }
   end
 
   def data_table

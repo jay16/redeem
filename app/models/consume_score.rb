@@ -70,9 +70,18 @@ class ConsumeScore < ActiveRecord::Base
       .map(&:to_hash)
     else
       puts where("(" + conditions.join(" or ") + ") and field7 is not null and field12 is null").to_sql
-      select('distinct field0, field7, field8, text1')
+      records = select('distinct field0, field7, field8, text1')
       .where("(" + conditions.join(" or ") + ") and field7 is not null and field12 is null")
-      .map(&:data_table)
+      
+      total_count = records.count
+      page_records = records.offset(params[:start]).limit(params[:length])
+      
+      {
+        draw: params[:draw] || 'nil',
+        recordsTotal: total_count,
+        recordsFiltered: total_count,
+        data: page_records.map(&:data_table)
+      }
     end
   end
 

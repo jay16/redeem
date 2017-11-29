@@ -25,7 +25,6 @@
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/sco.message.css?timestamp=1511363788">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/dataTables.bootstrap.css?timestamp=1511363788">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/jquery.dataTables.yadcf.css?timestamp=1511363788">
-<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/dataTables.colVis.css?timestamp=1511363788">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/jquery-ui.min.css?timestamp=1511363788">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/lightbox.css?timestamp=1511363788">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/common.css?timestamp=1511363788">
@@ -41,7 +40,6 @@
 <script src="assets/javascripts/sco.message.js?timestamp=1511363788"></script>
 <script src="assets/javascripts/jquery.dataTables.min.js?timestamp=1511363788"></script>
 <script src="assets/javascripts/jquery.dataTables.yadcf.js?timestamp=1511363788"></script>
-<script src="assets/javascripts/dataTables.colVis.js?timestamp=1511363788"></script>
 <script src="assets/javascripts/dataTables.bootstrap.js?timestamp=1511363788"></script>
 <script src="assets/javascripts/lightbox.min.js?timestamp=1511363788"></script>
 <script src="assets/javascripts/app.min.js?timestamp=1511363788"></script>
@@ -213,7 +211,6 @@
   </section>
 </aside>
 
-
   <div class="content-wrapper">
     <section class="content-header">
       <h1>消费管理</h1>
@@ -247,164 +244,151 @@
 </section>
 <div id="imageWrapper">
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-  var oTable = $('#tableRecords').DataTable({
-    //bFilter: false,
-    "columnDefs": [{
-      "title": "ID",
-      "targets": 0,
-      "orderable": true,
-      "searchable": false
-    },
-    {
-      "title": "用户名",
-      "targets": 1,
-      "orderable": true,
-      "searchable": false
-    },
-    {
-      "title": "流水号",
-      "targets": 2,
-      "orderable": true,
-      "searchable": false
-    },
-    {
-      "title": "消费<br>金额",
-      "targets": 3,
-      "orderable": true,
-      "searchable": false
-    },
-    {
-      "title": "店铺code",
-      "targets": 4,
-      "orderable": true,
-      "searchable": false
-    },
-    {
-      "title": "店铺名",
-      "targets": 5,
-      "orderable": true,
-      "searchable": false
-    },
-    {
-      "title": "来源",
-      "targets": 6,
-      "orderable": true,
-      "searchable": false
-    },
-    {
-      "title": "查看<br>图片",
-      "targets": 7,
-      "orderable": true,
-      "searchable": false
-    },
-    {
-      "title": "添加<br>时间",
-      "targets": 8,
-      "orderable": true,
-      "searchable": false
-    },
-    ],
-    "stateSave": true,
-    "order": [[0, "desc"]],
-    "serverSide": false,
-    //true代表后台处理分页，false代表前台处理分页
-    "iDisplayLength": 20,
-    // 每页显示多少条
-    "iDisplayStart": 0,
-    "ajax": {
-      "url": window.ServerAPI.server + "/api/v1/list/consume",
-      "data": function(params) {
-        var query = window.ServerAPI.params();
-        if(query["serial_number"]) {
-          params["serial_number"] = query["serial_number"];
-          $("input[name=serial_number]").val(query["serial_number"]);
-        }
-        if(query["card_number"]) {
-          params["card_number"] = query["card_number"];
-          $("input[name=card_number]").val(query["card_number"]);
-        }
-        if(query["telphone"]) {
-          params["telphone"] = query["telphone"];
-          $("input[name=telphone]").val(query["telphone"]);
-        }
-        return params;
-      }
-    },
-    "drawCallback": function(settings) {
-      $("#tableRecords_filter").hide();
-      $(".iframe").off('click').on('click', function(event) {
-        event.preventDefault();
-
-        $("#imageWrapper").css({"display": "block"});
-        $("#imageWrapper").html("<div id='imageList'></div>")
-        var $imageList = $("#imageList");
-        var imageName = "无图片";
-        $imageList.html("<p style='text-align:center;'>" + imageName + "</p>");
-
-        if($(event.target) && $(event.target).data("images")) {
-            $imageList.empty();
-            /*===updatecynthia 0925 start===*/
-          imageName = $(event.target).data("images").split(",");
-          for(i=0;i<imageName.length;i++)
-          {$imageList.append("<div style='position:relative'><div style='text-align:center;position:absolute;left:35%;top:0px;z-index:999'><button>旋转图片</button></div><img style='max-width:100%;max-height:100%;margin-top:30px;' src='/images/tkh/" + imageName[i] + "' /></div>");}
-            /*===updatecynthia 0925 end===*/
-            var num = 0;
-            $("#imageList").on("click","button",function(){
-                num ++;
-                $(this).parents("div").next("img").rotate(90*num);
-            })
-        }
-
-
-        layer.open({
-          type: 1,
-          title: "查看图片",
-          area: ["400px", "300px"],
-          content: $imageList,
-          cancel: function() {
-            $("#imageWrapper").css({"display": "none"});
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var oTable = $('#tableRecords').DataTable({
+        "columnDefs": [{
+          "title": "ID",
+          "targets": 0,
+          "orderable": false,
+          "searchable": false
+        },
+        {
+          "title": "用户名",
+          "targets": 1,
+          "orderable": false,
+          "searchable": false
+        },
+        {
+          "title": "流水号",
+          "targets": 2,
+          "orderable": false,
+          "searchable": false
+        },
+        {
+          "title": "消费<br>金额",
+          "targets": 3,
+          "orderable": false,
+          "searchable": false
+        },
+        {
+          "title": "店铺code",
+          "targets": 4,
+          "orderable": false,
+          "searchable": false
+        },
+        {
+          "title": "店铺名",
+          "targets": 5,
+          "orderable": false,
+          "searchable": false
+        },
+        {
+          "title": "来源",
+          "targets": 6,
+          "orderable": false,
+          "searchable": false
+        },
+        {
+          "title": "查看<br>图片",
+          "targets": 7,
+          "orderable": false,
+          "searchable": false
+        },
+        {
+          "title": "添加<br>时间",
+          "targets": 8,
+          "orderable": false,
+          "searchable": false
+        },
+        ],
+        "bInfo": true,
+        "bFilter": false,
+        "lengthChange": false,
+        "stateSave": false,
+        "ordering": false,
+        "serverSide": true,
+        "pagingType": "full_numbers",
+        "deferRender": true,
+        "iDisplayLength": 20,
+        "iDisplayStart": 0,
+        "ajax": {
+          "url": window.ServerAPI.server + "/api/v1/list/consume",
+          "data": function(params) {
+            var query = window.ServerAPI.params();
+            if(query["serial_number"]) {
+              params["serial_number"] = query["serial_number"];
+              $("input[name=serial_number]").val(query["serial_number"]);
+            }
+            if(query["card_number"]) {
+              params["card_number"] = query["card_number"];
+              $("input[name=card_number]").val(query["card_number"]);
+            }
+            if(query["telphone"]) {
+              params["telphone"] = query["telphone"];
+              $("input[name=telphone]").val(query["telphone"]);
+            }
+            return params;
           }
-        });
+        },
+        "drawCallback": function(settings) {
+          $(".iframe").off('click').on('click', function(event) {
+            event.preventDefault();
+
+            $("#imageWrapper").css({"display": "block"});
+            $("#imageWrapper").html("<div id='imageList'></div>")
+            var $imageList = $("#imageList");
+            var imageName = "无图片";
+            $imageList.html("<p style='text-align:center;'>" + imageName + "</p>");
+
+            if($(event.target) && $(event.target).data("images")) {
+                $imageList.empty();
+                /*===updatecynthia 0925 start===*/
+              imageName = $(event.target).data("images").split(",");
+              for(i=0;i<imageName.length;i++) {
+                $imageList.append("<div style='position:relative'><div style='text-align:center;position:absolute;left:35%;top:0px;z-index:999'><button>旋转图片</button></div><img style='max-width:100%;max-height:100%;margin-top:30px;' src='/images/tkh/" + imageName[i] + "' /></div>");}
+                /*===updatecynthia 0925 end===*/
+                var num = 0;
+                $("#imageList").on("click","button",function(){
+                    num ++;
+                    $(this).parents("div").next("img").rotate(90*num);
+                })
+            }
+
+            layer.open({
+              type: 1,
+              title: "查看图片",
+              area: ["400px", "300px"],
+              content: $imageList,
+              cancel: function() {
+                $("#imageWrapper").css({"display": "none"});
+              }
+            });
+          });
+        }
       });
-    }
-  });
-
-  // var foot = $('#tableRecords').find('tfoot');
-  // if (!foot.length) {
-  //   foot = $('<tfoot>').appendTo($('#tableRecords'));
-  //   var tr = $("<tr></tr>");
-  //   for (var i = 0; i < $('#tableRecords thead th').length; i++) {
-  //     $('<th>').appendTo(tr);
-  //   }
-  //   foot.append(tr);
-  // }
-
-});
-</script>
-
+    });
+  </script>
   </div>
 
   <footer class="main-footer">
-  <div class="pull-right hidden-xs">
-    version: <b>0.3.4</b>
-  </div>
-  <span id="copyright"></span> all rights reserved.
-</footer>
-<script type="text/javascript">
-$(document).ready(function() {
-  var developedYear = "2017",
-      todayYear = (new Date()).getFullYear(),
-      copyrightYield = developedYear;
+    <div class="pull-right hidden-xs">
+      version: <b>0.3.4</b>
+    </div>
+    <span id="copyright"></span> all rights reserved.
+  </footer>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var developedYear = "2017",
+          todayYear = (new Date()).getFullYear(),
+          copyrightYield = developedYear;
 
-  if(parseInt(developedYear) < parseInt(todayYear)) {
-    copyrightYield = developedYear + '-' + todayYear;
-  }
-  document.getElementById("copyright").innerHTML = "copyright © " + copyrightYield + " <a href='#'>hd studio</a>.";
-});
-</script>
-
+      if(parseInt(developedYear) < parseInt(todayYear)) {
+        copyrightYield = developedYear + '-' + todayYear;
+      }
+      document.getElementById("copyright").innerHTML = "copyright © " + copyrightYield + " <a href='#'>hd studio</a>.";
+    });
+  </script>
 </div>
 <script src="assets/javascripts/common.js?timestamp=1511363788"></script>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->

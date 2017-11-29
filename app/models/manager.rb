@@ -57,7 +57,17 @@ class Manager < ActiveRecord::Base
 
   def self.data_tables(params)
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    where("field5 = 'yes' and field12 is null").map(&respond_foramt)
+    records = where("field5 = 'yes' and field12 is null").order(id: :desc)
+      
+    total_count = records.count
+    page_records = records.offset(params[:start]).limit(params[:length])
+    
+    {
+      draw: params[:draw] || 'nil',
+      recordsTotal: total_count,
+      recordsFiltered: total_count,
+      data: page_records.map(&respond_foramt)
+    }
   end
 
   # ID  会员名 电话  卡号  出身日期  居住地址  添加时间  操作
