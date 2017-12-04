@@ -1,8 +1,8 @@
-//    用于压缩图片的canvas
+// 用于压缩图片的canvas
 var txterror, scorescc;
 
 function getpark(obj, i) {
-    //测试地址var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiJoZCIsImlhdCI6MTUxMDA0MzQ1NCwiZXhwIjo0NjYzNjQzNDU0fQ.dpdcrYjGXBiZGpiuS53NziIoB0-x5yk_CNJOxjVgpkI";
+    // 测试地址var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiJoZCIsImlhdCI6MTUxMDA0MzQ1NCwiZXhwIjo0NjYzNjQzNDU0fQ.dpdcrYjGXBiZGpiuS53NziIoB0-x5yk_CNJOxjVgpkI";
     var tokenchar = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiIxIiwiaWF0IjoxNTEwMjk4NDA5LCJleHAiOjQ2NjM4OTg0MDl9.oNfxRgu7xIIR-NHA5nZu_4kbi2DdLBCL7vNzxvhMUB0";
     console.log("park    " + obj);
 
@@ -299,6 +299,16 @@ window.TKH = {
             workStation: '10.254.2.9',
             oper: 'website'
         }
+    },
+    errorLayer: function(text) {
+        layer.msg(text, {
+            time: 0,
+            btn: ['确定'],
+            btnAlign: 'c',
+            yes: function(index) {
+                layer.close(index);
+            }
+        });
     },
     initialized: function() {
         var host_origin = window.location.host,
@@ -1463,7 +1473,14 @@ window.TKH = {
         window.TKH.hdClientCommand(data, function(xmlHttpRequest) {
             var errMsg = $(xmlHttpRequest).find('sErrMsg').text(),
                 resultstring = $(xmlHttpRequest).find('sOutParams').text(),
-                outparams = JSON.parse(resultstring);
+                outparams;
+
+            try {
+                outparams = JSON.parse(resultstring)
+            } catch(e) {
+                window.TKH.errorLayer("获取礼品列表失败，请尝试刷新；\n定位原因：响应数据格式不是 JSON 格式");
+                return false;
+            }
 
             if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
                 $('.shangPing.jin').empty();
@@ -1475,9 +1492,11 @@ window.TKH = {
                     layer.msg("赠品已全部被兑换", { time: 3000 });
                     return false;
                 }
+                var fcodes = ['0001', '0002', '0003', '0006', '0007', '0008', '0009', '0010', '0011', '0012', '0013', '0014', '0015'];
                 for (var i = 0, len = outparams["Data"].length; i < len; i++) {
                     item = outparams["Data"][i];
                     gift_image = 'gift.png';
+                    
                     /*
                      * FCODE: 0001, FGID: 1000022 FNAME: 乐高精美礼品 FNUM: 02101707090001
                      * FCODE: 0002, FGID: 1000023 FNAME: Hottoys主题抱枕 FNUM: 02101707090001
@@ -1490,7 +1509,8 @@ window.TKH = {
                      *
                      * FCODE: 0004, FGID: 1000025 FNAME: 抽奖 FNUM: 02101707090001
                      */
-                    if (['0001', '0002', '0003', '0006', '0007', '0008', '0009', '0010', '0011', '0012'].indexOf($.trim(item["FCODE"])) >= 0) {
+
+                    if (fcodes.indexOf($.trim(item["FCODE"])) >= 0) {
                         gift_image = 'gift-' + item["FCODE"] + '.png';
                     }
                     console.log(item["FNAME"] + ' - ' + gift_image);
@@ -1721,7 +1741,14 @@ window.TKH = {
             var parkobj = [];
             var errMsg = $(result).find('sErrMsg').text(),
                 resultstring = $(result).find('sOutParams').text(),
-                outparams = JSON.parse(resultstring);
+                outparams;
+
+            try {
+                outparams = JSON.parse(resultstring)
+            } catch(e) {
+                window.TKH.errorLayer("生成赠品发放单接口失败，请刷新后再次尝试；\n定位原因：响应数据格式不是 JSON 格式");
+                return false;
+            }
 
             if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
                 // # field3, amount, 兑换金额
@@ -1834,7 +1861,14 @@ window.TKH = {
                 var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
                 var resultstring = $(xmlHttpRequest).find('sOutParams').text();
                 console.log(resultstring);
-                var outparams = JSON.parse(resultstring);
+                var outparams;
+
+                try {
+                    outparams = JSON.parse(resultstring)
+                } catch(e) {
+                    window.TKH.errorLayer("查询调查问卷模板失败，请刷新后再次尝试；\n定位原因：响应数据格式不是 JSON 格式");
+                    return false;
+                }
 
                 if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
                     window.localStorage.setItem("questionnaire", resultstring);
@@ -1881,7 +1915,14 @@ window.TKH = {
         window.TKH.hdClientCommand(data, function(result) {
             var errMsg = $(result).find('sErrMsg').text(),
                 resultstring = $(result).find('sOutParams').text(),
-                outparams = JSON.parse(resultstring);
+                outparams;
+
+            try {
+                outparams = JSON.parse(resultstring)
+            } catch(e) {
+                window.TKH.errorLayer("保存调查问卷信息失败，请刷新后再次尝试；\n定位原因：响应数据格式不是 JSON 格式");
+                return false;
+            }
 
             if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
                 var questionPostParam = window.localStorage.getItem("questionPostParam");
@@ -2862,7 +2903,14 @@ window.TKH = {
         window.TKH.hdClientCommand(data, function(result) {
             var errMsg = $(result).find('sErrMsg').text(),
                 resultstring = $(result).find('sOutParams').text(),
-                outparams = JSON.parse(resultstring);
+                outparams;
+
+            try {
+                outparams = JSON.parse(resultstring)
+            } catch(e) {
+                window.TKH.errorLayer("查询赠品发放信息失败，请刷新后再次尝试；\n定位原因：响应数据格式不是 JSON 格式");
+                return false;
+            }
 
             if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
                 var fdata = outparams["FDATA"];
