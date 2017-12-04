@@ -1347,7 +1347,7 @@ window.TKH = {
     queryMallGndWebV2: function(fpageindex) {
         var index_loading_layer = layer.load(0);
         $.ajax({
-            url: window.TKH.api_server + "/api/v1/list/store?format=json",
+            url: window.TKH.api_server + "/api/v1/list/store?format=json&length=1000",
             type: 'get',
             async: true,
             dataType: 'json',
