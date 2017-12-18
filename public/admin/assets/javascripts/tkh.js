@@ -66,7 +66,7 @@ window.TKH = {
       oper: 'HDCRM[0]'
     },
     production: {
-      server: 'http://180.169.127.188:7072/HDCRMWebService.dll/soap/IHDCRMWebService',
+      server: 'http://10.254.2.17:7072/HDCRMWebService.dll/soap/IHDCRMWebService',
       userGid: '1000185',
       userPwd: 'B3E6E46E1BC2C968',
       storeCode: '0210',
