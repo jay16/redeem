@@ -1510,10 +1510,12 @@ window.TKH = {
                      * FCODE: 0004, FGID: 1000025 FNAME: 抽奖 FNUM: 02101707090001
                      */
 
-                    if (fcodes.indexOf($.trim(item["FCODE"])) >= 0) {
-                        gift_image = 'gift-' + item["FCODE"] + '.png';
-                    }
-                    console.log(item["FNAME"] + ' - ' + gift_image);
+                   // if (fcodes.indexOf($.trim(item["FCODE"])) >= 0) {
+                        //图片
+                       // gift_image = 'gift-' + item["FCODE"] + '.png';
+                        gift_image="data:image/jpg;base64,"+item["IMGCONTENT"];
+                   // }
+                   // console.log(item["FNAME"] + ' - ' + gift_image);
                     html += "<div class='xuzh_jin' style='display: none;'>"
                     html += "  <input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
                     html += "  <input type='hidden' class='fnum' value='" + item["FNUM"] + "'/>";
@@ -1526,7 +1528,7 @@ window.TKH = {
                     html += "  <input type='hidden' class='price' value='" + item["FPRICE"] + "'/>";
                     html += "  <input type='hidden' class='count' value='" + item["FQTY"] + "'/>";
                     html += "  <input type='hidden' class='min_amount' value='" + item["FLOWAMT"] + "'/>";
-                    html += "  <img style='' src='assets/images/" + gift_image + "'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
+                    html += "  <img style='' src='" + gift_image + "'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
                     html += "  <div class='gou'>";
                     html += "  <img src='assets/images/gou.png' />";
                     html += "  </div>";
