@@ -1,6 +1,23 @@
 // 用于压缩图片的canvas
 var txterror, scorescc;
 
+// 找到支持的方法, 使用需要全屏的 element 调用
+function launchFullScreen(element) {
+    if(element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if(element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if(element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if(element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
+}
+
+// 在支持全屏的浏览器中启动全屏
+// 整个页面
+launchFullScreen(document.documentElement);
+
 function getpark(obj, i) {
     // 测试地址var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiJoZCIsImlhdCI6MTUxMDA0MzQ1NCwiZXhwIjo0NjYzNjQzNDU0fQ.dpdcrYjGXBiZGpiuS53NziIoB0-x5yk_CNJOxjVgpkI";
     var tokenchar = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiIxIiwiaWF0IjoxNTEwMjk4NDA5LCJleHAiOjQ2NjM4OTg0MDl9.oNfxRgu7xIIR-NHA5nZu_4kbi2DdLBCL7vNzxvhMUB0";
