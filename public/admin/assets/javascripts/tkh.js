@@ -268,20 +268,16 @@ window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, err
 
 window.TKH = {
     version: '0.6.33',
-    environment: '',
+    environment: 'deprecated',
     /*服务器 start*/
     api_server: '', // 后台管理
     server: '', // HD server*!/
-    /*===本地服务器 修改 start===*/
-    /*api_server: 'http://123.56.91.131:4567/', // 后台管理
-    server: 'http://123.56.91.131:4567/',
-    180.169.127.188*/
-    /*===本地服务器  修改 end===*/
     userGid: '',
     userPwd: '',
     workStation: '',
     storeCode: '',
     oper: '',
+    api_mapping: {},
     setting: {
         production_hosts: ['10.254.2.9', '180.169.127.188'],
         development: {
@@ -292,6 +288,7 @@ window.TKH = {
             workStation: '172.17.104.164',
             oper: 'HDCRM[0]'
         },
+
         production: {
             server: 'http://10.254.2.17:7072/HDCRMWebService.dll/soap/IHDCRMWebService',
             userGid: '1000185',
@@ -311,23 +308,38 @@ window.TKH = {
             }
         });
     },
+    refreshAPIMapping: function() {
+        var apiMapping = JSON.parse(window.localStorage.getItem("api_mapping"));
+        window.TKH.api_mapping = apiMapping.data;
+        for(var key in apiMapping.data) {
+            if(key === 'server') { window.TKH.server = apiMapping.data.server; }
+            if(key === 'userGid') { window.TKH.userGid = apiMapping.data.userGid; }
+            if(key === 'userPwd') { window.TKH.userPwd = apiMapping.data.userPwd; }
+            if(key === 'workStation') { window.TKH.workStation = apiMapping.data.workStation; }
+            if(key === 'storeCode') { window.TKH.storeCode = apiMapping.data.storeCode; }
+            if(key === 'oper') { window.TKH.oper = apiMapping.data.oper; }
+        }
+    },
     initialized: function() {
         var host_origin = window.location.host,
             port = window.location.port,
             host = host_origin.replace(":" + port, ""),
             setting = {},
-            environment;
+            environment,
+            api_mapping;
 
         environment = (window.TKH.setting.production_hosts.indexOf(host) >= 0 ? "production" : "development");
         setting = window.TKH.setting[environment];
 
-        window.TKH.environment = environment;
-        window.TKH.server = setting.server;
-        window.TKH.userGid = setting.userGid;
-        window.TKH.userPwd = setting.userPwd;
-        window.TKH.workStation = setting.workStation;
-        window.TKH.storeCode = setting.storeCode;
-        window.TKH.oper = setting.oper;
+        api_mapping = window.localStorage.getItem("api_mapping");
+        if(api_mapping) {     
+            window.TKH.refreshAPIMapping();
+        } else { 
+            window.ServerAPI.api_mapping(host, function(data) {
+                window.localStorage.setItem("api_mapping", JSON.stringify(data));
+                window.TKH.refreshAPIMapping();
+            })
+        }
     },
     currentENV: function() {
         console.log({
@@ -672,6 +684,7 @@ window.TKH = {
             btn: ['确定', '取消'],
             yes: function(index) {
                 window.localStorage.setItem("logined", "no");
+                window.localStorage.removeItem("api_mapping");
                 layer.close(index);
                 window.TKH.redirect_to_with_timestamp('login.html');
 

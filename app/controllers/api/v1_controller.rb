@@ -11,6 +11,14 @@ module API
       params.to_inspect
     end
 
+    get '/api_mapping' do
+      api_authen_params([:host_ip])
+
+      config = WConfig.fetch_api_mapping(params[:host_ip])
+      respond_with_json({data: config}, 200)
+    end
+
+
     # update member
     # post /api/v1/update/member/:telphone
     post '/member/:card_number' do

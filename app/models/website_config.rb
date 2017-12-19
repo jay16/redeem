@@ -20,29 +20,37 @@ class WConfig < ActiveRecord::Base
   alias_attribute :remark, :field2 # 备注
   alias_attribute :content, :text1 # 键值
 
-  def self.extract_params(params)
-    options = {}
-    options[:field0] = params[:keyname] if params[:keyname]
-    options[:field1] = params[:description] if params[:description]
-    options[:field2] = params[:remark] if params[:remark]
-    options[:text1] = params[:content] if params[:content]
-    options
-  end
-
-  def self.update_or_create_with_params(params)
-    expected_params = extract_params(params)
-
-    if record = find_by(field0: params[:keyname])
-      record.update_columns(expected_params)
-    else
-      record = create(expected_params)
+  class << self  
+    def extract_params(params)
+      options = {}
+      options[:field0] = params[:keyname] if params[:keyname]
+      options[:field1] = params[:description] if params[:description]
+      options[:field2] = params[:remark] if params[:remark]
+      options[:text1] = params[:content] if params[:content]
+      options
     end
-    record
-  end
 
-  class << self
+    def update_or_create_with_params(params)
+      expected_params = extract_params(params)
+
+      if record = find_by(field0: params[:keyname])
+        record.update_columns(expected_params)
+      else
+        record = create(expected_params)
+      end
+      record
+    end
+
     def ipad_selected_questionnaire
       find_by(field0: 'ipad-selected-questionnaire')
+    end
+
+    def fetch_api_mapping(host_ip)
+      unless record = find_by(keyname: "api-mapping:#{host_ip}")
+        record = find_by(keyname: "api-mapping:*")
+      end
+
+      return JSON.parse(record.content) if record
     end
   end
 end

@@ -120,6 +120,7 @@ window.ServerAPI = {
             btn: ['确定', '取消'],
             yes: function(index) {
                 window.localStorage.setItem("logined", "no");
+                window.localStorage.removeItem("api_mapping");
                 layer.close(index);
 
                 window.ServerAPI.redirect_to_with_timestamp('login.html');
@@ -144,10 +145,13 @@ window.ServerAPI = {
                 console.log(xhr);
                 console.timeEnd(message);
                 if (typeof(callback) === 'function') {
-                    callback();
+                    try { callback(xhr); } catch(e) { callback(); }
                 }
             }
         });
+    },
+    api_mapping: function(host_ip, callback) {
+        window.ServerAPI.http_action('get', "/api/v1/api_mapping", {host_ip: host_ip}, 'get api_mapping', callback);
     },
     // 日志记录
     // # 字段，别名，意思
