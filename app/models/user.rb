@@ -13,6 +13,7 @@ require 'sinatra/activerecord'
 # sys_model_7, Gift, 礼品列表
 # sys_model_8, Signautre, 签字
 # sys_model_9, WConfig, 全局配置
+# sys_model_10, WLogger, 全局日志记录
 
 # 管理员
 class User < ActiveRecord::Base

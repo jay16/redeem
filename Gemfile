@@ -8,16 +8,15 @@ end
 
 # ruby '2.3.0'
 
-gem 'sinatra', '~>1.4.7'
-gem 'sinatra-contrib', '~>1.4.7'
-gem 'sinatra-flash', '~>0.3.0'
-gem 'sinatra-logger', '~>0.1.1'
-gem 'sinatra-synchrony', '~>0.4.1'
-gem 'emk-sinatra-url-for', '~>0.2.1'
+gem 'sinatra', '~> 2.0.0'
+gem 'sinatra-contrib', '~> 2.0.0'
+gem 'sinatra-flash', '~> 0.3.0'
+gem 'sinatra-logger', '~> 0.3.2'
+gem 'emk-sinatra-url-for', '~> 0.2.1'
 
 # orm
 gem 'mysql2', '~>0.4.4'
-gem 'sinatra-activerecord', '2.0.10'
+gem 'sinatra-activerecord', '2.0.13'
 
 # assets
 gem 'json', '~>1.8.3'
@@ -29,7 +28,7 @@ gem 'unicorn', '~>5.0.1'
 gem 'unicorn-worker-killer', '~>0.4.4'
 gem 'unicorn_metrics', '~>0.3.1', github: 'superiorlu/unicorn_metrics'
 
-gem 'rake', '~>11.1.2'
+gem 'rake', '~> 12.3.0'
 gem 'settingslogic', '~>2.0.9'
 
 gem 'net-ssh', '~>2.7.0'

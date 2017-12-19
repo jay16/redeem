@@ -9,8 +9,7 @@
 
 app_root_path="$(pwd)"
 export LANG=zh_CN.UTF-8
-while read filepath
-do
+while read filepath; do
     test -f "${filepath}" && source "${filepath}"
 done < .env-files
 source lib/scripts/toolsh_common_functions.sh
@@ -19,7 +18,6 @@ cd ${app_root_path}
 #
 # tool kit logic
 #
-
 exit_when_miss_dependency '.app-user' 'echo $(whoami) > .app-user'
 exit_when_miss_dependency '.app-port' 'echo 4567 > .app-port'
 exit_when_miss_dependency '.env-files' "echo ${HOME}/.${SHELL##*/}_profile >> .env-files"
@@ -30,8 +28,7 @@ app_env=${3:-'production'}
 app_user=$(cat .app-user)
 
 if [[ "$(whoami)" != "${app_user}" ]]; then
-    echo "EXIT: expect \`${app_user}\` to run app, but \`$(whoami)\`!"
-    exit 1
+    echo "EXIT: expect \`${app_user}\` to run app, but \`$(whoami)\`!" && exit 1
 fi
 
 unicorn_config_file=config/unicorn.rb
@@ -47,8 +44,7 @@ case "$1" in
     commands:version)
         echo $(date)
         echo "-----------------------"
-        while read filepath
-        do
+        while read filepath; do
             test -f "${filepath}" && echo "YES ${filepath}" || echo "NO ${filepath}"
         done < .env-files
         echo "-----------------------"
@@ -56,16 +52,10 @@ case "$1" in
         ruby --version
         git --version
         echo "-----------------------"
-        which ls
-        which rm
-        which cp
-        which date
-        which mkdir
-        which bash
-        which sleep
-        which cat
-        which echo 
-        which crontab
+        dependency_commands=(ls rm cp date mkdir bash sleep cat echo crontab which test source)
+        for cmd in ${dependency_commands[@]}; do
+            which ${cmd}
+        done
         echo "-----------------------"
     ;;
     process:defender)
@@ -108,8 +98,7 @@ case "$1" in
     deploy:server|ds)
         local_modified=$(git status -s)
         if [[ ! -z "${local_modified}" ]]; then
-            echo "WARNING: please git push local modified!"
-            exit 1
+            echo "WARNING: please git push local modified!" && exit 1
         fi
         bash "$0" git:pull
         bash "$0" crontab:update
@@ -135,7 +124,7 @@ case "$1" in
         fi
         git add .
         git commit -a -m "$2"
-         bash "$0" git:push
+        bash "$0" git:push
     ;;
     pages)
         bash lib/scripts/offline_pages.sh

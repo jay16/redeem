@@ -1,5 +1,5 @@
 window.ServerAPI = {
-    version: '0.5.3',
+    version: '0.5.4',
     server: '',
     params: function() {
         var query = {},
@@ -148,6 +148,23 @@ window.ServerAPI = {
                 }
             }
         });
+    },
+    // 日志记录
+    // # 字段，别名，意思
+    // # field0, platform, 前端兑换/后台管理
+    // # field1, scene, 业务模块/场景
+    // # field2, operator_type, 用户类型
+    // # field3, operator_identifer, 用户标识
+    // # field4, action, 用户行为
+    // # field5, action_description1, 行为描述1
+    // # field6, action_description2, 行为描述2
+    // # field7, action_description3, 行为描述3
+    // # field8, exception_file_name, 异常时文件名
+    // # field9, exception_line_number, 异常时行号
+    // # field10, exception_column_number, 异常时列号
+    // # text1, exception, 异常内容
+    post_logger: function(data) {
+        window.ServerAPI.http_action('post', "/api/v1/w_logger", data, 'post logger', function() {});
     },
     // 创建会员(单条)
     save_member: function(data) {

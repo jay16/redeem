@@ -1,6 +1,5 @@
 # encoding: utf-8
 require 'digest/md5'
-require 'sinatra/decompile'
 require 'sinatra/multi_route'
 require 'sinatra/url_for'
 require 'sinatra/activerecord'
@@ -11,7 +10,6 @@ class ApplicationController < Sinatra::Base
   register Sinatra::Reloader unless ENV['RACK_ENV'].eql?('production')
   register Sinatra::MarkupPlugin
   register Sinatra::MultiRoute
-  register Sinatra::Decompile
   register Sinatra::Flash
 
   # helpers
