@@ -279,7 +279,7 @@ window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, err
           exception: JSON.stringify(errorObj)
         }
         window.ServerAPI.post_logger(data);   
-    }
+    } catch(e) {}
 
     if (layer) { layer.closeAll(); }
     // alert("错误详情: \n" + errorObj);
