@@ -2,7 +2,7 @@
 require 'sinatra/activerecord'
 
 # 全局配置
-class WConfig < ActiveRecord::Base
+class WebsiteConfig < ActiveRecord::Base
   self.table_name = 'sys_model_9'
 
   attr_reader :class_name
@@ -41,6 +41,17 @@ class WConfig < ActiveRecord::Base
       record
     end
 
+    def find_or_create_with_params(params)
+      expected_params = extract_params(params)
+
+      if record = find_by(field0: params[:keyname])
+        record.update_columns(expected_params)
+      else
+        record = create(expected_params)
+      end
+      record
+    end
+
     def ipad_selected_questionnaire
       find_by(field0: 'ipad-selected-questionnaire')
     end
@@ -52,5 +63,57 @@ class WConfig < ActiveRecord::Base
 
       return JSON.parse(record.content) if record
     end
+
+    def data_tables(params)
+      respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+      records = (params[:keyname] ? where("field0 like '%#{params[:keyname]}%'") : all).order(id: :desc)
+    
+      puts records.to_sql
+      total_count = records.count
+      page_records = records.offset(params[:start]).limit(params[:length])
+      
+      {
+        draw: params[:draw] || 'nil',
+        recordsTotal: total_count,
+        recordsFiltered: total_count,
+        data: page_records.map(&respond_foramt)
+      }
+    end
+  end
+
+  def update_with_params(params)
+    self.update_columns(self.class.extract_params(params))
+  end
+
+  def data_table
+    html_tag1 = <<-EOF
+      <a href="javascript:void(0);" data-type='view' data-config='#{self.text1}' class="btn btn-primary btn-xs iframe" title="查看配置">
+        查看配置
+      </a>
+    EOF
+    html_tag2 = <<-EOF
+      <a href="/view/website_config/edit/#{self.id}" data-type='edit' class="btn btn-primary btn-xs iframe" title="编辑">
+        <i class="fa fa-pencil-square-o"></i>
+      </a>
+    EOF
+      
+    [
+      self.id,
+      self.field0,
+      self.created_at.strftime("%y-%m-%d %H:%M:%S"),
+      html_tag1,
+      html_tag2
+    ]
+  end
+
+  def to_hash
+    {
+      id: self.id,
+      keyname: self.field0,
+      description: self.field1,
+      remark: self.field2,
+      content: self.text1,
+      created_at: self.created_at.strftime("%y-%m-%d %H:%M:%S")
+    }
   end
 end

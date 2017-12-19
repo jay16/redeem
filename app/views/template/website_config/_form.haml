@@ -1,0 +1,19 @@
+%form#ajaxform.form-horizontal{"accept-charset" => "utf-8", :action => "", :autocomplete => "off", method: "POST"}
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "keyname"}
+      监控 ip
+      %sup *
+    .col-lg-10.col-sm-8
+      %input#keyname.form-control{name: "keyname", required: "required", type: "text", value: "#{@record.keyname}"}/
+  .form-group.required
+    %label.control-label.col-lg-2.col-sm-4{:for => "content"}
+      crm 配置
+      %sup *
+    .col-lg-10.col-sm-8
+      %textarea#content.form-control{name: "content", rows:10, required: "required"}
+        = @record.content
+  .form-group
+    .col-lg-offset-2.col-sm-offset-4.col-lg-10.col-sm-8
+      %button.btn.btn-primary.btn-lg.btn-block{type: "submit"}
+        %span.glyphicon.glyphicon-ok-sign
+  %input.form-control{name: "_token", type: "hidden", value: "4sKeXW2IREccIIgEwLtkn3d2DIGJ2c7eJ91MCzgz"}/

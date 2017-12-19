@@ -30,7 +30,7 @@ if (login_state && login_state.length && login_state === 'yes') {
     $(".current-username").html(username);
 
     if(username === 'superadmin') {
-      $(".li-logger, .todo-li-api-mapping").removeClass("hidden");
+      $(".li-logger, .li-api-mapping").removeClass("hidden");
     }
 } else {
     if (current_path !== 'login.html') {

@@ -2,7 +2,7 @@
 require 'sinatra/activerecord'
 
 # 全局日志记录
-class WLogger < ActiveRecord::Base
+class WebsiteLogger < ActiveRecord::Base
   self.table_name = 'sys_model_10'
 
   attr_reader :class_name
@@ -52,7 +52,6 @@ class WLogger < ActiveRecord::Base
   def self.find_or_create_with_params(params)
      create(extract_params(params))
   end
-
 
   def self.data_tables(params)
     respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
