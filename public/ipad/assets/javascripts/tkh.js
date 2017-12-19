@@ -252,6 +252,35 @@ window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, err
     console.log(typeof(errorObj));
     console.log('--------------------');
 
+    try {
+        // 日志记录
+        // # 字段，别名，意思
+        // # field0, platform, 前端兑换/后台管理
+        // # field1, scene, 业务模块/场景
+        // # field2, operator_type, 用户类型
+        // # field3, operator_identifer, 用户标识
+        // # field4, action, 用户行为
+        // # field5, action_description1, 行为描述1
+        // # field6, action_description2, 行为描述2
+        // # field7, action_description3, 行为描述3
+        // # field8, exception_file_name, 异常时文件名
+        // # field9, exception_line_number, 异常时行号
+        // # field10, exception_column_number, 异常时列号
+        // # text1, exception, 异常内容
+        var data = {
+          platform: "礼品兑换前端",
+          scene: "全局监控",
+          operator_type: "",
+          operator_identifer: "",
+          action: "onerror",
+          action_description1: errorMessage, // 查询的内容
+          exception_file_name: scriptURI,
+          exception_line_number: lineNumber,
+          exception: JSON.stringify(errorObj)
+        }
+        window.ServerAPI.post_logger(data);   
+    }
+
     if (layer) { layer.closeAll(); }
     // alert("错误详情: \n" + errorObj);
     layer.msg('操作有误，请修改或重新提交该流程。', {
