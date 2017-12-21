@@ -1,6 +1,23 @@
 // 用于压缩图片的canvas
 var txterror, scorescc;
 
+// 找到支持的方法, 使用需要全屏的 element 调用
+function launchFullScreen(element) {
+    if(element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if(element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if(element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if(element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
+}
+
+// 在支持全屏的浏览器中启动全屏
+// 整个页面
+//launchFullScreen(document.documentElement);
+
 function getpark(obj, i) {
     // 测试地址var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiJoZCIsImlhdCI6MTUxMDA0MzQ1NCwiZXhwIjo0NjYzNjQzNDU0fQ.dpdcrYjGXBiZGpiuS53NziIoB0-x5yk_CNJOxjVgpkI";
     var tokenchar = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiIxIiwiaWF0IjoxNTEwMjk4NDA5LCJleHAiOjQ2NjM4OTg0MDl9.oNfxRgu7xIIR-NHA5nZu_4kbi2DdLBCL7vNzxvhMUB0";
@@ -251,6 +268,35 @@ window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, err
     console.log(errorObj);
     console.log(typeof(errorObj));
     console.log('--------------------');
+
+    try {
+        // 日志记录
+        // # 字段，别名，意思
+        // # field0, platform, 前端兑换/后台管理
+        // # field1, scene, 业务模块/场景
+        // # field2, operator_type, 用户类型
+        // # field3, operator_identifer, 用户标识
+        // # field4, action, 用户行为
+        // # field5, action_description1, 行为描述1
+        // # field6, action_description2, 行为描述2
+        // # field7, action_description3, 行为描述3
+        // # field8, exception_file_name, 异常时文件名
+        // # field9, exception_line_number, 异常时行号
+        // # field10, exception_column_number, 异常时列号
+        // # text1, exception, 异常内容
+        var data = {
+          platform: "礼品兑换前端",
+          scene: "全局监控",
+          operator_type: "",
+          operator_identifer: "",
+          action: "onerror",
+          action_description1: errorMessage, // 查询的内容
+          exception_file_name: scriptURI,
+          exception_line_number: lineNumber,
+          exception: JSON.stringify(errorObj)
+        }
+        window.ServerAPI.post_logger(data);   
+    } catch(e) {}
 
     if (layer) { layer.closeAll(); }
     // alert("错误详情: \n" + errorObj);
@@ -1525,7 +1571,7 @@ window.TKH = {
                      */
 
                     if (fcodes.indexOf($.trim(item["FCODE"])) >= 0) {
-                        gift_image = 'gift-' + item["FCODE"] + '.png';
+                        gift_image = 'data:image/jpg;base64,' + item["IMGCONTENT"];
                     }
                     console.log(item["FNAME"] + ' - ' + gift_image);
                     html += "<div class='xuzh_jin' style='display: none;'>"
@@ -1540,7 +1586,7 @@ window.TKH = {
                     html += "  <input type='hidden' class='price' value='" + item["FPRICE"] + "'/>";
                     html += "  <input type='hidden' class='count' value='" + item["FQTY"] + "'/>";
                     html += "  <input type='hidden' class='min_amount' value='" + item["FLOWAMT"] + "'/>";
-                    html += "  <img style='' src='assets/images/" + gift_image + "'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
+                    html += "  <img style='' src='" + gift_image + "'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
                     html += "  <div class='gou'>";
                     html += "  <img src='assets/images/gou.png' />";
                     html += "  </div>";
