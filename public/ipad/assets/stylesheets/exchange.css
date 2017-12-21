@@ -189,8 +189,8 @@
 
 }
 .shangPing > div > img{
-    width: auto;
-    height:150px;
+    width: 95%;
+    height:auto;
     margin: 2.6% 0 1%;
 }
 .gou{
@@ -251,7 +251,7 @@
 }
 .dhlp .gb img{vertical-align: top;}
 
-.dhlp_content{margin-top: 1.6rem;}
+.dhlp_content{margin-top: 1.2rem;}
 .dhlp_content>div{float:left;}
 .dhlp .suo{
     width: 32%;

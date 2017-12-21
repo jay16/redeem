@@ -16,7 +16,7 @@ function launchFullScreen(element) {
 
 // 在支持全屏的浏览器中启动全屏
 // 整个页面
-launchFullScreen(document.documentElement);
+//launchFullScreen(document.documentElement);
 
 function getpark(obj, i) {
     // 测试地址var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiJoZCIsImlhdCI6MTUxMDA0MzQ1NCwiZXhwIjo0NjYzNjQzNDU0fQ.dpdcrYjGXBiZGpiuS53NziIoB0-x5yk_CNJOxjVgpkI";
@@ -1571,7 +1571,7 @@ window.TKH = {
                      */
 
                     if (fcodes.indexOf($.trim(item["FCODE"])) >= 0) {
-                        gift_image = 'gift-' + item["FCODE"] + '.png';
+                        gift_image = 'data:image/jpg;base64,' + item["IMGCONTENT"];
                     }
                     console.log(item["FNAME"] + ' - ' + gift_image);
                     html += "<div class='xuzh_jin' style='display: none;'>"
@@ -1586,7 +1586,7 @@ window.TKH = {
                     html += "  <input type='hidden' class='price' value='" + item["FPRICE"] + "'/>";
                     html += "  <input type='hidden' class='count' value='" + item["FQTY"] + "'/>";
                     html += "  <input type='hidden' class='min_amount' value='" + item["FLOWAMT"] + "'/>";
-                    html += "  <img style='' src='assets/images/" + gift_image + "'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
+                    html += "  <img style='' src='" + gift_image + "'/><p><span class='gift_name'>" + item["FNAME"] + "</span></p>";
                     html += "  <div class='gou'>";
                     html += "  <img src='assets/images/gou.png' />";
                     html += "  </div>";
