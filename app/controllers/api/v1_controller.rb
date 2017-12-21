@@ -14,7 +14,7 @@ module API
     get '/api_mapping' do
       api_authen_params([:host_ip])
 
-      config = WConfig.fetch_api_mapping(params[:host_ip])
+      config = WebsiteConfig.fetch_api_mapping(params[:host_ip])
       respond_with_json({data: config}, 200)
     end
 
@@ -152,7 +152,7 @@ module API
     #
     get '/ipad/questionnaire' do
       result_hash = {info: '后台未指定问卷', code: 404}
-      if wconfig = WConfig.ipad_selected_questionnaire
+      if wconfig = WebsiteConfig.ipad_selected_questionnaire
         result_hash = {data: wconfig.content, code: 200}
       end
 
@@ -167,7 +167,7 @@ module API
           content: questionnaire.questionnaire_content,
           remark: params[:questionnaire_code]
         }
-        WConfig.update_or_create_with_params(config_params)
+        WebsiteConfig.update_or_create_with_params(config_params)
         result_hash = {info: '配置成功', code: 200}
       end
 
@@ -176,7 +176,7 @@ module API
 
     get '/ipad/setting' do
       questionnaires = Questionnaire.select('distinct field0, field1').map { |h| [h.field0, h.field1] }
-      selected_questionnaire = WConfig.ipad_selected_questionnaire
+      selected_questionnaire = WebsiteConfig.ipad_selected_questionnaire
       questionnaire_code = selected_questionnaire && selected_questionnaire.remark ? selected_questionnaire.remark : ''
 
       result_hash = {

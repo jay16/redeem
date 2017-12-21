@@ -168,7 +168,7 @@ window.ServerAPI = {
     // # field10, exception_column_number, 异常时列号
     // # text1, exception, 异常内容
     post_logger: function(data) {
-        window.ServerAPI.http_action('post', "/api/v1/w_logger", data, 'post logger', function() {});
+        window.ServerAPI.http_action('post', "/api/v1/website_logger", data, 'post logger', function() {});
     },
     // 创建会员(单条)
     save_member: function(data) {

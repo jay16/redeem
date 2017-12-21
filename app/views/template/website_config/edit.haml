@@ -1,0 +1,9 @@
+= haml :"template/website_config/_form"
+
+:javascript
+  window.CRUD = {
+    submit: "更新",
+    action: "/api/v1/update/website_config/#{@record.id}",
+  }
+
+= haml :"template/javascripts/create_or_update"

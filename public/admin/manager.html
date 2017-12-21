@@ -294,8 +294,7 @@ $(document).ready(function() {
     "ajax": window.ServerAPI.server + "/api/v1/list/manager",
     "drawCallback": function(settings) {
       $("#manager_filter").hide();
-      $(".iframe").off('click').on('click',
-      function(event) {
+      $(".iframe").off('click').on('click', function(event) {
         event.preventDefault();
         var url = $(this).attr('href');
         var type = BootstrapDialog.TYPE_PRIMARY;

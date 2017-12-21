@@ -341,8 +341,7 @@ $(document).ready(function() {
     },
     "drawCallback": function(settings) {
       $("#tableRecords_filter").hide();
-      $(".iframe").off('click').on('click',
-      function(event) {
+      $(".iframe").off('click').on('click', function(event) {
         event.preventDefault();
 
         $("#signatureWrapper").html("<div id='signature'></div>");

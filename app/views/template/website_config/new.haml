@@ -1,0 +1,9 @@
+= haml :"template/website_config/_form"
+
+:javascript
+  window.CRUD = {
+    submit: "保存",
+    action: "/api/v1/website_config"
+  }
+
+= haml :"template/javascripts/create_or_update"
