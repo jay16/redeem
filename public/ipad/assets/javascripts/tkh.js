@@ -498,7 +498,7 @@ window.TKH = {
             async: false,
             dataType: 'json',
             data: params,
-            timeout: 5000,
+            timeout: 15000,
             success: function(xhr) {
                 if (xhr.code === 200) {
                     window.localStorage.setItem("username", username);
@@ -564,7 +564,7 @@ window.TKH = {
             async: false,
             dataType: 'xml',
             data: xmlString,
-            timeout: 5000,
+            timeout: 15000,
             contentType: "text/xml; charset=UTF-8"
         }).done(function(xmlHttpRequest) {
             var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
@@ -670,7 +670,7 @@ window.TKH = {
             async: false,
             dataType: 'xml',
             data: xmlString,
-            timeout: 5000,
+            timeout: 15000,
             contentType: "text/xml; charset=UTF-8"
         }).done(function(xmlHttpRequest) {
             var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
@@ -834,7 +834,7 @@ window.TKH = {
             async: async_state,
             dataType: 'xml',
             data: xmlString,
-            timeout: 5000,
+            timeout: 15000,
             contentType: "text/xml; charset=UTF-8"
         }).done(function(result) {
             console.log('response:');
@@ -1437,7 +1437,7 @@ window.TKH = {
             type: 'get',
             async: true,
             dataType: 'json',
-            timeout: 5000,
+            timeout: 15000,
             /*===服务器要加contentType===*/
             /*contentType: "application/json; charset=UTF-8"*/
         }).done(function(result) {
@@ -1939,7 +1939,7 @@ window.TKH = {
             async: false,
             dataType: 'xml',
             data: xmlString,
-            timeout: 5000,
+            timeout: 15000,
             contentType: "text/xml; charset=UTF-8",
             success: function(xmlHttpRequest) {
                 console.log('success');
