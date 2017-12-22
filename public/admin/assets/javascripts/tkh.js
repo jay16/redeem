@@ -498,7 +498,7 @@ window.TKH = {
             async: false,
             dataType: 'json',
             data: params,
-            timeout: 5000,
+            timeout: 15000,
             success: function(xhr) {
                 if (xhr.code === 200) {
                     window.localStorage.setItem("username", username);
@@ -564,7 +564,7 @@ window.TKH = {
             async: false,
             dataType: 'xml',
             data: xmlString,
-            timeout: 5000,
+            timeout: 15000,
             contentType: "text/xml; charset=UTF-8"
         }).done(function(xmlHttpRequest) {
             var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
@@ -598,6 +598,15 @@ window.TKH = {
             // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
             // 3 － （交互）正在解析响应内容
             // 4 － （完成）响应内容解析完成，可以在客户端调用了
+            console.log("loginWithinIPad");
+            console.log(" =========== FAILED BEGIN ===========");
+            console.log("xhr:");
+            console.log(xhr);
+            console.log("textstatus:");
+            console.log(textstatus);
+            console.log("errorThrown:");
+            console.log(errorThrown);
+            console.log(" =========== FAILED END ===========");
 
             var error_msg = '';
             if (xhr.readyState === 0) {
@@ -611,7 +620,6 @@ window.TKH = {
             } else {
                 error_msg = '未知处理异常(' + xhr.readyState + ')' + errorThrown;
             }
-
             layer.msg(error_msg, {
                 time: 0,
                 btnAlign: 'c',
@@ -662,7 +670,7 @@ window.TKH = {
             async: false,
             dataType: 'xml',
             data: xmlString,
-            timeout: 5000,
+            timeout: 15000,
             contentType: "text/xml; charset=UTF-8"
         }).done(function(xmlHttpRequest) {
             var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
@@ -695,6 +703,15 @@ window.TKH = {
             // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
             // 3 － （交互）正在解析响应内容
             // 4 － （完成）响应内容解析完成，可以在客户端调用了
+            console.log("loginWithinAdmin");
+            console.log(" =========== FAILED BEGIN ===========");
+            console.log("xhr:");
+            console.log(xhr);
+            console.log("textstatus:");
+            console.log(textstatus);
+            console.log("errorThrown:");
+            console.log(errorThrown);
+            console.log(" =========== FAILED END ===========");
 
             var error_msg = '';
             if (xhr.readyState === 0) {
@@ -817,7 +834,7 @@ window.TKH = {
             async: async_state,
             dataType: 'xml',
             data: xmlString,
-            timeout: 5000,
+            timeout: 15000,
             contentType: "text/xml; charset=UTF-8"
         }).done(function(result) {
             console.log('response:');
@@ -830,7 +847,16 @@ window.TKH = {
             // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
             // 3 － （交互）正在解析响应内容
             // 4 － （完成）响应内容解析完成，可以在客户端调用了
-
+            console.log("hdClientCommand");
+            console.log(" =========== FAILED BEGIN ===========");
+            console.log(data);
+            console.log("xhr:");
+            console.log(xhr);
+            console.log("textstatus:");
+            console.log(textstatus);
+            console.log("errorThrown:");
+            console.log(errorThrown);
+            console.log(" =========== FAILED END ===========");
             var error_msg = '';
             if (xhr.readyState === 0) {
                 error_msg = '请确认网络环境正常';
@@ -1411,7 +1437,7 @@ window.TKH = {
             type: 'get',
             async: true,
             dataType: 'json',
-            timeout: 5000,
+            timeout: 15000,
             /*===服务器要加contentType===*/
             /*contentType: "application/json; charset=UTF-8"*/
         }).done(function(result) {
@@ -1913,7 +1939,7 @@ window.TKH = {
             async: false,
             dataType: 'xml',
             data: xmlString,
-            timeout: 5000,
+            timeout: 15000,
             contentType: "text/xml; charset=UTF-8",
             success: function(xmlHttpRequest) {
                 console.log('success');
