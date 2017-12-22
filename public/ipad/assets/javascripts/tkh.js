@@ -2450,12 +2450,12 @@ window.TKH = {
                     /*===压缩图片 ===*/
                     reader.readAsDataURL(file);
                     var hdimg;
-                    if (resultimg.length <= maxsize) {
-                        var hdimg = resultimg;
+                    var imgnew = new Image();
+                    imgnew.src = resultimg;
+                    if (resultimg.length<= maxsize) {
+                        hdimg = resultimg;
                     }
-                    else {
-                        var imgnew = new Image();
-                        imgnew.src = resultimg;
+                    else {                       
                         //imgnew.src = file;
                         // hdimg = compress(imgnew, file.type);
                         if (imgnew.complete) {
@@ -2463,9 +2463,9 @@ window.TKH = {
                         } else {
                             imgnew.onload = imgcallback1;
                         }
-                        function imgcallback1() {
-                            hdimg = compress(imgnew, file.type);
-                        }
+                    }
+                    function imgcallback1() {
+                        hdimg = compress(imgnew, file.type);
                     }
                     /*===压缩图片 end ===*/
                     /*===调图片接口 start===*/
