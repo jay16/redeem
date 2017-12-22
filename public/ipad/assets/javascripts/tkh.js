@@ -2449,15 +2449,24 @@ window.TKH = {
                     var resultimg = this.result;
                     /*===压缩图片 ===*/
                     reader.readAsDataURL(file);
-                    var hdimg = resultimg;
-                    if (resultimg.length > maxsize) {
-                        var imgnew = new Image();
-                       // imgnew.src = resultimg;
-                        imgnew.src = file;
-                       // hdimg = compress(imgnew, file.type);
-                        hdimg = compress(file, file.type);
+                    var hdimg;
+                    if (resultimg.length <= maxsize) {
+                        var hdimg = resultimg;
                     }
-
+                    else {
+                        var imgnew = new Image();
+                        imgnew.src = resultimg;
+                        //imgnew.src = file;
+                        // hdimg = compress(imgnew, file.type);
+                        if (imgnew.complete) {
+                            imgcallback1();
+                        } else {
+                            imgnew.onload = imgcallback1;
+                        }
+                        function imgcallback1() {
+                            hdimg = compress(imgnew, file.type);
+                        }
+                    }
                     /*===压缩图片 end ===*/
                     /*===调图片接口 start===*/
                     var params = '{' +
