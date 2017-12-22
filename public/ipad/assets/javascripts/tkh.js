@@ -2454,6 +2454,7 @@ window.TKH = {
                         var imgnew = new Image();
                        // imgnew.src = resultimg;
                         imgnew.src = file;
+                       // hdimg = compress(imgnew, file.type);
                         hdimg = compress(file, file.type);
                     }
 
