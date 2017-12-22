@@ -1555,8 +1555,6 @@ window.TKH = {
                 var fcodes = ['0001', '0002', '0003', '0006', '0007', '0008', '0009', '0010', '0011', '0012', '0013', '0014', '0015'];
                 for (var i = 0, len = outparams["Data"].length; i < len; i++) {
                     item = outparams["Data"][i];
-                    gift_image = 'gift.png';
-                    
                     /*
                      * FCODE: 0001, FGID: 1000022 FNAME: 乐高精美礼品 FNUM: 02101707090001
                      * FCODE: 0002, FGID: 1000023 FNAME: Hottoys主题抱枕 FNUM: 02101707090001
@@ -1569,10 +1567,7 @@ window.TKH = {
                      *
                      * FCODE: 0004, FGID: 1000025 FNAME: 抽奖 FNUM: 02101707090001
                      */
-
-                    if (fcodes.indexOf($.trim(item["FCODE"])) >= 0) {
-                        gift_image = 'data:image/jpg;base64,' + item["IMGCONTENT"];
-                    }
+                     gift_image = 'data:image/jpg;base64,' + item["IMGCONTENT"];
                     console.log(item["FNAME"] + ' - ' + gift_image);
                     html += "<div class='xuzh_jin' style='display: none;'>"
                     html += "  <input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
@@ -2423,16 +2418,19 @@ window.TKH = {
                 if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
                 var reader = new FileReader();
                 var size = file.size / 1024 > 1024 ? (~~(10 * file.size / 1024 / 1024)) / 10 + "MB" : ~~(file.size / 1024) + "KB";
-                reader.readAsDataURL(file);
+
                 reader.onload = function(e) {
                     var resultimg = this.result;
                     /*===压缩图片 ===*/
+                    reader.readAsDataURL(file);
                     var hdimg = resultimg;
                     if (resultimg.length > maxsize) {
                         var imgnew = new Image();
-                        imgnew.src = resultimg;
-                        hdimg = compress(imgnew, file.type);
+                       // imgnew.src = resultimg;
+                        imgnew.src = file;
+                        hdimg = compress(file, file.type);
                     }
+
                     /*===压缩图片 end ===*/
                     /*===调图片接口 start===*/
                     var params = '{' +
