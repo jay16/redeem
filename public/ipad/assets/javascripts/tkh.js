@@ -2954,7 +2954,7 @@ window.TKH = {
                 var mm1 = item.TRANDATE,
                     mm2 = item.SCORE,
                     input_string = '';
-                if (mm1) {
+                if (mm1 && mm2!=0) {
                     if (limit_time < 5) {
                         input_string = "<input disabled='disabled' type=text value='" + mm1 + '    ' + mm2 + "'>";
                         $("#ScoreInfo > div:eq(1)").append(input_string);
