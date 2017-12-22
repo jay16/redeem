@@ -823,10 +823,10 @@ window.TKH = {
             async_state = (data.async !== undefined ? data.async : false);
 
         console.log((new Date()).format('yy-MM-dd hh:mm:ss load ') + data.command);
-        console.log('api version:' + window.TKH.version);
-        console.log('xml params:');
-        console.log(xmlString);
-        console.log(window.TKH.escapeQUOTA(data.params));
+       // console.log('api version:' + window.TKH.version);
+       // console.log('xml params:');
+       // console.log(xmlString);
+       // console.log(window.TKH.escapeQUOTA(data.params));
         index_loading_layer = layer.load(0);
         $.ajax({
             url: window.TKH.server + "?op=DoClientCommand",
