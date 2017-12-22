@@ -2444,11 +2444,10 @@ window.TKH = {
                 if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
                 var reader = new FileReader();
                 var size = file.size / 1024 > 1024 ? (~~(10 * file.size / 1024 / 1024)) / 10 + "MB" : ~~(file.size / 1024) + "KB";
-
+                reader.readAsDataURL(file);
                 reader.onload = function(e) {
                     var resultimg = this.result;
                     /*===压缩图片 ===*/
-                    reader.readAsDataURL(file);
                     var hdimg= resultimg;
                     if (resultimg.length>= maxsize) {
                         var imgnew = new Image();
