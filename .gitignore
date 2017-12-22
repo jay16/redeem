@@ -9,6 +9,7 @@
 .app-user
 .env-files
 *.rdb
+.idea/
 db/
 /tmp/
 /log
