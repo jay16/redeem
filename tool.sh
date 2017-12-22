@@ -34,8 +34,13 @@ fi
 unicorn_config_file=config/unicorn.rb
 unicorn_pid_file=tmp/pids/unicorn.pid
 
-bundle_command=$(rbenv which bundle)
-gem_command=$(rbenv which gem)
+command -v rbenv > /dev/null 2>&1 && {
+    bundle_command=$(rbenv which bundle)
+    gem_command=$(rbenv which gem)
+} || {
+    echo >&2 "warning: rbenv is not installed";
+    echo >&2 ""
+}
 
 cd "${app_root_path}" || exit 1
 mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
