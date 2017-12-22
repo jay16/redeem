@@ -4,6 +4,7 @@
 # 文件添加至本地文件，而依然被跟踪,可使用下面代码，把该文件从cached中删除。
 # git rm --cached un_wanted_be_tracked_file_name
 
+.DS_Store
 .app-port
 .unicorn-port
 .app-user

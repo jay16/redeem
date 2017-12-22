@@ -29,6 +29,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/lightbox.css?timestamp=1513915033">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/common.css?timestamp=1513915033">
 <link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/layer.css?v=3.0.11110&timestamp=1513915033">
+<link media="all" type="text/css" rel="stylesheet" href="assets/stylesheets/layui.css?v=3.0.11110&timestamp=1513915033">
 
 <script src="assets/javascripts/jquery-2.1.1.min.js?timestamp=1513915033"></script>
 <script src="assets/javascripts/jquery-ui.min.js?timestamp=1513915033"></script>
@@ -54,8 +55,6 @@
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
-
-
 
   <header class="main-header">
     <!-- Logo -->
@@ -241,18 +240,6 @@
   </div>
 </section>
 
-<style>
-#apiMappingWrapper pre {
-  white-space: pre;           /* CSS 2.0 */
-  white-space: pre-wrap;      /* CSS 2.1 */
-  white-space: pre-line;      /* CSS 3.0 */
-  white-space: -pre-wrap;     /* Opera 4-6 */
-  white-space: -o-pre-wrap;   /* Opera 7 */
-  white-space: -moz-pre-wrap !important; /* Mozilla */
-  white-space: -hp-pre-wrap;  /* HP Printers */
-  word-wrap: break-word;      /* IE 5+ */
-}
-</style>
 <div id="apiMappingWrapper" style="display: none;">
 </div>
 <script type="text/javascript">
@@ -308,11 +295,12 @@ $(document).ready(function() {
         event.preventDefault();
 
         if($(this).data("type") === 'view') {
-          $("#apiMappingWrapper").html("<pre id='apiMapping'></pre>");
+          $("#apiMappingWrapper").html("<pre id='apiMapping' class='layui-code'></pre>");
           var $apiMapping = $("#apiMapping");
           $("#apiMappingWrapper").css({"display": "block"});
           console.log($(this).data("config"));
-          $("#apiMapping").html(JSON.stringify($(this).data("config"), null, 4))
+          $("#apiMapping").html(JSON.stringify($(this).data("config"), null, 4));
+
           layer.open({
             type: 1,
             title: "CRM  接口信息",
@@ -347,7 +335,7 @@ $(document).ready(function() {
     }
     foot.append(tr);
   }
-  $('div.toolbar').html('<a href="' + window.ServerAPI.server + '/view/website_config/new/0" title="添加" class="btn btn-primary btn-xm iframe">添加</a>');
+  $('div.toolbar').html('<a href="' + window.ServerAPI.server + '/view/website_config/new/0" title="添加" class="btn btn-primary btn-xm iframe">添加</a><span class="help-block">CRM 接口会使用对应 IP/域名的配置进行业务操作；匹配不到时，默认使用 * 对应的配置</span>');
 });
 
 </script>

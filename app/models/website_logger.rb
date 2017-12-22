@@ -32,40 +32,42 @@ class WebsiteLogger < ActiveRecord::Base
   alias_attribute :keyname, :field0 # 键名
   alias_attribute :keyname, :field0 # 键名
 
-  def self.extract_params(params)
-    options = {}
-    options[:field0] = params[:platform] if params[:platform]
-    options[:field1] = params[:scene] if params[:scene]
-    options[:field2] = params[:operator_type] if params[:operator_type]
-    options[:field3] = params[:operator_identifer] if params[:operator_identifer]
-    options[:field4] = params[:action] if params[:action]
-    options[:field5] = params[:action_description1] if params[:action_description1]
-    options[:field6] = params[:action_description2] if params[:action_description2]
-    options[:field7] = params[:action_description3] if params[:action_description3]
-    options[:field8] = params[:exception_file_name] if params[:exception_file_name]
-    options[:field9] = params[:exception_line_number] if params[:exception_line_number]
-    options[:field10] = params[:exception_column_number] if params[:exception_column_number]
-    options[:text1] = params[:exception] if params[:exception]
-    options
-  end
+  class << self
+    def extract_params(params)
+      options = {}
+      options[:field0] = params[:platform] if params[:platform]
+      options[:field1] = params[:scene] if params[:scene]
+      options[:field2] = params[:operator_type] if params[:operator_type]
+      options[:field3] = params[:operator_identifer] if params[:operator_identifer]
+      options[:field4] = params[:action] if params[:action]
+      options[:field5] = params[:action_description1] if params[:action_description1]
+      options[:field6] = params[:action_description2] if params[:action_description2]
+      options[:field7] = params[:action_description3] if params[:action_description3]
+      options[:field8] = params[:exception_file_name] if params[:exception_file_name]
+      options[:field9] = params[:exception_line_number] if params[:exception_line_number]
+      options[:field10] = params[:exception_column_number] if params[:exception_column_number]
+      options[:text1] = params[:exception] if params[:exception]
+      options
+    end
 
-  def self.find_or_create_with_params(params)
-     create(extract_params(params))
-  end
+    def find_or_create_with_params(params)
+       create(extract_params(params))
+    end
 
-  def self.data_tables(params)
-    respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
-    records = where("field12 is null").order(id: :desc)
+    def data_tables(params)
+      respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
+      records = where("field12 is null").order(id: :desc)
+        
+      total_count = records.count
+      page_records = records.offset(params[:start]).limit(params[:length])
       
-    total_count = records.count
-    page_records = records.offset(params[:start]).limit(params[:length])
-    
-    {
-      draw: params[:draw] || 'nil',
-      recordsTotal: total_count,
-      recordsFiltered: total_count,
-      data: page_records.map(&respond_foramt)
-    }
+      {
+        draw: params[:draw] || 'nil',
+        recordsTotal: total_count,
+        recordsFiltered: total_count,
+        data: page_records.map(&respond_foramt)
+      }
+    end
   end
 
   def data_table

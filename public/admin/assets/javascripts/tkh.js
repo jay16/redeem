@@ -270,20 +270,6 @@ window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, err
     console.log('--------------------');
 
     try {
-        // 日志记录
-        // # 字段，别名，意思
-        // # field0, platform, 前端兑换/后台管理
-        // # field1, scene, 业务模块/场景
-        // # field2, operator_type, 用户类型
-        // # field3, operator_identifer, 用户标识
-        // # field4, action, 用户行为
-        // # field5, action_description1, 行为描述1
-        // # field6, action_description2, 行为描述2
-        // # field7, action_description3, 行为描述3
-        // # field8, exception_file_name, 异常时文件名
-        // # field9, exception_line_number, 异常时行号
-        // # field10, exception_column_number, 异常时列号
-        // # text1, exception, 异常内容
         var data = {
           platform: "礼品兑换前端",
           scene: "全局监控",
@@ -607,6 +593,21 @@ window.TKH = {
             console.log("errorThrown:");
             console.log(errorThrown);
             console.log(" =========== FAILED END ===========");
+
+            try {
+                var data = {
+                  platform: "礼品兑换前端",
+                  scene: "登录",
+                  operator_type: "",
+                  operator_identifer: "",
+                  action: "ajax",
+                  action_description1: textstatus,
+                  exception_file_name: '',
+                  exception_line_number: '',
+                  exception: ''
+                }
+                window.ServerAPI.post_logger(data);   
+            } catch(e) {}
 
             var error_msg = '';
             if (xhr.readyState === 0) {

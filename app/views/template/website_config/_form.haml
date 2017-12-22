@@ -4,16 +4,75 @@
       监控 ip
       %sup *
     .col-lg-10.col-sm-8
-      %input#keyname.form-control{name: "keyname", required: "required", type: "text", value: "#{@record.keyname}"}/
+      %input#keyname.form-control{name: "keyname", required: "required", type: "text", value: "#{@record.keyname.to_s.sub('api-mapping:', '')}"}/
+
   .form-group.required
     %label.control-label.col-lg-2.col-sm-4{:for => "content"}
       crm 配置
       %sup *
-    .col-lg-10.col-sm-8
+    .col-lg-10.col-sm-8.has-error
       %textarea#content.form-control{name: "content", rows:10, required: "required"}
         = @record.content
+      .help-block.json-error
   .form-group
     .col-lg-offset-2.col-sm-offset-4.col-lg-10.col-sm-8
       %button.btn.btn-primary.btn-lg.btn-block{type: "submit"}
         %span.glyphicon.glyphicon-ok-sign
   %input.form-control{name: "_token", type: "hidden", value: "4sKeXW2IREccIIgEwLtkn3d2DIGJ2c7eJ91MCzgz"}/
+
+:javascript
+  $(document).ready(function() {
+      $(".glyphicon-ok-sign").html(window.CRUD.submit);
+      $("#ajaxform").attr("action", window.CRUD.action);
+
+      //提交数据
+      var tableId = "tableRecords";
+      var frm     = $('#ajaxform');
+      frm.submit(function () {
+          try {
+              JSON.parse($("#content").val());
+              $(".json-error").addClass("hidden");
+          } catch(e) {
+              $(".json-error").removeClass("hidden");
+              $(".json-error").html("请确认 CRM 接口配置为 JSON 格式");
+              return false;
+          }
+
+          var value = $("#keyname").val().trim().replace("api-mapping:", "");
+          $("#keyname").val("api-mapping:" + value);
+
+          $.ajax({
+              type: frm.attr('method'),
+              url: frm.attr('action'),
+              data: frm.serialize(),
+              cache: false,
+              dataType: 'json',
+              beforeSend: function() {
+                  $(".validator-error").remove();
+                  $(".has-error").removeClass("has-error");
+              },
+              success: function(data) {
+                  if(data.status == 0){
+                      $.scojs_message(data.message, $.scojs_message.TYPE_ERROR);
+                      if(data.hasOwnProperty('errors')){
+                          var arr = data.errors;
+                          $.each(arr, function(index, value){
+                              if (value.length != 0){
+                                  $("#"+index).parent().parent().addClass('has-error');
+                                  $("#"+index).parent().after('<div class="col-md-offset-2 col-md-12 validator-error"><label class="control-label" for="'+index+'">'+ value +'</label></div>');
+                              }
+                          });
+                      }
+                  }else {
+                      BootstrapDialog.closeAll();
+                      $('#'+tableId).DataTable().ajax.reload();
+                      $.scojs_message(data.message, $.scojs_message.TYPE_OK);
+                  }
+              },
+              error: function(xhr, textStatus, thrownError) {
+                  alert('Something went to wrong.Please Try again later...');
+              }
+          });
+          return false;
+      });
+  });

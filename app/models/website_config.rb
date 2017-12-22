@@ -68,7 +68,6 @@ class WebsiteConfig < ActiveRecord::Base
       respond_foramt = (params[:format] == 'json' ? :to_hash : :data_table)
       records = (params[:keyname] ? where("field0 like '%#{params[:keyname]}%'") : all).order(id: :desc)
     
-      puts records.to_sql
       total_count = records.count
       page_records = records.offset(params[:start]).limit(params[:length])
       
@@ -99,7 +98,7 @@ class WebsiteConfig < ActiveRecord::Base
       
     [
       self.id,
-      self.field0,
+      self.field0.to_s.sub('api-mapping:', ''),
       self.created_at.strftime("%y-%m-%d %H:%M:%S"),
       html_tag1,
       html_tag2
