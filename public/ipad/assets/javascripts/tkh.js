@@ -2449,13 +2449,10 @@ window.TKH = {
                     var resultimg = this.result;
                     /*===压缩图片 ===*/
                     reader.readAsDataURL(file);
-                    var hdimg;
-                    var imgnew = new Image();
-                    imgnew.src = resultimg;
-                    if (resultimg.length<= maxsize) {
-                        hdimg = resultimg;
-                    }
-                    else {                       
+                    var hdimg= resultimg;
+                    if (resultimg.length>= maxsize) {
+                        var imgnew = new Image();
+                        imgnew.src = resultimg;
                         //imgnew.src = file;
                         // hdimg = compress(imgnew, file.type);
                         if (imgnew.complete) {
