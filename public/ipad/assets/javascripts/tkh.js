@@ -69,8 +69,8 @@ function saveimgstore() {
     window.localStorage.setItem("storageImg", JSON.stringify(imgdata));
 }
 
-// 保存礼品兑换界面的消费记录
-function saveEntryRecords() {
+// 保存消费积分的消费记录
+function saveScoreInputRecords() {
     var paies = [],
         gid, flowno, crttime, famt,
         post_params = {},
@@ -116,8 +116,8 @@ function saveEntryRecords() {
     window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
 }
 
-// 保存消费积分界面的消费记录
-function saveStoreInputRecords() {
+// 保存礼品兑换界面的消费记录
+function saveEntryRecords() {
     var fcardnum = window.localStorage.getItem('sFCARDNUM');
     var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/,
         name = '',
@@ -208,6 +208,7 @@ function saveStoreInputRecords() {
         store_input_records.push({
           card_number: fcardnum,
           store_code: gndcode,
+          gndgid: gndgid,
           store_name: store_name,
           serial_num: serial_num,
           real_amt: amount,
@@ -215,20 +216,30 @@ function saveStoreInputRecords() {
           datetime: datetime,
           wrapper_class: wrapper_class
         });
+
+        record = {};
+        record["name"] = store_name;
+        record["serial_num"] = serial_num;
+        record["amount"] = amount;
+        record["gndgid"] = gndgid;
+        record["gndcode"] = gndcode;
+        record["datetime"] = datetime;
+        records.push(record);
       }
     });
 
     console.log(store_input_records);
-    window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
 
+    window.localStorage.setItem("records", JSON.stringify(records));
+    window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
 }
 
 function saveConsumeRecords() {
     if($(".xf") !== null && $(".xf").length >= 0) {
-        saveEntryRecords();
+        saveScoreInputRecords();
     }
     if($(".dq-wrapper") !== null && $(".dq-wrapper").length >= 0) {
-        saveStoreInputRecords();
+        saveEntryRecords();
     }
 }
 
@@ -1529,9 +1540,11 @@ window.TKH = {
         $('.xuanZe').fadeOut(200);
         $(".suoding").removeClass("suoding");
 
+        console.log('selectedDQM');
         // 选择门店后，缓存消费记录
         saveimgstore();
         saveConsumeRecords();
+        console.log('cachedDone');
     },
     initJEDate: function(datetimeId) {
         $("#" + datetimeId).jeDate({
@@ -1970,7 +1983,7 @@ window.TKH = {
                 command: 'CRMGenMallSupplyBill',
                 async: true
             };
-
+            
         /*===cynthia赠品发放单号绑定附件 start====*/
         var paramAttachid = JSON.parse(window.localStorage.getItem("storageImg"))["imgid"];
         for (var key in paramAttachid) {
@@ -1990,6 +2003,7 @@ window.TKH = {
                     outparams = JSON.parse(resultstring);
             })
         }
+        console.log(data);
         /*===cynthia赠品发放单号绑定附件 end====*/
         window.TKH.hdClientCommand(data, function(result) {
             var parkobj = [];
@@ -2705,7 +2719,7 @@ window.TKH = {
             str += "<span class='absolute ico loadingico' id='loading" + nowDate + "' style='top:40%;text-align:center;left:0;right:0;'></span>";
             str += "</div>";
             $("#piclist").prepend($(str));
-            var str = "<span class='closeico' onclick='window.TKH.delPic($(this))' data='" + nowId + "'></span>";
+            var str = "<span class='closeico' onclick='window.TKH.delPic($(this))' data='" + nowId + "' attachId='" + nowId + "'></span>";
             $("#picbox" + nowDate).prepend(str);
             $("#piclist").append('<input type="hidden" class="input_imgurl" value="' + data[i] + '" attachId="' + nowId + '">');
         }
