@@ -59,7 +59,7 @@ function saveimgstore() {
     $(".input_imgid").each(function(i) {
         imgarr.push($(this).val());
     })
-    $(".imgdataurl").each(function() {
+    $(".input_imgurl").each(function() {
         arr_imgurl.push($(this).val());
     })
     var imgdata = {
@@ -68,9 +68,173 @@ function saveimgstore() {
     }
     window.localStorage.setItem("storageImg", JSON.stringify(imgdata));
 }
+
+// 保存礼品兑换界面的消费记录
+function saveEntryRecords() {
+    var paies = [],
+        gid, flowno, crttime, famt,
+        post_params = {},
+        post_param_consumes = [],
+        post_param_gifts = [],
+        store_input_records = [],
+        wrapper_class;
+    // 消费记录
+    $(".xf").each(function() {
+        if ($(this).hasClass("checked")) {
+            var fgndgid = $(this).find(".guoxiao_gndgid").val(),
+                fgndcode = $(this).find(".guoxiao_gndcode").val(),
+                storename = $(this).find(".guoxiao_store").val(),
+                fflowno = $(this).find(".guoxiao_serialnum").val(),
+                famt = (new Number($(this).find(".guoxiao_amount").val())).toFixed(2),
+                focrtime = $(this).find(".guoxiao_datetime").val();
+            wrapper_class = $(this).data("class");
+            // (new Date()).format('yyyy.MM.dd hh:mm:ss');
+            paies.push('{' +
+                '&quot;FGNDGID&quot;:&quot;' + fgndgid + '&quot;' +
+                ',&quot;FFLOWNO&quot;:&quot;' + fflowno + '&quot;' +
+                ',&quot;FOCRTIME&quot;:&quot;' + focrtime + '&quot;' +
+                ',&quot;FAMT&quot;:&quot;' + famt + '&quot;' +
+                '}');
+            /*===updatecynthia0925 start===*/
+            if (fcardnum !== null && fcardnum !== '-') {
+                store_input_records.push({
+                    card_number: fcardnum,
+                    store_code: fgndcode,
+                    store_name: storename,
+                    serial_num: fflowno,
+                    gndgid: fgndgid,
+                    real_amt: famt,
+                    score: parseInt(famt),
+                    datetime: focrtime,
+                    wrapper_class: wrapper_class
+                });
+            }
+        }
+    });
+
+    console.log(store_input_records);
+    window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
+}
+
+// 保存消费积分界面的消费记录
+function saveStoreInputRecords() {
+    var fcardnum = window.localStorage.getItem('sFCARDNUM');
+    var reg = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/,
+        name = '',
+        amount = '',
+        serial_num = '',
+        serial_nums = [],
+        store_and_datetime = '',
+        store_and_datetimes = [],
+        gndgid = '',
+        gndcode = '',
+        datetime = '',
+        record = {},
+        records = [],
+        is_error = 0,
+        serial_num_with_store_code,
+        wrapper_class,
+        store_input_records = [],
+        layer_index;
+
+    var is_all_ok = true;
+    // 已提交成功的消费项
+    $(".dq-wrapper").each(function() {
+      if($(this).data("submited") === "yes") {
+        name = $(this).find("input.store-name").val();
+        serial_num = $(this).find("input.serial-num").val();
+        amount = $(this).find("input.amount").val();
+        gndgid = $(this).find("input.gndgid").val();
+        gndcode = $(this).find("input.gndcode").val();
+        datetime = $(this).find("input.datetime").val();
+
+        serial_num_with_store_code = gndcode + serial_num;
+        serial_nums.push(serial_num_with_store_code);
+        store_and_datetime = gndgid + datetime;
+        store_and_datetimes.push(store_and_datetime);
+      } else {
+        is_all_ok = false;
+      }
+    });
+
+    // 全部积分提交成功，则跳转页面
+    if(is_all_ok) {
+      return false;
+    }
+    $(".dq-wrapper").each(function() {
+      // 跳过已经提交成功的消费项
+      if($(this).data("submited") !== "yes") {
+        store_name = $(this).find("input.store-name").val();
+        serial_num = $(this).find("input.serial-num").val();
+        amount = $(this).find("input.amount").val();
+        gndgid = $(this).find("input.gndgid").val();
+        gndcode = $(this).find("input.gndcode").val();
+        datetime = $(this).find("input.datetime").val();
+        store_and_datetime = gndgid + datetime;
+        is_error = 0,
+        wrapper_class = $(this).data("class");
+
+        if(!store_name.length) {
+          is_error = 1;
+          return false;
+        }
+
+        if(!serial_num.length) {
+          is_error = 1;
+          return false;
+        }
+
+        if(!amount.length) {
+          is_error = 1;
+          return false;
+        }
+
+        if(serial_num.length > 30) {
+          is_error = 1;
+          return false;
+        }
+        serial_num_with_store_code = gndcode + serial_num;
+        if(serial_nums.indexOf(serial_num_with_store_code) >= 0) {
+          is_error = 1;
+          return false;
+        }
+        if(store_and_datetimes.indexOf(store_and_datetime) >= 0) {
+          is_error = 1;
+          return false;
+        }
+
+        serial_nums.push(serial_num_with_store_code);
+        store_and_datetimes.push(store_and_datetime);
+        store_input_records.push({
+          card_number: fcardnum,
+          store_code: gndcode,
+          store_name: store_name,
+          serial_num: serial_num,
+          real_amt: amount,
+          score: parseInt(amount),
+          datetime: datetime,
+          wrapper_class: wrapper_class
+        });
+      }
+    });
+
+    console.log(store_input_records);
+    window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
+
+}
+
+function saveConsumeRecords() {
+    if($(".xf") !== null && $(".xf").length >= 0) {
+        saveEntryRecords();
+    }
+    if($(".dq-wrapper") !== null && $(".dq-wrapper").length >= 0) {
+        saveStoreInputRecords();
+    }
+}
+
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext('2d');
-//    瓦片canvas
+// 瓦片canvas
 var tCanvas = document.createElement("canvas");
 var tctx = tCanvas.getContext("2d");
 var maxsize = 400 * 1024;
@@ -1364,6 +1528,10 @@ window.TKH = {
         $(".suoding").find(".gndcode").val($(ctl).find('.gndcode').val());
         $('.xuanZe').fadeOut(200);
         $(".suoding").removeClass("suoding");
+
+        // 选择门店后，缓存消费记录
+        saveimgstore();
+        saveConsumeRecords();
     },
     initJEDate: function(datetimeId) {
         $("#" + datetimeId).jeDate({
@@ -1387,11 +1555,16 @@ window.TKH = {
         });
         var idx = $(ctl).parents(".dq-wrapper").index();
         $(".layui-layer-tips").eq(idx - 1).remove();
+        $wrapper_class.remove();
         if ($(".dq-wrapper").length == 0) {
             isrepeat = 0;
-        }
-        $wrapper_class.remove();
 
+            window.TKH.addRecordInput();
+        }
+
+        // 缓存消费记录
+        saveimgstore();
+        saveConsumeRecords();
     },
     // 消费录入，添加录入框
     addRecordInput: function() {
@@ -1427,7 +1600,7 @@ window.TKH = {
        </div>'
         );
         window.TKH.initJEDate(datetimeId);
-
+        
     },
     // 3.2.7 查询有效商铺信息
     queryMallGndWebV2: function(fpageindex) {
@@ -1881,7 +2054,13 @@ window.TKH = {
                 getpark(paramsobj, 0);
                 /*====兑换停车券 end====*/
                 window.ServerAPI.save_redeem(post_param, function() {
+                    // 礼品兑换完成后
+                    //   1. 清理消费记录
+                    //   2. 清理缓存图片
+                    window.localStorage.removeItem("storageImg");
+                    window.localStorage.removeItem("scoreInputRecords");
                     window.localStorage.removeItem("records");
+
                     window.setTimeout('window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html")', 2000);
                 });
                 console.log("post_param" + post_param);
@@ -2386,7 +2565,7 @@ window.TKH = {
             });
             $store_name.data("layerindex", layer_index);
             var img_source = [];
-            $(".imgdataurl").each(function(i) {
+            $(".input_imgurl").each(function(i) {
                 img_source.push($(this).val());
             })
             var post_param = {};
@@ -2465,21 +2644,25 @@ window.TKH = {
                     }
                     /*===压缩图片 end ===*/
                     /*===调图片接口 start===*/
+                    
+                    var hdimg_without_header = hdimg.split(";base64,")[1];
                     var params = '{' +
                         '&quot;FATTACHNAME&quot;:&quot;' + file.name + '&quot;' +
-                        ',&quot;FATTACH&quot;:&quot;' + hdimg + '&quot;' +
+                        ',&quot;FATTACH&quot;:&quot;' + hdimg_without_header + '&quot;' +
                         '}',
                         ajax_data = {
                             params: params,
                             command: 'CRMMediaService',
                             async: true
                         };
+                    console.log("<img src='" + hdimg + "'>");
+
                     window.TKH.hdClientCommand(ajax_data, function(result) {
                         var errMsg = $(result).find('sErrMsg').text(),
-                            resultstring = $(result).find('sOutParams').text();
-                        outparams = JSON.parse(resultstring);
+                            resultstring = $(result).find('sOutParams').text(),
+                            outparams = JSON.parse(resultstring);
                         if (outparams["FRESULT"] === 0 || outparams["FRESULT"] === "0") {
-                            $("#piclist").append("<input type='hidden' class='input_imgid' value='" + outparams["FATTACHID"] + "'>");
+                            $("#piclist").append("<input type='hidden' class='input_imgid' value='" + outparams["FATTACHID"] + "' attachId='" + outparams["FATTACHID"] + "'>");
                             var nowId = outparams["FATTACHID"];
                             /*===显示图片接口 start===*/
                             var img = new Image();
@@ -2524,29 +2707,36 @@ window.TKH = {
             $("#piclist").prepend($(str));
             var str = "<span class='closeico' onclick='window.TKH.delPic($(this))' data='" + nowId + "'></span>";
             $("#picbox" + nowDate).prepend(str);
-            $("#piclist").append('<input type="hidden" class="imgdataurl" value="' + data[i] + '">');
+            $("#piclist").append('<input type="hidden" class="input_imgurl" value="' + data[i] + '" attachId="' + nowId + '">');
         }
-        //数量等于10个，隐藏上传按钮
+        // 缓存消费记录
+        saveimgstore();
+        saveConsumeRecords();
+        // 数量等于10个，隐藏上传按钮
         if ($(".imgitem").length == 10) { $(".boarditem_c_add").hide(); }
     },
     delPic: function(obj) {
         $(".input_imgid").each(function(i) {
-            if ($(".input_imgid").eq(i).val() == obj.attr("data")) { $(".input_imgid").eq(i).remove(); }
+            if ($(".input_imgid").eq(i).attr("attachId") == obj.attr("attachId")) { $(".input_imgid").eq(i).remove(); }
         })
-        $(".imgdataurl").each(function(i) {
-            if ($(".imgdataurl").eq(i).val() == obj.next("img").attr("code")) { $(".imgdataurl").eq(i).remove(); }
+        $(".input_imgurl").each(function(i) {
+            if ($(".input_imgurl").eq(i).attr("attachId") == obj.attr("attachId")) { $(".input_imgurl").eq(i).remove(); }
         })
         obj.parents(".boarditem_c_i").remove();
         if ($(".imgitem").length < 10) {
             $(".boarditem_c_add").show();
         }
+
+        // 删除图片后，缓存图片
+        saveimgstore();
+        saveConsumeRecords();
     },
     showLarge: function() {
         if (event.target.getAttribute("src") != "") {
             $("#largePic").attr("src", event.target.getAttribute("src"));
             $(".largebox").show();
         }
-        $(".imgclose").click(function() {
+        $(".imgclose, .largebox").click(function() {
             $(".largebox").hide();
         })
     },
@@ -2673,6 +2863,11 @@ window.TKH = {
     skipStoreToScoreComplete: function() {
         window.TKH.refreshRedeemScoreInput(true);
         window.TKH.redirect_to_with_timestamp('score-complete.html');
+        // 积分完成后
+        //   1. 点击礼品兑换时可继续使用缓存图片
+        //   2. 点击返回首页时，清理缓存图片
+        window.localStorage.removeItem("storageImg");
+        window.localStorage.removeItem("scoreInputRecords");
     },
     backToUpdateScoreInput: function(data_source) {
         $(".layui-layer-close").click();
@@ -2692,7 +2887,6 @@ window.TKH = {
         $(".submit-btn").html(is_all_ok ? "下一页<br/>Next" : "提交<br/>Submit");
 
         if (is_all_ok) {
-            //window.localStorage.removeItem("scoreInputRecords");
             $(".submit-btn").css("display", "block");
             $(".skip-btn").css("display", "none");
         } else {
