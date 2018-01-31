@@ -1,3 +1,24 @@
+// 当 Safari 开启无痕模式时的补救措施
+try {
+    localStorage.setItem('debugerLocalStorage', 'helloworld');
+    console.log(localStorage.getItem('debugerLocalStorage'));
+} catch(e) {
+    console.log(e.message, e.name, e.stack);  // 输出错误信息
+
+    if (layer) { layer.closeAll(); }
+    // alert("错误详情: \n" + errorObj);
+    layer.msg('当前为无痕模式，请设置为正常模式，<br>以保证应用的正常使用，谢谢！', {
+        time: 0,
+        btn: ['确定'],
+        btnAlign: 'c',
+        yes: function(index) {
+            layer.close(index);
+
+            window.location.reload();
+        }
+    });
+}
+
 // 用于压缩图片的canvas
 var txterror, scorescc;
 
