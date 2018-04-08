@@ -8,6 +8,7 @@
 .app-port
 .unicorn-port
 .app-user
+.app-defender
 .env-files
 *.rdb
 .idea/

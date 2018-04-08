@@ -33,16 +33,15 @@ process_start() {
     local process_name="$2"
     local command_text="$3"
 
-    echo "## start ${process_name}"
     if [[ -f ${pid_file} ]]; then
         local pid=$(cat ${pid_file})
         /bin/ps ax | awk '{print $1}' | grep -e "^${pid}$" &> /dev/null
         if [[ $? -eq 0 ]]; then
-            echo -e "\t ${process_name} already started"
+            printf "$two_cols_table_format" "${process_name}" "running(${pid})"
             return 0
         fi
 
-        echo "${process_name} not running then remove ${pid_file}"
+        printf "$two_cols_table_format" "${process_name}" "not exist: ${pid_file}"
         [[ -f ${pid_file} ]] && rm -f ${pid_file} &> /dev/null
     fi
 
@@ -54,19 +53,20 @@ process_start() {
         [[ $? -eq 0 ]] && return 0
     fi
 
-    echo -e "\t$ run \`${command_text}\`"
     run_result=$($command_text) #> /dev/null 2>&1
-    echo -e "\t# ${process_name} start $([[ $? -eq 0 ]] && echo 'successfully' || echo 'failed')(${run_result})"
+    run_result_text="$([[ $? -eq 0 ]] && echo 'successfully' || echo 'failed')(${run_result})"
+
+    printf "$two_cols_table_format" "${process_name}" "run ${run_result_text}"
+    # echo -e "$ run \`${command_text}\`"
 }
 
 process_stop() {
     local pid_file="$1"
     local process_name="$2"
     local exec_status='failed'
-    echo "## stop ${process_name}"
 
     if [[ ! -f ${pid_file} ]]; then
-        echo -e "\t ${process_name} never started"
+        echo -e "${process_name} never started"
         return 1
     fi
 
@@ -75,7 +75,7 @@ process_stop() {
         rm -f ${pid_file} &> /dev/null
         exec_status='successfully'
     fi
-    echo -e "\t ${process_name} stop ${exec_status}"
+    echo -e "${process_name} stop ${exec_status}"
 }
 
 process_checker() {
@@ -83,7 +83,7 @@ process_checker() {
     local process_name="$2"
 
     if [[ ! -f "${pid_file}" ]]; then
-        echo "process(${process_name}): pid file not exist - ${pid_file}"
+        printf "$two_cols_table_format" "${process_name}" "not exist: ${pid_file}"
 
         # donnot attemp to startup multiple redis processes
         if [[ "${process_name}" = "redis" ]]; then
@@ -97,12 +97,12 @@ process_checker() {
     local pid=$(cat ${pid_file})
     ps ax | awk '{print $1}' | grep -e "^${pid}$" &> /dev/null
     if [[ $? -gt 0 ]]; then
-        echo "process(${process_name}) is not running"
+        printf "$two_cols_table_format" "${process_name}" "not running"
         [[ -f ${pid_file} ]] && rm -f ${pid_file} &> /dev/null
         return 2
     fi
 
-    echo "process(${process_name}) is running"
+    printf "$two_cols_table_format" "${process_name}" "running($pid)"
     return 0
 }
 
@@ -116,4 +116,36 @@ mobile_asset_check() {
     else
         echo "WARNING: ${zip_path} not found"
     fi
+}
+
+check_app_defenders_include() {
+    if [[ $(grep "$1" .app-defender | wc -l) -eq 0 ]]; then
+       return 404
+    else
+       return 0
+    fi
+}
+
+two_cols_table_divider=------------------------------
+two_cols_table_divider=$two_cols_table_divider$two_cols_table_divider
+two_cols_table_header="+%-14.14s+%-42.42s+\n"
+two_cols_table_format="| %-12s | %-40s |\n"
+two_cols_table_width=59
+
+fun_print_table_header() {
+    local header_text="${1}"
+    
+    printf "$two_cols_table_header" "$two_cols_table_divider" "$two_cols_table_divider"
+    printf "| %-55s |\n" "${header_text}"
+    printf "$two_cols_table_header" "$two_cols_table_divider" "$two_cols_table_divider"
+    printf "$two_cols_table_format" "$2" "$3"
+    printf "$two_cols_table_header" "$two_cols_table_divider" "$two_cols_table_divider"
+}
+
+fun_print_table_footer() {
+    local footer_text="${1-timestamp: $(date +'%Y-%m-%d %H:%M:%S')}"
+
+    printf "$two_cols_table_header" "$two_cols_table_divider" "$two_cols_table_divider"
+    printf "| %-55s |\n" "${footer_text}"
+    printf "$two_cols_table_header" "$two_cols_table_divider" "$two_cols_table_divider"
 }

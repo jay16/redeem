@@ -895,7 +895,7 @@ window.TKH = {
             return false;
         }
 
-        var $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+        var $phe = /^1[0-9]{10}$/; // /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
         if (!($phe.test(phone))) {
             layer.msg('请输入正确的手机号码', { time: 2000 });
             return false;
@@ -1190,7 +1190,7 @@ window.TKH = {
     // 注册会员
     weiXinOpenCardJson: function() {
         var fmbrmobilephone = $('#search').val(),
-            $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+            $phe = /^1[0-9]{10}$/; // $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
         if (!($phe.test(fmbrmobilephone))) {
             layer.msg('请输入正确的手机号码', { time: 2000 });
             return false;
@@ -1281,7 +1281,7 @@ window.TKH = {
     // udatemember更新会员资料 start
     udatemember: function() {
         var fmbrmobilephone = $('#search').val(),
-            $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+            $phe = /^1[0-9]{10}$/; // $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
         if (!($phe.test(fmbrmobilephone))) {
             layer.msg('请输入正确的手机号码', { time: 2000 });
             return false;

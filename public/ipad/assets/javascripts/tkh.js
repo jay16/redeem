@@ -1386,7 +1386,7 @@ window.TKH = {
     // 注册会员
     weiXinOpenCardJson: function() {
         var fmbrmobilephone = $('#search').val(),
-            $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+            $phe = /^1[0-9]{10}$/; // /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
         if (!($phe.test(fmbrmobilephone))) {
             layer.msg('请输入正确的手机号码', { time: 2000 });
             return false;
@@ -1477,7 +1477,7 @@ window.TKH = {
     // udatemember更新会员资料 start
     udatemember: function() {
         var fmbrmobilephone = $('#search').val(),
-            $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
+            $phe = /^1[0-9]{10}$/; // $phe = /^(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
         if (!($phe.test(fmbrmobilephone))) {
             layer.msg('请输入正确的手机号码', { time: 2000 });
             return false;
@@ -2068,21 +2068,13 @@ window.TKH = {
                 var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
                     sdata = JSON.parse(scoreInputRecordsString);
                 for (var key in sdata) {
-                    var trant_time = sdata[key]["datetime"];
-                    while (trant_time && trant_time.length &&
-                        (trant_time.indexOf(".") >= 0 ||
-                            trant_time.indexOf(":") >= 0 ||
-                            trant_time.indexOf(" ") >= 0)) {
-                        trant_time = trant_time.replace(".", "");
-                        trant_time = trant_time.replace(":", "");
-                        trant_time = trant_time.replace(" ", "");
-                    }
+                    var trant_time = (sdata[key].datetime + '').replace(/\./g, "").replace(/:/g, "").replace(/\s/g, "");
                     var parklist = '{' +
-                        '"FCARDNUM":"' + sdata[key]["card_number"] + '"' +
-                        ',"FTRANTIME":"' + trant_time + '"' +
-                        ',"FSHOPCODE":"' + sdata[key]["store_code"] + '"' +
-                        ',"FVOUCHERNUM":"' + sdata[key]["serial_num"] + '"' +
-                        ',"FREALAMT":"' + sdata[key]["real_amt"] + '"' +
+                            '"FCARDNUM":"' + sdata[key]["card_number"] + '"' +
+                            ',"FTRANTIME":"' + trant_time + '"' +
+                            ',"FSHOPCODE":"' + sdata[key]["store_code"] + '"' +
+                            ',"FVOUCHERNUM":"' + sdata[key]["serial_num"] + '"' +
+                            ',"FREALAMT":"' + sdata[key]["real_amt"] + '"' +
                         '}';
                     parkobj.push(parklist);
                 }
@@ -2407,18 +2399,10 @@ window.TKH = {
       },*/
     /*===判断是否重复积分输入框自动判断 start===*/
     isrepeatscore: function(data) {
-        var trant_time = data[0].datetime;
-        while (trant_time && trant_time.length &&
-            (trant_time.indexOf(".") >= 0 ||
-                trant_time.indexOf(":") >= 0 ||
-                trant_time.indexOf(" ") >= 0)) {
-            trant_time = trant_time.replace(".", "");
-            trant_time = trant_time.replace(":", "");
-            trant_time = trant_time.replace(" ", "");
-        }
         var store_code = data[0].store_code,
             store_name = data[0].store_name,
             serial_num = data[0].serial_num,
+            trant_time = (data[0].datetime + '').replace(/\./g, "").replace(/:/g, "").replace(/\s/g, ""),
             fvoucher_type = '01',
             layer_index;
         var data_params = '{' +
@@ -2476,16 +2460,8 @@ window.TKH = {
             isrepeat = 0,
             consumer_Arr = new Array();
         for (var key in data) {
-            var trant_time = data[key].datetime;
-            while (trant_time && trant_time.length &&
-                (trant_time.indexOf(".") >= 0 ||
-                    trant_time.indexOf(":") >= 0 ||
-                    trant_time.indexOf(" ") >= 0)) {
-                trant_time = trant_time.replace(".", "");
-                trant_time = trant_time.replace(":", "");
-                trant_time = trant_time.replace(" ", "");
-            }
             var trant_time2 = (new Date()).format('yyyyMMddhhmmss'),
+                trant_time = (data[key].datetime + '').replace(/\./g, "").replace(/:/g, "").replace(/\s/g, ""),
                 store_code = data[key].store_code,
                 store_name = data[key].store_name,
                 serial_num = data[key].serial_num,

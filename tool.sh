@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 #
-# Description: script jobs around unicorn/redis/sidekiq/mysql
+# Description: script jobs around unicorn/redis/mysql
 # Author: jay@16/02/03
 #
 # Usage:
 # ./tool.sh {config|start|stop|start_redis|stop_redis|restart|deploy|update_assets|import_data|copy_data}
 #
 
+
+#
+# script env
+#
 app_root_path="$(pwd)"
 export LANG=zh_CN.UTF-8
 while read filepath; do
@@ -18,9 +22,9 @@ cd ${app_root_path}
 #
 # tool kit logic
 #
-exit_when_miss_dependency '.app-user' 'echo $(whoami) > .app-user'
-exit_when_miss_dependency '.app-port' 'echo 4567 > .app-port'
-exit_when_miss_dependency '.env-files' "echo ${HOME}/.${SHELL##*/}_profile >> .env-files"
+exit_when_miss_dependency '.app-user'     'echo $(whoami) > .app-user'
+exit_when_miss_dependency '.app-port'     'echo 4567 > .app-port'
+exit_when_miss_dependency '.env-files'    "echo ${HOME}/.${SHELL##*/}_profile >> .env-files"
 
 app_default_port=$(cat .app-port)
 app_port=${2:-${app_default_port}}
@@ -34,51 +38,57 @@ fi
 unicorn_config_file=config/unicorn.rb
 unicorn_pid_file=tmp/pids/unicorn.pid
 
-command -v rbenv > /dev/null 2>&1 && {
-    bundle_command=$(rbenv which bundle)
-    gem_command=$(rbenv which gem)
-} || {
-    echo >&2 "warning: rbenv is not installed";
-    echo >&2 ""
-}
-
-cd "${app_root_path}" || exit 1
-mkdir -p {db,log/crontab,tmp/{pids,rb},public} > /dev/null 2>&1
+bundle_command=$(rbenv which bundle)
+gem_command=$(rbenv which gem)
 
 case "$1" in
-    commands:version)
-        echo $(date)
-        echo "-----------------------"
+    commands:version|cv)
         while read filepath; do
             test -f "${filepath}" && echo "YES ${filepath}" || echo "NO ${filepath}"
         done < .env-files
-        echo "-----------------------"
-        rbenv --version
-        ruby --version
-        git --version
-        echo "-----------------------"
-        dependency_commands=(ls rm cp date mkdir bash sleep cat echo crontab which test source)
+        # if [[ $? -ne 0 ]]; then
+        #     while read filepath; do
+        #         echo "export PATH=\$PATH:/usr/local/bin" >> "${filepath}"
+        #     done < .env-files
+        # fi
+
+        fun_print_table_header "check dependency commands status" "command" "version/path"
+        dependency_commands=(mysql rbenv ruby git)
+
+        check_app_defenders_include "redis" && {
+            dependency_commands[${#dependency_commands[@]}]='redis-cli'
+            dependency_commands[${#dependency_commands[@]}]='redis-server'
+        }
+
         for cmd in ${dependency_commands[@]}; do
-            which ${cmd}
+            version=$(${cmd} --version)
+            printf "$two_cols_table_format" "${cmd}" "${version:0:40}"
         done
-        echo "-----------------------"
+
+        dependency_commands=(ls rm cp date mkdir bash sleep cat echo crontab which test)
+        for cmd in ${dependency_commands[@]}; do
+            printf "$two_cols_table_format" "${cmd}" "$(which ${cmd})"
+        done
+
+        fun_print_table_footer 
     ;;
-    process:defender)
+    process:defender|pd)
         process_checker "${unicorn_pid_file}" 'unicorn'
     ;;
-    app:defender)
-        echo -e $(date "+## app defender at %y-%m-%d %H:%M:%S\n")
+    app:defender|ad)
         bash "$0" commands:version
-        bash "$0" process:defender
         bash "$0" start
+        bash "$0" process:defender
     ;;
     start)
         RACK_ENV=production $bundle_command exec rake boom:setting
 
-        echo "## shell used: ${shell_used}"
+        fun_print_table_header "start process" "process" "status"
+
         command_text="$bundle_command exec unicorn -c ${unicorn_config_file} -p ${app_port} -E ${app_env} -D"
         process_start "${unicorn_pid_file}" 'unicorn' "${command_text}"
-        echo -e "\t# port: ${app_port}, environment: ${app_env}"
+
+        fun_print_table_footer
 
         RACK_ENV=production $bundle_command exec whenever --update-crontab
     ;;
@@ -91,7 +101,6 @@ case "$1" in
     restart:force)
         bash "$0" stop
         sleep 1
-        echo -e '\n\n#-----------command sparate line----------\n\n'
         bash "$0" start
     ;;
     crontab:update)
