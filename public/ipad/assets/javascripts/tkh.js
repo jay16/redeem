@@ -1,6 +1,6 @@
 // 当 Safari 开启无痕模式时的补救措施
 try {
-    localStorage.setItem('debugerLocalStorage', 'helloworld');
+    localStorage.setItem('debugerLocalStorage', new Date());
     console.log(localStorage.getItem('debugerLocalStorage'));
 } catch(e) {
     console.log(e.message, e.name, e.stack);  // 输出错误信息
@@ -42,7 +42,6 @@ function launchFullScreen(element) {
 function getpark(obj, i) {
     // 测试地址var tokenchar="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiJoZCIsImlhdCI6MTUxMDA0MzQ1NCwiZXhwIjo0NjYzNjQzNDU0fQ.dpdcrYjGXBiZGpiuS53NziIoB0-x5yk_CNJOxjVgpkI";
     var tokenchar = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhcHBfaWQiOiIxIiwiaWF0IjoxNTEwMjk4NDA5LCJleHAiOjQ2NjM4OTg0MDl9.oNfxRgu7xIIR-NHA5nZu_4kbi2DdLBCL7vNzxvhMUB0";
-    console.log("park    " + obj);
 
     $.ajax({
         //测试地址 url: "http://taikoohuitest.smartac.co/api/taikoohui.customer/req_send_park_hdcrm_coupon_list",
@@ -133,7 +132,6 @@ function saveScoreInputRecords() {
         }
     });
 
-    console.log(store_input_records);
     window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
 }
 
@@ -248,8 +246,6 @@ function saveEntryRecords() {
         records.push(record);
       }
     });
-
-    console.log(store_input_records);
 
     window.localStorage.setItem("records", JSON.stringify(records));
     window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
@@ -455,15 +451,14 @@ Date.prototype.format = function(format) {
 }
 
 window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
-    console.log('--------------------');
-    console.log("错误信息：", errorMessage);
+    console.group("错误信息：", errorMessage);
     console.log("出错文件：", scriptURI);
     console.log("出错行号：", lineNumber);
     console.log("出错列号：", columnNumber);
     console.log("错误详情：", errorObj);
     console.log(errorObj);
     console.log(typeof(errorObj));
-    console.log('--------------------');
+    console.groupEnd();
 
     try {
         // 日志记录
@@ -753,7 +748,6 @@ window.TKH = {
       </SOAP-ENV:Envelope>',
             index_loading_layer = layer.load(0);
 
-        console.log(xmlString);
         $.ajax({
             url: window.TKH.server + "?op=LogIn",
             type: 'POST',
@@ -764,8 +758,6 @@ window.TKH = {
             contentType: "text/xml; charset=UTF-8"
         }).done(function(xmlHttpRequest) {
             var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
-            console.log(xmlHttpRequest);
-            console.log(clientCookie);
             if (clientCookie !== null && clientCookie.length > 0) {
                 window.localStorage.setItem('sClientCookie', clientCookie);
                 window.localStorage.setItem('userGid', userGid);
@@ -794,15 +786,11 @@ window.TKH = {
             // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
             // 3 － （交互）正在解析响应内容
             // 4 － （完成）响应内容解析完成，可以在客户端调用了
-            console.log("loginWithinIPad");
-            console.log(" =========== FAILED BEGIN ===========");
-            console.log("xhr:");
-            console.log(xhr);
-            console.log("textstatus:");
-            console.log(textstatus);
-            console.log("errorThrown:");
-            console.log(errorThrown);
-            console.log(" =========== FAILED END ===========");
+            console.group("loginWithinIPad Failed:");
+            console.log("xhr:", xhr);
+            console.log("textstatus:", textstatus);
+            console.log("errorThrown:", errorThrown);
+            console.groupEnd();
 
             var error_msg = '';
             if (xhr.readyState === 0) {
@@ -871,8 +859,6 @@ window.TKH = {
         }).done(function(xmlHttpRequest) {
             var clientCookie = $(xmlHttpRequest).find('sClientCookie').text();
 
-            console.log(xmlHttpRequest);
-            console.log(clientCookie);
             if (clientCookie !== null && clientCookie.length > 0) {
                 window.localStorage.setItem('sClientCookie', clientCookie);
                 window.localStorage.setItem('userGid', userGid);
@@ -988,10 +974,12 @@ window.TKH = {
         });
     },
     escapeQUOTA: function(string) {
-        while (string.indexOf("&quot;") >= 0) {
-            string = string.replace("&quot;", '"');
+        try {
+            return JSON.parse(string.replace(/&quot;/g, '"'))
+        } catch(e) {
+            console.log(e.message);
+            return string;
         }
-        console.log(string);
     },
     // 所有操作的通用接口
     hdClientCommand: function(data, callback) {
@@ -1018,11 +1006,9 @@ window.TKH = {
             index_loading_layer = -1,
             async_state = (data.async !== undefined ? data.async : false);
 
-        console.log((new Date()).format('yy-MM-dd hh:mm:ss load ') + data.command);
-       // console.log('api version:' + window.TKH.version);
-       // console.log('xml params:');
-       // console.log(xmlString);
-       // console.log(window.TKH.escapeQUOTA(data.params));
+        console.group(data.command + "@" + (new Date()).format('yyMMddhhmmss'));
+        data.paramsObject = window.TKH.escapeQUOTA(data.params);
+        console.log('crm params:', data);
         index_loading_layer = layer.load(0);
         $.ajax({
             url: window.TKH.server + "?op=DoClientCommand",
@@ -1033,8 +1019,7 @@ window.TKH = {
             timeout: 15000,
             contentType: "text/xml; charset=UTF-8"
         }).done(function(result) {
-            console.log('response:');
-            console.log(result);
+            console.log('crm response:', result);
             if (callback) { callback(result); }
         }).fail(function(xhr, textstatus, errorThrown) {
             // XMLHttpRequest.readyState: 状态码的意思
@@ -1043,16 +1028,12 @@ window.TKH = {
             // 2 － （载入完成）send()方法执行完成，已经接收到全部响应内容
             // 3 － （交互）正在解析响应内容
             // 4 － （完成）响应内容解析完成，可以在客户端调用了
-            console.log("hdClientCommand");
-            console.log(" =========== FAILED BEGIN ===========");
+            console.group(data.command + " Failed:");
             console.log(data);
-            console.log("xhr:");
-            console.log(xhr);
-            console.log("textstatus:");
-            console.log(textstatus);
-            console.log("errorThrown:");
-            console.log(errorThrown);
-            console.log(" =========== FAILED END ===========");
+            console.log("xhr:", xhr);
+            console.log("textstatus:", textstatus);
+            console.log("errorThrown:", errorThrown);
+            console.groupEnd();
             var error_msg = '';
             if (xhr.readyState === 0) {
                 error_msg = '请确认网络环境正常';
@@ -1078,7 +1059,7 @@ window.TKH = {
             if (index_loading_layer) {
                 layer.close(index_loading_layer);
             }
-            console.log((new Date()).format('yy-MM-dd hh:mm:ss deal ') + data.command + ' done');
+            console.groupEnd();
         });
     },
     // 搜索手机号
@@ -1115,7 +1096,6 @@ window.TKH = {
             params: '{&quot;FCARDNUM&quot;:&quot;&quot;,&quot;FMOBILEPHONE&quot;:&quot;' + phone + '&quot;, &quot;FQUERYTYPE&quot;:&quot;1&quot;,&quot;FCARNUM&quot;:&quot;&quot;}'
         };
         window.TKH.hdClientCommand(data, function(result) {
-            console.log(result);
             var errMsg = $(result).find('sErrMsg').text(),
                 resultstring = $(result).find('sOutParams').text();
 
@@ -1136,10 +1116,6 @@ window.TKH = {
                 $('#wx').parent().css('display', 'block');
                 $('.bc, .legal-provision-dz').css('display', 'none');
                 $('.xy').css('display', 'block');
-
-                for (var key in outparams) {
-                    console.log(key + ": " + outparams[key]);
-                }
 
                 // # field7, married, 婚姻状态
                 // # field8, id_number, 身份证号
@@ -1211,7 +1187,6 @@ window.TKH = {
                 tempSuffix = "";
             for (var i = 0, len = ldd_parts.length; i < len; i++) {
                 ldd_part = $.trim(ldd_parts[i]);
-                console.log(i + ' - ' + ldd_part);
                 if (!ldd_part.length) { continue; }
 
                 tempSuffix = ldd_part.charAt(ldd_part.length - 1)
@@ -1555,18 +1530,15 @@ window.TKH = {
     },
     // 消费录入/积分录入，选择商户选择
     selectedDQM: function(ctl) {
-        console.log($(ctl).find('.gndname').val());
         $(".suoding").find(".store-name").val($(ctl).find('.gndname').val());
         $(".suoding").find(".gndgid").val($(ctl).find('.gndgid').val());
         $(".suoding").find(".gndcode").val($(ctl).find('.gndcode').val());
         $('.xuanZe').fadeOut(200);
         $(".suoding").removeClass("suoding");
 
-        console.log('selectedDQM');
         // 选择门店后，缓存消费记录
         saveimgstore();
         saveConsumeRecords();
-        console.log('cachedDone');
     },
     initJEDate: function(datetimeId) {
         $("#" + datetimeId).jeDate({
@@ -1635,7 +1607,6 @@ window.TKH = {
        </div>'
         );
         window.TKH.initJEDate(datetimeId);
-        
     },
     // 3.2.7 查询有效商铺信息
     queryMallGndWebV2: function(fpageindex) {
@@ -1742,7 +1713,6 @@ window.TKH = {
                       <input type='hidden' value='" + fdata[i].RN + "' class='rn'/>\
                     </div> ";
                 }
-                console.log(html);
                 $('.xuanZe .hangHu').append(html);
                 if (fdata.length) {
                     window.TKH.queryMallGndWeb(fpageindex + 1);
@@ -1801,8 +1771,7 @@ window.TKH = {
                      *
                      * FCODE: 0004, FGID: 1000025 FNAME: 抽奖 FNUM: 02101707090001
                      */
-                     gift_image = 'data:image/jpg;base64,' + item["IMGCONTENT"];
-                    console.log(item["FNAME"] + ' - ' + gift_image);
+                    gift_image = 'data:image/jpg;base64,' + item["IMGCONTENT"];
                     html += "<div class='xuzh_jin' style='display: none;'>"
                     html += "  <input type='hidden' class='gift_id' value='" + item["FGID"] + "'/>";
                     html += "  <input type='hidden' class='fnum' value='" + item["FNUM"] + "'/>";
@@ -1931,7 +1900,6 @@ window.TKH = {
             }
         });
         if (store_input_records.length) {
-            console.log(store_input_records);
             window.localStorage.setItem("scoreInputRecords", JSON.stringify(store_input_records));
         }
         // var fgndgid = '500021',
@@ -2025,7 +1993,6 @@ window.TKH = {
                     outparams = JSON.parse(resultstring);
             })
         }
-        console.log(data);
         /*===cynthia赠品发放单号绑定附件 end====*/
         window.TKH.hdClientCommand(data, function(result) {
             var parkobj = [];
@@ -2062,7 +2029,6 @@ window.TKH = {
                     "redeem_state": "兑换成功",
                     "images": JSON.parse(window.localStorage.getItem("storageImg"))["imgurl"].join(",")
                 };
-                console.log("post_param" + post_param);
                 window.setTimeout('', 2000);
                 /*====兑换停车券 start====*/
                 var scoreInputRecordsString = window.localStorage.getItem("scoreInputRecords"),
@@ -2091,7 +2057,6 @@ window.TKH = {
 
                     window.setTimeout('window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html")', 2000);
                 });
-                console.log("post_param" + post_param);
                 //window.TKH.redirect_to_with_timestamp("questionnaire.html?from=exchange.html");
             } else {
                 layer.msg("礼品兑换失败：" + outparams["FMSG"], {
@@ -2111,12 +2076,9 @@ window.TKH = {
     // 3.2.32 查询调查问卷模板信息
     queryCRMQuestionnaireMode: function() {
         var clientCookie = window.localStorage.getItem('sClientCookie');
-        console.log(clientCookie);
-
         var fname = '';
         var params = '{&quot;FNAME&quot;:&quot;' + fname + '&quot;}';
 
-        console.log(params);
         var xmlString = '<SOAP-ENV:Envelope \
       xmlns:ns3="http://www.w3.org/2001/XMLSchema" \
       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" \
@@ -2144,11 +2106,8 @@ window.TKH = {
             timeout: 15000,
             contentType: "text/xml; charset=UTF-8",
             success: function(xmlHttpRequest) {
-                console.log('success');
-                console.log(xmlHttpRequest);
                 var errMsg = $(xmlHttpRequest).find('sErrMsg').text();
                 var resultstring = $(xmlHttpRequest).find('sOutParams').text();
-                console.log(resultstring);
                 var outparams;
 
                 try {
@@ -2167,7 +2126,6 @@ window.TKH = {
                 }
             },
             complete: function(xmlHttpRequest, status) {
-                console.log('complete');
                 console.log(xmlHttpRequest);
             },
             error: function(xmlHttpRequest) {
@@ -2533,7 +2491,6 @@ window.TKH = {
                 resultstring = $(result).find('sOutParams').text(),
                 outparams = JSON.parse(resultstring),
                 $wrapper_class = $("." + data[0].wrapper_class);
-            console.log("wrapper_class: " + data[0].wrapper_class);
             var $store_name = $wrapper_class.find('.store-name'),
                 layer_index;
             layer.close(parseInt($wrapper_class.data("layerindex")));
@@ -2667,7 +2624,6 @@ window.TKH = {
                             command: 'CRMMediaService',
                             async: true
                         };
-                    console.log("<img src='" + hdimg + "'>");
 
                     window.TKH.hdClientCommand(ajax_data, function(result) {
                         var errMsg = $(result).find('sErrMsg').text(),

@@ -7,7 +7,6 @@
 # ./tool.sh {config|start|stop|start_redis|stop_redis|restart|deploy|update_assets|import_data|copy_data}
 #
 
-
 #
 # script env
 #
@@ -25,6 +24,7 @@ cd ${app_root_path}
 exit_when_miss_dependency '.app-user'     'echo $(whoami) > .app-user'
 exit_when_miss_dependency '.app-port'     'echo 4567 > .app-port'
 exit_when_miss_dependency '.env-files'    "echo ${HOME}/.${SHELL##*/}_profile >> .env-files"
+test -f .app-defender || touch .app-defender
 
 app_default_port=$(cat .app-port)
 app_port=${2:-${app_default_port}}

@@ -9,8 +9,8 @@
             if (!clientWidth) return;
             var font = 20 * (clientWidth / 320) < 40 ? 20 * (clientWidth / 320) : 40;
             docEl.style.fontSize = font + 'px';
-            console.log('clientWidth: ' + clientWidth);
-            console.log('font: ' + font + 'px');
+            // console.log('clientWidth: ' + clientWidth);
+            // console.log('font: ' + font + 'px');
             if(font < 30){
                 $('.tgl').hide();
             }else{
