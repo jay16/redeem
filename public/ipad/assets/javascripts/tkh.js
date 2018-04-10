@@ -1594,7 +1594,7 @@ window.TKH = {
          </div>\
          <div class="dq-control">\
            <p>消费时间 / Time</p>\
-           <input type="text" id="' + datetimeId + '" value="' + (new Date).format('yyyy.MM.dd hh:mm:ss') + '" class="datetime" readonly />\
+           <input type="text" id="' + datetimeId + '" class="datetime" readonly />\
          </div>\
          <div class="dq-control">\
            <p>消费金额 / Amount</p>\
