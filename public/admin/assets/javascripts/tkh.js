@@ -320,7 +320,6 @@ window.TKH = {
             workStation: '172.17.104.164',
             oper: 'HDCRM[0]'
         },
-
         production: {
             server: 'http://10.254.2.17:7072/HDCRMWebService.dll/soap/IHDCRMWebService',
             userGid: '1000185',

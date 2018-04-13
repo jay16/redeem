@@ -4,9 +4,6 @@
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-
 task default: [:environment]
 
 desc 'bundle exec rake task_name RACK_ENV=development'

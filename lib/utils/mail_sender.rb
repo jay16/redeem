@@ -2,7 +2,7 @@ require 'net/smtp'
 require 'settingslogic'
 # Private Info
 class Setting < Settingslogic
-  source File.absolute_path('./config/settings.yaml')
+  source File.absolute_path('./config/setting.yaml')
   namespace 'production'
   load!
 end unless defined?(Setting)
